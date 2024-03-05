@@ -1,14 +1,20 @@
 <div class="register">
     <h2>You need to create account!</h2>
     <br>
-    <form>
-    <div><input type="text" name="name" placeholder="Name" required></div><br>
-    <div><input type="text" name="surname" placeholder="Surname" required></div><br>
-    <div><input type="text" name="email" placeholder="Email" required></div><br>
-    <div><input type="text" name="username" placeholder="Username" required></div><br>
-    <div><input type="password"  name="password" placeholder="Password" required></div><br>
-    <div><input type="password"  name="confirm-password" placeholder="Confirm password" required></div><br>
-    <button type="submit">Sign up</button><br>
+    <form [formGroup]="registerForm">
+    <div><input formControlName="name" type="text" name="name" placeholder="Name" required></div>
+    <small *ngIf="registerForm.controls['name'].dirty && registerForm.hasError('required','name')" style="color:red;">*Name is required</small><br>
+    <div><input formControlName="surname" type="text" name="surname" placeholder="Surname" required></div>
+    <small *ngIf="registerForm.controls['surname'].dirty && registerForm.hasError('required','surname')" style="color:red;">*Surname is required</small><br>
+    <div><input formControlName="email" type="text" name="email" placeholder="Email" required></div>
+    <small *ngIf="registerForm.controls['email'].dirty && registerForm.hasError('required','email')" style="color:red;">*Email is required</small><br>
+    <div><input formControlName="username" type="text" name="username" placeholder="Username" required></div>
+    <small *ngIf="registerForm.controls['username'].dirty && registerForm.hasError('required','username')" style="color:red;">*Username is required</small><br>
+    <div><input formControlName="password" type="password"  name="password" placeholder="Password" required></div>
+    <small *ngIf="registerForm.controls['password'].dirty && registerForm.hasError('required','password')" style="color:red;">*Password is required</small><br>
+    <div><input formControlName="confirmPassword" type="password"  name="confirm-password" placeholder="Confirm password" required></div>
+    <small *ngIf="registerForm.controls['confirmPassword'].dirty && registerForm.hasError('required','confirmPassword')" style="color:red;">*Confirm password is required</small><br>
+    <button (click)="onSubmit()" type="submit">Sign up</button><br>
     </form>
     <br>
     <p>Already have an account? <a routerLink="/auth">Log in</a>.</p>
