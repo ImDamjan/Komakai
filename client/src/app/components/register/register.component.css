@@ -39,6 +39,7 @@
     margin-top: 20px;
     font-family: 'Inter';
     font-size: 16px;
+    font-family: 'Poppins', sans-serif;
     line-height: 40px;
     color: #EBEBEC;
     background: #001B47;
@@ -50,6 +51,7 @@
   .register p {
     font-size: 14px;
     margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
   }
   
   .register a {

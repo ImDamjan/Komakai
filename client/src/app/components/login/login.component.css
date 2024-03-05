@@ -24,6 +24,7 @@
     border-radius: 10px;
     padding: 10px;
     font-size: 16px; 
+    font-family: 'Poppins', sans-serif;
     border: 1px solid #ccc;
     transition: border-color 0.3s;
   }
@@ -45,11 +46,13 @@
     border: none; 
     border-radius: 10px;
     cursor: pointer; 
+    font-family: 'Poppins', sans-serif;
   }
   
   p {
     font-size: 14px;
     margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
   }
   
   a {
