@@ -23,8 +23,9 @@
         max-height: 600px;
     }
 
-    .login{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+    
+
+.reglog {
+    display: flex;
+    margin-top: 50px;
+}
