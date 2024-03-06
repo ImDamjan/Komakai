@@ -7,9 +7,7 @@ import { ReglogComponent } from './components/reglog/reglog.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full' },
-  { path: 'auth' ,component: AuthComponent},
-  
-  { path: 'auth/reglog', component: ReglogComponent }
+  { path: 'auth' ,component: AuthComponent}
 ];
 
 @NgModule({
