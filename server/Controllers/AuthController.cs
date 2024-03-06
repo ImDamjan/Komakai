@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using server.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace server.Controllers
 {
@@ -9,6 +14,12 @@ namespace server.Controllers
     public class AuthController : ControllerBase
     {
         public static User user = new User();
+        private readonly IConfiguration _configuration;
+
+        public AuthController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         //Registracija
         [HttpPost("register")]
@@ -40,7 +51,40 @@ namespace server.Controllers
                 return BadRequest("Wrong password");
             }
 
-            return Ok(user);
+            string token = CreateToken(user);
+
+            return Ok(token);
+        }
+
+        [NonAction]
+        public string CreateToken(User user)
+        {
+            //postavi username kao claim
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            //kreiraj i verifikuj json token
+            var tokenValue = _configuration.GetValue<string>("Jwt:Token");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenValue));
+
+            //kredencijali
+            var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
+
+            //token
+            var token = new JwtSecurityToken(
+                    claims: claims,
+                    expires: DateTime.Now.AddDays(1),
+                    signingCredentials: creds
+                );
+
+            //write token
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            //return token
+            return jwt;
+
         }
 
     }
