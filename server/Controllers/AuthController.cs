@@ -43,12 +43,12 @@ namespace server.Controllers
         {
             if(user.Username != request.Username)
             {
-                return BadRequest("User not found");
+                return BadRequest("User or Password incorrect");
             }
 
             if(!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
-                return BadRequest("Wrong password");
+                return BadRequest("User or Password incorrect");
             }
 
             string token = CreateToken(user);
