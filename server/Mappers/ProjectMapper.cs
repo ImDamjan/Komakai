@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using server.DTOs.Projects;
+using server.Models;
+
+namespace server.Mappers
+{
+    public static class ProjectMapper
+    {
+        public static ProjectDto ToProjectDto(this Project p)
+        {
+            return new ProjectDto{
+                Id = p.Id,
+                Spent=p.Spent,
+                Status=p.Status,
+                Start=p.Start,
+                Percentage = p.Percentage,
+                End = p.End,
+                EstimatedTime = p.EstimatedTime,
+                Title = p.Title,
+                Budget = p.Budget,
+                Type = p.Type
+
+            };
+        }
+
+        public static Project toProjectFromCreateDto(this CreateProjectDto dto)
+        {
+            return new Project{
+                Title = dto.Title,
+                Type = dto.Type,
+                Start = dto.Start, 
+                End = dto.End,
+                Status = dto.Status, 
+                EstimatedTime = dto.EstimatedTime,
+                Spent = 0,
+                Percentage = 0
+            };
+        }
+    }
+}
