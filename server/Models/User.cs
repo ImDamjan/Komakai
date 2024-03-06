@@ -14,26 +14,26 @@ namespace server.Models
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("name")]
-        public int Name { get; set; }
+        [Column("name",TypeName = "varchar(45)")]
+        public string Name { get; set; } = string.Empty;
 
-        [Column("surname")]
-        public int Surname { get; set; }
+        [Column("surname", TypeName = "varchar(45)")]
+        public string Surname { get; set; } = string.Empty;
 
-        [Column("username")]
-        public int Username { get; set; }
+        [Column("username", TypeName ="varchar(45)")]
+        public string Username { get; set; } = string.Empty;
 
-        [Column("email")]
-        public int Email { get; set; }
+        [Column("email", TypeName = "varchar(45)")]
+        public string Email { get; set; }= string.Empty;
 
-        [Column("job_title")]
-        public int JobTitle { get; set; }
+        [Column("job_title", TypeName = "varchar(45)")]
+        public string JobTitle { get; set; } =string.Empty;
 
-        [Column("organisation")]
-        public int Organisation { get; set; }
+        [Column("organisation", TypeName = "varchar(45)")]
+        public string Organisation { get; set; } = string.Empty;
 
-        [Column("department")]
-        public int Department { get; set; }
+        [Column("department", TypeName = "varchar(45)")]
+        public string Department { get; set; } = string.Empty;
 
         [Column("role_id")]
         public int RoleId { get; set; }
