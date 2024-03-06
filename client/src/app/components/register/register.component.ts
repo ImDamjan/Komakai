@@ -5,7 +5,7 @@ import { RegisterService } from '../../services/register.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
 
@@ -21,49 +21,53 @@ export class RegisterComponent implements OnInit {
       username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_.-]*')]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required]
-    }, { validator: this.passwordMatchValidator });
+    }, { validators: this.passwordMatchValidator });
   }
 
   onSubmit() {
     if(this.registerForm.valid){
-      console.log(this.registerForm.value)
-      //send the obj to database
-      this.reg.register(this.registerForm.value)
-      .subscribe({
-        next:(res)=>{
-          alert(res.message)
-        },
-        error:(err)=>{
-          alert(err?.error.message)
-        }
-      })
-    }else{
+      // Remove confirmPassword from the form value before sending to the server
+      const { confirmPassword, ...formData } = this.registerForm.value;
+      console.log(formData);
+      // Send the object to the database
+      this.reg.register(formData)
+        .subscribe({
+          next: (res) => {
+            alert(res.message);
+          },
+          error: (err) => {
+            alert(err?.error.message);
+          }
+        });
+    } else {
       this.validateAllFormFields(this.registerForm);
-      alert("Your form is invalid")
+      alert("Your form is invalid");
     }
   }
 
-  passwordMatchValidator(group: FormGroup): ValidationErrors | null {
+  private passwordMatchValidator: Validators = (group: FormGroup) => {
     const passwordControl = group.get('password');
     const confirmPasswordControl = group.get('confirmPassword');
   
     if (!passwordControl || !confirmPasswordControl) return null;
   
     if (passwordControl.value !== confirmPasswordControl.value) {
+      confirmPasswordControl.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
     } else {
+      confirmPasswordControl.setErrors(null);
       return null;
     }
-  }
+  };
 
   private validateAllFormFields(formGroup: FormGroup){
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
       if(control instanceof FormControl){
         control.markAsDirty({onlySelf:true});
-      }else if(control instanceof FormGroup){
-        this.validateAllFormFields(control)
+      } else if(control instanceof FormGroup){
+        this.validateAllFormFields(control);
       }
-    })
+    });
   }
 }
