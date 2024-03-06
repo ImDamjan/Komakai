@@ -1,0 +1,29 @@
+button {
+    width: 180px;
+    height: 40px;
+    border: 2px solid #C41E3A;
+    border-radius: 10px;
+    background-color: transparent;
+    color: #C41E3A;
+    justify-self: center;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #C41E3A;
+    color: white;
+  }
+  
+  button:active {
+    transform: translateY(2px);
+  }
+  
+  button.active {
+    background-color: #C41E3A;
+    color: white;
+  }
+  
+  
