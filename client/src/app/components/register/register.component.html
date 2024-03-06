@@ -7,7 +7,8 @@
     <div><input formControlName="surname" type="text" name="surname" placeholder="Surname" required></div>
     <small *ngIf="registerForm.controls['surname'].dirty && registerForm.hasError('required','surname')" style="color:red;">*Surname is required</small><br>
     <div><input formControlName="email" type="text" name="email" placeholder="Email" required></div>
-    <small *ngIf="registerForm.controls['email'].dirty && registerForm.hasError('required','email')" style="color:red;">*Email is required</small><br>
+    <small *ngIf="registerForm.controls['email'].dirty && registerForm.hasError('required','email')" style="color:red;">*Email is required</small>
+    <small *ngIf="registerForm.controls['email'].dirty && registerForm.hasError('email','email')" style="color:red;">*Email is invalid</small><br>
     <div><input formControlName="username" type="text" name="username" placeholder="Username" required></div>
     <small *ngIf="registerForm.controls['username'].dirty && registerForm.hasError('required','username')" style="color:red;">*Username is required</small><br>
     <div><input formControlName="password" type="password"  name="password" placeholder="Password" required></div>
