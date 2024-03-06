@@ -1,24 +1,27 @@
 <div class="register">
-    <h2>You need to create account!</h2>
-    <br>
-    <form [formGroup]="registerForm">
-    <div><input formControlName="name" type="text" name="name" placeholder="Name" required></div>
-    <small *ngIf="registerForm.controls['name'].dirty && registerForm.hasError('required','name')" style="color:red;">*Name is required</small><br>
-    <div><input formControlName="surname" type="text" name="surname" placeholder="Surname" required></div>
-    <small *ngIf="registerForm.controls['surname'].dirty && registerForm.hasError('required','surname')" style="color:red;">*Surname is required</small><br>
-    <div><input formControlName="email" type="text" name="email" placeholder="Email" required></div>
-    <small *ngIf="registerForm.controls['email'].dirty && registerForm.hasError('required','email')" style="color:red;">*Email is required</small>
-    <small *ngIf="registerForm.controls['email'].dirty && registerForm.hasError('email','email')" style="color:red;">*Email is invalid</small><br>
-    <div><input formControlName="username" type="text" name="username" placeholder="Username" required></div>
-    <small *ngIf="registerForm.controls['username'].dirty && registerForm.hasError('required','username')" style="color:red;">*Username is required</small><br>
-    <div><input formControlName="password" type="password"  name="password" placeholder="Password" required></div>
-    <small *ngIf="registerForm.controls['password'].dirty && registerForm.hasError('required','password')" style="color:red;">*Password is required</small>
-    <small *ngIf="registerForm.controls['password'].dirty && registerForm.hasError('minlength', 'password')" style="color:red;">*Password must be at least 8 characters long</small><br>
-    <div><input formControlName="confirmPassword" type="password"  name="confirm-password" placeholder="Confirm password" required></div>
-    <small *ngIf="registerForm.controls['confirmPassword'].dirty && registerForm.hasError('required', 'confirmPassword')" style="color:red;">*Confirm password is required</small>
-      <small *ngIf="registerForm.hasError('passwordMismatch') && registerForm.controls['confirmPassword'].dirty" style="color:red;">*Passwords do not match</small><br>
-    <button (click)="onSubmit()" type="submit">Sign up</button><br>
-    </form>
-    <br>
-    <p>Already have an account? <a routerLink="/auth">Log in</a>.</p>
+  <h2>You need to create account!</h2>
+  <br>
+  <form [formGroup]="registerForm">
+  <div><input formControlName="name" type="text" name="name" placeholder="Name" required></div>
+  <small *ngIf="registerForm.controls['name'].dirty && registerForm.hasError('required', 'name')" style="color:red;">*Name is required</small>
+  <small *ngIf="registerForm.controls['name'].dirty && registerForm.hasError('pattern', 'name')" style="color:red;">*Name should only contain letters.</small><br>
+  <div><input formControlName="surname" type="text" name="surname" placeholder="Surname" required></div>
+  <small *ngIf="registerForm.controls['surname'].dirty && registerForm.hasError('required', 'surname')" style="color:red;">*Surname is required</small>
+  <small *ngIf="registerForm.controls['surname'].dirty && registerForm.hasError('pattern', 'surname')" style="color:red;">*Surname should only contain letters.</small><br>
+  <div><input formControlName="email" type="text" name="email" placeholder="Email" required></div>
+  <small *ngIf="registerForm.controls['email'].dirty && registerForm.hasError('required','email')" style="color:red;">*Email is required</small>
+  <small *ngIf="registerForm.controls['email'].dirty && registerForm.hasError('email','email')" style="color:red;">*Please enter a valid email address.</small><br>
+  <div><input formControlName="username" type="text" name="username" placeholder="Username" required></div>
+  <small *ngIf="registerForm.controls['username'].dirty && registerForm.hasError('required', 'username')" style="color:red;">*Username is required</small>
+  <small *ngIf="registerForm.controls['username'].dirty && registerForm.hasError('pattern', 'username')" style="color:red;">*Username can only contain letters, numbers, underscores, hyphens, and periods.</small><br>
+  <div><input formControlName="password" type="password"  name="password" placeholder="Password" required></div>
+  <small *ngIf="registerForm.controls['password'].dirty && registerForm.hasError('required','password')" style="color:red;">*Password is required</small>
+  <small *ngIf="registerForm.controls['password'].dirty && registerForm.hasError('minlength', 'password')" style="color:red;">*Password must be at least 8 characters long</small><br>
+  <div><input formControlName="confirmPassword" type="password"  name="confirm-password" placeholder="Confirm password" required></div>
+  <small *ngIf="registerForm.controls['confirmPassword'].dirty && registerForm.hasError('required', 'confirmPassword')" style="color:red;">*Confirm password is required</small>
+  <small *ngIf="registerForm.hasError('passwordMismatch') && registerForm.controls['confirmPassword'].dirty" style="color:red;">*Passwords do not match</small><br>
+  <button (click)="onSubmit()" type="submit">Sign up</button><br>
+  </form>
+  <br>
+  <p>Already have an account? <a routerLink="/auth">Log in</a>.</p>
 </div>
