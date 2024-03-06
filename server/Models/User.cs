@@ -17,11 +17,14 @@ namespace server.Models
         [Column("name",TypeName = "varchar(45)")]
         public string Name { get; set; } = string.Empty;
 
-        [Column("surname", TypeName = "varchar(45)")]
-        public string Surname { get; set; } = string.Empty;
+        [Column("lastname", TypeName = "varchar(45)")]
+        public string Lastname { get; set; } = string.Empty;
 
         [Column("username", TypeName ="varchar(45)")]
         public string Username { get; set; } = string.Empty;
+
+        [Column("password", TypeName = "varchar(45)")]
+        public string Password { get; set; } = string.Empty;
 
         [Column("email", TypeName = "varchar(45)")]
         public string Email { get; set; }= string.Empty;
