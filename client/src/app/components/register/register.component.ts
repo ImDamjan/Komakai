@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { RegisterService } from '../../services/register.service';
 
 @Component({
@@ -15,13 +15,13 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
-      name: ['',Validators.required],
+      name: ['',[Validators.required]],
       surname: ['',Validators.required],
       email: ['',[Validators.required,Validators.email]],
       username: ['',Validators.required],
-      password: ['',Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['',Validators.required]
-    })
+    }, { validator: this.passwordMatchValidator })
   }
 
   onSubmit() {
@@ -38,9 +38,21 @@ export class RegisterComponent implements OnInit {
         }
       })
     }else{
-      //throw error
       this.validateAllFormFields(this.registerForm);
       alert("Your form is invalid")
+    }
+  }
+
+  passwordMatchValidator(group: FormGroup): ValidationErrors | null {
+    const passwordControl = group.get('password');
+    const confirmPasswordControl = group.get('confirmPassword');
+  
+    if (!passwordControl || !confirmPasswordControl) return null;
+  
+    if (passwordControl.value !== confirmPasswordControl.value) {
+      return { passwordMismatch: true };
+    } else {
+      return null;
     }
   }
 
@@ -55,4 +67,3 @@ export class RegisterComponent implements OnInit {
     })
   }
 }
-
