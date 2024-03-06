@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { RegisterService } from '../../services/register.service';
 
 @Component({
@@ -11,29 +12,32 @@ export class RegisterComponent implements OnInit {
 
   registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private reg: RegisterService){}
+  constructor(private fb: FormBuilder, private reg: RegisterService, private router: Router) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
-      name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
-      surname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
-      email: ['', [Validators.required, Validators.email]],
-      username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_.-]*')]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', Validators.required]
+      Name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
+      Lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
+      Email: ['', [Validators.required, Validators.email]],
+      Username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_.-]*')]],
+      Password: ['', [Validators.required, Validators.minLength(8)]],
+      ConfirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
 
   onSubmit() {
-    if(this.registerForm.valid){
+    if (this.registerForm.valid) {
       // Remove confirmPassword from the form value before sending to the server
-      const { confirmPassword, ...formData } = this.registerForm.value;
+      const { ConfirmPassword, ...formData } = this.registerForm.value;
       console.log(formData);
       // Send the object to the database
       this.reg.register(formData)
         .subscribe({
           next: (res) => {
-            alert(res.message);
+            alert("User registered successfully");
+            this.router.navigate(['auth/login']);
+            this.registerForm.reset();
+            //add redirection to login
           },
           error: (err) => {
             alert(err?.error.message);
@@ -45,12 +49,13 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  private passwordMatchValidator: Validators = (group: FormGroup) => {
-    const passwordControl = group.get('password');
-    const confirmPasswordControl = group.get('confirmPassword');
-  
+  private passwordMatchValidator = (group: FormGroup) => {
+    
+    const passwordControl = group.get('Password');
+    const confirmPasswordControl = group.get('ConfirmPassword');
+
     if (!passwordControl || !confirmPasswordControl) return null;
-  
+
     if (passwordControl.value !== confirmPasswordControl.value) {
       confirmPasswordControl.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
@@ -60,12 +65,12 @@ export class RegisterComponent implements OnInit {
     }
   };
 
-  private validateAllFormFields(formGroup: FormGroup){
+  private validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
-      if(control instanceof FormControl){
-        control.markAsDirty({onlySelf:true});
-      } else if(control instanceof FormGroup){
+      if (control instanceof FormControl) {
+        control.markAsDirty({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
         this.validateAllFormFields(control);
       }
     });
