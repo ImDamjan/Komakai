@@ -38,8 +38,10 @@ namespace server.Models
         [Column("department", TypeName = "varchar(45)")]
         public string Department { get; set; } = string.Empty;
 
+        
+
         [Column("role_id")]
-        public int RoleId { get; set; }
+        public int? RoleId { get; set; }
 
         [InverseProperty("AssigneeNavigation")]
         public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
@@ -61,5 +63,6 @@ namespace server.Models
         [ForeignKey("UserId")]
         [InverseProperty("Users")]
         public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+       
     }
 }
