@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using server.Data;
 using server.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,40 +15,52 @@ namespace server.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public static User user = new User();
+        private readonly ProjectManagmentDbContext _context;
         private readonly IConfiguration _configuration;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(ProjectManagmentDbContext context, IConfiguration configuration)
         {
+            _context = context;
             _configuration = configuration;
         }
 
         //Registracija
         [HttpPost("register")]
-        public ActionResult<User> Register(UserRequestDto request)
+        public async Task<ActionResult<User>> Register(UserRequestDto request)
         {
             //hash
             string passwordHash
                 = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-            user.Username = request.Username;
-            user.Lastname = request.Lastname;
-            user.PasswordHash = passwordHash;
-            user.Email = request.Email;
+            //Kreiranje novog korisnika
+            var newUser = new User
+            {
+                //Id = request.Id,
+                Username = request.Username,
+                Lastname = request.Lastname,
+                Email = request.Email,
+                Password = passwordHash,
+            };
 
-            return Ok(user);
+            //Dodavanje korsnika u DBContext
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            return Ok(newUser);
         }
 
         //Login
         [HttpPost("login")]
-        public ActionResult<User> Login(UserRequestDto request)
+        public async Task<ActionResult<string>> Login(UserRequestDto request)
         {
-            if(user.Username != request.Username)
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+            if(user==null)
             {
                 return BadRequest("User or Password incorrect");
             }
 
-            if(!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+            if(!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
             {
                 return BadRequest("User or Password incorrect");
             }
@@ -62,7 +76,7 @@ namespace server.Controllers
             //postavi username kao claim
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.Name),
             };
 
             //kreiraj i verifikuj json token
