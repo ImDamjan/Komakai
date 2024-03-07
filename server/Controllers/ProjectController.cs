@@ -33,7 +33,7 @@ namespace server.Controllers
         {
             var project = await _repos.GetProjectByIdAsync(id);
             if(project==null)
-                return NotFound("Project with "+id + " was not found !!!");
+                return NotFound("Project with Id:"+id + " was not found !!!");
             
             return Ok(project.ToProjectDto());
         }
@@ -45,6 +45,31 @@ namespace server.Controllers
             
             await _repos.CreateProjectAsync(projectModel);
             return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto());
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] UpdateProjectDto projectDto)
+        {
+            var project = await _repos.UpdateProjectAsync(id,projectDto);
+
+            if(project==null)
+                return NotFound("Project with Id:"+id + " was not found !!!");
+
+            return Ok(project.ToProjectDto());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var project =  await _repos.DeleteProjectAsync(id);
+
+            if(project==null)
+                return NotFound("Project with Id:"+id + " was not found !!!");
+            
+            return Ok(project);
         }
     }
 }
