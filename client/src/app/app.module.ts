@@ -5,8 +5,9 @@ import { AppComponent } from './app.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ReglogComponent } from './components/reglog/reglog.component';
 
 @NgModule({
@@ -18,6 +19,8 @@ import { ReglogComponent } from './components/reglog/reglog.component';
     ReglogComponent
   ],
   imports: [
+    
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
