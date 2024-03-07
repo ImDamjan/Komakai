@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
         .subscribe({
           next: (res) => {
             alert("User registered successfully");
-            this.router.navigate(['auth/login']);
+            this.router.navigate(['auth/']);
             this.registerForm.reset();
             //add redirection to login
           },
