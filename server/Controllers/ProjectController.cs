@@ -20,7 +20,7 @@ namespace server.Controllers
             _repos = repos;
         }
 
-        [HttpGet]
+        [HttpGet("getProjects")]
         public async Task<IActionResult> GetAll()
         {
             var projects = await _repos.GetAllProjectsAsync();
@@ -28,7 +28,7 @@ namespace server.Controllers
             return Ok(projectDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("getProject/{id}")]
         public async Task<IActionResult> getById([FromRoute] int id)
         {
             var project = await _repos.GetProjectByIdAsync(id);
@@ -38,7 +38,7 @@ namespace server.Controllers
             return Ok(project.ToProjectDto());
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto projectDto)
         {
             var projectModel = projectDto.toProjectFromCreateDto();
@@ -48,7 +48,7 @@ namespace server.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("update/{id}")]
         public async Task<IActionResult> Update([FromRoute] int id,[FromBody] UpdateProjectDto projectDto)
         {
             var project = await _repos.UpdateProjectAsync(id,projectDto);
@@ -60,7 +60,7 @@ namespace server.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("delete/{id}")]
 
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
