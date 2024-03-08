@@ -31,12 +31,11 @@ namespace server.Mappers
             return new Project{
                 Title = dto.Title,
                 Type = dto.Type,
-                Start = dto.Start, 
-                End = dto.End,
-                Status = dto.Status, 
+                Start = DateTime.Now, 
                 EstimatedTime = dto.EstimatedTime,
                 Spent = 0,
-                Percentage = 0
+                Percentage = 0,
+                Status = "New"
             };
         }
     }
