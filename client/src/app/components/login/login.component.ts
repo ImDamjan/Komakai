@@ -1,17 +1,49 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit} from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
+import { AuthService } from '../../services/jwt-decoder.service';
+import { decode } from 'punycode';
+import { environment } from '../../enviroments/environment';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit{
-  username: string = '';
-  password: string = '';
-  
-  constructor() { }
+export class LoginComponent{
+  loginObj: Login;
 
-  ngOnInit(): void {
+  loginForm!: FormGroup;
+  
+  decodedToken: any;
+  apiUrl = environment.apiUrl;
+  constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private authService: AuthService) {
+    this.loginObj=new Login();
   }
 
+  onLogin(): void {
+
+    this.http.post('${this.apiUrl}/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res:any)=>{
+      if(res){
+        alert("Login success");
+      }
+
+    })
+  }
+
+}
+
+export class Login{
+  Username: string;
+  Lastname: string;
+  Password: string;
+  Email: string;
+  constructor(){
+    this.Username='';
+    this.Lastname='';
+    this.Password='';
+    this.Email='';
+  }
 }

@@ -3,16 +3,14 @@
 <br>
 <form>
   <div>
-    <input type="text" name="username" placeholder="Username" required>
+    <input type="text" [(ngModel)]="loginObj.Username" name="username" placeholder="Username" required>
   </div>
   <br>
   <div>
-    <input type="password"  name="password" placeholder="Password" required>
+    <input type="password" [(ngModel)]="loginObj.Password" name="password" placeholder="Password" required>
   </div>
   <br>
-  <button type="submit">Login</button>
+  <button type="submit" (click)="onLogin()">Login</button>
   <br>
 </form>
-<br>
-<p>You don't have an account? <a routerLink="./register">Sign up</a>.</p>
 </div>
