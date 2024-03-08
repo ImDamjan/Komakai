@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../../services/jwt-decoder.service';
 import { decode } from 'punycode';
+import { environment } from '../../enviroments/environment';
 
 @Component({
   selector: 'app-login',
@@ -17,14 +18,14 @@ export class LoginComponent{
   loginForm!: FormGroup;
   
   decodedToken: any;
-  
+  apiUrl = environment.apiUrl;
   constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private authService: AuthService) {
     this.loginObj=new Login();
   }
 
   onLogin(): void {
 
-    this.http.post('http://localhost:5295/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res:any)=>{
+    this.http.post('${this.apiUrl}/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res:any)=>{
       if(res){
         alert("Login success");
       }
