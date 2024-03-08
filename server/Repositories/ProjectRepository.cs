@@ -17,8 +17,19 @@ namespace server.Repositories
         {
             _context = context;
         }
-        public async Task<Project> CreateProjectAsync(Project projectModel)
+        public async Task<Project?> CreateProjectAsync(Project projectModel, int userId)
         {
+            var user = await _context.Users.Where(u=> u.Id==userId).FirstOrDefaultAsync();
+
+            if(user==null)
+                return null;
+
+            ProjectUser relation = new ProjectUser(){
+                Project = projectModel,
+                User = user,
+                ProjectRoleId = 1
+            };
+            await _context.ProjectUsers.AddAsync(relation);
             await _context.Projects.AddAsync(projectModel);
             await _context.SaveChangesAsync();
 

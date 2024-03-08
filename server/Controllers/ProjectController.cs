@@ -42,8 +42,11 @@ namespace server.Controllers
         public async Task<IActionResult> Create([FromBody] CreateProjectDto projectDto)
         {
             var projectModel = projectDto.toProjectFromCreateDto();
+            int userId = projectDto.UserId;
             
-            await _repos.CreateProjectAsync(projectModel);
+            var response = await _repos.CreateProjectAsync(projectModel, userId);
+            if(response==null)
+                return BadRequest("User was not found ");
             return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto());
         }
 
