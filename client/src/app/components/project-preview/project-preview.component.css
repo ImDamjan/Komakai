@@ -1,139 +1,93 @@
-.container {
-    display: flex;
-    max-width: 488px;
-    padding: 0 22px 0 0;
-    flex-direction: column;
-    align-items: center;
-  }
-  @media (max-width: 991px) {
-    .container {
-      padding-right: 20px;
-    }
-  }
-  .card {
-    border-radius: 16px;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    padding: 21px 17px 9px;
-  }
-  @media (max-width: 991px) {
-    .card {
-      max-width: 100%;
-    }
-  }
-  .inner-content {
-    width: 465px;
-    height: 316px;
-    border-radius: 14px;
-    padding: 0;
-    box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .card-header {
-    display: flex;
-    padding-right: 26px;
-    justify-content: space-between;
-    gap: 20px;
-    align-items: center;
-  }
-  @media (max-width: 991px) {
-    .card-header {
-      max-width: 100%;
-      flex-wrap: wrap;
-      padding-right: 20px;
-    }
-  }
-  .title-container {
-    display: flex;
-    gap: 14px;
-    font-size: 25px;
-    color: #1e1e1e;
-    font-weight: 700;
-    margin: auto 0;
-  }
-  @media (max-width: 991px) {
-    .title-container {
-      white-space: initial;
-    }
-  }
-  .title {
-    font-family: Inter, sans-serif;
-    flex-grow: 1;
-  }
-  .status-indicator {
-    width: 80px;
-    height: 35px;
-    border-radius: 4px;
-    background-color: #2e8b57;
-    color: #fff;
-    font-weight: 500;
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Inter, sans-serif;
-    padding: 0;
-  }
-  
-  .separator {
-    border-color: rgba(30, 30, 30, 1);
-    border-style: solid;
-    border-width: 1px;
-    background-color: #1e1e1e;
-    margin-top: 12px;
-    height: 1px;
-  }
-  .content-text {
-    color: #424242;
-    text-align: justify;
-    margin-top: 36px;
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 21px;
-    font-family: Inter, sans-serif;
-  }
-  .date-section {
-    display: flex;
-    gap: 8px;
-    font-size: 14px;
-    color: #000000;
-    font-weight: 500;
-    margin-top: 50px;
-    align-self: start;
-  }
-  .issues-section {
-    display: flex;
-    margin-top: 22px;
-    justify-content: space-between;
-    font-size: 14px;
-    color: #5c5967;
-    font-weight: 500;
-    width: 100%;
-  }
-  img {
-    object-fit: cover;
-    object-position: center;
-  }
-  .icon {
-    width: 25px;
-    aspect-ratio: 1;
-  }
-  .date-icon {
-    width: 11px;
-    aspect-ratio: 0.65;
-  }
-  .issues-icon {
-    width: 20px;
-    aspect-ratio: 0.95;
-  }
-  .big-icon {
-    width: 144px;
-    aspect-ratio: 3.85;
-    max-width: 100%;
-  }
-  .issues-count {
-    display: flex;
-    gap: 3px;
-    margin: auto 0;
-  }
+.card {
+  display: flex;
+  max-width: 466px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-content {
+  border-radius: 16px;
+  background-color: #fff;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding: 21px 17px 9px;
+  box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+.header-section {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 20px;
+  white-space: nowrap;
+}
+
+.title-wrapper {
+  display: flex;
+  gap: 14px;
+  font: 700 25px/1 Inter, sans-serif;
+  color: #1e1e1e;
+  align-items: center;
+}
+
+.status-label {
+  border-radius: 4px;
+  background-color: #2e8b57;
+  color: #fff;
+  padding: 14px 19px;
+  font: 500 12px/1 Inter, sans-serif;
+}
+
+.divider {
+  border-top: 1px solid #1e1e1e;
+  margin-top: 12px;
+}
+
+.description {
+  color: #424242;
+  text-align: justify;
+  margin-top: 36px;
+  font: 500 13px/21px Inter, sans-serif;
+}
+
+.date-section {
+  display: flex;
+  margin-top: 50px;
+  gap: 8px;
+  font-size: 14px;
+  color: #000000;
+  font-weight: 500;
+  white-space: nowrap;
+  align-items: center;
+}
+
+.issue-section {
+  display: flex;
+  margin-top: 22px;
+  height: 35px; 
+  width: 100%;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 14px;
+  color: #5c5967;
+  font-weight: 500;
+  align-items: center;
+}
+
+.issue-details {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
