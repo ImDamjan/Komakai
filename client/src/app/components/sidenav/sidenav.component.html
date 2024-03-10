@@ -1,9 +1,9 @@
 <div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed' : ''">
     <div class="logo-container">
-        <button class="logo"><img src="assets/logo/icon.svg" /></button>
+        <button class="logo" (click)="toggleCollapse()"><img src="assets/logo/icon.svg" /></button>
         <div class="logo-text" *ngIf="collapsed">Komakai</div>
-        <button class="btn-close" *ngIf="collapsed">
-            <i class="fal fa-times close-icon"></i>
+        <button class="btn-close" *ngIf="collapsed" aria-label="Close" (click)="closeSidenav()">
+            <span aria-hidden="true">×</span>
         </button>
     </div>
     <ul class="sidenav-nav">
