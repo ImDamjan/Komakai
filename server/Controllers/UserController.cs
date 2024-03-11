@@ -34,5 +34,17 @@ namespace server.Controllers
             var users = await _repos.GetAllUsersAsync();
             return Ok(users);
         }
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUserById(int id)
+        {
+            var user=await _repos.GetUserByIdAsync(id);
+            if(user==null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
     }
 }
