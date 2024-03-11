@@ -1,11 +1,15 @@
 import { Component, Output, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { navbarData } from './nav-data';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
+import { faSlack, faUncharted } from '@fortawesome/free-brands-svg-icons';
+
 
 interface SideNavToggle {
   screenWidth: number;
   collapsed: boolean;
 }
+
+
 
 @Component({
   selector: 'app-sidenav',
@@ -38,6 +42,8 @@ interface SideNavToggle {
   ]
 })
 export class SidenavComponent implements OnInit {
+
+  faDashboard = faSlack;
 
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
 

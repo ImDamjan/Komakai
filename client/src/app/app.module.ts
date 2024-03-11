@@ -20,6 +20,7 @@ import { TeamsComponent } from './components/navigationbar/teams/teams.component
 import { HelpcentreComponent } from './components/navigationbar/helpcentre/helpcentre.component';
 import { AplicationComponent } from './pages/aplication/aplication.component';
 import { BodyComponent } from './components/body/body.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { BodyComponent } from './components/body/body.component';
     BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
   providers: [
     provideClientHydration()

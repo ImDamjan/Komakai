@@ -1,7 +1,9 @@
+import { faHome } from "@fortawesome/free-solid-svg-icons";
+
 export const navbarData = [
     {
         routeLink: 'dashboard',
-        icon: 'fal fa-home',
+        icon: 'faDashboard',
         label: 'Dashboard'
     },
     {
