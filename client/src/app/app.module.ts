@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ReglogComponent } from './components/reglog/reglog.component';
+import { ProjectPreviewComponent } from './components/project-preview/project-preview.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ReglogComponent } from './components/reglog/reglog.component';
     AuthComponent,
     LoginComponent,
     RegisterComponent,
-    ReglogComponent
+    ReglogComponent,
+    ProjectPreviewComponent
   ],
   imports: [
     
