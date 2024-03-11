@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using server.Data;
+using server.DTOs.Users;
+using server.Interfaces;
 using server.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,12 +17,12 @@ namespace server.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly ProjectManagmentDbContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
 
-        public AuthController(ProjectManagmentDbContext context, IConfiguration configuration)
+        public AuthController(IUserRepository userRepository, IConfiguration configuration)
         {
-            _context = context;
+            _userRepository = userRepository;
             _configuration = configuration;
         }
 
@@ -43,8 +45,7 @@ namespace server.Controllers
             };
 
             //Dodavanje korsnika u DBContext
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
+            await _userRepository.AddUserAsync(newUser);
 
             return Ok(newUser);
         }
@@ -54,7 +55,7 @@ namespace server.Controllers
         public async Task<ActionResult<string>> Login(UserLoginDto request)
         {
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+            var user = await _userRepository.GetUserByUsernameAsync(request.Username);
             if(user==null)
             {
                 return BadRequest("User or Password incorrect");
