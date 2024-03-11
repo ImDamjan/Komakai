@@ -43,5 +43,12 @@ namespace server.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
         }
+
+        public async Task<List<User>> GetUsersByRoleAsync(string roleName)
+        {
+            return await _context.Users
+                .Where(u=> u.Role!= null && u.Role.Name==roleName)
+                .ToListAsync();
+        }
     }
 }

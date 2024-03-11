@@ -46,5 +46,12 @@ namespace server.Controllers
             }
             return Ok(user);
         }
+
+        [HttpGet("byRole/{roleName}")]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsersByRole(string roleName)
+        {
+            var users=await _repos.GetUsersByRoleAsync(roleName);
+            return Ok(users);
+        }
     }
 }
