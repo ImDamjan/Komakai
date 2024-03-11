@@ -6,12 +6,11 @@ interface SideNavToggle {
 }
 
 @Component({
-  selector: 'app-body',
-  templateUrl: './body.component.html',
-  styleUrl: './body.component.css'
+  selector: 'app-aplication',
+  templateUrl: './aplication.component.html',
+  styleUrl: './aplication.component.css'
 })
-export class BodyComponent {
-
+export class AplicationComponent {
   isSideNavCollapsed = false;
   screenWidth = 0;
 
