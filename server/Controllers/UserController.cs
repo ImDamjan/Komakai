@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using server.Interfaces;
 using server.Mappers;
+using server.Models;
 using server.Repositories;
 
 namespace server.Controllers
@@ -25,6 +26,13 @@ namespace server.Controllers
             var projects = await _repos.GetAllUserProjectsAsync(id);
             var projectDtos = projects.Select(p=>p.ToProjectDto());
             return Ok(projectDtos);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
+        {
+            var users = await _repos.GetAllUsersAsync();
+            return Ok(users);
         }
     }
 }

@@ -28,6 +28,11 @@ namespace server.Repositories
             return await _context.ProjectUsers.Where(u=> u.UserId==id).Select(p=> p.Project).ToListAsync();
         }
 
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);

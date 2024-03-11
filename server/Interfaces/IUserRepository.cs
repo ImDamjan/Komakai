@@ -12,6 +12,8 @@ namespace server.Interfaces
 
         Task AddUserAsync(User user);
 
+        Task <List<User>> GetAllUsersAsync();
+
         Task<User> GetUserByUsernameAsync(string username);
     }
 }
