@@ -41,7 +41,7 @@ namespace server.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto projectDto)
         {
-            var projectModel = projectDto.toProjectFromCreateDto();
+            var projectModel = projectDto.toProjectFromCreateDto(1);
             int userId = projectDto.UserId;
             
             var response = await _repos.CreateProjectAsync(projectModel, userId);

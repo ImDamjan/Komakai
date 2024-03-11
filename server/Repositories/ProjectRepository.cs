@@ -70,7 +70,7 @@ namespace server.Repositories
                 return null;
             
             project.Spent=projectDto.Spent;
-            project.Status=projectDto.Status;
+            project.StateId=projectDto.StateId;
             project.Start=projectDto.Start;
             project.Percentage = projectDto.Percentage;
             project.End = projectDto.End;
