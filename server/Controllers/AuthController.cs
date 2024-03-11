@@ -26,7 +26,7 @@ namespace server.Controllers
 
         //Registracija
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserRequestDto request)
+        public async Task<ActionResult<User>> Register(UserRegistrationDto request)
         {
             //hash
             string passwordHash
@@ -37,9 +37,9 @@ namespace server.Controllers
             {
                 //Id = request.Id,
                 Username = request.Username,
-                Lastname = request.Lastname,
-                Email = request.Email,
                 Password = passwordHash,
+                Email = request.Email,
+                Name = request.Name
             };
 
             //Dodavanje korsnika u DBContext
@@ -51,7 +51,7 @@ namespace server.Controllers
 
         //Login
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserRequestDto request)
+        public async Task<ActionResult<string>> Login(UserLoginDto request)
         {
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
@@ -76,7 +76,7 @@ namespace server.Controllers
             //postavi username kao claim
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
             //kreiraj i verifikuj json token
