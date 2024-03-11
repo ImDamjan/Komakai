@@ -1,4 +1,4 @@
-﻿namespace server.Models
+﻿namespace server.DTOs.Users
 {
     public class UserRegistrationDto
     {
@@ -6,6 +6,6 @@
         public required string Lastname { get; set; }
         public required string Password { get; set; }
         public required string Email { get; set; }
-        public required string Name { get; set;}
+        public required string Name { get; set; }
     }
 }
