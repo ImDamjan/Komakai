@@ -25,5 +25,60 @@ namespace server.Data
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<State> States { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            var states = new List<State>{
+                new State{
+                    Id = 1,
+                    Name = "Not started"
+                },
+                new State{
+                    Id = 2,
+                    Name = "Ready"
+                },
+                new State{
+                    Id = 3,
+                    Name = "In Progress"
+                },
+                new State{
+                    Id = 4,
+                    Name = "Blocked"
+                },
+                new State{
+                    Id = 5,
+                    Name = "Done"
+                },
+                new State{
+                    Id = 6,
+                    Name = "Cancelled"
+                }
+            };
+
+            var roles =  new List<ProjectRole>{
+                new ProjectRole{
+                    Id = 1,
+                    Name = "Project Manager"
+                },
+                    new ProjectRole{
+                    Id = 2,
+                    Name = "Developer"
+                },
+                    new ProjectRole{
+                    Id = 3,
+                    Name = "User"
+                },
+                    new ProjectRole{
+                    Id = 4,
+                    Name = "Guest"
+                }
+            };
+
+            modelBuilder.Entity<State>().HasData(states);
+            modelBuilder.Entity<ProjectRole>().HasData(roles);
+        }
     }
 }

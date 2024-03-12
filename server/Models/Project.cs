@@ -23,8 +23,11 @@ namespace server.Models
         [Column("end", TypeName = "datetime")]
         public DateTime End { get; set; }
 
-        [Column("status", TypeName = "varchar(45)")]
-        public string Status { get; set; } = null!;
+        [Column("state")]
+        public int? StateId { get; set; }
+
+        [Column("last_state_changed")]
+        public DateTime LastStateChange { get; set; }
 
         [Column("subproject")]
         public int? Subproject { get; set; }
@@ -72,5 +75,9 @@ namespace server.Models
         [ForeignKey("ProjectId")]
         [InverseProperty("Projects")]
         public virtual ICollection<User> Users { get; set; } = new List<User>();
+
+        [ForeignKey("StateId")]
+        [InverseProperty("Projects")]
+        public virtual State? State { get; set; } = null!;
     }
 }

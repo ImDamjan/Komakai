@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using server.Data;
 
@@ -10,9 +11,11 @@ using server.Data;
 namespace server.Migrations
 {
     [DbContext(typeof(ProjectManagmentDbContext))]
-    partial class ProjectManagmentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240311165752_State-Added")]
+    partial class StateAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -261,10 +264,6 @@ namespace server.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("estimated_time");
 
-                    b.Property<DateTime>("LastStateChange")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("last_state_changed");
-
                     b.Property<double>("Percentage")
                         .HasColumnType("float")
                         .HasColumnName("percentage");
@@ -319,28 +318,6 @@ namespace server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("project_role");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Project Manager"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Developer"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "User"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Guest"
-                        });
                 });
 
             modelBuilder.Entity("server.Models.ProjectUser", b =>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.DTOs.Projects;
 using server.Interfaces;
 using server.Models;
 
@@ -21,11 +22,6 @@ namespace server.Repositories
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<List<Project>> GetAllUserProjectsAsync(int id)
-        {
-            return await _context.ProjectUsers.Where(u=> u.UserId==id).Select(p=> p.Project).ToListAsync();
         }
 
         public async Task<List<User>> GetAllUsersAsync()

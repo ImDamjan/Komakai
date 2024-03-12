@@ -27,6 +27,13 @@ namespace server.Controllers
             var projectDto = projects.Select(p=> p.ToProjectDto());
             return Ok(projectDto);
         }
+        [HttpGet("userProjects/{userId}")]
+        public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId)
+        {
+            var projects = await _repos.GetAllUserProjectsAsync(userId);
+            var projectDtos = projects.Select(p=>p.ToProjectDto());
+            return Ok(projectDtos);
+        }
 
         [HttpGet("getProject/{id}")]
         public async Task<IActionResult> getById([FromRoute] int id)
@@ -41,7 +48,7 @@ namespace server.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto projectDto)
         {
-            var projectModel = projectDto.toProjectFromCreateDto();
+            var projectModel = projectDto.toProjectFromCreateDto(1);
             int userId = projectDto.UserId;
             
             var response = await _repos.CreateProjectAsync(projectModel, userId);
@@ -73,6 +80,13 @@ namespace server.Controllers
                 return NotFound("Project with Id:"+id + " was not found !!!");
             
             return Ok(project);
+        }
+        //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
+        [HttpGet("userProjectStates/{userId}/{period}")]
+        public async Task<IActionResult> GetAllUserStatesProjects([FromRoute]int userId,[FromRoute] string period)
+        {
+            var res = await _repos.GetAllUserProjectStates(userId,period);
+            return Ok(res);
         }
     }
 }
