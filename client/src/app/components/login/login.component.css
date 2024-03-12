@@ -165,6 +165,14 @@
   text-align: center;
 }
 
+#vreme{
+  vertical-align: middle;
+}
+
+#datum{
+  margin-top: 10px;
+}
+
 #mark{
   background-color: #E8FFDC;
   color: #3FB202;
