@@ -52,9 +52,15 @@ namespace server.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId)
+        public async Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId,string period)
         {
-            var projects = await _context.ProjectUsers.Where(u=> u.UserId==userId).Select(p=> p.Project).ToListAsync();
+            DateTime past = DateTime.MinValue;
+            if(period.ToLower()=="month")
+                past = DateTime.Now.AddDays(-30);
+            else if(period.ToLower()=="week")
+                past = DateTime.Now.AddDays(-7);
+
+            var projects = await _context.ProjectUsers.Where(u=> u.UserId==userId).Select(p=> p.Project).Where(p=>p.LastStateChange>=past).ToListAsync();
 
             List<ProjectStatesDto> lista = new List<ProjectStatesDto>();
 
@@ -81,6 +87,7 @@ namespace server.Repositories
                 }
             }
 
+            //racunanje procenata po stateovima
             foreach (var item in lista)
             {
                 if(item.count>0)

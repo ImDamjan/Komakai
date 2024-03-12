@@ -9,7 +9,7 @@ namespace server.Interfaces
 {
     public interface IUserRepository
     {
-        Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId);
+        Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId,string period);
         Task<List<Project>> GetAllUserProjectsAsync(int id);
 
         Task AddUserAsync(User user);

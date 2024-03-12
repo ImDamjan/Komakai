@@ -25,6 +25,7 @@ namespace server.Repositories
                 return null;
 
             projectModel.StateId = 1;
+            projectModel.LastStateChange = DateTime.Now;
             ProjectUser relation = new ProjectUser(){
                 Project = projectModel,
                 User = user,

@@ -26,6 +26,9 @@ namespace server.Models
         [Column("state")]
         public int? StateId { get; set; }
 
+        [Column("last_state_changed")]
+        public DateTime LastStateChange { get; set; }
+
         [Column("subproject")]
         public int? Subproject { get; set; }
 
