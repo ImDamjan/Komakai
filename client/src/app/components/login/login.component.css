@@ -144,29 +144,30 @@
 }
 
 #details{
-  border: #001B47 2px solid;
   width: 40%;
   overflow: hidden;
 }
 
+#more{
+  font-size: 13px;
+}
+
 #start{
   width: 10%;
-  border: #001B47 2px solid;
 }
 
 #end{
   width: 10%;
-  border: #001B47 2px solid;
 }
 
 #time{
   width: 12%;
-  border: #001B47 2px solid;
   text-align: center;
 }
 
-#vreme{
-  
+#mark{
+  background-color: #E8FFDC;
+  color: #3FB202;
 }
 
 #person{
