@@ -11,5 +11,15 @@ namespace server.Interfaces
     {
         Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId);
         Task<List<Project>> GetAllUserProjectsAsync(int id);
+
+        Task AddUserAsync(User user);
+
+        Task <List<User>> GetAllUsersAsync();
+
+        Task<User> GetUserByIdAsync(int id);
+
+        Task<List<User>> GetUsersByRoleAsync(string roleName);
+
+        Task<User> GetUserByUsernameAsync(string username);
     }
 }
