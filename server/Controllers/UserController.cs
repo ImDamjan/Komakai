@@ -20,14 +20,6 @@ namespace server.Controllers
             _repos = repos;
         }
 
-        [HttpGet("userProjects/{id}")]
-        public async Task<IActionResult> GetAllUserProjects([FromRoute]int id)
-        {
-            var projects = await _repos.GetAllUserProjectsAsync(id);
-            var projectDtos = projects.Select(p=>p.ToProjectDto());
-            return Ok(projectDtos);
-        }
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {

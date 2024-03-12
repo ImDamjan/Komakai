@@ -27,6 +27,13 @@ namespace server.Controllers
             var projectDto = projects.Select(p=> p.ToProjectDto());
             return Ok(projectDto);
         }
+        [HttpGet("userProjects/{id}")]
+        public async Task<IActionResult> GetAllUserProjects([FromRoute]int id)
+        {
+            var projects = await _repos.GetAllUserProjectsAsync(id);
+            var projectDtos = projects.Select(p=>p.ToProjectDto());
+            return Ok(projectDtos);
+        }
 
         [HttpGet("getProject/{id}")]
         public async Task<IActionResult> getById([FromRoute] int id)

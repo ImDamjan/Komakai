@@ -8,6 +8,8 @@
 
 # Db files
 *.db
+*.db-wal
+*.db-shm
 
 # User-specific files
 *.rsuser

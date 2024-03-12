@@ -64,13 +64,18 @@ namespace server.Repositories
         {
             return await _context.Projects.AnyAsync(p=> p.Id==id);
         }
-
+        public async Task<List<Project>> GetAllUserProjectsAsync(int id)
+        {
+            return await _context.ProjectUsers.Where(u=> u.UserId==id).Select(p=> p.Project).ToListAsync();
+        }
         public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectDto projectDto)
         {
             var project = await _context.Projects.FirstOrDefaultAsync(p=> p.Id==id);
             if(project==null)
                 return null;
-            
+
+
+            project.LastStateChange = DateTime.Now;
             project.Spent=projectDto.Spent;
             project.StateId=projectDto.StateId;
             project.Start=projectDto.Start;

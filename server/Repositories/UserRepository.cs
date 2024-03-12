@@ -24,11 +24,6 @@ namespace server.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Project>> GetAllUserProjectsAsync(int id)
-        {
-            return await _context.ProjectUsers.Where(u=> u.UserId==id).Select(p=> p.Project).ToListAsync();
-        }
-
         public async Task<List<User>> GetAllUsersAsync()
         {
             return await _context.Users.ToListAsync();
