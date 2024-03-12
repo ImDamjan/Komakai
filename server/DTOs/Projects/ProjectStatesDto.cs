@@ -11,5 +11,7 @@ namespace server.DTOs.Projects
 
         public string StateName { get; set; } = string.Empty;
         public int count { get; set; }
+
+        public float Percentage { get; set; }
     }
 }

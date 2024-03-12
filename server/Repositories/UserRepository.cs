@@ -64,6 +64,7 @@ namespace server.Repositories
                 pom.count = 0;
                 pom.StateName = state.Name;
                 pom.StateId = state.Id;
+                pom.Percentage = 0;
 
                 lista.Add(pom);
             }
@@ -78,6 +79,13 @@ namespace server.Repositories
                         break;
                     }
                 }
+            }
+
+            foreach (var item in lista)
+            {
+                if(item.count>0)
+                    item.Percentage = projects.Count/(item.count*1.0f)*100;
+                    
             }
 
 

@@ -24,6 +24,7 @@ namespace server.Repositories
             if(user==null)
                 return null;
 
+            projectModel.StateId = 1;
             ProjectUser relation = new ProjectUser(){
                 Project = projectModel,
                 User = user,

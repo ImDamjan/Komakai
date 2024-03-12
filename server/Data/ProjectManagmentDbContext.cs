@@ -58,7 +58,27 @@ namespace server.Data
                 }
             };
 
+            var roles =  new List<ProjectRole>{
+                new ProjectRole{
+                    Id = 1,
+                    Name = "Project Manager"
+                },
+                    new ProjectRole{
+                    Id = 2,
+                    Name = "Developer"
+                },
+                    new ProjectRole{
+                    Id = 3,
+                    Name = "User"
+                },
+                    new ProjectRole{
+                    Id = 4,
+                    Name = "Guest"
+                }
+            };
+
             modelBuilder.Entity<State>().HasData(states);
+            modelBuilder.Entity<ProjectRole>().HasData(roles);
         }
     }
 }
