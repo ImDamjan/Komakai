@@ -165,7 +165,15 @@
   text-align: center;
 }
 
-#vreme{
+.vreme img{
+  vertical-align: middle;
+}
+
+.tekst{
+  vertical-align: middle;
+}
+
+.datum img{
   vertical-align: middle;
 }
 
