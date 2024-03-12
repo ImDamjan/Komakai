@@ -58,7 +58,7 @@ namespace server.Data
                 }
             };
 
-            var roles =  new List<ProjectRole>{
+            var ProjectRoles =  new List<ProjectRole>{
                 new ProjectRole{
                     Id = 1,
                     Name = "Project Manager"
@@ -77,8 +77,33 @@ namespace server.Data
                 }
             };
 
+            var platformRoles = new List<Role>{
+                new Role{
+                    Id = 1,
+                    Name = "Project Manager"
+                },
+                new Role{
+                    Id = 2,
+                    Name = "Developer"
+                },
+                new Role{
+                    Id = 3,
+                    Name = "User"
+                },
+                new Role{
+                    Id = 4,
+                    Name = "Guest"
+                },
+                new Role{
+                    Id = 5,
+                    Name = "Admin"
+                }
+
+            };
+
+            modelBuilder.Entity<Role>().HasData(platformRoles);
             modelBuilder.Entity<State>().HasData(states);
-            modelBuilder.Entity<ProjectRole>().HasData(roles);
+            modelBuilder.Entity<ProjectRole>().HasData(ProjectRoles);
         }
     }
 }
