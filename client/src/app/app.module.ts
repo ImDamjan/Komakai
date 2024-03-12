@@ -38,7 +38,7 @@ import { ProjectPreviewComponent } from './components/project-preview/project-pr
     TeamsComponent,
     HelpcentreComponent,
     AplicationComponent,
-    BodyComponent
+    BodyComponent,
     ProjectPreviewComponent
   ],
   imports: [
