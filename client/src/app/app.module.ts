@@ -22,6 +22,7 @@ import { AplicationComponent } from './pages/aplication/aplication.component';
 import { BodyComponent } from './components/body/body.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ProjectPreviewComponent } from './components/project-preview/project-preview.component';
+import { ProjectTaskComponent } from './components/project-task/project-task.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ProjectPreviewComponent } from './components/project-preview/project-pr
     HelpcentreComponent,
     AplicationComponent,
     BodyComponent,
-    ProjectPreviewComponent
+    ProjectPreviewComponent,
+    ProjectTaskComponent
   ],
   imports: [
     
