@@ -21,6 +21,7 @@ import { HelpcentreComponent } from './components/navigationbar/helpcentre/helpc
 import { AplicationComponent } from './pages/aplication/aplication.component';
 import { BodyComponent } from './components/body/body.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ProjectPreviewComponent } from './components/project-preview/project-preview.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HelpcentreComponent,
     AplicationComponent,
     BodyComponent
+    ProjectPreviewComponent
   ],
   imports: [
     
