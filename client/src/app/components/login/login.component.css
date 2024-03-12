@@ -63,3 +63,20 @@
     text-decoration: underline;
   }
   
+/* Ovde krece trenutni css za task */
+
+.task {
+  display: flex;
+  max-width: 1000px;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.bulb{
+
+}
+
+.details{
+  
+}
