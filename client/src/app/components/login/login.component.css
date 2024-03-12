@@ -65,31 +65,46 @@
   
 /* Ovde krece trenutni css za task */
 
-.task {
+/* .task {
   display: flex;
   max-width: 1000px;
-  flex-direction: column;
+  max-height: 100px;
+  align-items: center;
   justify-content: center;
+} */
+
+#task-content{
+  align-items: center;
   overflow: hidden;
-  padding: 20px; 
+  display: table-cell;
+  height: 100px;
+  width: 1000px;
   border-radius: 15px; 
   background-color: #fff; 
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); 
 }
 
-.bulb{
-  width: 30px;
+#bulb{
   display: inline-block;
-  margin-right: 10px;
-  margin-left: 15px;
-}
-
-.details{
-  width: 500px;
-  display: inline-block;
+  margin-right: 15px;
+  margin-left: 25px;
   align-items: center;
 }
 
-.top{
-  
+#details{
+  display: inline-block;
+  width: 500px;
+  align-items: center;
+}
+
+#tekst1{
+  font-size: 12px;
+}
+
+#start{
+  display: inline-block;
+}
+
+#end{
+  display: inline-block;
 }
