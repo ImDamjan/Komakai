@@ -14,7 +14,7 @@ namespace server.Mappers
             return new ProjectDto{
                 Id = p.Id,
                 Spent=p.Spent,
-                Status=p.Status,
+                StateId=p.StateId,
                 Start=p.Start,
                 Percentage = p.Percentage,
                 End = p.End,
@@ -26,7 +26,7 @@ namespace server.Mappers
             };
         }
 
-        public static Project toProjectFromCreateDto(this CreateProjectDto dto)
+        public static Project toProjectFromCreateDto(this CreateProjectDto dto, int stateId)
         {
             return new Project{
                 Title = dto.Title,
@@ -35,7 +35,7 @@ namespace server.Mappers
                 EstimatedTime = dto.EstimatedTime,
                 Spent = 0,
                 Percentage = 0,
-                Status = "New"
+                StateId = stateId
             };
         }
     }

@@ -14,17 +14,17 @@ namespace server.Models
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("start")]
-        public int Start { get; set; }
+        [Column("start", TypeName ="datetime")]
+        public DateTime Start { get; set; }
 
-        [Column("end")]
-        public int End { get; set; }
+        [Column("end", TypeName ="datetime")]
+        public DateTime End { get; set; }
 
         [Column("status")]
-        public int Status { get; set; }
+        public int StatusId { get; set; }
 
-        [Column("percentage")]
-        public int Percentage { get; set; }
+        [Column("percentage", TypeName ="float")]
+        public float Percentage { get; set; }
 
         [Column("dependent")]
         public int? Dependent { get; set; }

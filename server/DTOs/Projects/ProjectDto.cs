@@ -11,7 +11,7 @@ namespace server.DTOs.Projects
         public string Title { get; set; } = "";
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-        public string Status { get; set; } = "";
+        public int? StateId { get; set; }
         public int? Subproject { get; set; }
         public DateTime EstimatedTime { get; set; }
         public double Budget { get; set; }

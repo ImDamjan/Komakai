@@ -24,6 +24,8 @@ namespace server.Repositories
             if(user==null)
                 return null;
 
+            projectModel.StateId = 1;
+            projectModel.LastStateChange = DateTime.Now;
             ProjectUser relation = new ProjectUser(){
                 Project = projectModel,
                 User = user,
@@ -62,15 +64,20 @@ namespace server.Repositories
         {
             return await _context.Projects.AnyAsync(p=> p.Id==id);
         }
-
+        public async Task<List<Project>> GetAllUserProjectsAsync(int id)
+        {
+            return await _context.ProjectUsers.Where(u=> u.UserId==id).Select(p=> p.Project).ToListAsync();
+        }
         public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectDto projectDto)
         {
             var project = await _context.Projects.FirstOrDefaultAsync(p=> p.Id==id);
             if(project==null)
                 return null;
-            
+
+
+            project.LastStateChange = DateTime.Now;
             project.Spent=projectDto.Spent;
-            project.Status=projectDto.Status;
+            project.StateId=projectDto.StateId;
             project.Start=projectDto.Start;
             project.Percentage = projectDto.Percentage;
             project.End = projectDto.End;
@@ -80,6 +87,53 @@ namespace server.Repositories
             await _context.SaveChangesAsync();
 
             return project;
+        }
+        public async Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId,string period)
+        {
+            DateTime past = DateTime.MinValue;
+            if(period.ToLower()=="month")
+                past = DateTime.Now.AddDays(-30);
+            else if(period.ToLower()=="week")
+                past = DateTime.Now.AddDays(-7);
+
+            var projects = await _context.ProjectUsers.Where(u=> u.UserId==userId).Select(p=> p.Project).Where(p=>p.LastStateChange>=past).ToListAsync();
+
+            List<ProjectStatesDto> lista = new List<ProjectStatesDto>();
+
+            foreach (var state in _context.States)
+            {
+                ProjectStatesDto pom = new ProjectStatesDto();
+                pom.count = 0;
+                pom.StateName = state.Name;
+                pom.StateId = state.Id;
+                pom.Percentage = 0;
+
+                lista.Add(pom);
+            }
+
+            foreach (var project in projects)
+            {
+                foreach(var item in lista)
+                {
+                    if(item.StateId==project.StateId)
+                    {
+                        item.count++;
+                        break;
+                    }
+                }
+            }
+
+            //racunanje procenata po stateovima
+            foreach (var item in lista)
+            {
+                if(item.count>0)
+                    item.Percentage = projects.Count/(item.count*1.0f)*100;
+                    
+            }
+
+
+            return lista;
+
         }
     }
 }

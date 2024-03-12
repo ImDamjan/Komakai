@@ -129,12 +129,12 @@ namespace server.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("dependent");
 
-                    b.Property<int>("End")
-                        .HasColumnType("INTEGER")
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime")
                         .HasColumnName("end");
 
-                    b.Property<int>("Percentage")
-                        .HasColumnType("INTEGER")
+                    b.Property<float>("Percentage")
+                        .HasColumnType("float")
                         .HasColumnName("percentage");
 
                     b.Property<int>("PriorityId")
@@ -145,11 +145,11 @@ namespace server.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("project_id");
 
-                    b.Property<int>("Start")
-                        .HasColumnType("INTEGER")
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime")
                         .HasColumnName("start");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("StatusId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("status");
 
@@ -261,6 +261,10 @@ namespace server.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("estimated_time");
 
+                    b.Property<DateTime>("LastStateChange")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("last_state_changed");
+
                     b.Property<double>("Percentage")
                         .HasColumnType("float")
                         .HasColumnName("percentage");
@@ -273,10 +277,9 @@ namespace server.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("start");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(45)")
-                        .HasColumnName("status");
+                    b.Property<int?>("StateId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("state");
 
                     b.Property<int?>("Subproject")
                         .HasColumnType("INTEGER")
@@ -293,6 +296,8 @@ namespace server.Migrations
                         .HasColumnName("type");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StateId");
 
                     b.HasIndex("Subproject");
 
@@ -314,6 +319,28 @@ namespace server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("project_role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Project Manager"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Developer"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "User"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Guest"
+                        });
                 });
 
             modelBuilder.Entity("server.Models.ProjectUser", b =>
@@ -360,6 +387,80 @@ namespace server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Project Manager"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Developer"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "User"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Guest"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Admin"
+                        });
+                });
+
+            modelBuilder.Entity("server.Models.State", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("state");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Not started"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Ready"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "In Progress"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Blocked"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Done"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Cancelled"
+                        });
                 });
 
             modelBuilder.Entity("server.Models.Tag", b =>
@@ -620,9 +721,15 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.Project", b =>
                 {
+                    b.HasOne("server.Models.State", "State")
+                        .WithMany("Projects")
+                        .HasForeignKey("StateId");
+
                     b.HasOne("server.Models.Project", "SubprojectNavigation")
                         .WithMany("InverseSubprojectNavigation")
                         .HasForeignKey("Subproject");
+
+                    b.Navigation("State");
 
                     b.Navigation("SubprojectNavigation");
                 });
@@ -708,6 +815,11 @@ namespace server.Migrations
             modelBuilder.Entity("server.Models.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("server.Models.State", b =>
+                {
+                    b.Navigation("Projects");
                 });
 
             modelBuilder.Entity("server.Models.Team", b =>
