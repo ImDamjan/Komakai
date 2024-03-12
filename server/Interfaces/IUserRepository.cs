@@ -9,7 +9,6 @@ namespace server.Interfaces
 {
     public interface IUserRepository
     {
-        Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId,string period);
 
         Task AddUserAsync(User user);
 

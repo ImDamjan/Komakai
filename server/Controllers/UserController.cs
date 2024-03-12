@@ -45,15 +45,5 @@ namespace server.Controllers
             var users=await _repos.GetUsersByRoleAsync(roleName);
             return Ok(users);
         }
-
-
-
-        //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
-        [HttpGet("userProjectStates/{id}/{period}")]
-        public async Task<IActionResult> GetAllUserStatesProjects([FromRoute]int id,[FromRoute] string period)
-        {
-            var res = await _repos.GetAllUserProjectStates(id,period);
-            return Ok(res);
-        }
     }
 }

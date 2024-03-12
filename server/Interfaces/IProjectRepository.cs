@@ -9,6 +9,7 @@ namespace server.Interfaces
 {
     public interface IProjectRepository
     {
+        Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId,string period);
         Task<List<Project>> GetAllProjectsAsync();
         Task<Project?> GetProjectByIdAsync(int id);
         Task<Project?> DeleteProjectAsync(int id);
