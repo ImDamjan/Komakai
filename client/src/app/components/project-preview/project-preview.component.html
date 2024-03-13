@@ -1,22 +1,25 @@
-<article class="card">
+<div *ngIf="projectsData.length === 0 && !isLoading">
+  <p>{{ errorMessage }}</p>
+</div>
+<article class="card" *ngFor="let project of projectsData">
   <section class="card-content">
     <div class="header-section">
       <header class="title-wrapper">
-        <h1>Adoddle</h1>
-        <img src="assets\project-preview\more.svg" alt="Company Logo" width="25" height="25" />
+        <h1>{{ project.title }}</h1>
+        <img src="assets/project-preview/more.svg" alt="" class="icon" />
       </header>
       <span class="status-label">Status</span>
     </div>
     <hr class="divider" />
     <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     <div class="date-section">
-      <img src="assets\project-preview\time.svg" alt="" width="11" height="17" />
+      <img src="assets/project-preview/time.svg" alt="" class="icon" />
       <time datetime="2023-04-05">05 APRIL 2023</time>
     </div>
     <div class="issue-section">
       <p>Team part</p>
       <div class="issue-details">
-        <img src="assets\project-preview\issues.svg" alt="Issues Icon" width="20" height="21" />
+        <img src="assets/project-preview/issues.svg" alt="" class="icon" />
         <span>14 issues</span>
       </div>
     </div>
