@@ -1,4 +1,4 @@
-<div *ngIf="projectsData.length === 0 && !isLoading">
+<div *ngIf="projectsData && projectsData.length === 0 && !isLoading">
   <p>{{ errorMessage }}</p>
 </div>
 <article class="card" *ngFor="let project of projectsData">
