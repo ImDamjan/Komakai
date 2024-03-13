@@ -9,6 +9,10 @@ export class ProjectService {
   userId: number;
 
   constructor(private http: HttpClient) {
-      this.userId = -1;
+    this.userId = -1;
+   }
+
+   setUserId(userId: number) {
+    this.userId = userId;
    }
 }
