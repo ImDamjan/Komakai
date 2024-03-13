@@ -23,8 +23,13 @@ namespace server.Models
         [Column("tags", TypeName = "varchar(45)")]
         public string Tags { get; set; } = null!;
 
+
+
+        //many-to-many condition
+        [ForeignKey("TeamId")]
         [InverseProperty("Team")]
-        public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
+        public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
+    
 
     }
 }

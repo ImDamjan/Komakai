@@ -26,7 +26,7 @@ namespace server.Models
         [Column("state")]
         public int? StateId { get; set; }
 
-        [Column("last_state_changed")]
+        [Column("last_state_changed", TypeName ="datetime")]
         public DateTime LastStateChange { get; set; }
 
         [Column("subproject")]
@@ -53,8 +53,6 @@ namespace server.Models
         [InverseProperty("SubprojectNavigation")]
         public virtual ICollection<Project> InverseSubprojectNavigation { get; set; } = new List<Project>();
 
-        [InverseProperty("Project")]
-        public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
 
         [ForeignKey("Subproject")]
         [InverseProperty("InverseSubprojectNavigation")]
