@@ -21,6 +21,9 @@ namespace server.Models
         public string Description { get; set; } = null!;
 
         [InverseProperty("Priority")]
+        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+        [InverseProperty("Priority")]
         public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
 
     }

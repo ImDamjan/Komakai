@@ -23,6 +23,9 @@ namespace server.Models
         [Column("end", TypeName = "datetime")]
         public DateTime End { get; set; }
 
+        [Column("description")]
+        public string Description { get; set; } = null!;
+
         [Column("state")]
         public int? StateId { get; set; }
 
@@ -47,6 +50,13 @@ namespace server.Models
         [Column("team_id")]
         public int TeamId { get; set; }
 
+        [Column("priority_id")]
+        public int PriorityId { get; set; }
+
+        [ForeignKey("PriorityId")]
+        [InverseProperty("Projects")]
+        public Priority? Priority { get; set; }
+        
         [InverseProperty("Project")]
         public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
 

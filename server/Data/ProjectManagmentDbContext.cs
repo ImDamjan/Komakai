@@ -25,10 +25,34 @@ namespace server.Data
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<State> States { get; set; }
+        public virtual DbSet<TeamTag> TeamTags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            var priorities = new List<Priority>{
+                new Priority{
+                    Id = 1,
+                    Level = 4,
+                    Description = "At risk"
+                },
+                new Priority{
+                    Id = 2,
+                    Level = 3,
+                    Description = "High"
+                },
+                new Priority{
+                    Id = 3,
+                    Level = 2,
+                    Description = "Medium"
+                },
+                new Priority{
+                    Id = 4,
+                    Level = 1,
+                    Description = "Low"
+                },
+            };
 
             var states = new List<State>{
                 new State{
@@ -83,6 +107,7 @@ namespace server.Data
 
             modelBuilder.Entity<Role>().HasData(platformRoles);
             modelBuilder.Entity<State>().HasData(states);
+            modelBuilder.Entity<Priority>().HasData(priorities);
         }
     }
 }
