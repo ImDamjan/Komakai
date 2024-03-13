@@ -12,6 +12,8 @@ namespace server.Interfaces
 
         Task AddUserAsync(User user);
 
+        Task<Role> GetRoleByNameAsync(string roleName);
+
         Task <List<User>> GetAllUsersAsync();
 
         Task<User> GetUserByIdAsync(int id);

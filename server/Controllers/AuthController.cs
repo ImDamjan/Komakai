@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,12 +18,12 @@ namespace server.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _repos;
         private readonly IConfiguration _configuration;
 
         public AuthController(IUserRepository userRepository, IConfiguration configuration)
         {
-            _userRepository = userRepository;
+            _repos = userRepository;
             _configuration = configuration;
         }
 
@@ -41,11 +42,20 @@ namespace server.Controllers
                 Username = request.Username,
                 Password = passwordHash,
                 Email = request.Email,
-                Name = request.Name
+                Name = request.Name,
+                Lastname = request.Lastname,
             };
 
+            var role=await _repos.GetRoleByNameAsync(request.Role); 
+            if (role == null)
+            {
+                return BadRequest("Invalid role");
+            }
+            newUser.RoleId= role.Id;
+
+
             //Dodavanje korsnika u DBContext
-            await _userRepository.AddUserAsync(newUser);
+            await _repos.AddUserAsync(newUser);
 
             return Ok(newUser);
         }
@@ -55,7 +65,7 @@ namespace server.Controllers
         public async Task<ActionResult<string>> Login(UserLoginDto request)
         {
 
-            var user = await _userRepository.GetUserByUsernameAsync(request.Username);
+            var user = await _repos.GetUserByUsernameAsync(request.Username);
             if(user==null)
             {
                 return BadRequest("User or Password incorrect");
@@ -78,6 +88,7 @@ namespace server.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role,user.RoleId.ToString()),
             };
 
             //kreiraj i verifikuj json token
