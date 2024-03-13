@@ -42,4 +42,8 @@ export class ProjectPreviewComponent implements OnInit{
       }
     );
   }
+
+  navigateToProjectDetails(projectId: number) {
+    this.router.navigate(['/projects']);
+  }
 }

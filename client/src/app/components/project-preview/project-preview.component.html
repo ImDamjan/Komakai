@@ -6,7 +6,7 @@
     <div class="header-section">
       <header class="title-wrapper">
         <h1>{{ project.title }}</h1>
-        <img src="assets/project-preview/more.svg" alt="" class="icon" />
+        <img src="assets/project-preview/more.svg" alt="" class="icon" (click)="navigateToProjectDetails(project.id)" style="cursor: pointer;"/>
       </header>
       <span class="status-label">Status</span>
     </div>
