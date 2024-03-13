@@ -9,6 +9,7 @@ import { environment } from '../enviroments/environment';
 export class ProjectService {
   
   userId: number;
+  baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {
     this.userId = -1;

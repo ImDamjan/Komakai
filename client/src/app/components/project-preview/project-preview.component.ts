@@ -1,10 +1,23 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-project-preview',
   templateUrl: './project-preview.component.html',
   styleUrl: './project-preview.component.css'
 })
-export class ProjectPreviewComponent {
+export class ProjectPreviewComponent implements OnInit{
+  
+  data: any;
+  projectsData: any;
 
+  constructor(private http: HttpClient, private projectService: ProjectService) {}
+
+  ngOnInit(): void {
+    this.projectService.setUserId(2);
+    this.projectService.getProjectsData().subscribe(data => {
+      this.projectsData = data;
+    });
+  }
 }
