@@ -37,13 +37,9 @@ export class LoginComponent{
 
 export class Login{
   Username: string;
-  Lastname: string;
   Password: string;
-  Email: string;
   constructor(){
     this.Username='';
-    this.Lastname='';
     this.Password='';
-    this.Email='';
   }
 }
