@@ -21,7 +21,9 @@ namespace server.Mappers
                 EstimatedTime = p.EstimatedTime,
                 Title = p.Title,
                 Budget = p.Budget,
-                Type = p.Type
+                Type = p.Type,
+                TeamId = p.TeamId,
+                PriorityId = p.PriorityId
 
             };
         }
@@ -35,7 +37,8 @@ namespace server.Mappers
                 EstimatedTime = dto.EstimatedTime,
                 Spent = 0,
                 Percentage = 0,
-                StateId = stateId
+                StateId = stateId,
+                Description = dto.Description
             };
         }
     }

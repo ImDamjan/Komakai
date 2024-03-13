@@ -11,6 +11,8 @@ namespace server.DTOs.Projects
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public int? StateId { get; set; }
+        public int? PriorityId { get; set; }
+        public string Description { get; set; } = "";
         public DateTime EstimatedTime { get; set; }
         public double Spent { get; set; }
         public double Percentage { get; set; }
