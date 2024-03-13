@@ -57,10 +57,6 @@ namespace server.Models
         [InverseProperty("Users")]
         public virtual ICollection<Assignment> AssignmentsNavigation { get; set; } = new List<Assignment>();
 
-        [ForeignKey("UserId")]
-        [InverseProperty("Users")]
-        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
-
 
         //many-to-many-condition
         [InverseProperty("User")]

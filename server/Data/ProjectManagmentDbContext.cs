@@ -19,7 +19,6 @@ namespace server.Data
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Priority> Priorities { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
-        public virtual DbSet<ProjectRole> ProjectRoles { get; set; }
         public virtual DbSet<TeamUser> TeamUsers {get; set;}
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
@@ -58,25 +57,6 @@ namespace server.Data
                 }
             };
 
-            var ProjectRoles =  new List<ProjectRole>{
-                new ProjectRole{
-                    Id = 1,
-                    Name = "Project Manager"
-                },
-                    new ProjectRole{
-                    Id = 2,
-                    Name = "Developer"
-                },
-                    new ProjectRole{
-                    Id = 3,
-                    Name = "User"
-                },
-                    new ProjectRole{
-                    Id = 4,
-                    Name = "Guest"
-                }
-            };
-
             var platformRoles = new List<Role>{
                 new Role{
                     Id = 1,
@@ -103,7 +83,6 @@ namespace server.Data
 
             modelBuilder.Entity<Role>().HasData(platformRoles);
             modelBuilder.Entity<State>().HasData(states);
-            modelBuilder.Entity<ProjectRole>().HasData(ProjectRoles);
         }
     }
 }

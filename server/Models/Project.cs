@@ -70,10 +70,6 @@ namespace server.Models
         [InverseProperty("Projects")]
         public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
-        [ForeignKey("ProjectId")]
-        [InverseProperty("Projects")]
-        public virtual ICollection<User> Users { get; set; } = new List<User>();
-
         [ForeignKey("StateId")]
         [InverseProperty("Projects")]
         public virtual State? State { get; set; } = null!;

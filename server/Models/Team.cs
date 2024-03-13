@@ -26,7 +26,6 @@ namespace server.Models
 
 
         //many-to-many condition
-        [ForeignKey("TeamId")]
         [InverseProperty("Team")]
         public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
     
