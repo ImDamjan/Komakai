@@ -46,5 +46,10 @@ namespace server.Repositories
                 .Where(u=> u.Role!= null && u.Role.Name==roleName)
                 .ToListAsync();
         }
+
+        public async Task<Role> GetRoleByNameAsync(string roleName)
+        {
+            return await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
+        }
     }
 }
