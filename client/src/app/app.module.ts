@@ -24,6 +24,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ProjectPreviewComponent } from './components/project-preview/project-preview.component';
 import { ProjectTaskComponent } from './components/project-task/project-task.component';
 import { ProjectStatusComponent } from './components/project-status/project-status.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ProjectStatusComponent } from './components/project-status/project-stat
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    NgApexchartsModule
   ],
   providers: [
     provideClientHydration()
