@@ -1,32 +1,32 @@
 export const navbarData = [
     {
         routeLink: 'dashboard',
-        icon: 'fal fa-slack',
+        icon: '/assets/sidenavigation/dashboard.svg',
         label: 'Dashboard'
     },
     {
         routeLink: 'projects',
-        icon: 'fal fa-home',
+        icon: '/assets/sidenavigation/project.svg',
         label: 'Project list'
     },
     {
         routeLink: 'tasks',
-        icon: 'fal fa-home',
+        icon: '/assets/sidenavigation/tasks.svg',
         label: 'Tasks'
     },
     {
         routeLink: 'activity',
-        icon: 'fal fa-home',
+        icon: '/assets/sidenavigation/activity.svg',
         label: 'Activity'
     },
     {
         routeLink: 'teams',
-        icon: 'fal fa-home',
+        icon: '/assets/sidenavigation/teams.svg',
         label: 'Teams'
     },
     {
         routeLink: 'help',
-        icon: 'fal fa-home',
+        icon: '/assets/sidenavigation/help.svg',
         label: 'Help'
     }
 ];
