@@ -14,7 +14,7 @@
     <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     <div class="date-section">
       <img src="assets/project-preview/time.svg" alt="" class="icon" />
-      <time datetime="2023-04-05">05 APRIL 2023</time>
+      <time>{{ project.end | date: 'dd MMMM yyyy' }}</time>
     </div>
     <div class="issue-section">
       <p>Team part</p>
