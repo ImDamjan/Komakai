@@ -16,7 +16,9 @@ export class LoginComponent{
   loginObj: Login;
 
   loginForm!: FormGroup;
-  
+
+  idUser='';
+
   decodedToken: any;
   apiUrl = environment.apiUrl;
   constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService) {
@@ -27,7 +29,19 @@ export class LoginComponent{
 
     this.http.post('https://localhost:7152/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res)=>{
       if(res){
-        console.log(res);
+        this.decodedToken=jwtDecode(res);
+        
+        this.http.get('https://localhost:7152/api/User',this.decodedToken.nameidentifier).subscribe((res1:any)=>{
+
+          console.log(res1.username);
+
+          if(this.loginObj.Username==res1.username){
+            alert('Login success');
+            this.router.navigateByUrl('/dashboard');
+          }
+
+        })
+
       }
     })
   }
