@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.DTOs.Priority;
 using server.DTOs.Projects;
 using server.Models;
 
@@ -40,6 +41,14 @@ namespace server.Mappers
                 StateId = stateId,
                 Description = dto.Description,
                 PriorityId = dto.PriorityId
+            };
+        }
+        public static PriorityDto toPrioDto(this Priority prio)
+        {
+            return new PriorityDto{
+                Id = prio.Id,
+                Description = prio.Description,
+                Level = prio.Level
             };
         }
     }
