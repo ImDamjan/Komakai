@@ -70,18 +70,6 @@ namespace server.Controllers
             return Ok(project.ToProjectDto());
         }
 
-        [HttpDelete]
-        [Route("delete/{id}")]
-
-        public async Task<IActionResult> Delete([FromRoute] int id)
-        {
-            var project =  await _repos.DeleteProjectAsync(id);
-
-            if(project==null)
-                return NotFound("Project with Id:"+id + " was not found !!!");
-            
-            return Ok(project);
-        }
         //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
         [HttpGet("userProjectStates/{userId}/{period}")]
         public async Task<IActionResult> GetAllUserStatesProjects([FromRoute]int userId,[FromRoute] string period)

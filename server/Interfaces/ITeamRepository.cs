@@ -12,7 +12,6 @@ namespace server.Interfaces
         Task<Team?> GetTeamByIdAsync(int id);
         Task<Team> CreateTeamAsync(Team team, List<User> members);
 
-        Task<Team?> DeleteUserFromTeam(int userId, int teamId);
 
         Task<List<TeamUser>> GetTeamUsersByIdAsync(int teamId);
 
