@@ -46,5 +46,7 @@ namespace server.Controllers
             var users=await _repos.GetUsersByRoleAsync(roleName);
             return Ok(users);
         }
+
+        //TO-DO treba da se napravi endpoint za getovanje role preko id-ija
     }
 }

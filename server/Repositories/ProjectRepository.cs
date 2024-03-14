@@ -17,18 +17,15 @@ namespace server.Repositories
         {
             _context = context;
         }
-        public async Task<Project?> CreateProjectAsync(Project projectModel, int userId, List<int> teamMembers)
+
+        //TO-DO treba da se proveri da li postoji project manager u prosledjenim idijevima
+        public async Task<Project?> CreateProjectAsync(Project projectModel, List<int> teamMembers)
         {
             var Users = new List<User>();
-            var user = await _context.Users.Where(u=> u.Id==userId).FirstOrDefaultAsync();
-            if(user==null)
-                return null;
-
-            Users.Add(user);
             
             foreach (int userid in teamMembers)
             {
-                user = await _context.Users.Where(u=> u.Id==userid).FirstOrDefaultAsync();
+                var user = await _context.Users.Where(u=> u.Id==userid).FirstOrDefaultAsync();
                 if(user == null)
                     return null;
                 Users.Add(user);
@@ -52,9 +49,13 @@ namespace server.Repositories
                 await _context.TeamUsers.AddAsync(item);
             }
             await _context.Teams.AddAsync(team);
+
             projectModel.StateId = 1;
             projectModel.Percentage = 0;
-            projectModel.PriorityId = 4;
+
+            if(projectModel.PriorityId > 4 || projectModel.PriorityId < 1)
+                projectModel.PriorityId = 4;
+            projectModel.Start = DateTime.Now;
             projectModel.Team = team;
             projectModel.LastStateChangedTime = DateTime.Now;
 
@@ -97,12 +98,15 @@ namespace server.Repositories
 
             project.LastStateChangedTime = DateTime.Now;
             project.Spent=projectDto.Spent;
-            project.StateId=projectDto.StateId;
-            project.Start=projectDto.Start;
+            if(projectDto.StateId > 0 && projectDto.StateId < 7)
+                project.StateId=projectDto.StateId;
             project.Percentage = projectDto.Percentage;
             project.End = projectDto.End;
             project.EstimatedTime = projectDto.EstimatedTime;
             project.Title = projectDto.Title;
+            
+            if(projectDto.PriorityId > 0 && projectDto.PriorityId < 5)
+                project.PriorityId = projectDto.PriorityId;
 
             await _context.SaveChangesAsync();
 

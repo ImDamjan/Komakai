@@ -7,7 +7,6 @@ namespace server.DTOs.Projects
 {
     public class CreateProjectDto
     {
-        public int ProjectManagerId { get; set; }
         public List<int> UserIds { get; set; } = new List<int>();
         public int PriorityId { get; set; }
         public string Title { get; set; } = null!;

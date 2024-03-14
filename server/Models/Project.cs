@@ -51,7 +51,7 @@ namespace server.Models
         public int TeamId { get; set; }
 
         [Column("priority_id")]
-        public int PriorityId { get; set; }
+        public int? PriorityId { get; set; }
 
         [ForeignKey("PriorityId")]
         [InverseProperty("Projects")]

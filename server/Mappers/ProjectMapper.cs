@@ -38,7 +38,8 @@ namespace server.Mappers
                 Spent = 0,
                 Percentage = 0,
                 StateId = stateId,
-                Description = dto.Description
+                Description = dto.Description,
+                PriorityId = dto.PriorityId
             };
         }
     }
