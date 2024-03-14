@@ -27,7 +27,7 @@ export class LoginComponent{
 
     this.http.post('${this.apiUrl}/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res:any)=>{
       if(res){
-        alert("Login success");
+        console.log(res);
       }
 
     })
@@ -36,10 +36,10 @@ export class LoginComponent{
 }
 
 export class Login{
-  username: string;
-  password: string;
+  Username: string;
+  Password: string;
   constructor(){
-    this.username='';
-    this.password='';
+    this.Username='';
+    this.Password='';
   }
 }
