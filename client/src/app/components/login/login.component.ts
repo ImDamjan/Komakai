@@ -36,10 +36,10 @@ export class LoginComponent{
 }
 
 export class Login{
-  Username: string;
-  Password: string;
+  username: string;
+  password: string;
   constructor(){
-    this.Username='';
-    this.Password='';
+    this.username='';
+    this.password='';
   }
 }
