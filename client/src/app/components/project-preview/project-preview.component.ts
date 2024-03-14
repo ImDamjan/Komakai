@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-preview',
@@ -16,10 +17,10 @@ export class ProjectPreviewComponent implements OnInit{
   data: any;
   projectsData: any;
 
-  constructor(private http: HttpClient, private projectService: ProjectService) {}
+  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router) {}
 
   ngOnInit(): void {
-    this.projectService.setUserId(2);
+    //this.projectService.setUserId(2);
     this.projectService.getProjectsData().subscribe(data => {
       this.projectsData = data;
     });
