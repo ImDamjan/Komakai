@@ -49,15 +49,6 @@ export class LoginComponent{
     }
   })
   }
-
-  registerUser(userdata): Observable<any> {
-    return this.http.post('https://localhost:7152/api/Auth/login', this.loginObj).pipe(catchError(this.handleError));
-  }
-
-  handleError(error: HttpErrorResponse) {
-    return throwError(error);
-}
-
 }
 
 export class Login{
