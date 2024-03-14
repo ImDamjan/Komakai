@@ -20,7 +20,7 @@ namespace server.Models
         public int UserId { get; set; }
 
         [Column("project_role_id")]
-        public int ProjectRoleId { get; set; }
+        public int? ProjectRoleId { get; set; }
 
         [ForeignKey("ProjectRoleId")]
         [InverseProperty("TeamUsers")]

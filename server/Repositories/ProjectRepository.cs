@@ -44,7 +44,7 @@ namespace server.Repositories
                 relationship.Add(new TeamUser{
                     User = item,
                     Team = team,
-                    ProjectRoleId = (int)item.RoleId
+                    ProjectRoleId = item.RoleId
                 });
             }
             foreach (var item in relationship)

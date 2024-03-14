@@ -19,6 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
+builder.Services.AddScoped<ITeamRepository,TeamRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 
 builder.Services.AddDbContext<ProjectManagmentDbContext>(
