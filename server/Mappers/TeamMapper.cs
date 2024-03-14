@@ -18,5 +18,13 @@ namespace server.Mappers
                 Members = members
             };
         }
+
+        public static Team fromCreateDtoToTeam(this CreateTeamDto dto)
+        {
+            return new Team{
+                Name = dto.Name,
+                Type = dto.Type,
+            };
+        }
     }
 }

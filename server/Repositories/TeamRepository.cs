@@ -18,11 +18,11 @@ namespace server.Repositories
         {
             _context = context;
         }
-        public async Task<Team> CreateTeamAsync(Team team, List<User> memebers)
+        public async Task<Team> CreateTeamAsync(Team team, List<int> memebers)
         {
             foreach (var user in memebers)
             {
-                await _context.TeamUsers.AddAsync(new TeamUser{ Team = team, User = user});
+                await _context.TeamUsers.AddAsync(new TeamUser{ Team = team, UserId = user});
             }
 
             await _context.Teams.AddAsync(team);
@@ -31,41 +31,6 @@ namespace server.Repositories
 
             return team;
 
-        }
-
-        public async Task<Team?> DeleteTeamAsync(int id)
-        {
-            var team = await GetTeamByIdAsync(id);
-
-            if(team==null)
-                return null;
-
-            _context.Teams.Remove(team);
-            await _context.SaveChangesAsync();
-            
-            return team;
-        }
-
-        public async Task<Team?> DeleteUserFromTeam(int userId, int teamId)
-        {
-            var teamUser = await _context.TeamUsers.FirstOrDefaultAsync(tu=> tu.UserId==userId && tu.TeamId==teamId);
-
-            if(teamUser==null)
-                return null;
-
-            _context.TeamUsers.Remove(teamUser);
-            await _context.SaveChangesAsync();
-
-            var teamMembers = await GetTeamUsersByIdAsync(teamId);
-
-            if(teamMembers.Count==0)
-            {
-                await DeleteTeamAsync(teamId);
-                return null;
-            }
-
-            return await GetTeamByIdAsync(teamId);
-                        
         }
 
         public async Task<List<Team>> GetAllTeamsAsync()
@@ -83,9 +48,9 @@ namespace server.Repositories
             return team;
         }
 
-        public async Task<List<TeamUser>> GetTeamUsersByIdAsync(int teamId)
+        public async Task<List<int>> GetTeamUsersByIdAsync(int teamId)
         {
-            return await _context.TeamUsers.Where(tu=>tu.TeamId==teamId).ToListAsync();
+            return await _context.TeamUsers.Where(t=>t.TeamId==teamId).Select(t=>t.UserId).ToListAsync();
         }
     }
 }
