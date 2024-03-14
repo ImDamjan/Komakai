@@ -28,11 +28,11 @@ export class LoginComponent{
 
   onLogin(): void {
 
-    this.http.post('https://localhost:7152/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res)=>{
+    this.http.post('http://localhost:5295/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res)=>{
       if(res){
         this.decodedToken=jwtDecode(res);
         
-        this.http.get('https://localhost:7152/api/User',this.decodedToken.nameidentifier).subscribe((res1:any)=>{
+        this.http.get('http://localhost:5295/api/User',this.decodedToken.nameidentifier).subscribe((res1:any)=>{
 
           if(this.loginObj.Username==res1[0].username){
             alert('Login success');
