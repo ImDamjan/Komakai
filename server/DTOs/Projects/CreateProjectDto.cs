@@ -7,8 +7,11 @@ namespace server.DTOs.Projects
 {
     public class CreateProjectDto
     {
-        public int UserId { get; set; }
+        public List<int> UserIds { get; set; } = new List<int>();
+        public int PriorityId { get; set; }
         public string Title { get; set; } = null!;
+        public double Budget { get; set; }
+        public string Description { get; set; } = "";
         public string Type { get; set; } = null!;
         public DateTime EstimatedTime { get; set; }
     }

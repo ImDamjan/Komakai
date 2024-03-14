@@ -23,14 +23,14 @@ namespace server.Models
         [Column("end", TypeName = "datetime")]
         public DateTime End { get; set; }
 
+        [Column("description")]
+        public string Description { get; set; } = null!;
+
         [Column("state")]
         public int? StateId { get; set; }
 
-        [Column("last_state_changed")]
-        public DateTime LastStateChange { get; set; }
-
-        [Column("subproject")]
-        public int? Subproject { get; set; }
+        [Column("last_state_changed", TypeName ="datetime")]
+        public DateTime LastStateChangedTime { get; set; }
 
         [Column("estimated_time", TypeName = "datetime")]
         public DateTime EstimatedTime { get; set; }
@@ -47,18 +47,18 @@ namespace server.Models
         [Column("percentage", TypeName = "float")]
         public double Percentage { get; set; }
 
+        [Column("team_id")]
+        public int TeamId { get; set; }
+
+        [Column("priority_id")]
+        public int? PriorityId { get; set; }
+
+        [ForeignKey("PriorityId")]
+        [InverseProperty("Projects")]
+        public Priority? Priority { get; set; }
+        
         [InverseProperty("Project")]
         public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
-
-        [InverseProperty("SubprojectNavigation")]
-        public virtual ICollection<Project> InverseSubprojectNavigation { get; set; } = new List<Project>();
-
-        [InverseProperty("Project")]
-        public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
-
-        [ForeignKey("Subproject")]
-        [InverseProperty("InverseSubprojectNavigation")]
-        public virtual Project? SubprojectNavigation { get; set; }
 
         [ForeignKey("RelatedProjectId")]
         [InverseProperty("RelatedProjects")]
@@ -72,12 +72,15 @@ namespace server.Models
         [InverseProperty("Projects")]
         public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
-        [ForeignKey("ProjectId")]
-        [InverseProperty("Projects")]
-        public virtual ICollection<User> Users { get; set; } = new List<User>();
-
+        //1-to-many
         [ForeignKey("StateId")]
         [InverseProperty("Projects")]
         public virtual State? State { get; set; } = null!;
+
+        [ForeignKey("TeamId")]
+        [InverseProperty("Projects")]
+
+        public virtual Team? Team { get; set; }
+        
     }
 }

@@ -1,11 +1,12 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { AuthService } from '../../services/jwt-decoder.service';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { decode } from 'punycode';
 import { environment } from '../../enviroments/environment';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -16,34 +17,45 @@ export class LoginComponent{
   loginObj: Login;
 
   loginForm!: FormGroup;
-  
+
+  idUser='';
+
   decodedToken: any;
   apiUrl = environment.apiUrl;
-  constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private authService: AuthService) {
+  constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService) {
     this.loginObj=new Login();
   }
 
   onLogin(): void {
 
-    this.http.post('${this.apiUrl}/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res:any)=>{
+    this.http.post('http://localhost:5295/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res)=>{
       if(res){
-        alert("Login success");
+        this.decodedToken=jwtDecode(res);
+        
+        this.http.get('http://localhost:5295/api/User',this.decodedToken.nameidentifier).subscribe((res1:any)=>{
+
+          if(this.loginObj.Username==res1[0].username){
+            alert('Login success');
+            this.router.navigateByUrl('/dashboard');
+          }
+
+        },
+        )
+
       }
-
-    })
+    },
+    (err) =>{
+      alert(err.error);
+    }
+  )
   }
-
 }
 
 export class Login{
   Username: string;
-  Lastname: string;
   Password: string;
-  Email: string;
   constructor(){
     this.Username='';
-    this.Lastname='';
     this.Password='';
-    this.Email='';
   }
 }
