@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { decode } from 'punycode';
 import { environment } from '../../enviroments/environment';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,7 @@ export class LoginComponent{
 
   onLogin(): void {
 
-    this.http.post('https://localhost:7152/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res)=>{
+    this.http.post('https://localhost:7152/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe({ next: (res)=>{
       if(res){
         this.decodedToken=jwtDecode(res);
         
@@ -39,14 +40,23 @@ export class LoginComponent{
           }
 
         },
-        (error)=>{
-          
-        }
         )
 
       }
-    })
+    },
+    error: (err) =>{
+      alert(err?.error.message);
+    }
+  })
   }
+
+  registerUser(userdata): Observable<any> {
+    return this.http.post('https://localhost:7152/api/Auth/login', this.loginObj).pipe(catchError(this.handleError));
+  }
+
+  handleError(error: HttpErrorResponse) {
+    return throwError(error);
+}
 
 }
 
