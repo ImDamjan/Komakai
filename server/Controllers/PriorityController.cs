@@ -27,5 +27,16 @@ namespace server.Controllers
 
             return Ok(dtos);
         }
+
+        [HttpGet("getPrio{id}")]
+
+        public async Task<IActionResult> GetPrioById([FromRoute] int id)
+        {
+            var prio = await _repo.GetPriority(id);
+            if(prio==null)
+                return NotFound("Priority not found");
+
+            return Ok(prio.toPrioDto());
+        }
     }
 }
