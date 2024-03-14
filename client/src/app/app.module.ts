@@ -4,7 +4,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthComponent } from './pages/auth/auth.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { FormsModule } from '@angular/forms';
@@ -23,6 +22,7 @@ import { BodyComponent } from './components/body/body.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ProjectPreviewComponent } from './components/project-preview/project-preview.component';
 import { ProjectTaskComponent } from './components/project-task/project-task.component';
+import { AuthComponent } from './pages/auth/auth.component';
 
 @NgModule({
   declarations: [

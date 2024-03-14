@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.Interfaces;
 using server.Mappers;
@@ -39,7 +40,7 @@ namespace server.Controllers
             return Ok(user);
         }
 
-        [HttpGet("byRole/{roleName}")]
+        [HttpGet("byRole/{roleName}"), Authorize(Roles ="5")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsersByRole(string roleName)
         {
             var users=await _repos.GetUsersByRoleAsync(roleName);
