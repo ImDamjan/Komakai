@@ -3,7 +3,7 @@ import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { AuthService } from '../../services/jwt-decoder.service';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { decode } from 'punycode';
 import { environment } from '../../enviroments/environment';
 
@@ -19,7 +19,7 @@ export class LoginComponent{
   
   decodedToken: any;
   apiUrl = environment.apiUrl;
-  constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private authService: AuthService) {
+  constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService) {
     this.loginObj=new Login();
   }
 
