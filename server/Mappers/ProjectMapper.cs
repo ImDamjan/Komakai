@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.DTOs.Priority;
 using server.DTOs.Projects;
 using server.Models;
 
@@ -21,7 +22,9 @@ namespace server.Mappers
                 EstimatedTime = p.EstimatedTime,
                 Title = p.Title,
                 Budget = p.Budget,
-                Type = p.Type
+                Type = p.Type,
+                TeamId = p.TeamId,
+                PriorityId = p.PriorityId
 
             };
         }
@@ -35,7 +38,17 @@ namespace server.Mappers
                 EstimatedTime = dto.EstimatedTime,
                 Spent = 0,
                 Percentage = 0,
-                StateId = stateId
+                StateId = stateId,
+                Description = dto.Description,
+                PriorityId = dto.PriorityId
+            };
+        }
+        public static PriorityDto toPrioDto(this Priority prio)
+        {
+            return new PriorityDto{
+                Id = prio.Id,
+                Description = prio.Description,
+                Level = prio.Level
             };
         }
     }

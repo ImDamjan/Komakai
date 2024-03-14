@@ -17,38 +17,54 @@ namespace server.Repositories
         {
             _context = context;
         }
-        public async Task<Project?> CreateProjectAsync(Project projectModel, int userId)
-        {
-            var user = await _context.Users.Where(u=> u.Id==userId).FirstOrDefaultAsync();
 
-            if(user==null)
-                return null;
+        //TO-DO treba da se proveri da li postoji project manager u prosledjenim idijevima
+        public async Task<Project?> CreateProjectAsync(Project projectModel, List<int> teamMembers)
+        {
+            var Users = new List<User>();
+            
+            foreach (int userid in teamMembers)
+            {
+                var user = await _context.Users.Where(u=> u.Id==userid).FirstOrDefaultAsync();
+                if(user == null)
+                    return null;
+                Users.Add(user);
+            }
+            var relationship = new List<TeamUser>();
+            var team = new Team{
+                Name = projectModel.Title + " Team",
+                Type = projectModel.Type   
+            };
+
+            foreach (var item in Users)
+            {
+                relationship.Add(new TeamUser{
+                    User = item,
+                    Team = team,
+                    ProjectRoleId = item.RoleId
+                });
+            }
+            foreach (var item in relationship)
+            {
+                await _context.TeamUsers.AddAsync(item);
+            }
+            await _context.Teams.AddAsync(team);
 
             projectModel.StateId = 1;
-            projectModel.LastStateChange = DateTime.Now;
-            ProjectUser relation = new ProjectUser(){
-                Project = projectModel,
-                User = user,
-                ProjectRoleId = 1
-            };
-            await _context.ProjectUsers.AddAsync(relation);
+            projectModel.Percentage = 0;
+
+            if(projectModel.PriorityId > 4 || projectModel.PriorityId < 1)
+                projectModel.PriorityId = 4;
+            projectModel.Start = DateTime.Now;
+            projectModel.Team = team;
+            projectModel.LastStateChangedTime = DateTime.Now;
+
             await _context.Projects.AddAsync(projectModel);
             await _context.SaveChangesAsync();
 
             return projectModel;
         }
 
-        public async Task<Project?> DeleteProjectAsync(int id)
-        {
-            var project = await _context.Projects.FirstOrDefaultAsync(p=> p.Id==id);
-            if(project==null)
-                return null;
-            
-            _context.Projects.Remove(project);
-            await _context.SaveChangesAsync();
-                
-            return project;
-        }
 
         public async Task<List<Project>> GetAllProjectsAsync()
         {
@@ -57,32 +73,40 @@ namespace server.Repositories
 
         public async Task<Project?> GetProjectByIdAsync(int id)
         {
-            return await _context.Projects.FindAsync(id);
-        }
-
-        public async Task<bool> ProjectExists(int id)
-        {
-            return await _context.Projects.AnyAsync(p=> p.Id==id);
+            return await _context.Projects.FirstOrDefaultAsync(p=>p.Id==id);
         }
         public async Task<List<Project>> GetAllUserProjectsAsync(int id)
         {
-            return await _context.ProjectUsers.Where(u=> u.UserId==id).Select(p=> p.Project).ToListAsync();
+            var teams = await _context.TeamUsers.Where(u=> u.UserId==id).Select(t=>t.Team).ToListAsync();
+
+            List<Project> projects = new List<Project>();
+            foreach (var team in teams)
+            {
+                var pom = await _context.Projects.Where(p=>p.TeamId==team.Id).ToListAsync();
+
+                projects.AddRange(pom);
+            }
+
+            return projects;
         }
         public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectDto projectDto)
         {
-            var project = await _context.Projects.FirstOrDefaultAsync(p=> p.Id==id);
+            var project = await GetProjectByIdAsync(id);
             if(project==null)
                 return null;
 
 
-            project.LastStateChange = DateTime.Now;
+            project.LastStateChangedTime = DateTime.Now;
             project.Spent=projectDto.Spent;
-            project.StateId=projectDto.StateId;
-            project.Start=projectDto.Start;
+            if(projectDto.StateId > 0 && projectDto.StateId < 7)
+                project.StateId=projectDto.StateId;
             project.Percentage = projectDto.Percentage;
             project.End = projectDto.End;
             project.EstimatedTime = projectDto.EstimatedTime;
             project.Title = projectDto.Title;
+            
+            if(projectDto.PriorityId > 0 && projectDto.PriorityId < 5)
+                project.PriorityId = projectDto.PriorityId;
 
             await _context.SaveChangesAsync();
 
@@ -96,7 +120,11 @@ namespace server.Repositories
             else if(period.ToLower()=="week")
                 past = DateTime.Now.AddDays(-7);
 
-            var projects = await _context.ProjectUsers.Where(u=> u.UserId==userId).Select(p=> p.Project).Where(p=>p.LastStateChange>=past).ToListAsync();
+            
+            var projects = await GetAllUserProjectsAsync(userId);
+
+            
+
 
             List<ProjectStatesDto> lista = new List<ProjectStatesDto>();
 

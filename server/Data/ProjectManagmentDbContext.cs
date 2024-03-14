@@ -19,17 +19,40 @@ namespace server.Data
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Priority> Priorities { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
-        public virtual DbSet<ProjectRole> ProjectRoles { get; set; }
-        public virtual DbSet<ProjectUser> ProjectUsers { get; set; }
+        public virtual DbSet<TeamUser> TeamUsers {get; set;}
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<State> States { get; set; }
+        public virtual DbSet<TeamTag> TeamTags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            var priorities = new List<Priority>{
+                new Priority{
+                    Id = 1,
+                    Level = 4,
+                    Description = "At risk"
+                },
+                new Priority{
+                    Id = 2,
+                    Level = 3,
+                    Description = "High"
+                },
+                new Priority{
+                    Id = 3,
+                    Level = 2,
+                    Description = "Medium"
+                },
+                new Priority{
+                    Id = 4,
+                    Level = 1,
+                    Description = "Low"
+                },
+            };
 
             var states = new List<State>{
                 new State{
@@ -55,25 +78,6 @@ namespace server.Data
                 new State{
                     Id = 6,
                     Name = "Cancelled"
-                }
-            };
-
-            var ProjectRoles =  new List<ProjectRole>{
-                new ProjectRole{
-                    Id = 1,
-                    Name = "Project Manager"
-                },
-                    new ProjectRole{
-                    Id = 2,
-                    Name = "Developer"
-                },
-                    new ProjectRole{
-                    Id = 3,
-                    Name = "User"
-                },
-                    new ProjectRole{
-                    Id = 4,
-                    Name = "Guest"
                 }
             };
 
@@ -103,7 +107,7 @@ namespace server.Data
 
             modelBuilder.Entity<Role>().HasData(platformRoles);
             modelBuilder.Entity<State>().HasData(states);
-            modelBuilder.Entity<ProjectRole>().HasData(ProjectRoles);
+            modelBuilder.Entity<Priority>().HasData(priorities);
         }
     }
 }

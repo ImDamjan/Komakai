@@ -49,9 +49,6 @@ namespace server.Models
         [InverseProperty("User")]
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-        [InverseProperty("User")]
-        public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
-
         [ForeignKey("RoleId")]
         [InverseProperty("Users")]
         public virtual Role Role { get; set; } = null!;
@@ -60,9 +57,11 @@ namespace server.Models
         [InverseProperty("Users")]
         public virtual ICollection<Assignment> AssignmentsNavigation { get; set; } = new List<Assignment>();
 
-        [ForeignKey("UserId")]
-        [InverseProperty("Users")]
-        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+        //many-to-many-condition
+        [InverseProperty("User")]
+        public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
+    
        
     }
 }

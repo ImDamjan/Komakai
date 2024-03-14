@@ -20,11 +20,17 @@ namespace server.Models
         [Column("type", TypeName = "varchar(45)")]
         public string Type { get; set; } = null!;
 
-        [Column("tags", TypeName = "varchar(45)")]
-        public string Tags { get; set; } = null!;
+
+
+        //many-to-many condition
+        [InverseProperty("Team")]
+        public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
 
         [InverseProperty("Team")]
-        public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
+        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+        [InverseProperty("Team")]
+        public virtual ICollection<TeamTag> TeamTags { get; set; } = new List<TeamTag>();
 
     }
 }
