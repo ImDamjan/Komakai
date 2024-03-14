@@ -25,11 +25,10 @@ export class LoginComponent{
 
   onLogin(): void {
 
-    this.http.post('${this.apiUrl}/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res:any)=>{
+    this.http.post('https://localhost:7152/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res)=>{
       if(res){
         console.log(res);
       }
-
     })
   }
 
