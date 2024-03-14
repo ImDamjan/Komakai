@@ -33,14 +33,16 @@ export class LoginComponent{
         
         this.http.get('https://localhost:7152/api/User',this.decodedToken.nameidentifier).subscribe((res1:any)=>{
 
-          console.log(res1[0].username);
-
           if(this.loginObj.Username==res1[0].username){
             alert('Login success');
             this.router.navigateByUrl('/dashboard');
           }
 
-        })
+        },
+        (error)=>{
+          
+        }
+        )
 
       }
     })
