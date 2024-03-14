@@ -38,6 +38,11 @@ namespace server.Repositories
             return await _context.Teams.Include(t=> t.TeamUsers).ToListAsync();
         }
 
+        public async Task<List<Team>> GetAllUserTeams(int userid)
+        {
+            return await _context.TeamUsers.Where(t=>t.UserId==userid).Select(t=>t.Team).ToListAsync();
+        }
+
         public async Task<Team?> GetTeamByIdAsync(int id)
         {
             var team = await _context.Teams.FirstOrDefaultAsync(t=> t.Id==id);

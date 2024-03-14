@@ -35,8 +35,37 @@ namespace server.Controllers
 
             return Ok(teamDtos);
         }
+        [HttpGet]
+        [Route("getTeam/{teamId}")]
 
-        [HttpPost]
+        public async Task<IActionResult> GetTeam([FromRoute] int teamId)
+        {
+            var team = await _team_repo.GetTeamByIdAsync(teamId);
+            if(team==null)
+                return NotFound("Team not found!");
+
+            var members = await _team_repo.GetTeamUsersByIdAsync(teamId);
+
+            return Ok(team.ToTeamDto(members));
+        }
+
+        [HttpGet]
+        [Route("getUserTeams/{userId}")]
+        public async Task<IActionResult> getUserTeams([FromRoute] int userId)
+        {
+            var teams = await _team_repo.GetAllUserTeams(userId);
+            
+            var timovi = new List<TeamDto>();
+            foreach (var item in teams)
+            {
+                var members = await _team_repo.GetTeamUsersByIdAsync(userId);
+                timovi.Add(item.ToTeamDto(members));
+            }
+
+            return Ok(timovi);
+        }
+
+        [HttpPost("createTeam")]
         public async Task<IActionResult> CreateTeam([FromBody]CreateTeamDto dto)
         {
             var team = dto.fromCreateDtoToTeam();
