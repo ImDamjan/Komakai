@@ -80,6 +80,26 @@ namespace server.Controllers
 
             return Ok(res);
         }
-        
+
+        [HttpGet]
+        [Route("getTasksByUser/{user_id}")]
+        public async Task<IActionResult> GetAllTasksByUser([FromRoute] int user_id)
+        {
+            var user =  await _user_repo.GetUserByIdAsync(user_id);
+            if(user==null)
+                return BadRequest("User " + user_id + " does not exist");
+            var tasks = await _asign_repo.GetAllUserAssignments(user_id);
+            List<AssignmentDto> res = new List<AssignmentDto>();
+
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                List<int> ids = new List<int>();
+
+                res.Add(tasks[i].toAssignmentDto(ids));
+            }
+
+            return Ok(res);
+        }
+
     }
 }

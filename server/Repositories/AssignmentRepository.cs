@@ -40,9 +40,11 @@ namespace server.Repositories
             return await _context.Assignments.Where(a=>a.ProjectId==project_id).Include(a=>a.Users).ToListAsync();
         }
 
-        public Task<List<Assignment>> GetAllUserAssignments(int userId)
+        public async Task<List<Assignment>> GetAllUserAssignments(int userId)
         {
-            throw new NotImplementedException();
+            var pom = await _context.Assignments.Include(a=>a.Users.Where(u=>u.Id==userId)).ToListAsync();
+
+            return pom.Where(t=>t.Users.Count > 0).ToList();
         }
 
         public Task<Assignment?> GetAssignmentByid(int id)
