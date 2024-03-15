@@ -18,13 +18,22 @@ namespace server.Controllers
             _state_repo = state_repo;
         }
         [HttpGet("getAll")]
-        public async Task<IActionResult> GetAllRoles()
+        public async Task<IActionResult> GetAllStates()
         {
             var states = await _state_repo.GetAllStatesAsync();
             
             var dtos = states.Select(s=>s.toStateDto());
 
             return Ok(dtos);
+        }
+        [HttpGet("getById{id}")]
+        public async Task<IActionResult> GetStateById([FromRoute] int id)
+        {
+            var state = await _state_repo.GetStateByIdAsync(id);
+            if(state==null)
+                return NotFound("State not found");
+
+            return Ok(state.toStateDto());
         }
     }
 }
