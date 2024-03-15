@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using server.DTOs.Priority;
 using server.DTOs.Projects;
 using server.DTOs.Role;
+using server.DTOs.State;
 using server.Models;
 
 namespace server.Mappers
@@ -58,6 +59,14 @@ namespace server.Mappers
             return new RoleDto{
                 Id = role.Id,
                 Name = role.Name
+            };
+        }
+
+        public static StateDto toStateDto(this State state)
+        {
+            return new StateDto{
+                Id = state.Id,
+                Name = state.Name
             };
         }
     }
