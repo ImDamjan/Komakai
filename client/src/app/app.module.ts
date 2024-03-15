@@ -22,6 +22,7 @@ import { ProjectPreviewComponent } from './components/project-preview/project-pr
 import { ProjectTaskComponent } from './components/project-task/project-task.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { ProjectStatusComponent } from './components/project-status/project-status.component';
+import { ProjectWeeklyAnalizeComponent } from './components/project-weekly-analize/project-weekly-analize.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ProjectStatusComponent } from './components/project-status/project-stat
     HelpcentreComponent,
     ProjectPreviewComponent,
     ProjectTaskComponent,
-    ProjectStatusComponent
+    ProjectStatusComponent,
+    ProjectWeeklyAnalizeComponent
   ],
   imports: [
     FormsModule,
