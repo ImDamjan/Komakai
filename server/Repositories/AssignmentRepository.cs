@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using server.Data;
+using server.DTOs.Assignment;
+using server.Interfaces;
+using server.Models;
+
+namespace server.Repositories
+{
+    public class AssignmentRepository : IAssignmentRepository
+    {
+        private readonly ProjectManagmentDbContext _context;
+        public AssignmentRepository(ProjectManagmentDbContext context)
+        {
+            _context = context;
+        }
+
+        public Task<Assignment> CreateAssignment(Assignment a, Project project, Assignment dependent, State state, Priority prio)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Assignment>> GetAllProjectAssignments(int project_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Assignment>> GetAllUserAssignments(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Assignment?> GetAssignmentByid(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Assignment>> GetAssignmentsByTeamId(int teamId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Assignment?> UpdateAssignment(UpdateAssignmentDto a, int id)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

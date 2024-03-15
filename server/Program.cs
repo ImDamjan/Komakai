@@ -50,6 +50,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
 builder.Services.AddScoped<ITeamRepository,TeamRepository>();
 builder.Services.AddScoped<IPriorityRepository,PriorityRepository>();
+builder.Services.AddScoped<IAssignmentRepository,AssignmentRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 
 builder.Services.AddDbContext<ProjectManagmentDbContext>(
