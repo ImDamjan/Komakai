@@ -16,12 +16,12 @@ namespace server.Repositories
         {
             _context = context;
         }
-        public async Task<List<Role>> GetAllRoles()
+        public async Task<List<Role>> GetAllRolesAsync()
         {
             return await _context.Roles.ToListAsync();
         }
 
-        public async Task<Role?> GetRoleById(int role_id)
+        public async Task<Role?> GetRoleByIdAsync(int role_id)
         {
             return await _context.Roles.FirstOrDefaultAsync(r=> r.Id==role_id);
         }

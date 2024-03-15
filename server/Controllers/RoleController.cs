@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using server.Interfaces;
+using server.Mappers;
 
 namespace server.Controllers
 {
@@ -15,6 +16,15 @@ namespace server.Controllers
         public RoleController(IRoleRepository role_repo)
         {
             _role_repo = role_repo;
+        }
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            var roles = await _role_repo.GetAllRolesAsync();
+            
+            var dtos = roles.Select(r=>r.toRoleDto());
+
+            return Ok(dtos);
         }
     }
 }

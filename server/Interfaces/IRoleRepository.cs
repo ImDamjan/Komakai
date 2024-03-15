@@ -8,7 +8,7 @@ namespace server.Interfaces
 {
     public interface IRoleRepository
     {
-        Task<Role?> GetRoleById(int role_id);
-        Task<List<Role>> GetAllRoles();
+        Task<Role?> GetRoleByIdAsync(int role_id);
+        Task<List<Role>> GetAllRolesAsync();
     }
 }
