@@ -63,10 +63,6 @@ namespace server.Models
         [InverseProperty("Assignments")]
         public virtual Project Project { get; set; } = null!;
 
-        [ForeignKey("TypeId")]
-        [InverseProperty("Assignments")]
-        public virtual AssignmentType Type { get; set; } = null!;
-
         [ForeignKey("AssignmentId")]
         [InverseProperty("Assignments")]
         public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
