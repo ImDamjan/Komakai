@@ -1,12 +1,11 @@
-import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit} from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Component} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
-import { decode } from 'punycode';
 import { environment } from '../../enviroments/environment';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Login } from '../../models/login';
+import { AuthenticationService } from '../../services/atentication.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +13,10 @@ import { Observable, catchError, throwError } from 'rxjs';
   styleUrl: './login.component.css'
 })
 export class LoginComponent{
-  loginObj: Login;
+  loginObj: Login = {
+    username: "aleksandrastaniic",
+    password: "Boki037"
+  } as Login;
 
   loginForm!: FormGroup;
 
@@ -22,40 +24,39 @@ export class LoginComponent{
 
   decodedToken: any;
   apiUrl = environment.apiUrl;
-  constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService) {
-    this.loginObj=new Login();
+  constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService, private authService: AuthenticationService) {
   }
 
   onLogin(): void {
-
-    this.http.post('http://localhost:5295/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res)=>{
-      if(res){
-        this.decodedToken=jwtDecode(res);
-        
-        this.http.get('http://localhost:5295/api/User',this.decodedToken.nameidentifier).subscribe((res1:any)=>{
-
-          if(this.loginObj.Username==res1[0].username){
-            alert('Login success');
-            this.router.navigateByUrl('/dashboard');
-          }
-
-        },
-        )
-
+    this.authService.login(this.loginObj).subscribe({
+      next:(response)=>{
+        this.authService.setToken(response)
+        this.router.navigate(['/dashboard']);
+      },
+      error:(error)=>{
+        console.log(error)
       }
-    },
-    (err) =>{
-      alert(err.error);
-    }
-  )
-  }
-}
+    })
 
-export class Login{
-  Username: string;
-  Password: string;
-  constructor(){
-    this.Username='';
-    this.Password='';
+  //   this.http.post('http://localhost:5295/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res)=>{
+  //     if(res){
+  //       this.decodedToken=jwtDecode(res);
+        
+  //       this.http.get('http://localhost:5295/api/User',this.decodedToken.nameidentifier).subscribe((res1:any)=>{
+
+  //         if(this.loginObj.username==res1[0].username){
+  //           alert('Login success');
+  //           this.router.navigateByUrl('/dashboard');
+  //         }
+
+  //       },
+  //       )
+
+  //     }
+  //   },
+  //   (err) =>{
+  //     alert(err.error);
+  //   }
+  // )
   }
 }
