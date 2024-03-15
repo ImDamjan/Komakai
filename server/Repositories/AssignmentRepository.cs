@@ -18,7 +18,7 @@ namespace server.Repositories
             _context = context;
         }
 
-        public async Task<Assignment> CreateAssignment(Assignment a, Project project, Assignment dependent, Priority prio, List<User> users)
+        public async Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Assignment? dependent, Priority prio, List<User> users)
         {
 
             a.Users = users;
@@ -35,29 +35,33 @@ namespace server.Repositories
 
         }
 
-        public async Task<List<Assignment>> GetAllProjectAssignments(int project_id)
+        public async Task<List<Assignment>> GetAllProjectAssignmentsAsync(int project_id)
         {
             return await _context.Assignments.Where(a=>a.ProjectId==project_id).Include(a=>a.Users).ToListAsync();
         }
 
-        public async Task<List<Assignment>> GetAllUserAssignments(int userId)
+        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId)
         {
             var pom = await _context.Assignments.Include(a=>a.Users.Where(u=>u.Id==userId)).ToListAsync();
 
             return pom.Where(t=>t.Users.Count > 0).ToList();
         }
 
-        public Task<Assignment?> GetAssignmentByid(int id)
+        public async Task<Assignment?> GetAssignmentByidAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Assignments.FirstOrDefaultAsync(a=>a.Id==id);
         }
 
-        public Task<List<Assignment>> GetAssignmentsByTeamId(int teamId)
+        public async Task<List<User>> GetAssignmentUsersAsync(int task_id)
         {
-            throw new NotImplementedException();
+            var task = await _context.Assignments.Include(a=>a.Users).FirstOrDefaultAsync(a=>a.Id==task_id);
+            if(task==null)
+                return new List<User>();
+
+            return task.Users.ToList();
         }
 
-        public Task<Assignment?> UpdateAssignment(UpdateAssignmentDto a, int id)
+        public Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id)
         {
             throw new NotImplementedException();
         }

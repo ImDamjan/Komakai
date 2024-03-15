@@ -9,13 +9,14 @@ namespace server.Interfaces
 {
     public interface IAssignmentRepository
     {
-        Task<Assignment?> GetAssignmentByid(int id);
-        Task<List<Assignment>> GetAllUserAssignments(int userId);
-        Task<List<Assignment>> GetAllProjectAssignments(int project_id);
-        Task<Assignment?> UpdateAssignment(UpdateAssignmentDto a,int id);
-        Task<List<Assignment>> GetAssignmentsByTeamId(int teamId);
+        Task<Assignment?> GetAssignmentByidAsync(int id);
+        Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId);
+        Task<List<Assignment>> GetAllProjectAssignmentsAsync(int project_id);
+        Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a,int id);
 
-        Task<Assignment> CreateAssignment(Assignment a, Project project, Assignment dependent,Priority prio,List<User> users);
+        Task<List<User>> GetAssignmentUsersAsync(int task_id);
+
+        Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Assignment? dependent,Priority prio,List<User> users);
 
     }
 }

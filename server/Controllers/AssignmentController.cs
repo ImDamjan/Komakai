@@ -35,10 +35,15 @@ namespace server.Controllers
         [Route("createAssingment")]
         public async Task<IActionResult> CreateAssignment([FromBody]CreateAssignmentDto dto)
         {
+
+            //da li je project validan
             var project = await _project_repo.GetProjectByIdAsync(dto.ProjectId);
             if(project==null)
                 return NotFound("Project with " + dto.ProjectId+ " does not exist");
             
+
+
+            //proverava da li su useri validni
             var users = new List<User>();
             var team = await _team_repo.GetTeamUsersByIdAsync(project.TeamId);
             foreach (var userId in dto.UserIds)
@@ -49,12 +54,18 @@ namespace server.Controllers
                 users.Add(user);
             }
             
-
+            //da li je prio validan
             var prio = await _prio_repo.GetPriority(dto.PriorityId);
             if(prio==null)
                 return BadRequest("Priority with "+ dto.PriorityId+ " does not exist");
+
+
+            //da li je dependent asignment validan
+            var as_dp = await _asign_repo.GetAssignmentByidAsync(dto.Dependent);
+            if(as_dp==null && dto.Dependent > 0)
+                return BadRequest("There is no such task that can make dependency to this task");
             
-            var a = await _asign_repo.CreateAssignment(dto.fromCreateDtoToAssignment(),project,null,prio,users);
+            var a = await _asign_repo.CreateAssignmentAsync(dto.fromCreateDtoToAssignment(),project,as_dp,prio,users);
 
             return Ok(a.toAssignmentDto(dto.UserIds));
         }
@@ -63,17 +74,16 @@ namespace server.Controllers
 
         public async Task<IActionResult> GetAllTasksByProject([FromRoute] int project_id)
         {
-            var tasks =  await _asign_repo.GetAllProjectAssignments(project_id);
-            var users = tasks.Select(t=> t.Users.ToList()).ToList();
+            var tasks =  await _asign_repo.GetAllProjectAssignmentsAsync(project_id);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)
             {
                 List<int> ids = new List<int>();
-
-                for (int j = 0; j < users[i].Count; j++)
+                var users = await _asign_repo.GetAssignmentUsersAsync(tasks[i].Id);
+                foreach (var user in users)
                 {
-                    ids.Add(users[i][j].Id);
+                    ids.Add(user.Id);
                 }
                 res.Add(tasks[i].toAssignmentDto(ids));
             }
@@ -88,17 +98,41 @@ namespace server.Controllers
             var user =  await _user_repo.GetUserByIdAsync(user_id);
             if(user==null)
                 return BadRequest("User " + user_id + " does not exist");
-            var tasks = await _asign_repo.GetAllUserAssignments(user_id);
+            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)
             {
                 List<int> ids = new List<int>();
-
+                var users = await _asign_repo.GetAssignmentUsersAsync(tasks[i].Id);
+                foreach (var user1 in users)
+                {
+                    ids.Add(user1.Id);
+                }
                 res.Add(tasks[i].toAssignmentDto(ids));
             }
 
             return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("getTaskById/{task_id}")]
+        public async Task<IActionResult> GetTasksById([FromRoute] int task_id)
+        {
+            var task = await _asign_repo.GetAssignmentByidAsync(task_id);
+            var users =  await _asign_repo.GetAssignmentUsersAsync(task_id);
+            if(task==null)
+                return BadRequest("Task does not exist");
+
+            
+            List<int> ids = new List<int>();
+            foreach (var user1 in users)
+            {
+                ids.Add(user1.Id);
+            }
+            
+
+            return Ok(task.toAssignmentDto(ids));
         }
 
     }

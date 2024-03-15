@@ -7,6 +7,7 @@ namespace server.DTOs.Assignment
 {
     public class UpdateAssignmentDto
     {
+        public List<int> UserIds { get; set; } = new List<int>();
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
         public DateTime End { get; set; }
