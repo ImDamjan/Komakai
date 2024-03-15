@@ -28,7 +28,7 @@ namespace server.Controllers
         }
 
         [HttpGet("getById{id}")]
-        public async Task<IActionResult> GetPrioById([FromRoute] int id)
+        public async Task<IActionResult> GetRoleById([FromRoute] int id)
         {
             var role = await _role_repo.GetRoleByIdAsync(id);
             if(role==null)
