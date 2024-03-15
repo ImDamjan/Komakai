@@ -61,9 +61,27 @@ namespace server.Repositories
             return task.Users.ToList();
         }
 
-        public Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id)
+        public async Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id)
         {
-            throw new NotImplementedException();
+            var assignment = await GetAssignmentByidAsync(id);
+            if(assignment==null)
+                return null;
+
+            if(a.Dependent > 0)
+                assignment.Dependent = a.Dependent;
+            else
+                assignment.Dependent = null;
+            assignment.Title = a.Title;
+            assignment.Type = a.Type;
+            assignment.PriorityId = a.PriorityId;
+            assignment.StateId = a.StateId;
+            assignment.Description = a.Description;
+            assignment.End = a.End;
+            assignment.Percentage = a.Percentage;
+
+            await _context.SaveChangesAsync();
+
+            return assignment;
         }
     }
 }

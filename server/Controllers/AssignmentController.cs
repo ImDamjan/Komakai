@@ -32,7 +32,7 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        [Route("createAssingment")]
+        [Route("create")]
         public async Task<IActionResult> CreateAssignment([FromBody]CreateAssignmentDto dto)
         {
 
@@ -70,9 +70,9 @@ namespace server.Controllers
             return Ok(a.toAssignmentDto(dto.UserIds));
         }
         [HttpGet]
-        [Route("getTasksByProject/{project_id}")]
+        [Route("getByProject/{project_id}")]
 
-        public async Task<IActionResult> GetAllTasksByProject([FromRoute] int project_id)
+        public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id)
         {
             var tasks =  await _asign_repo.GetAllProjectAssignmentsAsync(project_id);
             List<AssignmentDto> res = new List<AssignmentDto>();
@@ -92,8 +92,8 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        [Route("getTasksByUser/{user_id}")]
-        public async Task<IActionResult> GetAllTasksByUser([FromRoute] int user_id)
+        [Route("getByUser/{user_id}")]
+        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id)
         {
             var user =  await _user_repo.GetUserByIdAsync(user_id);
             if(user==null)
@@ -116,8 +116,8 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        [Route("getTaskById/{task_id}")]
-        public async Task<IActionResult> GetTasksById([FromRoute] int task_id)
+        [Route("getById/{task_id}")]
+        public async Task<IActionResult> GetAssignmentById([FromRoute] int task_id)
         {
             var task = await _asign_repo.GetAssignmentByidAsync(task_id);
             var users =  await _asign_repo.GetAssignmentUsersAsync(task_id);
@@ -135,5 +135,24 @@ namespace server.Controllers
             return Ok(task.toAssignmentDto(ids));
         }
 
+        [HttpPut]
+        [Route("update/{task_id}")]
+        public async Task<IActionResult> UpdateAssignmentById([FromBody]UpdateAssignmentDto dto,[FromRoute] int task_id)
+        {
+            var asignment = await _asign_repo.UpdateAssignmentAsync(dto,task_id);
+
+            if(asignment==null)
+                return BadRequest("Assignment does not exist");
+            
+            var users = await _asign_repo.GetAssignmentUsersAsync(task_id);
+            List<int> ids = new List<int>();
+            foreach (var user1 in users)
+            {
+                ids.Add(user1.Id);
+            }
+            
+
+            return Ok(asignment.toAssignmentDto(ids));
+        }
     }
 }
