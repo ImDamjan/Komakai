@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using server.DTOs.Priority;
 using server.DTOs.Projects;
+using server.DTOs.Role;
 using server.Models;
 
 namespace server.Mappers
@@ -49,6 +50,14 @@ namespace server.Mappers
                 Id = prio.Id,
                 Description = prio.Description,
                 Level = prio.Level
+            };
+        }
+
+        public static RoleDto toRoleDto(this Role role)
+        {
+            return new RoleDto{
+                Id = role.Id,
+                Name = role.Name
             };
         }
     }
