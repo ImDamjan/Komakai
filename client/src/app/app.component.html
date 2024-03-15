@@ -1,4 +1,4 @@
 <div class="wrapper">
-    <app-sidenav></app-sidenav>
+    <app-sidenav *ngIf="isLoggedIn()"></app-sidenav>
     <router-outlet></router-outlet>
 </div>

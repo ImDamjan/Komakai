@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { AuthenticationService } from './services/atentication.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,9 @@ import { Component, OnInit, inject } from '@angular/core';
 })
 export class AppComponent{
   title = 'client';
+  constructor(private authService: AuthenticationService){}
+
+  isLoggedIn(){
+    return this.authService.isAuthenticated();
+  }
 }
