@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.DTOs.Assignment;
 using server.Interfaces;
@@ -34,9 +35,9 @@ namespace server.Repositories
 
         }
 
-        public Task<List<Assignment>> GetAllProjectAssignments(int project_id)
+        public async Task<List<Assignment>> GetAllProjectAssignments(int project_id)
         {
-            throw new NotImplementedException();
+            return await _context.Assignments.Where(a=>a.ProjectId==project_id).Include(a=>a.Users).ToListAsync();
         }
 
         public Task<List<Assignment>> GetAllUserAssignments(int userId)

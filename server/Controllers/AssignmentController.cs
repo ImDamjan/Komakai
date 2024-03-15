@@ -58,5 +58,28 @@ namespace server.Controllers
 
             return Ok(a.toAssignmentDto(dto.UserIds));
         }
+        [HttpGet]
+        [Route("getTasksByProject/{project_id}")]
+
+        public async Task<IActionResult> GetAllTasksByProject([FromRoute] int project_id)
+        {
+            var tasks =  await _asign_repo.GetAllProjectAssignments(project_id);
+            var users = tasks.Select(t=> t.Users.ToList()).ToList();
+            List<AssignmentDto> res = new List<AssignmentDto>();
+
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                List<int> ids = new List<int>();
+
+                for (int j = 0; j < users[i].Count; j++)
+                {
+                    ids.Add(users[i][j].Id);
+                }
+                res.Add(tasks[i].toAssignmentDto(ids));
+            }
+
+            return Ok(res);
+        }
+        
     }
 }
