@@ -26,5 +26,15 @@ namespace server.Controllers
 
             return Ok(dtos);
         }
+
+        [HttpGet("getById{id}")]
+        public async Task<IActionResult> GetPrioById([FromRoute] int id)
+        {
+            var role = await _role_repo.GetRoleByIdAsync(id);
+            if(role==null)
+                return NotFound("Role not found");
+
+            return Ok(role.toRoleDto());
+        }
     }
 }
