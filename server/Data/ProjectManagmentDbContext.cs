@@ -14,7 +14,6 @@ namespace server.Data
         }
 
         public virtual DbSet<Answer> Answers { get; set; }
-        public virtual DbSet<AssignmentType> AsignmentTypes { get; set; }
         public virtual DbSet<Assignment> Assignments { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Priority> Priorities { get; set; }
