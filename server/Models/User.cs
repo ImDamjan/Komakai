@@ -43,8 +43,6 @@ namespace server.Models
         [Column("role_id")]
         public int? RoleId { get; set; }
 
-        [InverseProperty("AssigneeNavigation")]
-        public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
 
         [InverseProperty("User")]
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

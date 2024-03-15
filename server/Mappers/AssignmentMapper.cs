@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using server.DTOs.Assignment;
+using server.Models;
+
+namespace server.Mappers
+{
+    public static class AssignmentMapper
+    {
+        public static Assignment fromCreateDtoToAssignment(this CreateAssignmentDto dto)
+        {
+            return new Assignment{
+                Title = dto.Title,
+                Type = dto.Type,
+                Description = dto.Description,
+                End = dto.End
+            };
+        }
+
+        public static AssignmentDto toAssignmentDto(this Assignment a, List<int> asignees)
+        {
+            return new AssignmentDto{
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                Start = a.Start,
+                End = a.End,
+                StateId = a.StateId,
+                Percentage = a.Percentage,
+                Dependent = a.Dependent,
+                PriorityId = a.PriorityId,
+                ProjectId = a.ProjectId,
+                Type = a.Type,
+                Assignees = asignees
+            };
+        }
+    }
+}

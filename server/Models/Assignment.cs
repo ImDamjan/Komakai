@@ -14,14 +14,20 @@ namespace server.Models
         [Column("id")]
         public int Id { get; set; }
 
+        [Column("title", TypeName ="varchar(45)")]
+        public string Title { get; set; } = null!;
+
+        [Column("description")]
+        public string Description { get; set; } = null!;
+
         [Column("start", TypeName ="datetime")]
         public DateTime Start { get; set; }
 
         [Column("end", TypeName ="datetime")]
         public DateTime End { get; set; }
 
-        [Column("status")]
-        public int StatusId { get; set; }
+        [Column("state_id")]
+        public int StateId { get; set; }
 
         [Column("percentage", TypeName ="float")]
         public float Percentage { get; set; }
@@ -35,19 +41,14 @@ namespace server.Models
         [Column("project_id")]
         public int ProjectId { get; set; }
 
-        [Column("type_id")]
-        public int TypeId { get; set; }
-
-        [Column("assignee")]
-        public int Assignee { get; set; }
-
-        [ForeignKey("Assignee")]
-        [InverseProperty("Assignments")]
-        public virtual User AssigneeNavigation { get; set; } = null!;
+        [Column("type")]
+        public string Type { get; set; } = null!;
 
         [InverseProperty("Assignment")]
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
+
+        //dependent prop
         [ForeignKey("Dependent")]
         [InverseProperty("InverseDependentNavigation")]
         public virtual Assignment? DependentNavigation { get; set; }
@@ -63,10 +64,6 @@ namespace server.Models
         [InverseProperty("Assignments")]
         public virtual Project Project { get; set; } = null!;
 
-        [ForeignKey("TypeId")]
-        [InverseProperty("Assignments")]
-        public virtual AssignmentType Type { get; set; } = null!;
-
         [ForeignKey("AssignmentId")]
         [InverseProperty("Assignments")]
         public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
@@ -74,5 +71,10 @@ namespace server.Models
         [ForeignKey("AssignmentId")]
         [InverseProperty("AssignmentsNavigation")]
         public virtual ICollection<User> Users { get; set; } = new List<User>();
-        }
+        
+
+        [ForeignKey("StateId")]
+        [InverseProperty("Assignments")]
+        public State? State { get; set; }    
+    }
 }

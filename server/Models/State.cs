@@ -20,5 +20,8 @@ namespace server.Models
         //1-to-many
         [InverseProperty("State")]
         public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+        [InverseProperty("State")]
+        public ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
     }
 }
