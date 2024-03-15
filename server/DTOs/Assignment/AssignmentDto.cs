@@ -8,6 +8,7 @@ namespace server.DTOs.Assignment
     public class AssignmentDto
     {
         public int Id { get; set; }
+        public List<int> Assignees {get; set;} = new List<int>();
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
         public DateTime Start { get; set; }

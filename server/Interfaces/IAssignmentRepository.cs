@@ -15,7 +15,7 @@ namespace server.Interfaces
         Task<Assignment?> UpdateAssignment(UpdateAssignmentDto a,int id);
         Task<List<Assignment>> GetAssignmentsByTeamId(int teamId);
 
-        Task<Assignment> CreateAssignment(Assignment a, Project project, Assignment dependent,State state,Priority prio);
+        Task<Assignment> CreateAssignment(Assignment a, Project project, Assignment dependent,Priority prio,List<User> users);
 
     }
 }

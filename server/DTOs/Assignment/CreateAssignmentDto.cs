@@ -7,6 +7,7 @@ namespace server.DTOs.Assignment
 {
     public class CreateAssignmentDto
     {
+        public List<int> UserIds { get; set; } = new List<int>();
         public string Title { get; set; } = null!;
         public string Type { get; set; } = null!;
         public string Description { get; set; } = null!;
@@ -14,5 +15,6 @@ namespace server.DTOs.Assignment
         public int? Dependent { get; set; }
         public int PriorityId { get; set; }
         public int ProjectId { get; set; }
+        
     }
 }

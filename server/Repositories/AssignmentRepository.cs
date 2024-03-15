@@ -17,9 +17,21 @@ namespace server.Repositories
             _context = context;
         }
 
-        public Task<Assignment> CreateAssignment(Assignment a, Project project, Assignment dependent, State state, Priority prio)
+        public async Task<Assignment> CreateAssignment(Assignment a, Project project, Assignment dependent, Priority prio, List<User> users)
         {
-            throw new NotImplementedException();
+
+            a.Users = users;
+            a.Project = project;
+            a.Priority = prio;
+            a.DependentNavigation = dependent;
+            a.StateId=1;
+            a.Start = DateTime.Now;
+
+            await _context.Assignments.AddAsync(a);
+            await _context.SaveChangesAsync();
+            
+            return a;
+
         }
 
         public Task<List<Assignment>> GetAllProjectAssignments(int project_id)
