@@ -42,7 +42,6 @@ import { ProjectStatusComponent } from './components/project-status/project-stat
     ProjectStatusComponent
   ],
   imports: [
-    
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
