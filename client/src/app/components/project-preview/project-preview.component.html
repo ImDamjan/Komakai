@@ -2,13 +2,13 @@
   <section class="card-content">
     <div class="header-section">
       <header class="title-wrapper">
-        <h1>{{ truncatedTitle }}</h1>
+        <h1 [title]="title">{{ truncatedTitle }}</h1>
         <img src="assets\project-preview\more.svg" alt=""/>
       </header>
       <span class="status-label">Status</span>
     </div>
     <hr class="divider" />
-    <p class="description">{{truncatedDescription}}</p>
+    <p class="description" [title]="description">{{truncatedDescription}}</p>
     <div class="date-section">
       <img src="assets\project-preview\time.svg" alt="" />
       <time>05 APRIL 2023</time>
