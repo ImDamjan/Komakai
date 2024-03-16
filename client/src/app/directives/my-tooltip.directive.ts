@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[appMyTooltip]'
@@ -6,5 +6,14 @@ import { Directive } from '@angular/core';
 export class MyTooltipDirective {
 
   constructor() { }
+
+  @HostListener('mouseover')
+  onMouseOver(){
+    console.log('Mouse in')
+  }
+  @HostListener('mouseout')
+  onMouseOut(){
+    console.log('Mouse out')
+  }
 
 }
