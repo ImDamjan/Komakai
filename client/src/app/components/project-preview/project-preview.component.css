@@ -2,9 +2,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 360px; /* Maximum width for larger screens */
-  width: 100%; /* Occupy full width on smaller screens */
+  width: 360px;
   margin: 0 auto;
+  height: 200px;
+  padding-left: 35px;
 }
 
 .card-content {
@@ -14,7 +15,7 @@
   margin-bottom: 15px;
   width: 100%;
   padding: 14px;
-  box-sizing: border-box; /* Include padding in width calculation */
+  box-sizing: border-box;
 }
 
 .header-section {
@@ -30,11 +31,11 @@
   display: flex;
   align-items: center;
   overflow-wrap: break-word;
-  width: 100%; /* Ensure title takes full width */
+  width: 100%;
 }
 
 .title-wrapper img {
-  margin-left: 5px; /* Adjusted to maintain icon on the left */
+  margin-left: 5px;
 }
 
 .icon {
@@ -48,7 +49,7 @@
   color: #fff;
   padding: 8px 16px;
   font: 400 11px/1.2 Inter, sans-serif;
-  margin-left: auto; /* Push status label to the right */
+  margin-left: auto;
 }
 
 .divider {
@@ -57,7 +58,8 @@
 }
 
 .description {
-  width: 100%; /* Occupy full width */
+  width: 297px;
+  height: 67px;
   color: #424242;
   text-align: justify;
   margin-top: 10px;
@@ -105,4 +107,29 @@
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+/* Responsive styles for tablets */
+@media (max-width: 1024px) {
+  .card {
+    width: 300px; /* Adjust width for tablets */
+    
+  }
+
+  .description {
+    width: 100%; /* Make description full width on phones */
+    height: 67px;
+  }
+}
+
+/* Responsive styles for phones */
+@media (max-width: 768px) {
+  .card {
+    width: 240px; /* Adjust width for phones */
+  }
+  
+  .description {
+    width: 100%; /* Make description full width on phones */
+    height: 67px;
+  }
 }
