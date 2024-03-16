@@ -46,6 +46,38 @@ namespace server.Data
                 _context.Priorities.AddRange(priorities);
                 _context.SaveChanges();
             }
+
+            if(!_context.States.Any())
+            {
+                var states = new List<State>{
+                    new State{
+                        Id = 1,
+                        Name = "Not started"
+                    },
+                    new State{
+                        Id = 2,
+                        Name = "Ready"
+                    },
+                    new State{
+                        Id = 3,
+                        Name = "In Progress"
+                    },
+                    new State{
+                        Id = 4,
+                        Name = "Blocked"
+                    },
+                    new State{
+                        Id = 5,
+                        Name = "Done"
+                    },
+                    new State{
+                        Id = 6,
+                        Name = "Cancelled"
+                    }
+                };
+                _context.States.AddRange(states);
+                _context.SaveChanges();
+            }
         }
     }
 }
