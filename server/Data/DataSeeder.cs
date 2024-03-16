@@ -146,6 +146,64 @@ namespace server.Data
                         RoleId = 2
                     }
                 };
+                _context.Users.AddRange(users);
+                _context.SaveChanges();
+                if(!_context.Teams.Any())
+                {
+                    var teams = new List<Team>{
+                        new Team{
+                            Id = 1,
+                            Name = "Team1",
+                            Type = "Programming"
+                        },
+                            new Team{
+                            Id = 2,
+                            Name = "Team2",
+                            Type = "Testing"
+                        },
+                            new Team{
+                            Id = 3,
+                            Name = "Team3",
+                            Type = "Managing"
+                        },
+                    };
+
+                var team_users = new List<TeamUser>(){
+                        new TeamUser{
+                            TeamId = 1,
+                            UserId = 1,
+                            ProjectRoleId = 2
+                        },
+                        new TeamUser{
+                            TeamId = 1,
+                            UserId = 3,
+                            ProjectRoleId = 2
+                        },
+                        new TeamUser{
+                            TeamId = 2,
+                            UserId = 2,
+                            ProjectRoleId = 1
+                        },
+                        new TeamUser{
+                            TeamId = 2,
+                            UserId = 1,
+                            ProjectRoleId = 2
+                        },
+                        new TeamUser{
+                            TeamId = 3,
+                            UserId = 2,
+                            ProjectRoleId = 1
+                        },
+                        new TeamUser{
+                            TeamId = 3,
+                            UserId = 3,
+                            ProjectRoleId = 2
+                        },
+                    };
+                    _context.Teams.AddRange(teams);
+                    _context.TeamUsers.AddRange(team_users);
+                    _context.SaveChanges();
+                }
             }
         }
     }
