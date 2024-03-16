@@ -78,6 +78,34 @@ namespace server.Data
                 _context.States.AddRange(states);
                 _context.SaveChanges();
             }
+            if(!_context.Roles.Any())
+            {
+                var platformRoles = new List<Role>{
+                    new Role{
+                        Id = 1,
+                        Name = "Project Manager"
+                    },
+                    new Role{
+                        Id = 2,
+                        Name = "Developer"
+                    },
+                    new Role{
+                        Id = 3,
+                        Name = "User"
+                    },
+                    new Role{
+                        Id = 4,
+                        Name = "Guest"
+                    },
+                    new Role{
+                        Id = 5,
+                        Name = "Admin"
+                    }
+
+                };
+                _context.Roles.AddRange(platformRoles);
+                _context.SaveChanges();
+            }
         }
     }
 }

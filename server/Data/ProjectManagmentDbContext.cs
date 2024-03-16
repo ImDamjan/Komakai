@@ -25,34 +25,5 @@ namespace server.Data
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<TeamTag> TeamTags { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            var platformRoles = new List<Role>{
-                new Role{
-                    Id = 1,
-                    Name = "Project Manager"
-                },
-                new Role{
-                    Id = 2,
-                    Name = "Developer"
-                },
-                new Role{
-                    Id = 3,
-                    Name = "User"
-                },
-                new Role{
-                    Id = 4,
-                    Name = "Guest"
-                },
-                new Role{
-                    Id = 5,
-                    Name = "Admin"
-                }
-
-            };
-        }
     }
 }
