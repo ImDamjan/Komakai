@@ -2,21 +2,30 @@
   <section class="card-content">
     <div class="header-section">
       <header class="title-wrapper">
-        <h1>Adoddle</h1>
-        <img src="assets\project-preview\more.svg" alt="Company Logo" width="25" height="25" />
+        <h1 [title]="title">{{ truncatedTitle }}</h1>
+        <img src="assets\project-preview\more.svg" alt=""/>
       </header>
-      <span class="status-label">Status</span>
+      <span class="status-label" [ngClass]="{ 'ready': status === 'Ready', 'in-progress': status === 'In progress', 'done': status === 'Done', 'not-started': status === 'Not started', 'cancelled': status === 'Cancelled' }">{{status}}</span>
     </div>
     <hr class="divider" />
-    <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p class="description" [title]="description">{{truncatedDescription}}</p>
     <div class="date-section">
-      <img src="assets\project-preview\time.svg" alt="" width="11" height="17" />
-      <time datetime="2023-04-05">05 APRIL 2023</time>
+      <img src="assets\project-preview\time.svg" alt="" />
+      <time>05 APRIL 2023</time>
     </div>
     <div class="issue-section">
-      <p>Team part</p>
+      <!-- timovi -->
+      <div class="team-members">
+        <ng-container *ngFor="let member of teamMembers.slice(0, 4); let i = index">
+          <img class="team-member" [src]="member.imageUrl" [alt]="member.name" [style.left.px]="i * 20" />
+        </ng-container>
+        <div *ngIf="teamMembers.length > 4" class="additional-members">
+          +{{ teamMembers.length - 4 }}
+        </div>
+      </div>      
+
       <div class="issue-details">
-        <img src="assets\project-preview\issues.svg" alt="Issues Icon" width="20" height="21" />
+        <img src="assets\project-preview\issues.svg" alt=""/>
         <span>14 issues</span>
       </div>
     </div>
