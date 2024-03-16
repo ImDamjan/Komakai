@@ -106,6 +106,47 @@ namespace server.Data
                 _context.Roles.AddRange(platformRoles);
                 _context.SaveChanges();
             }
+            if(!_context.Users.Any())
+            {
+                var users = new List<User>{
+                    new User{
+                        Id = 1,
+                        Name = "Stefan",
+                        Lastname = "Peric",
+                        Username = "MrSmith",
+                        Password = BCrypt.Net.BCrypt.HashPassword("gospodinUBelom"),
+                        Email = "stefan.peric12@gmail.com",
+                        JobTitle = "Junior Developer",
+                        Organisation = "Organizacija 1",
+                        Department = "Odeljenje 1",
+                        RoleId = 2
+                    },
+                        new User{
+                        Id = 2,
+                        Name = "Marko",
+                        Lastname = "Simic",
+                        Username = "Kira",
+                        Password = BCrypt.Net.BCrypt.HashPassword("gospodinUBelom"),
+                        Email = "marko.simic12@gmail.com",
+                        JobTitle = "Developer",
+                        Organisation = "Organizacija 1",
+                        Department = "Odeljenje 1",
+                        RoleId = 1
+                    },
+                    new User{
+                        Id = 3,
+                        Name = "Gordon",
+                        Lastname = "Majls",
+                        Username = "AnimeNerd",
+                        Password = BCrypt.Net.BCrypt.HashPassword("gospodinUBelom"),
+                        Email = "gordon.m@gmail.com",
+                        JobTitle = "Developer",
+                        Organisation = "Organizacija 1",
+                        Department = "Odeljenje 1",
+                        RoleId = 2
+                    }
+                };
+            }
         }
     }
 }
