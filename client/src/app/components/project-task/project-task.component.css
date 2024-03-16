@@ -35,7 +35,7 @@
   overflow: hidden;
 }
 
-.tooltip {
+/* .tooltip {
   position: relative;
   display: inline-block;
   border-bottom: 1px dotted black;
@@ -43,7 +43,6 @@
 
 .tooltip .name {
   visibility: hidden;
-  width: 120px;
   color: black;
   text-align: center;
   border-radius: 6px;
@@ -62,7 +61,7 @@
 .tooltip:hover .name {
   visibility: visible;
   opacity: 1;
-}
+} */
 
 .name{
   font-size: 14px;
