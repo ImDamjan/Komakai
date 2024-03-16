@@ -8,6 +8,7 @@ import { Component, HostListener } from '@angular/core';
 export class ProjectPreviewComponent {
   title: string = 'Addodle';
   description: string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+  status: string = 'Not started';
   truncatedTitle: string = '';
   truncatedDescription: string = '';
   titleCharacterLimit: number = 0;

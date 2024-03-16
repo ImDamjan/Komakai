@@ -5,7 +5,7 @@
         <h1 [title]="title">{{ truncatedTitle }}</h1>
         <img src="assets\project-preview\more.svg" alt=""/>
       </header>
-      <span class="status-label">Status</span>
+      <span class="status-label" [ngClass]="{ 'ready': status === 'Ready', 'in-progress': status === 'In progress', 'done': status === 'Done', 'not-started': status === 'Not started', 'cancelled': status === 'Cancelled' }">{{status}}</span>
     </div>
     <hr class="divider" />
     <p class="description" [title]="description">{{truncatedDescription}}</p>
