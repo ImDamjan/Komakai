@@ -147,3 +147,34 @@
   width: 104px;
   text-align: center;
 }
+
+.toolTipMy::before{
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #f1f1f1 transparent;
+}
+
+.toolTipMy.show{
+  visibility: visible;
+  opacity: 1;
+}
+
+.toolTipMy{
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted gray;
+  visibility: visible;
+  width: 120px;
+  background-color: gray;
+  color: #fff;
+  text-align: center;
+  pad: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
