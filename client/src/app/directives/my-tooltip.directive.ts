@@ -19,9 +19,14 @@ export class MyTooltipDirective {
     return tooltip;
   }
 
+  shouldShowTooltip(): boolean {
+    const element = this.elRef.nativeElement;
+    return element.offsetWidth < element.scrollWidth;
+  }
+
   @HostListener('mouseenter')
   onMouseEnter() {
-    if (!this.tooltip) {
+    if (!this.tooltip && this.shouldShowTooltip()) {
       this.tooltip = this.createToolTip();
       this.renderer.appendChild(this.elRef.nativeElement, this.tooltip);
     }
