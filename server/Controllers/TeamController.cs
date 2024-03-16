@@ -58,7 +58,7 @@ namespace server.Controllers
             var timovi = new List<TeamDto>();
             foreach (var item in teams)
             {
-                var members = await _team_repo.GetTeamUsersByIdAsync(userId);
+                var members = await _team_repo.GetTeamUsersByIdAsync(item.Id);
                 timovi.Add(item.ToTeamDto(members));
             }
 
