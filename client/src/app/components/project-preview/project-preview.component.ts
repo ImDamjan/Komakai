@@ -7,37 +7,47 @@ import { Component, HostListener } from '@angular/core';
 })
 export class ProjectPreviewComponent {
   title: string = 'Addodle';
+  description: string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
   truncatedTitle: string = '';
-  characterLimit: number = 0;
+  truncatedDescription: string = '';
+  titleCharacterLimit: number = 0;
+  descriptionCharacterLimit: number = 0;
 
   constructor() {
     this.calculateCharacterLimit();
-    this.truncateTitle();
+    this.truncateText();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     this.calculateCharacterLimit();
-    this.truncateTitle();
+    this.truncateText();
   }
 
   calculateCharacterLimit() {
     const screenWidth = window.innerWidth;
     if (screenWidth < 768) {
-      this.characterLimit = 5;
-    } else if (screenWidth > 768 && screenWidth < 1020) {
-      this.characterLimit = 10;
-    }
-    else {
-      this.characterLimit = 20;
+      this.titleCharacterLimit = 5; // Adjust as needed
+      this.descriptionCharacterLimit = 60; // Adjust as needed
+    } else if (screenWidth >= 768 && screenWidth < 1025) {
+      this.titleCharacterLimit = 10; // Adjust as needed
+      this.descriptionCharacterLimit = 100; // Adjust as needed
+    } else {
+      this.titleCharacterLimit = 20; // Adjust as needed
+      this.descriptionCharacterLimit = 190; // Adjust as needed
     }
   }
 
-  truncateTitle() {
-    if (this.title.length > this.characterLimit) {
-      this.truncatedTitle = this.title.substring(0, this.characterLimit) + '...';
+  truncateText() {
+    this.truncatedTitle = this.truncate(this.title, this.titleCharacterLimit);
+    this.truncatedDescription = this.truncate(this.description, this.descriptionCharacterLimit);
+  }
+
+  truncate(text: string, limit: number): string {
+    if (text.length > limit) {
+      return text.substring(0, limit) + '...';
     } else {
-      this.truncatedTitle = this.title;
+      return text;
     }
   }
 }
