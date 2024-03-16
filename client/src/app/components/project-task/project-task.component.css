@@ -26,8 +26,17 @@
   padding-left: 10px;
 }
 
+#namediv{
+  min-width: 450px;
+  width: 520px;
+  max-width: 520px;
+}
+
 #name{
   font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 #details{
@@ -42,11 +51,13 @@
 }
 
 #start{
+  min-width: 69px;
   width: 130px;
   max-width: 130px;
 }
 
 #end{
+  min-width: 69px;
   width: 130px;
   max-width: 130px;
 }
