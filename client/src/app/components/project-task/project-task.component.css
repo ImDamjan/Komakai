@@ -1,4 +1,7 @@
-
+#tasks{
+  flex-grow: 1;
+  padding: 40px;
+}
 
 #task-content{
   border-radius: 15px; 
