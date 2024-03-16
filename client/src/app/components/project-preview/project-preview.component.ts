@@ -1,11 +1,11 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-project-preview',
   templateUrl: './project-preview.component.html',
-  styleUrl: './project-preview.component.css'
+  styleUrls: ['./project-preview.component.css']
 })
-export class ProjectPreviewComponent {
+export class ProjectPreviewComponent implements OnInit {
   title: string = 'Addodle';
   description: string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
   status: string = 'Not started';
@@ -14,9 +14,20 @@ export class ProjectPreviewComponent {
   titleCharacterLimit: number = 0;
   descriptionCharacterLimit: number = 0;
 
+  teamMembers: any[] = [];
+
   constructor() {
     this.calculateCharacterLimit();
     this.truncateText();
+  }
+
+  ngOnInit(): void {
+    this.teamMembers.push({ name: 'Test Member 1', imageUrl: '/assets/project-task/person.svg' });
+    this.teamMembers.push({ name: 'Test Member 2', imageUrl: '/assets/project-task/person.svg' });
+    this.teamMembers.push({ name: 'Test Member 3', imageUrl: '/assets/project-task/person.svg' });
+    this.teamMembers.push({ name: 'Test Member 4', imageUrl: '/assets/project-task/person.svg' });
+    this.teamMembers.push({ name: 'Test Member 5', imageUrl: '/assets/project-task/person.svg' });
+    this.teamMembers.push({ name: 'Test Member 6', imageUrl: '/assets/project-task/person.svg' });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -28,14 +39,14 @@ export class ProjectPreviewComponent {
   calculateCharacterLimit() {
     const screenWidth = window.innerWidth;
     if (screenWidth < 768) {
-      this.titleCharacterLimit = 5; // Adjust as needed
-      this.descriptionCharacterLimit = 60; // Adjust as needed
+      this.titleCharacterLimit = 5;
+      this.descriptionCharacterLimit = 60;
     } else if (screenWidth >= 768 && screenWidth < 1025) {
-      this.titleCharacterLimit = 10; // Adjust as needed
-      this.descriptionCharacterLimit = 100; // Adjust as needed
+      this.titleCharacterLimit = 10;
+      this.descriptionCharacterLimit = 100;
     } else {
-      this.titleCharacterLimit = 20; // Adjust as needed
-      this.descriptionCharacterLimit = 190; // Adjust as needed
+      this.titleCharacterLimit = 20;
+      this.descriptionCharacterLimit = 190;
     }
   }
 

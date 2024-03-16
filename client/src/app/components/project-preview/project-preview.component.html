@@ -14,7 +14,16 @@
       <time>05 APRIL 2023</time>
     </div>
     <div class="issue-section">
-      <p>Team part</p>
+      <!-- timovi -->
+      <div class="team-members">
+        <ng-container *ngFor="let member of teamMembers.slice(0, 4); let i = index">
+          <img class="team-member" [src]="member.imageUrl" [alt]="member.name" [style.left.px]="i * 20" />
+        </ng-container>
+        <div *ngIf="teamMembers.length > 4" class="additional-members">
+          +{{ teamMembers.length - 4 }}
+        </div>
+      </div>      
+
       <div class="issue-details">
         <img src="assets\project-preview\issues.svg" alt=""/>
         <span>14 issues</span>
