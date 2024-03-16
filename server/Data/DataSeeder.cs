@@ -285,8 +285,98 @@ namespace server.Data
                         };
                         _context.Projects.AddRange(projects);
                         _context.SaveChanges();
+                        if(!_context.Assignments.Any())
+                        {
+                            var assignments = new List<Assignment>{
+                                new Assignment{
+                                    Id = 1,
+                                    Title = "Task 1",
+                                    Description = "Uradi register i login",
+                                    Start = DateTime.Now,
+                                    End = DateTime.MinValue,
+                                    StateId = 4,
+                                    Percentage = 20,
+                                    Dependent = null,
+                                    PriorityId = 3,
+                                    Project = projects[0],
+                                    Type = "autorizacija",
+                                    Users = new List<User>{users[0], users[2]}
+                                },
+                                    new Assignment{
+                                    Id = 2,
+                                    Title = "Task 2",
+                                    Description = "Uradi register",
+                                    Start = DateTime.Now,
+                                    End = DateTime.MinValue,
+                                    StateId = 5,
+                                    Percentage = 90,
+                                    Dependent = 1,
+                                    PriorityId = 2,
+                                    Project = projects[0],
+                                    Type = "autorizacija",
+                                    Users = new List<User>{users[2]}
+                                },
+                                    new Assignment{
+                                    Id = 3,
+                                    Title = "Task 3",
+                                    Description = "Uradi login",
+                                    Start = DateTime.Now,
+                                    End = DateTime.MinValue,
+                                    StateId = 5,
+                                    Percentage = 80,
+                                    Dependent = 1,
+                                    PriorityId = 2,
+                                    Project = projects[0],
+                                    Type = "autorizacija",
+                                    Users = new List<User>{users[0]}
+                                },
+                                    new Assignment{
+                                    Id = 4,
+                                    Title = "Task 1",
+                                    Description = "Testiraj login i register",
+                                    Start = DateTime.Now,
+                                    End = DateTime.MinValue,
+                                    StateId = 4,
+                                    Percentage = 20,
+                                    Dependent = null,
+                                    PriorityId = 3,
+                                    Project = projects[2],
+                                    Type = "autorizacija",
+                                    Users = new List<User>{users[1], users[0]}
+                                },
+                                    new Assignment{
+                                    Id = 5,
+                                    Title = "Task 1",
+                                    Description = "Testiraj login",
+                                    Start = DateTime.Now,
+                                    End = DateTime.MinValue,
+                                    StateId = 4,
+                                    Percentage = 20,
+                                    Dependent = 4,
+                                    PriorityId = 3,
+                                    Project = projects[2],
+                                    Type = "autorizacija",
+                                    Users = new List<User>{users[1]}
+                                },
+                                    new Assignment{
+                                    Id = 6,
+                                    Title = "Task 1",
+                                    Description = "Testirajregister",
+                                    Start = DateTime.Now,
+                                    End = DateTime.MinValue,
+                                    StateId = 4,
+                                    Percentage = 20,
+                                    Dependent = 4,
+                                    PriorityId = 3,
+                                    Project = projects[2],
+                                    Type = "autorizacija",
+                                    Users = new List<User>{users[0]}
+                                }
+                            };
+                            _context.Assignments.AddRange(assignments);
+                            _context.SaveChanges();
+                        }
                     }
-
                 }
             }
         }
