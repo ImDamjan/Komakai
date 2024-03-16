@@ -168,7 +168,7 @@ namespace server.Data
                         },
                     };
 
-                var team_users = new List<TeamUser>(){
+                    var team_users = new List<TeamUser>(){
                         new TeamUser{
                             TeamId = 1,
                             UserId = 1,
@@ -203,6 +203,90 @@ namespace server.Data
                     _context.Teams.AddRange(teams);
                     _context.TeamUsers.AddRange(team_users);
                     _context.SaveChanges();
+
+                    if(!_context.Projects.Any())
+                    {
+                        var projects = new List<Project>{
+                            new Project{
+                                Id = 1,
+                                Title = "Projekat 1",
+                                Start = DateTime.Now,
+                                Description = "Projekat za nesto",
+                                StateId = 3,
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = DateTime.Now.AddDays(30),
+                                Budget = 100000,
+                                Spent = 5000,
+                                Type = "Programming",
+                                Percentage = 20,
+                                TeamId = 1,
+                                PriorityId = 2
+                            },
+                                new Project{
+                                Id = 2,
+                                Title = "Projekat 2",
+                                Start = DateTime.Now,
+                                Description = "Projekat za nesto",
+                                StateId = 2,
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = DateTime.Now.AddDays(30),
+                                Budget = 100000,
+                                Spent = 7000,
+                                Type = "Programming",
+                                Percentage = 8,
+                                TeamId = 1,
+                                PriorityId = 2
+                            },
+                                new Project{
+                                Id = 3,
+                                Title = "Projekat 3",
+                                Start = DateTime.Now,
+                                Description = "Projekat za nesto",
+                                StateId = 2,
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = DateTime.Now.AddDays(30),
+                                Budget = 8000,
+                                Spent = 5000,
+                                Type = "Testing",
+                                Percentage = 20,
+                                TeamId = 2,
+                                PriorityId = 2
+                            },
+                                new Project{
+                                Id = 4,
+                                Title = "Projekat 4",
+                                Start = DateTime.Now,
+                                Description = "Projekat za nesto",
+                                StateId = 3,
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = DateTime.Now.AddDays(30),
+                                Budget = 7000,
+                                Spent = 5000,
+                                Type = "Mananging",
+                                Percentage = 80,
+                                TeamId = 3,
+                                PriorityId = 2
+                            },
+                                new Project{
+                                Id = 5,
+                                Title = "Projekat 5",
+                                Start = DateTime.Now,
+                                Description = "Projekat za nesto",
+                                StateId = 3,
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = DateTime.Now.AddDays(30),
+                                Budget = 7000,
+                                Spent = 5000,
+                                Type = "Mananging",
+                                Percentage = 80,
+                                TeamId = 2,
+                                PriorityId = 2
+                            }
+                        };
+                        _context.Projects.AddRange(projects);
+                        _context.SaveChanges();
+                    }
+
                 }
             }
         }
