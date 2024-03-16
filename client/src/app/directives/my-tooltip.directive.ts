@@ -18,14 +18,17 @@ export class MyTooltipDirective {
     return tooltip;
   }
 
-  @HostListener('mouseover')
-  onMouseOver(){
-    const myToolTip = this.createToolTip();
-    this.renderer.appendChild(this.elRef.nativeElement,myToolTip);
-    // console.log('Mouse in')
+  @HostListener('mouseenter')
+  onMouseEnter(){
+    setTimeout(() => {
+      const myToolTip = this.createToolTip();
+      this.renderer.appendChild(this.elRef.nativeElement,myToolTip);
+    }, 300);
   }
   @HostListener('mouseout')
   onMouseOut(){
+    const tooltip = this.elRef.nativeElement.querySelector('.toolTipMy')
+    this.renderer.removeChild(this.elRef.nativeElement, 'toolTipMy');
     console.log('Mouse out')
   }
 
