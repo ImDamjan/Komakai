@@ -1,30 +1,37 @@
 <div class="grid-container">
-  <article class="card" *ngFor="let index of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+  <article class="card" *ngFor="let card of getPaginatedCards()">
     <section class="card-content">
       <div class="header-section">
         <header class="title-wrapper">
-          <h1 [title]="title">{{ truncatedTitle }}</h1>
+          <h1 [title]="card.title">{{ card.truncatedTitle }}</h1>
           <img src="assets\project-preview\more.svg" alt=""/>
         </header>
-        <span class="status-label" [ngClass]="{ 'ready': status === 'Ready', 'in-progress': status === 'In progress', 'done': status === 'Done', 'not-started': status === 'Not started', 'cancelled': status === 'Cancelled' }">{{status}}</span>
+        <span class="status-label" [ngClass]="{
+          'ready': card.status === 'Ready',
+          'in-progress': card.status === 'In progress',
+          'done': card.status === 'Done',
+          'not-started': card.status === 'Not started',
+          'cancelled': card.status === 'Cancelled'
+        }">{{ card.status }}</span>
       </div>
       <hr class="divider" />
-      <p class="description" [title]="description">{{truncatedDescription}}</p>
+      <p class="description" [title]="card.description">{{ card.truncatedDescription }}</p>
       <div class="date-section">
         <img src="assets\project-preview\time.svg" alt="" />
         <time>05 APRIL 2023</time>
       </div>
       <div class="issue-section">
-        <!-- timovi -->
+        <!-- Team members -->
         <div class="team-members">
-          <ng-container *ngFor="let member of teamMembers.slice(0, 4); let i = index">
-            <img class="team-member" [src]="member.imageUrl" [alt]="member.name" [style.left.px]="i * 20" />
+          <ng-container *ngFor="let imageUrl of card.teamMemberImages; let i = index">
+            <img class="team-member" [src]="imageUrl" [alt]="'Team Member ' + (i+1)" [style.left.px]="i * 20" />
           </ng-container>
-          <div *ngIf="teamMembers.length > 4" class="additional-members">
-            +{{ teamMembers.length - 4 }}
+          <div *ngIf="card.teamMemberImages.length > 4" class="additional-members">
+            +{{ card.teamMemberImages.length - 4 }}
           </div>
-        </div>      
+        </div>   
 
+        <!-- Issue details (you can replace this with actual data) -->
         <div class="issue-details">
           <img src="assets\project-preview\issues.svg" alt=""/>
           <span>14 issues</span>
@@ -33,3 +40,5 @@
     </section>
   </article>
 </div>
+
+
