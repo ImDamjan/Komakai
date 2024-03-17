@@ -108,65 +108,174 @@ namespace server.Data
             }
             if(!_context.Users.Any())
             {
-                var users = new List<User>{
-                    new User{
+                var users = new List<User>
+                {
+                    new User
+                    {
                         Id = 1,
-                        Name = "Stefan",
-                        Lastname = "Peric",
-                        Username = "MrSmith",
-                        Password = BCrypt.Net.BCrypt.HashPassword("gospodinUBelom"),
-                        Email = "stefan.peric12@gmail.com",
-                        JobTitle = "Junior Developer",
-                        Organisation = "Organizacija 1",
-                        Department = "Odeljenje 1",
-                        RoleId = 2
+                        Name = "John",
+                        Lastname = "Doe",
+                        Username = "johndoe",
+                        Password = "password123",
+                        Email = "john.doe@example.com",
+                        JobTitle = "Project Manager",
+                        Organisation = "Organization A",
+                        Department = "Department 1",
+                        RoleId = 1 // Project Manager
                     },
-                        new User{
+                    new User
+                    {
                         Id = 2,
-                        Name = "Marko",
-                        Lastname = "Simic",
-                        Username = "Kira",
-                        Password = BCrypt.Net.BCrypt.HashPassword("gospodinUBelom"),
-                        Email = "marko.simic12@gmail.com",
-                        JobTitle = "Developer",
-                        Organisation = "Organizacija 1",
-                        Department = "Odeljenje 1",
-                        RoleId = 1
+                        Name = "Jane",
+                        Lastname = "Smith",
+                        Username = "janesmith",
+                        Password = "password456",
+                        Email = "jane.smith@example.com",
+                        JobTitle = "Project Manager",
+                        Organisation = "Organization B",
+                        Department = "Department 2",
+                        RoleId = 1 // Project Manager
                     },
-                    new User{
+                    new User
+                    {
                         Id = 3,
-                        Name = "Gordon",
-                        Lastname = "Majls",
-                        Username = "AnimeNerd",
-                        Password = BCrypt.Net.BCrypt.HashPassword("gospodinUBelom"),
-                        Email = "gordon.m@gmail.com",
+                        Name = "Alex",
+                        Lastname = "Johnson",
+                        Username = "alexjohnson",
+                        Password = "password789",
+                        Email = "alex.johnson@example.com",
                         JobTitle = "Developer",
-                        Organisation = "Organizacija 1",
-                        Department = "Odeljenje 1",
-                        RoleId = 2
+                        Organisation = "Organization A",
+                        Department = "Department 1",
+                        RoleId = 2 // Developer
+                    },
+                    new User
+                    {
+                        Id = 4,
+                        Name = "Emily",
+                        Lastname = "Brown",
+                        Username = "emilybrown",
+                        Password = "password101",
+                        Email = "emily.brown@example.com",
+                        JobTitle = "Developer",
+                        Organisation = "Organization B",
+                        Department = "Department 2",
+                        RoleId = 2 // Developer
+                    },
+                    new User
+                    {
+                        Id = 5,
+                        Name = "Michael",
+                        Lastname = "Wilson",
+                        Username = "michaelwilson",
+                        Password = "password202",
+                        Email = "michael.wilson@example.com",
+                        JobTitle = "Developer",
+                        Organisation = "Organization A",
+                        Department = "Department 1",
+                        RoleId = 2 // Developer
+                    },
+                    new User
+                    {
+                        Id = 6,
+                        Name = "Sarah",
+                        Lastname = "Martinez",
+                        Username = "sarahmartinez",
+                        Password = "password303",
+                        Email = "sarah.martinez@example.com",
+                        JobTitle = "Developer",
+                        Organisation = "Organization B",
+                        Department = "Department 2",
+                        RoleId = 2 // Developer
+                    },
+                    new User
+                    {
+                        Id = 7,
+                        Name = "Jessica",
+                        Lastname = "Lee",
+                        Username = "jessicalee",
+                        Password = "password404",
+                        Email = "jessica.lee@example.com",
+                        JobTitle = "User",
+                        Organisation = "Organization A",
+                        Department = "Department 1",
+                        RoleId = 3 // User
+                    },
+                    new User
+                    {
+                        Id = 8,
+                        Name = "William",
+                        Lastname = "Taylor",
+                        Username = "williamtaylor",
+                        Password = "password505",
+                        Email = "william.taylor@example.com",
+                        JobTitle = "User",
+                        Organisation = "Organization B",
+                        Department = "Department 2",
+                        RoleId = 3 // User
+                    },
+                    new User
+                    {
+                        Id = 9,
+                        Name = "Olivia",
+                        Lastname = "Anderson",
+                        Username = "oliviaanderson",
+                        Password = "password606",
+                        Email = "olivia.anderson@example.com",
+                        JobTitle = "User",
+                        Organisation = "Organization A",
+                        Department = "Department 1",
+                        RoleId = 3 // User
+                    },
+                    new User
+                    {
+                        Id = 10,
+                        Name = "Ethan",
+                        Lastname = "Moore",
+                        Username = "ethanmoore",
+                        Password = "password707",
+                        Email = "ethan.moore@example.com",
+                        JobTitle = "Admin",
+                        Organisation = "Organization B",
+                        Department = "Department 2",
+                        RoleId = 5 // Admin
                     }
                 };
+
                 _context.Users.AddRange(users);
                 _context.SaveChanges();
+
                 if(!_context.Teams.Any())
                 {
                     var teams = new List<Team>{
                         new Team{
                             Id = 1,
-                            Name = "Team1",
-                            Type = "Programming"
+                            Name = "Team 1",
+                            Type = "Type 1"
                         },
-                            new Team{
+                        new Team{
                             Id = 2,
-                            Name = "Team2",
-                            Type = "Testing"
+                            Name = "Team 2",
+                            Type = "Type 2"
                         },
-                            new Team{
+                        new Team{
                             Id = 3,
-                            Name = "Team3",
-                            Type = "Managing"
+                            Name = "Team 3",
+                            Type = "Type 3"
                         },
+                        new Team{
+                            Id = 4,
+                            Name = "Team 4",
+                            Type = "Type 4"
+                        },
+                        new Team{
+                            Id = 5,
+                            Name = "Team 5",
+                            Type = "Type 5"
+                        }
                     };
+                    _context.Teams.AddRange(teams);
+                    _context.SaveChanges();
 
                     var team_users = new List<TeamUser>(){
                         new TeamUser{
