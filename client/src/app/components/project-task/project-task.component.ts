@@ -6,5 +6,5 @@ import { Component, Input} from '@angular/core';
   styleUrl: './project-task.component.css',
 })
 export class ProjectTaskComponent {
-  @Input() numberOfTimes!: number;
+  @Input() task: any;
 }

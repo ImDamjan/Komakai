@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Task } from '../../models/task';
 import { ProjectTaskComponent } from '../../components/project-task/project-task.component';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-tasks',
@@ -14,11 +15,12 @@ export class TasksComponent {
   } as Task;  
 
   n: number = 3; // Set your desired number of repetitions here
+tasks: any;
 
-  constructor(private projectTaskComponent: ProjectTaskComponent) { }
+  constructor(private taskService: TaskService) { }
 
   ngOnInit(): void {
-    this.projectTaskComponent.getAllTasks().subscribe(tasks => {
+    this.taskService.getAllTasks().subscribe(tasks => {
       this.taskObj = tasks;
     });
   }
