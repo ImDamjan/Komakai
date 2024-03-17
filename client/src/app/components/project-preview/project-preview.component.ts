@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-project-preview',
@@ -22,12 +22,9 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.teamMembers.push({ name: 'Test Member 1', imageUrl: '/assets/project-task/person.svg' });
-    this.teamMembers.push({ name: 'Test Member 2', imageUrl: '/assets/project-task/person.svg' });
-    this.teamMembers.push({ name: 'Test Member 3', imageUrl: '/assets/project-task/person.svg' });
-    this.teamMembers.push({ name: 'Test Member 4', imageUrl: '/assets/project-task/person.svg' });
-    this.teamMembers.push({ name: 'Test Member 5', imageUrl: '/assets/project-task/person.svg' });
-    this.teamMembers.push({ name: 'Test Member 6', imageUrl: '/assets/project-task/person.svg' });
+    for (let i = 0; i < 6; i++) {
+      this.teamMembers.push({ name: `Test Member ${i}`, imageUrl: '/assets/project-task/person.svg' });
+    }
   
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     mediaQuery.addEventListener('change', () => {

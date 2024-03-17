@@ -1,3 +1,9 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns */
+  grid-gap: 50px; /* Gap between grid items */
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -6,6 +12,7 @@
   margin: 0;
   height: 200px;
   padding-left: 35px;
+  margin-bottom: 30px;
 }
 
 .card-content {
