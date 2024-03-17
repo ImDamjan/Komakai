@@ -24,10 +24,11 @@ namespace server.Services
 
 
             using var smtp = new SmtpClient();
-            smtp.Connect(_configuration.GetSection("EmailSettings:SmtpServer").Value, 587, SecureSocketOptions.StartTls);
+            smtp.Connect(_configuration.GetSection("EmailSettings:SmtpServer").Value, 465, true);
             smtp.Authenticate(_configuration.GetSection("EmailSettings:Username").Value, _configuration.GetSection("EmailSettings:Password").Value);
             smtp.Send(email);
             smtp.Disconnect(true);
+            smtp.Dispose();
         }
     }
 }
