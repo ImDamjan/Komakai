@@ -1,4 +1,11 @@
 .dashboard{
     flex-grow: 1;
-    padding: 40px;
+    padding: 10px;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    grid-template-rows: repeat(2, auto); 
+    gap: 10px;
 }

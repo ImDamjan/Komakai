@@ -7,5 +7,9 @@
 }
   
 .chart-canvas {
-    margin-right: 20px; /* Dodajte željeni razmak sa desne strane canvasa */
+    margin-right: 20px;
+    width: 600px;
+    max-width: 600px;
+    height: 300px;
+    max-height: 350px;
   }
