@@ -6,47 +6,110 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./project-preview.component.css']
 })
 export class ProjectPreviewComponent implements OnInit {
-  title: string = 'Addodle';
-  description: string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
-  status: string = 'Not started';
+  // Properties for character limits
   titleCharacterLimit: number = 0;
   descriptionCharacterLimit: number = 0;
 
-  //promenljive za menjane stranica
+  // Properties for pagination
   cards: any[] = [];
   currentPage: number = 1;
   cardsPerPage: number = 6;
 
   constructor() {
+    // Initialize component
     this.calculateCharacterLimit();
+
+    // Sample data for cards
     this.cards = [
-      { title: 'Card 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat', status: 'Ready', teamMembers: ['John Doe', 'Jane Smith'], teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg'] },
-      { title: 'Card 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', status: 'In progress', teamMembers: ['Alice Johnson', 'Bob Brown', 'Charlie Davis'], teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg'] },
-      { title: 'Card 3', description: 'Description 3', status: 'Done', teamMembers: ['Ella Martinez'], teamMemberImages: ['/assets/project-task/person.svg'] },
-      { title: 'Card 4', description: 'Description 4', status: 'Ready', teamMembers: ['Frank Wilson', 'Grace Lee', 'Henry Taylor', 'Ivy Clark'], teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg'] },
-      { title: 'Card 5', description: 'Description 5', status: 'In progress', teamMembers: [], teamMemberImages: [] },
-      { title: 'Card 6', description: 'Description 6', status: 'Done', teamMembers: ['Jack White'], teamMemberImages: ['/assets/project-task/person.svg'] },
-      { title: 'Card 7', description: 'Description 7', status: 'Ready', teamMembers: ['Liam King', 'Mia Lopez', 'Noah Moore'], teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg'] },
-      { title: 'Card 8', description: 'Description 8', status: 'In progress', teamMembers: [], teamMemberImages: [] },
-      { title: 'Card 9', description: 'Description 9', status: 'Done', teamMembers: ['Peter Green', 'Quinn Hall', 'Ryan Adams'], teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg'] },
-      { title: 'Card 10', description: 'Description 10', status: 'Ready', teamMembers: ['Sophia Baker'], teamMemberImages: ['/assets/project-task/person.svg'] },
+      { 
+        title: 'Project X',
+        description: 'A revolutionary project aiming to redefine the way we approach software development. Join us in shaping the future!',
+        status: 'In progress',
+        teamMembers: ['Johnathan Doe', 'Jane Smithson', 'Alice Johnson'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      },
+      { 
+        title: 'Card 2',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        status: 'Ready',
+        teamMembers: ['Bob Brown', 'Charlie Davis'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      },
+      { 
+        title: 'Super Project Omega',
+        description: 'Join the most exciting project of the decade! Our team is dedicated to creating innovative solutions that will shape tomorrow.',
+        status: 'Done',
+        teamMembers: ['Ella Martinez', 'Frank Wilson', 'Grace Lee'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      },
+      { 
+        title: 'Project Prometheus',
+        description: 'Embark on a journey to unveil the mysteries of technology. Explore the depths of code with our dynamic team!',
+        status: 'In progress',
+        teamMembers: ['Jack White', 'Liam King', 'Mia Lopez', 'Noah Moore'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      },
+      { 
+        title: 'Exciting Venture',
+        description: 'A new venture awaits! Join our team of experts as we embark on a mission to disrupt conventional norms and create something extraordinary.',
+        status: 'In progress',
+        teamMembers: ['Sophia Baker', 'Peter Green', 'Quinn Hall'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      },
+      { 
+        title: 'Project Zeta',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi, ut semper risus.',
+        status: 'Done',
+        teamMembers: ['Ryan Adams', 'John Johnson'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      },
+      { 
+        title: 'Advanced Initiative',
+        description: 'Join us in an advanced initiative to push the boundaries of technology. Together, we can achieve the extraordinary!',
+        status: 'Ready',
+        teamMembers: ['Ella Martinez', 'Grace Lee', 'Henry Taylor', 'Ivy Clark'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      },
+      { 
+        title: 'Project Theta',
+        description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
+        status: 'In progress',
+        teamMembers: ['Alice Johnson', 'Bob Brown', 'Charlie Davis', 'David Wilson'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      },
+      { 
+        title: 'Card 9',
+        description: 'Description 9',
+        status: 'Done',
+        teamMembers: ['Ellie Brown', 'Aaron Smith'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      },
+      { 
+        title: 'Exciting Journey',
+        description: 'Embark on an exciting journey with our team. Together, we can achieve greatness and make a lasting impact!',
+        status: 'Ready',
+        teamMembers: ['Michael Davis', 'Olivia White'],
+        teamMemberImages: ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg']
+      }
     ];
   }
 
   ngOnInit(): void {
+    // Detect changes in screen size for character limits
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     mediaQuery.addEventListener('change', () => {
       this.calculateCharacterLimit();
       this.truncateText();
     });
 
-    // Initialize truncated titles and descriptions
+    // Initialize truncated titles and descriptions for cards
     this.cards.forEach(card => {
       card.truncatedTitle = this.truncate(card.title, this.titleCharacterLimit);
       card.truncatedDescription = this.truncate(card.description, this.descriptionCharacterLimit);
     });
   }
 
+  // Calculate character limits based on screen width
   calculateCharacterLimit() {
     const screenWidth = window.innerWidth;
     if (screenWidth < 768) {
@@ -56,11 +119,12 @@ export class ProjectPreviewComponent implements OnInit {
       this.titleCharacterLimit = 10;
       this.descriptionCharacterLimit = 100;
     } else {
-      this.titleCharacterLimit = 20;
+      this.titleCharacterLimit = 17;
       this.descriptionCharacterLimit = 190;
     }
   }
 
+  // Truncate text to specified character limit
   truncateText() {
     this.cards.forEach(card => {
       card.truncatedTitle = this.truncate(card.title, this.titleCharacterLimit);
@@ -68,6 +132,7 @@ export class ProjectPreviewComponent implements OnInit {
     });
   }
 
+  // Helper function to truncate text
   truncate(text: string, limit: number): string {
     if (text.length > limit) {
       return text.substring(0, limit) + '...';
@@ -76,43 +141,47 @@ export class ProjectPreviewComponent implements OnInit {
     }
   }
 
-  //deo za strane
+  // Pagination functions
+
+  // Get cards for the current page
   getPaginatedCards(): any[] {
     const startIndex = (this.currentPage - 1) * this.cardsPerPage;
     return this.cards.slice(startIndex, startIndex + this.cardsPerPage);
   }
 
+  // Go to the next page
   nextPage(): void {
     if (this.currentPage < this.totalPages()) {
       this.currentPage++;
     }
   }
 
+  // Go to the previous page
   previousPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
   }
 
+  // Get the total number of pages
   totalPages(): number {
     return Math.ceil(this.cards.length / this.cardsPerPage);
   }
 
+  // Calculate the pages to show in pagination control
   pagesToShow(): number[] {
     const total = this.totalPages();
     const current = this.currentPage;
-    const delta = 2; // Broj stranica prikazanih pre i posle trenutne stranice
+    const pagesToShowCount = 3;
   
-    let from = Math.max(1, current - delta);
-    let to = Math.min(total, current + delta);
+    let from = Math.max(1, current - Math.floor(pagesToShowCount / 2));
+    let to = Math.min(total, from + pagesToShowCount - 1);
   
-    // Ako trenutna stranica nije u sredini, prilagodi opseg stranica
-    const pagesToShow = to - from + 1;
-    if (pagesToShow < 5) {
-      if (current < delta + 2) {
-        to = Math.min(from + 4, total);
+    if (to - from + 1 < pagesToShowCount) {
+      if (current < Math.ceil(pagesToShowCount / 2)) {
+        to = Math.min(total, pagesToShowCount);
       } else {
-        from = Math.max(to - 4, 1);
+        from = Math.max(1, total - pagesToShowCount + 1);
       }
     }
   
@@ -121,8 +190,9 @@ export class ProjectPreviewComponent implements OnInit {
       pages.push(i);
     }
     return pages;
-  }
+}
   
+  // Method to navigate to a specific page
   goToPage(page: number): void {
     this.currentPage = page;
   }
