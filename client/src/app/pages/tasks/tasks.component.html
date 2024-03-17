@@ -1,6 +1,6 @@
 <div id="tasks">
     <h1>Tasks</h1><br><br>
-    <div *ngFor="let index of [1, 2, 3]">
+    <div *ngFor="let index of getRange(n)">
         <app-project-task [numberOfTimes]="index"></app-project-task>
     </div>
 </div>
