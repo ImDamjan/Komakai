@@ -18,7 +18,7 @@
       <p class="description" [title]="card.description">{{ card.truncatedDescription }}</p>
       <div class="date-section">
         <img src="assets\project-preview\time.svg" alt="" />
-        <time>05 APRIL 2023</time>
+        <time>{{ card.time }}</time>
       </div>
       <div class="issue-section">
         <!-- Team members -->
@@ -34,7 +34,7 @@
         <!-- Issue details (you can replace this with actual data) -->
         <div class="issue-details">
           <img src="assets\project-preview\issues.svg" alt=""/>
-          <span>14 issues</span>
+          <span>{{ card.issues }} issues</span>
         </div>
       </div>
     </section>
