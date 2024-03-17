@@ -41,7 +41,12 @@
   </article>
 </div>
 
+<!-- Kontrole paginacije -->
 <div class="pagination-controls">
   <button (click)="previousPage()" [disabled]="currentPage === 1">Prethodna</button>
+  <ng-container *ngFor="let page of pagesToShow()">
+    <button (click)="goToPage(page)" [class.active]="currentPage === page">{{ page }}</button>
+  </ng-container>
   <button (click)="nextPage()" [disabled]="currentPage === totalPages()">Sledeća</button>
 </div>
+

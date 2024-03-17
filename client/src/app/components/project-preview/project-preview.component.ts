@@ -97,4 +97,33 @@ export class ProjectPreviewComponent implements OnInit {
   totalPages(): number {
     return Math.ceil(this.cards.length / this.cardsPerPage);
   }
+
+  pagesToShow(): number[] {
+    const total = this.totalPages();
+    const current = this.currentPage;
+    const delta = 2; // Broj stranica prikazanih pre i posle trenutne stranice
+  
+    let from = Math.max(1, current - delta);
+    let to = Math.min(total, current + delta);
+  
+    // Ako trenutna stranica nije u sredini, prilagodi opseg stranica
+    const pagesToShow = to - from + 1;
+    if (pagesToShow < 5) {
+      if (current < delta + 2) {
+        to = Math.min(from + 4, total);
+      } else {
+        from = Math.max(to - 4, 1);
+      }
+    }
+  
+    const pages: number[] = [];
+    for (let i = from; i <= to; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+  
+  goToPage(page: number): void {
+    this.currentPage = page;
+  }
 }
