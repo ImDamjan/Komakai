@@ -1,4 +1,4 @@
-export interface Tast{
+export interface Task{
     id: number;
     assignees: Array<number>[];
     title: string;
@@ -7,7 +7,7 @@ export interface Tast{
     end: string;
     stateId: number;
     percentage: number;
-
+    dependent: Task;
     priorityId: number;
     projectId: number;
     type: string;
