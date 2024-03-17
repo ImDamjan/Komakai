@@ -196,4 +196,10 @@ export class ProjectPreviewComponent implements OnInit {
   goToPage(page: number): void {
     this.currentPage = page;
   }
+
+
+  // Method to see if the pagination needs to move
+  shouldShowBottomPagination(): boolean {
+    return this.cards.length <= 3;
+  }
 }

@@ -42,7 +42,7 @@
 </div>
 
 <!-- Kontrole paginacije -->
-<div class="pagination-container">
+<div class="pagination-container" [ngClass]="{'bottom': shouldShowBottomPagination()}">
   <div class="pagination-controls">
     <span class="pagination-text-prev" (click)="previousPage()" [class.disabled]="currentPage === 1" [style.visibility]="currentPage === 1 ? 'hidden' : 'visible'">Previous</span>
     <ng-container *ngFor="let page of pagesToShow()">

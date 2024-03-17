@@ -194,6 +194,9 @@
 
 /* paginacija */
 .pagination-container {
+  position: absolute;
+  left: 0;
+  right: 0;
   text-align: center;
   padding-top: 35px;
 }
@@ -235,6 +238,15 @@
   background-color: #001B47;
   color: white;
 }
+
+.pagination-container.bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 50px; /* Adjust this value as needed */
+}
+
+
 /* resposiveness */
 @media (max-width: 768px) {
   .card {
