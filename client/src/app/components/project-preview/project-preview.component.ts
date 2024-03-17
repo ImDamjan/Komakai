@@ -28,12 +28,12 @@ export class ProjectPreviewComponent implements OnInit {
     this.teamMembers.push({ name: 'Test Member 4', imageUrl: '/assets/project-task/person.svg' });
     this.teamMembers.push({ name: 'Test Member 5', imageUrl: '/assets/project-task/person.svg' });
     this.teamMembers.push({ name: 'Test Member 6', imageUrl: '/assets/project-task/person.svg' });
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.calculateCharacterLimit();
-    this.truncateText();
+  
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    mediaQuery.addEventListener('change', () => {
+      this.calculateCharacterLimit();
+      this.truncateText();
+    });
   }
 
   calculateCharacterLimit() {
