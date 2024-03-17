@@ -42,11 +42,14 @@
 </div>
 
 <!-- Kontrole paginacije -->
-<div class="pagination-controls">
-  <button (click)="previousPage()" [disabled]="currentPage === 1">Prethodna</button>
-  <ng-container *ngFor="let page of pagesToShow()">
-    <button (click)="goToPage(page)" [class.active]="currentPage === page">{{ page }}</button>
-  </ng-container>
-  <button (click)="nextPage()" [disabled]="currentPage === totalPages()">Sledeća</button>
+<div class="pagination-container">
+  <div class="pagination-controls">
+    <span class="pagination-text-prev" (click)="previousPage()" [class.disabled]="currentPage === 1" [style.visibility]="currentPage === 1 ? 'hidden' : 'visible'">Previous</span>
+    <ng-container *ngFor="let page of pagesToShow()">
+      <button class="pagination-page" (click)="goToPage(page)" [class.active]="currentPage === page">{{ page }}</button>
+      <span class="pagination-space"></span>
+    </ng-container>
+    <span class="pagination-text" (click)="nextPage()" [class.disabled]="currentPage === totalPages()" [style.visibility]="currentPage === totalPages() ? 'hidden' : 'visible'">Next</span>
+  </div>
 </div>
 

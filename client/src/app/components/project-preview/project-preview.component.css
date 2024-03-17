@@ -66,7 +66,7 @@
 
 .in-progress {
   background-color: #2e8b57;
-  padding: 0px 10px;
+  padding: 2px 10px;
   text-align: center;
   display: flex;
 }
@@ -192,7 +192,50 @@
   border: 1px solid white;
 }
 
+/* paginacija */
+.pagination-container {
+  text-align: center;
+  padding-top: 35px;
+}
 
+.pagination-controls {
+  display: inline-block;
+}
+
+.pagination-controls {
+  display: inline-block;
+}
+
+.pagination-text {
+  font: 500 12px/1.2 Montserrat, sans-serif;
+  color: #9E9E9E;
+}
+
+.pagination-text-prev {
+  font: 500 12px/1.2 Montserrat, sans-serif;
+  color: #9E9E9E;
+  margin-right: 10px;
+}
+
+.pagination-page {
+  font: 500 12px/1.2 Montserrat, sans-serif;
+  background-color: #9E9E9E;
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  border: 0px;
+}
+
+.pagination-space {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.pagination-page.active {
+  background-color: #001B47;
+  color: white;
+}
+/* resposiveness */
 @media (max-width: 768px) {
   .card {
     width: 240px; 
@@ -233,5 +276,4 @@
     margin-left: -40px;
     margin-top: 3px;
   }
-  
 }
