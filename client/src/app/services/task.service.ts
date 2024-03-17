@@ -12,7 +12,7 @@ export class TaskService {
 
   constructor(private http: HttpClient) { }
 
-  getAllTasks(): Observable<Task> {
-    return this.http.get<Task>(this.apiUrl+`/Assignment/getByUser/1`);
+  getAllTasks(): Observable<any> {
+    return this.http.get<any>(this.apiUrl+`/Assignment/getByUser/1`);
   }
 }

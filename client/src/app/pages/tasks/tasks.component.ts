@@ -12,20 +12,18 @@ export class TasksComponent {
 
   taskObj: Task = {
     
-  } as Task;  
+  } as Task; 
 
-  n: number = 3; // Set your desired number of repetitions here
-tasks: any;
+  tasks: any[] = [];
+
+  // n: number = 3;
 
   constructor(private taskService: TaskService) { }
 
   ngOnInit(): void {
     this.taskService.getAllTasks().subscribe(tasks => {
-      this.taskObj = tasks;
+      this.tasks = tasks;
     });
   }
-
-  // getRange(n: number): number[] {
-  //   return Array.from({length: n}, (_, i) => i + 1);
-  // }
+  
 }
