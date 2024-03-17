@@ -25,12 +25,22 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
       data: {
         labels: daysOfWeek,
         datasets: [
-          { label: "Achieved", data: achievedData },
-          { label: "Tracked", data: trackedData }
+          { label: "On time", data: achievedData },
+          { label: "Off time", data: trackedData }
         ]
       },
       options: {
-        aspectRatio: 2.5
+        aspectRatio: 2.5,
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Project Deadline Preview',
+            font: {
+              size: 18
+            }
+          }
+        }
       }
     });
   }
