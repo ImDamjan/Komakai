@@ -23,13 +23,13 @@
       <div class="issue-section">
         <!-- Team members -->
         <div class="team-members">
-          <ng-container *ngFor="let imageUrl of card.teamMemberImages; let i = index">
+          <ng-container *ngFor="let imageUrl of card.teamMemberImages.slice(0, 4); let i = index">
             <img class="team-member" [src]="imageUrl" [alt]="'Team Member ' + (i+1)" [style.left.px]="i * 20" />
           </ng-container>
           <div *ngIf="card.teamMemberImages.length > 4" class="additional-members">
             +{{ card.teamMemberImages.length - 4 }}
           </div>
-        </div>   
+        </div>
 
         <!-- Issue details (you can replace this with actual data) -->
         <div class="issue-details">
