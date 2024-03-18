@@ -51,26 +51,6 @@ export class TasksComponent {
             });
         });
     });
-}
-  
-  // ngOnInit(): void {
-  //   this.taskService.getAllTasks().pipe(
-  //       switchMap(tasks => {
-  //           this.tasks = tasks;
-  //           return this.http.get<any>(this.apiUrl + '/Priority/getPriorities');
-  //       })
-  //   ).subscribe(priorities => {
-  //       this.priorities = priorities;
-
-  //       for (const task of this.tasks) {
-  //           for (const priority of this.priorities) {
-  //               if (task.priorityId == priority.id) {
-  //                 task.priority = priority.description;
-  //                 task.status = 1;
-  //               }
-  //           }
-  //       }
-  //   });
-  // }
+  }
 
 }

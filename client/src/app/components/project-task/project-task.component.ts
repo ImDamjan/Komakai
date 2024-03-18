@@ -7,4 +7,19 @@ import { Component, Input} from '@angular/core';
 })
 export class ProjectTaskComponent {
   @Input() task: any;
+
+  getPriorityClass(priority: string): string {
+    switch (priority) {
+        case 'Low':
+            return 'low-priority';
+        case 'Medium':
+            return 'medium-priority';
+        case 'High':
+            return 'high-priority';
+        case 'At risk':
+            return 'at-risk';
+        default:
+            return '';
+    }
+}
 }
