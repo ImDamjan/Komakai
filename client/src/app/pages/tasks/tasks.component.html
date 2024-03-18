@@ -1,1 +1,6 @@
-<app-project-task></app-project-task>
+<div id="tasks">
+    <h1>Tasks</h1><br><br>
+    <div *ngFor="let task of tasks">
+        <app-project-task [task]="task"></app-project-task>
+    </div>
+</div>
