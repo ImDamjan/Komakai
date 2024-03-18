@@ -30,7 +30,6 @@ namespace server.Mappers
                 End = a.End,
                 StateId = a.StateId,
                 Percentage = a.Percentage,
-                Dependent = a.Dependent,
                 PriorityId = a.PriorityId,
                 ProjectId = a.ProjectId,
                 Type = a.Type,

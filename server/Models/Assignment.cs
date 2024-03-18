@@ -34,8 +34,8 @@ namespace server.Models
         [Column("percentage", TypeName ="float")]
         public float Percentage { get; set; }
 
-        [Column("dependent")]
-        public int? Dependent { get; set; }
+        [Column("task_group_id")]
+        public int TaskGroupId { get; set; }
 
         [Column("priority_id")]
         public int PriorityId { get; set; }
@@ -52,17 +52,8 @@ namespace server.Models
         [InverseProperty("Assignment")]
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-
-        //dependent prop
-        [ForeignKey("Dependent")]
-        [InverseProperty("InverseDependentNavigation")]
-        public virtual Assignment? DependentNavigation { get; set; }
-
-        [InverseProperty("DependentNavigation")]
-        public virtual ICollection<Assignment> InverseDependentNavigation { get; set; } = new List<Assignment>();
-
-        //
-
+        [InverseProperty("Assignments")]
+        public virtual TaskGroup? TaskGroup { get; set; } = null!;
         [ForeignKey("PriorityId")]
         [InverseProperty("Assignments")]
         public virtual Priority Priority { get; set; } = null!;
@@ -86,6 +77,15 @@ namespace server.Models
 
         [ForeignKey("PeriodId")]
         [InverseProperty("Assignments")]
-        public virtual Period? Period { get; set; } = null!;  
+        public virtual Period? Period { get; set; } = null!;
+
+        //dependency
+        [ForeignKey("RelatedAssignmentId")]
+        [InverseProperty("RelatedAssignments")]
+        public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
+
+        [ForeignKey("AssignmentId")]
+        [InverseProperty("Assignments")]
+        public virtual ICollection<Assignment> RelatedAssignments { get; set; } = new List<Assignment>();
     }
 }

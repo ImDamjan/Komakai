@@ -18,13 +18,12 @@ namespace server.Repositories
             _context = context;
         }
 
-        public async Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Assignment? dependent, Priority prio, List<User> users, Period per)
+        public async Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Priority prio, List<User> users, Period per)
         {
 
             a.Users = users;
             a.Project = project;
             a.Priority = prio;
-            a.DependentNavigation = dependent;
             a.StateId=1;
             a.Start = DateTime.Now;
             a.Period = per;
@@ -76,11 +75,6 @@ namespace server.Repositories
             var assignment = await GetAssignmentByidAsync(id);
             if(assignment==null)
                 return null;
-
-            if(a.Dependent > 0)
-                assignment.Dependent = a.Dependent;
-            else
-                assignment.Dependent = null;
             assignment.Title = a.Title;
             assignment.Type = a.Type;
             assignment.PriorityId = a.PriorityId;

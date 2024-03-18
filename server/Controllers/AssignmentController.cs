@@ -60,18 +60,12 @@ namespace server.Controllers
             if(prio==null)
                 return BadRequest("Priority with "+ dto.PriorityId+ " does not exist");
 
-
-            //da li je dependent asignment validan
-            var as_dp = await _asign_repo.GetAssignmentByidAsync(dto.Dependent);
-            if(as_dp==null && dto.Dependent > 0)
-                return BadRequest("There is no such task that can make dependency to this task");
-
             
             var per = await _per_repo.GetPeriod(dto.PeriodId);
             if(per==null)
                 return BadRequest("There is no such period");
             
-            var a = await _asign_repo.CreateAssignmentAsync(dto.fromCreateDtoToAssignment(),project,as_dp,prio,users,per);
+            var a = await _asign_repo.CreateAssignmentAsync(dto.fromCreateDtoToAssignment(),project,prio,users,per);
 
             return Ok(a.toAssignmentDto(dto.UserIds));
         }
