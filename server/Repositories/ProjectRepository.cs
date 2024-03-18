@@ -123,8 +123,6 @@ namespace server.Repositories
             
             var projects = await GetAllUserProjectsAsync(userId);
 
-            
-
 
             List<ProjectStatesDto> lista = new List<ProjectStatesDto>();
 
@@ -155,7 +153,7 @@ namespace server.Repositories
             foreach (var item in lista)
             {
                 if(item.count>0)
-                    item.Percentage = projects.Count/(item.count*1.0f)*100;
+                    item.Percentage = item.count/(projects.Count*1.0f)*100;
                     
             }
 
