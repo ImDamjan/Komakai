@@ -12,7 +12,7 @@ namespace server.DTOs.Projects
         public int StateId { get; set; }
         public int PriorityId { get; set; }
         public string Description { get; set; } = "";
-        public DateTime EstimatedTime { get; set; }
+        public int EstimatedTime { get; set; } //u danima
         public double Spent { get; set; }
         public double Percentage { get; set; }
 

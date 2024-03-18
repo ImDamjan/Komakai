@@ -62,7 +62,7 @@ builder.Services.AddDbContext<ProjectManagmentDbContext>(
 
 var app = builder.Build();
 
-if(args.Length == 1 && args[0].ToLower()=="seeddata")
+if(args.Length == 1 && args[0].ToLower()=="seed")
     SeedData(app);
 
 void SeedData(IHost app)

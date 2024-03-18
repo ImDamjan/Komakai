@@ -225,7 +225,7 @@ namespace server.Data
                         JobTitle = "User",
                         Organisation = "Organization A",
                         Department = "Department 1",
-                        RoleId = 3 // User
+                        RoleId = 4 // Guest
                     },
                     new User
                     {
@@ -247,244 +247,236 @@ namespace server.Data
 
                 if(!_context.Teams.Any())
                 {
-                    var teams = new List<Team>{
-                        new Team{
-                            Id = 1,
-                            Name = "Team 1",
-                            Type = "Type 1"
-                        },
-                        new Team{
-                            Id = 2,
-                            Name = "Team 2",
-                            Type = "Type 2"
-                        },
-                        new Team{
-                            Id = 3,
-                            Name = "Team 3",
-                            Type = "Type 3"
-                        },
-                        new Team{
-                            Id = 4,
-                            Name = "Team 4",
-                            Type = "Type 4"
-                        },
-                        new Team{
-                            Id = 5,
-                            Name = "Team 5",
-                            Type = "Type 5"
-                        }
+                    //Teams
+                    var teams = new List<Team>
+                    {
+                        new Team { Id = 1, Name = "Team A", Type = "Type 1" },
+                        new Team { Id = 2, Name = "Team B", Type = "Type 2" },
+                        new Team { Id = 3, Name = "Team C", Type = "Type 1" },
+                        new Team { Id = 4, Name = "Team D", Type = "Type 2" },
+                        new Team { Id = 5, Name = "Team E", Type = "Type 1" }
                     };
+
                     _context.Teams.AddRange(teams);
                     _context.SaveChanges();
 
-                    var team_users = new List<TeamUser>(){
-                        new TeamUser{
-                            TeamId = 1,
-                            UserId = 1,
-                            ProjectRoleId = 2
-                        },
-                        new TeamUser{
-                            TeamId = 1,
-                            UserId = 3,
-                            ProjectRoleId = 2
-                        },
-                        new TeamUser{
-                            TeamId = 2,
-                            UserId = 2,
-                            ProjectRoleId = 1
-                        },
-                        new TeamUser{
-                            TeamId = 2,
-                            UserId = 1,
-                            ProjectRoleId = 2
-                        },
-                        new TeamUser{
-                            TeamId = 3,
-                            UserId = 2,
-                            ProjectRoleId = 1
-                        },
-                        new TeamUser{
-                            TeamId = 3,
-                            UserId = 3,
-                            ProjectRoleId = 2
-                        },
+                    // Assign users to teams
+                    var teamUsers = new List<TeamUser>
+                    {
+                        // Team A
+                        new TeamUser { TeamId = 1, UserId = 1, ProjectRoleId = 1 }, // John Doe as Project Manager
+                        new TeamUser { TeamId = 1, UserId = 3, ProjectRoleId = 2 }, // Alex Johnson as Developer
+                        new TeamUser { TeamId = 1, UserId = 4, ProjectRoleId = 2 }, // Emily Brown as Developer
+                        new TeamUser { TeamId = 1, UserId = 7, ProjectRoleId = 3 }, // Jessica Lee as User
+
+                        // Team B
+                        new TeamUser { TeamId = 2, UserId = 2, ProjectRoleId = 1 }, // Jane Smith as Project Manager
+                        new TeamUser { TeamId = 2, UserId = 5, ProjectRoleId = 2 }, // Michael Wilson as Developer
+                        new TeamUser { TeamId = 2, UserId = 6, ProjectRoleId = 2 }, // Sarah Martinez as Developer
+                        new TeamUser { TeamId = 2, UserId = 8, ProjectRoleId = 3 }, // William Taylor as User
+
+                        // Team C
+                        new TeamUser { TeamId = 3, UserId = 9, ProjectRoleId = 4 }, // Olivia Anderson as Guest
+                        new TeamUser { TeamId = 3, UserId = 1, ProjectRoleId = 1 }, // John Doe as Project Manager
+                        new TeamUser { TeamId = 3, UserId = 3, ProjectRoleId = 2 }, // Alex Johnson as Developer
+                        new TeamUser { TeamId = 3, UserId = 5, ProjectRoleId = 2 }, // Michael Wilson as Developer
+
+                        // Team D
+                        new TeamUser { TeamId = 4, UserId = 2, ProjectRoleId = 1 }, // Jane Smith as Project Manager
+                        new TeamUser { TeamId = 4, UserId = 4, ProjectRoleId = 2 }, // Emily Brown as Developer
+                        new TeamUser { TeamId = 4, UserId = 5, ProjectRoleId = 2 }, // Michael Wilson as Developer
+                        new TeamUser { TeamId = 4, UserId = 7, ProjectRoleId = 3 }, // Jessica Lee as User
+
+                        // Team E
+                        new TeamUser { TeamId = 5, UserId = 6, ProjectRoleId = 2 }, // Sarah Martinez as Developer
+                        new TeamUser { TeamId = 5, UserId = 8, ProjectRoleId = 3 }, // William Taylor as User
+                        new TeamUser { TeamId = 5, UserId = 9, ProjectRoleId = 4 }, // Olivia Anderson as Guest
+                        new TeamUser { TeamId = 5, UserId = 1, ProjectRoleId = 1 } // John Doe as Project Manager
                     };
-                    _context.Teams.AddRange(teams);
-                    _context.TeamUsers.AddRange(team_users);
+
+                    _context.TeamUsers.AddRange(teamUsers);
                     _context.SaveChanges();
+
 
                     if(!_context.Projects.Any())
                     {
-                        var projects = new List<Project>{
-                            new Project{
+                        //Projects
+                        var projects = new List<Project>
+                        {
+                            new Project
+                            {
                                 Id = 1,
-                                Title = "Projekat 1",
-                                Start = DateTime.Now,
-                                Description = "Projekat za nesto",
-                                StateId = 3,
-                                LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = DateTime.Now.AddDays(30),
-                                Budget = 100000,
-                                Spent = 5000,
-                                Type = "Programming",
-                                Percentage = 20,
                                 TeamId = 1,
-                                PriorityId = 2
+                                Title = "Website Redesign",
+                                StateId = 1,
+                                Percentage = 100,
+                                Start = new DateTime(2023, 1, 15),
+                                End = new DateTime(2023, 5, 30),
+                                Description = "Redesign the company's website with a modern and responsive design.",
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = 120,
+                                Budget = 10000,
+                                Spent = 8000,
+                                Type = "Web",
+                                PriorityId = 2 // Medium Priority
                             },
-                                new Project{
+                            new Project
+                            {
                                 Id = 2,
-                                Title = "Projekat 2",
-                                Start = DateTime.Now,
-                                Description = "Projekat za nesto",
+                                TeamId = 2,
+                                Title = "Marketing Campaign",
                                 StateId = 2,
+                                Percentage = 80,
+                                Start = new DateTime(2023, 2, 10),
+                                End = new DateTime(2023, 6, 30),
+                                Description = "Plan and execute a targeted marketing campaign for new product launch.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = DateTime.Now.AddDays(30),
-                                Budget = 100000,
-                                Spent = 7000,
-                                Type = "Programming",
-                                Percentage = 8,
-                                TeamId = 1,
-                                PriorityId = 2
+                                EstimatedTime = 150,
+                                Budget = 12000,
+                                Spent = 10000,
+                                Type = "Marketing",
+                                PriorityId = 1 // High Priority
                             },
-                                new Project{
+                            new Project
+                            {
                                 Id = 3,
-                                Title = "Projekat 3",
-                                Start = DateTime.Now,
-                                Description = "Projekat za nesto",
-                                StateId = 2,
-                                LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = DateTime.Now.AddDays(30),
-                                Budget = 8000,
-                                Spent = 5000,
-                                Type = "Testing",
-                                Percentage = 20,
-                                TeamId = 2,
-                                PriorityId = 2
-                            },
-                                new Project{
-                                Id = 4,
-                                Title = "Projekat 4",
-                                Start = DateTime.Now,
-                                Description = "Projekat za nesto",
-                                StateId = 3,
-                                LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = DateTime.Now.AddDays(30),
-                                Budget = 7000,
-                                Spent = 5000,
-                                Type = "Mananging",
-                                Percentage = 80,
                                 TeamId = 3,
-                                PriorityId = 2
-                            },
-                                new Project{
-                                Id = 5,
-                                Title = "Projekat 5",
-                                Start = DateTime.Now,
-                                Description = "Projekat za nesto",
+                                Title = "Data Analysis Tool",
                                 StateId = 3,
+                                Percentage = 60,
+                                Start = new DateTime(2023, 3, 5),
+                                End = DateTime.MinValue, // Project not ended yet
+                                Description = "Develop a tool for analyzing large datasets and generating reports.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = DateTime.Now.AddDays(30),
-                                Budget = 7000,
-                                Spent = 5000,
-                                Type = "Mananging",
-                                Percentage = 80,
+                                EstimatedTime = 180,
+                                Budget = 15000,
+                                Spent = 12000,
+                                Type = "Data",
+                                PriorityId = 3 // Low Priority
+                            },
+                            new Project
+                            {
+                                Id = 4,
+                                TeamId = 4,
+                                Title = "Product Enhancement",
+                                StateId = 1,
+                                Percentage = 100,
+                                Start = new DateTime(2023, 4, 20),
+                                End = new DateTime(2023, 8, 31),
+                                Description = "Enhance product features based on user feedback and market trends.",
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = 200,
+                                Budget = 18000,
+                                Spent = 15000,
+                                Type = "Product",
+                                PriorityId = 2 // Medium Priority
+                            },
+                            new Project
+                            {
+                                Id = 5,
+                                TeamId = 5,
+                                Title = "Training Platform",
+                                StateId = 2,
+                                Percentage = 40,
+                                Start = new DateTime(2023, 5, 15),
+                                End = DateTime.MinValue, // Project not ended yet
+                                Description = "Develop an online training platform for employees.",
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = 120,
+                                Budget = 8000,
+                                Spent = 6000,
+                                Type = "Training",
+                                PriorityId = 1 // High Priority
+                            },
+                            new Project
+                            {
+                                Id = 6,
+                                TeamId = 1,
+                                Title = "Mobile App Development",
+                                StateId = 2,
+                                Percentage = 60,
+                                Start = new DateTime(2023, 6, 15),
+                                End = DateTime.MinValue, // Project not ended yet
+                                Description = "Develop a mobile application for iOS and Android platforms.",
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = 180,
+                                Budget = 8000,
+                                Spent = 6000,
+                                Type = "Mobile",
+                                PriorityId = 3 // Low Priority
+                            },
+                            new Project
+                            {
+                                Id = 7,
                                 TeamId = 2,
-                                PriorityId = 2
+                                Title = "Software Upgrade",
+                                StateId = 1,
+                                Percentage = 100,
+                                Start = new DateTime(2023, 7, 1),
+                                End = new DateTime(2023, 9, 30),
+                                Description = "Upgrade existing software to the latest version with new features.",
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = 150,
+                                Budget = 10000,
+                                Spent = 9000,
+                                Type = "Software",
+                                PriorityId = 2 // Medium Priority
+                            },
+                            new Project
+                            {
+                                Id = 8,
+                                TeamId = 3,
+                                Title = "Database Optimization",
+                                StateId = 2,
+                                Percentage = 40,
+                                Start = new DateTime(2023, 8, 10),
+                                End = new DateTime(2023, 11, 30),
+                                Description = "Optimize database performance for faster data retrieval.",
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = 120,
+                                Budget = 5000,
+                                Spent = 3500,
+                                Type = "Database",
+                                PriorityId = 1 // High Priority
+                            },
+                            new Project
+                            {
+                                Id = 9,
+                                TeamId = 4,
+                                Title = "Network Security",
+                                StateId = 3,
+                                Percentage = 80,
+                                Start = new DateTime(2023, 9, 5),
+                                End = new DateTime(2023, 12, 15),
+                                Description = "Implement enhanced security measures for the company's network infrastructure.",
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = 200,
+                                Budget = 12000,
+                                Spent = 10000,
+                                Type = "Security",
+                                PriorityId = 2 // Medium Priority
+                            },
+                            new Project
+                            {
+                                Id = 10,
+                                TeamId = 5,
+                                Title = "Customer Support System",
+                                StateId = 4,
+                                Percentage = 30,
+                                Start = new DateTime(2023, 10, 20),
+                                End = new DateTime(2024, 3, 31),
+                                Description = "Develop a customer support system to streamline customer inquiries.",
+                                LastStateChangedTime = DateTime.Now,
+                                EstimatedTime = 300,
+                                Budget = 15000,
+                                Spent = 8000,
+                                Type = "Support",
+                                PriorityId = 3 // Low Priority
                             }
                         };
+
                         _context.Projects.AddRange(projects);
                         _context.SaveChanges();
-                        if(!_context.Assignments.Any())
-                        {
-                            var assignments = new List<Assignment>{
-                                new Assignment{
-                                    Id = 1,
-                                    Title = "Task 1",
-                                    Description = "Uradi register i login",
-                                    Start = DateTime.Now,
-                                    End = DateTime.MinValue,
-                                    StateId = 4,
-                                    Percentage = 20,
-                                    Dependent = null,
-                                    PriorityId = 3,
-                                    Project = projects[0],
-                                    Type = "autorizacija",
-                                    Users = new List<User>{users[0], users[2]}
-                                },
-                                    new Assignment{
-                                    Id = 2,
-                                    Title = "Task 2",
-                                    Description = "Uradi register",
-                                    Start = DateTime.Now,
-                                    End = DateTime.MinValue,
-                                    StateId = 5,
-                                    Percentage = 90,
-                                    Dependent = 1,
-                                    PriorityId = 2,
-                                    Project = projects[0],
-                                    Type = "autorizacija",
-                                    Users = new List<User>{users[2]}
-                                },
-                                    new Assignment{
-                                    Id = 3,
-                                    Title = "Task 3",
-                                    Description = "Uradi login",
-                                    Start = DateTime.Now,
-                                    End = DateTime.MinValue,
-                                    StateId = 5,
-                                    Percentage = 80,
-                                    Dependent = 1,
-                                    PriorityId = 2,
-                                    Project = projects[0],
-                                    Type = "autorizacija",
-                                    Users = new List<User>{users[0]}
-                                },
-                                    new Assignment{
-                                    Id = 4,
-                                    Title = "Task 1",
-                                    Description = "Testiraj login i register",
-                                    Start = DateTime.Now,
-                                    End = DateTime.MinValue,
-                                    StateId = 4,
-                                    Percentage = 20,
-                                    Dependent = null,
-                                    PriorityId = 3,
-                                    Project = projects[2],
-                                    Type = "autorizacija",
-                                    Users = new List<User>{users[1], users[0]}
-                                },
-                                    new Assignment{
-                                    Id = 5,
-                                    Title = "Task 1",
-                                    Description = "Testiraj login",
-                                    Start = DateTime.Now,
-                                    End = DateTime.MinValue,
-                                    StateId = 4,
-                                    Percentage = 20,
-                                    Dependent = 4,
-                                    PriorityId = 3,
-                                    Project = projects[2],
-                                    Type = "autorizacija",
-                                    Users = new List<User>{users[1]}
-                                },
-                                    new Assignment{
-                                    Id = 6,
-                                    Title = "Task 1",
-                                    Description = "Testirajregister",
-                                    Start = DateTime.Now,
-                                    End = DateTime.MinValue,
-                                    StateId = 4,
-                                    Percentage = 20,
-                                    Dependent = 4,
-                                    PriorityId = 3,
-                                    Project = projects[2],
-                                    Type = "autorizacija",
-                                    Users = new List<User>{users[0]}
-                                }
-                            };
-                            _context.Assignments.AddRange(assignments);
-                            _context.SaveChanges();
-                        }
                     }
                 }
             }
