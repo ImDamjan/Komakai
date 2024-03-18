@@ -4,6 +4,6 @@ namespace server.Interfaces
 {
     public interface IEmailService
     {
-        void SendEmail(EmailDto request);
+        Task SendEmailAsync(EmailDto request);
     }
 }
