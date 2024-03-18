@@ -3,6 +3,7 @@ import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../enviroments/environment';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
@@ -25,24 +26,43 @@ export class TasksComponent {
 
   constructor(private taskService: TaskService, private http: HttpClient) { }
 
-  ngOnInit(): void {
+  // ngOnInit(): void {
     
-    this.taskService.getAllTasks().subscribe(tasks => {
-      this.tasks = tasks;
-    });
+  //   this.taskService.getAllTasks().subscribe(tasks => {
+  //     this.tasks = tasks;
 
-    this.http.get<any>(this.apiUrl+`/Priority/getPriorities`).subscribe(priorities =>{
-      this.priorities=priorities;
-    });
+  //     this.http.get<any>(this.apiUrl+`/Priority/getPriorities`).subscribe(priorities =>{
+  //       this.priorities=priorities;
 
-    for (const task of this.tasks) {
-      for (const priority of this.priorities) {
-        if(task.priorityId==priority.id){
-          task.priority=priority.description;
+  //       for (const task of this.tasks) {
+  //         for (const priority of this.priorities) {
+  //           if(task.priorityId==priority.id){
+  //             task.priority=priority.description;
+  //           }
+  //         }
+  //       }
+  //     });
+  //   });
+
+  // }
+
+  ngOnInit(): void {
+    this.taskService.getAllTasks().pipe(
+        switchMap(tasks => {
+            this.tasks = tasks;
+            return this.http.get<any>(this.apiUrl + '/Priority/getPriorities');
+        })
+    ).subscribe(priorities => {
+        this.priorities = priorities;
+
+        for (const task of this.tasks) {
+            for (const priority of this.priorities) {
+                if (task.priorityId == priority.id) {
+                    task.priority = priority.description;
+                }
+            }
         }
-      }
-    }
-
-  }
+    });
+}
 
 }
