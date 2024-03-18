@@ -20,9 +20,11 @@ namespace server.Controllers
     {
         private readonly IUserRepository _repos;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public AuthController(IUserRepository userRepository, IConfiguration configuration)
+        public AuthController(IUserRepository userRepository, IConfiguration configuration,IEmailService emailService)
         {
+            _emailService = emailService;
             _repos = userRepository;
             _configuration = configuration;
         }
@@ -56,6 +58,15 @@ namespace server.Controllers
 
             //Dodavanje korsnika u DBContext
             await _repos.AddUserAsync(newUser);
+
+            var emailRequest = new EmailDto
+            {
+                To = request.Email,
+                Subject = "Registration Successful",
+                Body = $"Dear {request.Username},\n\nYour registration is successful!\n\nUsername: {request.Username}\nPassword: {request.Password}\n\nThank you for registering."
+            };
+
+            await _emailService.SendEmailAsync(emailRequest);
 
             return Ok(newUser);
         }
