@@ -26,43 +26,38 @@ export class TasksComponent {
 
   constructor(private taskService: TaskService, private http: HttpClient) { }
 
-  // ngOnInit(): void {
+  ngOnInit(): void {
     
-  //   this.taskService.getAllTasks().subscribe(tasks => {
-  //     this.tasks = tasks;
+    this.taskService.getAllTasks().subscribe(tasks => {
+      this.tasks = tasks;
 
-  //     this.http.get<any>(this.apiUrl+`/Priority/getPriorities`).subscribe(priorities =>{
-  //       this.priorities=priorities;
+      for (const task of this.tasks) {
+        this.http.get<any>(this.apiUrl+`/Priority/getPrio` + task.priorityId).subscribe(priorities =>{
+          task.priority = priorities.description;
+        });
+      }
+    });
+  }
+
+  
+  // ngOnInit(): void {
+  //   this.taskService.getAllTasks().pipe(
+  //       switchMap(tasks => {
+  //           this.tasks = tasks;
+  //           return this.http.get<any>(this.apiUrl + '/Priority/getPriorities');
+  //       })
+  //   ).subscribe(priorities => {
+  //       this.priorities = priorities;
 
   //       for (const task of this.tasks) {
-  //         for (const priority of this.priorities) {
-  //           if(task.priorityId==priority.id){
-  //             task.priority=priority.description;
+  //           for (const priority of this.priorities) {
+  //               if (task.priorityId == priority.id) {
+  //                 task.priority = priority.description;
+  //                 task.status = 1;
+  //               }
   //           }
-  //         }
   //       }
-  //     });
   //   });
-
   // }
-
-  ngOnInit(): void {
-    this.taskService.getAllTasks().pipe(
-        switchMap(tasks => {
-            this.tasks = tasks;
-            return this.http.get<any>(this.apiUrl + '/Priority/getPriorities');
-        })
-    ).subscribe(priorities => {
-        this.priorities = priorities;
-
-        for (const task of this.tasks) {
-            for (const priority of this.priorities) {
-                if (task.priorityId == priority.id) {
-                    task.priority = priority.description;
-                }
-            }
-        }
-    });
-}
 
 }
