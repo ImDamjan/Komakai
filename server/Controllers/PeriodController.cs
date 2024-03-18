@@ -22,5 +22,15 @@ namespace server.Controllers
         {
             return Ok(await _repo.GetPeriods());
         }
+
+        [HttpGet("getPeriodById/{period_id}")]
+        public async Task<IActionResult> GetAllPeriods([FromRoute] int period_id)
+        {
+            var period = await _repo.GetPeriod(period_id);
+            if(period==null)
+                return NotFound("Period with that id does not exist");
+            
+            return Ok(period);
+        }
     }
 }

@@ -16,9 +16,9 @@ namespace server.Repositories
         {
             _context = context;
         }
-        public Task<Period?> GetPeriod(int period_id)
+        public async Task<Period?> GetPeriod(int period_id)
         {
-            throw new NotImplementedException();
+            return await _context.Periods.FirstOrDefaultAsync(p=>p.Id==period_id);
         }
 
         public async Task<List<Period>> GetPeriods()
