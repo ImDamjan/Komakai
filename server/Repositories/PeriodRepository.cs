@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.Interfaces;
 using server.Models;
@@ -20,9 +21,9 @@ namespace server.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<Period>> GetPeriods()
+        public async Task<List<Period>> GetPeriods()
         {
-            throw new NotImplementedException();
+            return await _context.Periods.ToListAsync();
         }
     }
 }
