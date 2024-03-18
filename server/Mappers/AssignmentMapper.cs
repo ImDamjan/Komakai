@@ -15,7 +15,8 @@ namespace server.Mappers
                 Title = dto.Title,
                 Type = dto.Type,
                 Description = dto.Description,
-                End = dto.End
+                EstimatedTime = dto.EstimatedTime,
+                PeriodId = dto.PeriodId
             };
         }
 

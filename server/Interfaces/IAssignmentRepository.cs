@@ -12,11 +12,11 @@ namespace server.Interfaces
         Task<Assignment?> GetAssignmentByidAsync(int id);
         Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId);
         Task<List<Assignment>> GetAllProjectAssignmentsAsync(int project_id);
-        Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a,int id);
+        Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a,int id, Period? per);
 
         Task<List<User>> GetAssignmentUsersAsync(int task_id);
 
-        Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Assignment? dependent,Priority prio,List<User> users);
+        Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Assignment? dependent,Priority prio,List<User> users, Period per);
 
     }
 }

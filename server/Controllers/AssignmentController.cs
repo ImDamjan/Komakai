@@ -18,16 +18,17 @@ namespace server.Controllers
         private readonly IProjectRepository _project_repo;
         private readonly IPriorityRepository _prio_repo;
         private readonly IUserRepository _user_repo;
-
+        private readonly IPeriodRepository _per_repo;
         private readonly ITeamRepository _team_repo;
 
         public AssignmentController(IAssignmentRepository asign_repo, IUserRepository user_repo
-        , IProjectRepository project_repo, IPriorityRepository prio_repo, ITeamRepository team_repo)
+        , IProjectRepository project_repo, IPriorityRepository prio_repo, ITeamRepository team_repo, IPeriodRepository per_repo)
         {
             _asign_repo = asign_repo;
             _project_repo = project_repo;
             _prio_repo = prio_repo;
             _user_repo = user_repo;
+            _per_repo = per_repo;
             _team_repo = team_repo;
         }
 
@@ -64,8 +65,13 @@ namespace server.Controllers
             var as_dp = await _asign_repo.GetAssignmentByidAsync(dto.Dependent);
             if(as_dp==null && dto.Dependent > 0)
                 return BadRequest("There is no such task that can make dependency to this task");
+
             
-            var a = await _asign_repo.CreateAssignmentAsync(dto.fromCreateDtoToAssignment(),project,as_dp,prio,users);
+            var per = await _per_repo.GetPeriod(dto.PeriodId);
+            if(per==null)
+                return BadRequest("There is no such period");
+            
+            var a = await _asign_repo.CreateAssignmentAsync(dto.fromCreateDtoToAssignment(),project,as_dp,prio,users,per);
 
             return Ok(a.toAssignmentDto(dto.UserIds));
         }
@@ -139,7 +145,10 @@ namespace server.Controllers
         [Route("update/{task_id}")]
         public async Task<IActionResult> UpdateAssignmentById([FromBody]UpdateAssignmentDto dto,[FromRoute] int task_id)
         {
-            var asignment = await _asign_repo.UpdateAssignmentAsync(dto,task_id);
+            var per = await _per_repo.GetPeriod(dto.PeriodId);
+            if(per==null && dto.PeriodId!=0)
+                return BadRequest("There is no such period");
+            var asignment = await _asign_repo.UpdateAssignmentAsync(dto,task_id,per);
 
             if(asignment==null)
                 return BadRequest("Assignment does not exist");

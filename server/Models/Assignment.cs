@@ -22,6 +22,8 @@ namespace server.Models
 
         [Column("start", TypeName ="datetime")]
         public DateTime Start { get; set; }
+        [Column("estimated_time")]
+        public int EstimatedTime { get; set; }
 
         [Column("end", TypeName ="datetime")]
         public DateTime End { get; set; }

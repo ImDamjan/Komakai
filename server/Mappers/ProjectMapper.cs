@@ -22,13 +22,11 @@ namespace server.Mappers
                 Start=p.Start,
                 Percentage = p.Percentage,
                 End = p.End,
-                EstimatedTime = p.EstimatedTime,
                 Title = p.Title,
                 Budget = p.Budget,
                 Type = p.Type,
                 TeamId = p.TeamId,
                 PriorityId = p.PriorityId,
-                PeriodId = p.PeriodId
 
             };
         }
