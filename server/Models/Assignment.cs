@@ -22,6 +22,8 @@ namespace server.Models
 
         [Column("start", TypeName ="datetime")]
         public DateTime Start { get; set; }
+        [Column("estimated_time")]
+        public int EstimatedTime { get; set; }
 
         [Column("end", TypeName ="datetime")]
         public DateTime End { get; set; }
@@ -41,6 +43,9 @@ namespace server.Models
         [Column("project_id")]
         public int ProjectId { get; set; }
 
+        [Column("period_id")]
+        public int PeriodId { get; set; }
+
         [Column("type")]
         public string Type { get; set; } = null!;
 
@@ -55,6 +60,8 @@ namespace server.Models
 
         [InverseProperty("DependentNavigation")]
         public virtual ICollection<Assignment> InverseDependentNavigation { get; set; } = new List<Assignment>();
+
+        //
 
         [ForeignKey("PriorityId")]
         [InverseProperty("Assignments")]
@@ -75,6 +82,10 @@ namespace server.Models
 
         [ForeignKey("StateId")]
         [InverseProperty("Assignments")]
-        public State? State { get; set; }    
+        public virtual State State { get; set; } = null!; 
+
+        [ForeignKey("PeriodId")]
+        [InverseProperty("Assignments")]
+        public virtual Period? Period { get; set; } = null!;  
     }
 }

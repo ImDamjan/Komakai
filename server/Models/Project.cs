@@ -51,7 +51,10 @@ namespace server.Models
         public int TeamId { get; set; }
 
         [Column("priority_id")]
-        public int? PriorityId { get; set; }
+        public int PriorityId { get; set; }
+
+        [Column("period_id")]
+        public int PeriodId { get; set; }
 
         [ForeignKey("PriorityId")]
         [InverseProperty("Projects")]
@@ -79,8 +82,11 @@ namespace server.Models
 
         [ForeignKey("TeamId")]
         [InverseProperty("Projects")]
+        public virtual Team? Team { get; set; } = null!;
 
-        public virtual Team? Team { get; set; }
+        [ForeignKey("PeriodId")]
+        [InverseProperty("Projects")]
+        public virtual Period Period { get; set; } = null!;
         
     }
 }

@@ -18,7 +18,7 @@ namespace server.Repositories
             _context = context;
         }
 
-        public async Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Assignment? dependent, Priority prio, List<User> users)
+        public async Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Assignment? dependent, Priority prio, List<User> users, Period per)
         {
 
             a.Users = users;
@@ -27,6 +27,16 @@ namespace server.Repositories
             a.DependentNavigation = dependent;
             a.StateId=1;
             a.Start = DateTime.Now;
+            a.Period = per;
+            a.EstimatedTime = a.EstimatedTime;
+            if(per.Name=="Day")
+                a.End = a.Start.AddDays(per.Value * a.EstimatedTime);
+            else if(per.Name=="Week")
+                a.End = a.Start.AddDays(per.Value * a.EstimatedTime);
+            else if(per.Name == "Month")
+                a.End = a.Start.AddMonths(a.EstimatedTime);
+            else if(per.Name=="Year")
+                a.End = a.Start.AddYears(a.EstimatedTime);
 
             await _context.Assignments.AddAsync(a);
             await _context.SaveChangesAsync();
@@ -61,7 +71,7 @@ namespace server.Repositories
             return task.Users.ToList();
         }
 
-        public async Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id)
+        public async Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id, Period? per)
         {
             var assignment = await GetAssignmentByidAsync(id);
             if(assignment==null)
@@ -76,7 +86,19 @@ namespace server.Repositories
             assignment.PriorityId = a.PriorityId;
             assignment.StateId = a.StateId;
             assignment.Description = a.Description;
-            assignment.End = a.End;
+            if(per!=null)
+            {
+                assignment.PeriodId = a.PeriodId;
+                assignment.EstimatedTime+= a.EstimatedTime;
+                if(per.Name=="Day")
+                    assignment.End = assignment.End.AddDays(per.Value * a.EstimatedTime);
+                else if(per.Name=="Week")
+                    assignment.End = assignment.End.AddDays(per.Value * a.EstimatedTime);
+                else if(per.Name == "Month")
+                    assignment.End = assignment.End.AddMonths(a.EstimatedTime);
+                else if(per.Name=="Year")
+                    assignment.End = assignment.End.AddYears(a.EstimatedTime);
+            }
             assignment.Percentage = a.Percentage;
 
             await _context.SaveChangesAsync();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.DTOs.Period;
 using server.DTOs.Priority;
 using server.DTOs.Projects;
 using server.DTOs.Role;
@@ -21,12 +22,11 @@ namespace server.Mappers
                 Start=p.Start,
                 Percentage = p.Percentage,
                 End = p.End,
-                EstimatedTime = p.EstimatedTime,
                 Title = p.Title,
                 Budget = p.Budget,
                 Type = p.Type,
                 TeamId = p.TeamId,
-                PriorityId = p.PriorityId
+                PriorityId = p.PriorityId,
 
             };
         }
@@ -42,7 +42,8 @@ namespace server.Mappers
                 Percentage = 0,
                 StateId = stateId,
                 Description = dto.Description,
-                PriorityId = dto.PriorityId
+                PriorityId = dto.PriorityId,
+                PeriodId =  dto.PeriodId
             };
         }
         public static PriorityDto toPrioDto(this Priority prio)
@@ -67,6 +68,15 @@ namespace server.Mappers
             return new StateDto{
                 Id = state.Id,
                 Name = state.Name
+            };
+        }
+
+        public static PeriodDto toPeriodDto(this Period per)
+        {
+            return new PeriodDto{
+                Id = per.Id,
+                Name = per.Name,
+                Value = per.Value
             };
         }
     }

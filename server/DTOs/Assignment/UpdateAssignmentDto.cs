@@ -9,10 +9,11 @@ namespace server.DTOs.Assignment
     {
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public DateTime End { get; set; }
         public int StateId { get; set; }
         public float Percentage { get; set; }
         public int Dependent { get; set; }
+        public int EstimatedTime { get; set; }
+        public int PeriodId { get; set; }
         public int PriorityId { get; set; }
         public string Type { get; set; } = null!;
     }

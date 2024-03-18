@@ -10,14 +10,18 @@ using server.Models;
 
 namespace server.Controllers
 {
+    //TO-DO treba se odraditi validacija podataka id-jevi svih vezanih modela
+    // takodje treba da se postave odredjeni dependency injection-i
     [ApiController]
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _repos;
-        public ProjectController(IProjectRepository repos)
+        private readonly IPeriodRepository _period_repo;
+        public ProjectController(IProjectRepository repos, IPeriodRepository period_repo)
         {
             _repos = repos;
+            _period_repo = period_repo;
         }
 
         [HttpGet("getProjects")]
@@ -50,8 +54,13 @@ namespace server.Controllers
         {
             var projectModel = projectDto.toProjectFromCreateDto(1);
             List<int> teamMembers = projectDto.UserIds;
+
+            var period = await _period_repo.GetPeriod(projectDto.PeriodId);
+
+            if(period==null)
+                return BadRequest("That period does not exist");
             
-            var response = await _repos.CreateProjectAsync(projectModel,teamMembers);
+            var response = await _repos.CreateProjectAsync(projectModel,teamMembers, period);
             if(response==null)
                 return BadRequest("User was not found ");
             return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto());
@@ -61,7 +70,10 @@ namespace server.Controllers
         [Route("update/{id}")]
         public async Task<IActionResult> Update([FromRoute] int id,[FromBody] UpdateProjectDto projectDto)
         {
-            var project = await _repos.UpdateProjectAsync(id,projectDto);
+            var period = await _period_repo.GetPeriod(projectDto.PeriodId);
+            if(period==null && projectDto.PeriodId!=0)
+                return BadRequest("Period does not exist");
+            var project = await _repos.UpdateProjectAsync(id,projectDto, period);
 
             if(project==null)
                 return NotFound("Project with Id:"+id + " was not found !!!");
@@ -70,11 +82,16 @@ namespace server.Controllers
         }
 
         //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
-        [HttpGet("userProjectStates/{userId}/{period}")]
-        public async Task<IActionResult> GetAllUserStatesProjects([FromRoute]int userId,[FromRoute] string period)
+        [HttpGet("userProjectStates/{userId}/{periodId}")]
+        public async Task<IActionResult> GetAllUserStatesProjects([FromRoute]int userId,[FromRoute] int periodId)
         {
+            var period = await _period_repo.GetPeriod(periodId);
+            if(period==null)
+                return BadRequest("Period does not exist");
             var res = await _repos.GetAllUserProjectStates(userId,period);
             return Ok(res);
         }
+
+        //TO-DO treba da se uradi endpoint koji kreira projekat sa vec gotovim timom
     }
 }
