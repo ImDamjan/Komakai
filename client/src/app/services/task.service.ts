@@ -8,7 +8,7 @@ import { environment } from '../enviroments/environment';
   providedIn: 'root'
 })
 export class TaskService {
-    private apiUrl = environment.apiUrl; // Replace 'your-api-url/tasks' with your actual API endpoint
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 

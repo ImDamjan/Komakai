@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Task } from '../../models/task';
-import { ProjectTaskComponent } from '../../components/project-task/project-task.component';
 import { TaskService } from '../../services/task.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../enviroments/environment';
 
 @Component({
   selector: 'app-tasks',
@@ -14,16 +15,34 @@ export class TasksComponent {
     
   } as Task; 
 
+  private apiUrl = environment.apiUrl;
+
   tasks: any[] = [];
 
-  // n: number = 3;
+  priorities: any[] = [];
 
-  constructor(private taskService: TaskService) { }
+  satuses: any[] = [];
+
+  constructor(private taskService: TaskService, private http: HttpClient) { }
 
   ngOnInit(): void {
+    
     this.taskService.getAllTasks().subscribe(tasks => {
       this.tasks = tasks;
     });
+
+    this.http.get<any>(this.apiUrl+`/Priority/getPriorities`).subscribe(priorities =>{
+      this.priorities=priorities;
+    });
+
+    for (const task of this.tasks) {
+      for (const priority of this.priorities) {
+        if(task.priorityId==priority.id){
+          task.priority=priority.description;
+        }
+      }
+    }
+
   }
-  
+
 }
