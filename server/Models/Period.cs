@@ -14,6 +14,12 @@ namespace server.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         //koliko dana vredi odredjen period
-        public int Value { get; set; } = 0;
+        [Column("value")]
+        public int Value { get; set; }
+
+        [InverseProperty("Period")]
+        public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
+        [InverseProperty("Period")]
+        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
     }
 }

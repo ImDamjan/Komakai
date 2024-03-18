@@ -13,6 +13,7 @@ namespace server.DTOs.Projects
         public DateTime End { get; set; }
         public int? StateId { get; set; }
         public int EstimatedTime { get; set; }
+        public int PeriodId { get; set; }
         public double Budget { get; set; }
         public double Spent { get; set; }
         public string Type { get; set; } = "";

@@ -13,6 +13,10 @@ namespace server.DTOs.Projects
         public double Budget { get; set; }
         public string Description { get; set; } = "";
         public string Type { get; set; } = null!;
-        public int EstimatedTime { get; set; }
+        
+        // brojcano prikazan tip vremena
+        public int EstimatedTime { get; set; } // true time = PeriodId.Value * EstimatedTime
+        //tip vremena
+        public int PeriodId { get; set; }
     }
 }
