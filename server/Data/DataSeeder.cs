@@ -17,6 +17,34 @@ namespace server.Data
 
         public void Seed()
         {
+            //periodi
+            if(!_context.Periods.Any())
+            {
+                var periods = new List<Period>{
+                    new Period{
+                        Id = 1,
+                        Name = "Day",
+                        Value = 1
+                    },
+                    new Period{
+                        Id = 2,
+                        Name = "Week",
+                        Value = 7
+                    },
+                    new Period{
+                        Id = 3,
+                        Name = "Month",
+                        Value = 30
+                    },
+                    new Period{
+                        Id = 4,
+                        Name = "Year",
+                        Value = 365
+                    },
+                };
+                _context.Periods.AddRange(periods);
+                _context.SaveChanges();
+            }
 
             //prioriteti
             if(!_context.Priorities.Any())
@@ -318,7 +346,8 @@ namespace server.Data
                                 Budget = 10000,
                                 Spent = 8000,
                                 Type = "Web",
-                                PriorityId = 2 // Medium Priority
+                                PriorityId = 2, // Medium Priority
+                                PeriodId = 1
                             },
                             new Project
                             {
@@ -335,7 +364,8 @@ namespace server.Data
                                 Budget = 12000,
                                 Spent = 10000,
                                 Type = "Marketing",
-                                PriorityId = 1 // High Priority
+                                PriorityId = 1, // High Priority
+                                PeriodId = 1
                             },
                             new Project
                             {
@@ -352,7 +382,8 @@ namespace server.Data
                                 Budget = 15000,
                                 Spent = 12000,
                                 Type = "Data",
-                                PriorityId = 3 // Low Priority
+                                PriorityId = 3, // Low Priority
+                                PeriodId = 1
                             },
                             new Project
                             {
@@ -369,7 +400,8 @@ namespace server.Data
                                 Budget = 18000,
                                 Spent = 15000,
                                 Type = "Product",
-                                PriorityId = 2 // Medium Priority
+                                PriorityId = 2, // Medium Priority
+                                PeriodId = 1
                             },
                             new Project
                             {
@@ -386,7 +418,8 @@ namespace server.Data
                                 Budget = 8000,
                                 Spent = 6000,
                                 Type = "Training",
-                                PriorityId = 1 // High Priority
+                                PriorityId = 1, // High Priority
+                                PeriodId = 1
                             },
                             new Project
                             {
@@ -403,7 +436,8 @@ namespace server.Data
                                 Budget = 8000,
                                 Spent = 6000,
                                 Type = "Mobile",
-                                PriorityId = 3 // Low Priority
+                                PriorityId = 3, // Low Priority
+                                PeriodId = 1
                             },
                             new Project
                             {
@@ -420,7 +454,8 @@ namespace server.Data
                                 Budget = 10000,
                                 Spent = 9000,
                                 Type = "Software",
-                                PriorityId = 2 // Medium Priority
+                                PriorityId = 2, // Medium Priority
+                                PeriodId = 1
                             },
                             new Project
                             {
@@ -437,7 +472,8 @@ namespace server.Data
                                 Budget = 5000,
                                 Spent = 3500,
                                 Type = "Database",
-                                PriorityId = 1 // High Priority
+                                PriorityId = 1, // High Priority
+                                PeriodId = 1
                             },
                             new Project
                             {
@@ -454,7 +490,8 @@ namespace server.Data
                                 Budget = 12000,
                                 Spent = 10000,
                                 Type = "Security",
-                                PriorityId = 2 // Medium Priority
+                                PriorityId = 2, // Medium Priority
+                                PeriodId = 1
                             },
                             new Project
                             {
@@ -471,7 +508,8 @@ namespace server.Data
                                 Budget = 15000,
                                 Spent = 8000,
                                 Type = "Support",
-                                PriorityId = 3 // Low Priority
+                                PriorityId = 3, // Low Priority
+                                PeriodId = 1
                             }
                         };
 

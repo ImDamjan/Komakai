@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using server.Interfaces;
+using server.Mappers;
 
 namespace server.Controllers
 {
@@ -20,7 +21,10 @@ namespace server.Controllers
         [HttpGet("getAllPeriods")]
         public async Task<IActionResult> GetAllPeriods()
         {
-            return Ok(await _repo.GetPeriods());
+            var periods = await _repo.GetPeriods();
+            var dtos = periods.Select(p=>p.toPeriodDto());
+
+            return Ok(dtos);
         }
 
         [HttpGet("getPeriodById/{period_id}")]
@@ -30,7 +34,7 @@ namespace server.Controllers
             if(period==null)
                 return NotFound("Period with that id does not exist");
             
-            return Ok(period);
+            return Ok(period.toPeriodDto());
         }
     }
 }
