@@ -87,6 +87,10 @@ namespace server.Models
         [ForeignKey("PeriodId")]
         [InverseProperty("Projects")]
         public virtual Period Period { get; set; } = null!;
+
+        [InverseProperty("Project")]
+        public virtual ICollection<TaskGroup> TaskGroups { get; set; } = new List<TaskGroup>();
+
         
     }
 }

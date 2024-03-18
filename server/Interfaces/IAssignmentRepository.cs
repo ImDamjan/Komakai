@@ -16,7 +16,7 @@ namespace server.Interfaces
 
         Task<List<User>> GetAssignmentUsersAsync(int task_id);
 
-        Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Assignment? dependent,Priority prio,List<User> users, Period per);
+        Task<Assignment> CreateAssignmentAsync(Assignment a, Project project,Priority prio,List<User> users, Period per);
 
     }
 }
