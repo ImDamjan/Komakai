@@ -17,6 +17,9 @@ namespace server.Models
         [Column("content")]
         public string? Content { get; set; }
 
+        [Column("post_time", TypeName = "datetime")]
+        public DateTime PostTime { get; set; }
+
         [Column("comment_id")]
         public int? CommentId { get; set; }
 

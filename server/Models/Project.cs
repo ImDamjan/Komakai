@@ -32,8 +32,8 @@ namespace server.Models
         [Column("last_state_changed", TypeName ="datetime")]
         public DateTime LastStateChangedTime { get; set; }
 
-        [Column("estimated_time", TypeName = "datetime")]
-        public DateTime EstimatedTime { get; set; }
+        [Column("estimated_time")]
+        public int EstimatedTime { get; set; }
 
         [Column("budget", TypeName = "double")]
         public double Budget { get; set; }

@@ -13,6 +13,6 @@ namespace server.DTOs.Projects
         public double Budget { get; set; }
         public string Description { get; set; } = "";
         public string Type { get; set; } = null!;
-        public DateTime EstimatedTime { get; set; }
+        public int EstimatedTime { get; set; }
     }
 }
