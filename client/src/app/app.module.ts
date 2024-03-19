@@ -23,6 +23,7 @@ import { ProjectTaskComponent } from './components/project-task/project-task.com
 import { AuthComponent } from './pages/auth/auth.component';
 import { ProjectStatusComponent } from './components/project-status/project-status.component';
 import { MyTooltipDirective } from './directives/my-tooltip.directive';
+import { CreateProjectOverlayComponent } from './components/create-project-overlay/create-project-overlay.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { MyTooltipDirective } from './directives/my-tooltip.directive';
     ProjectPreviewComponent,
     ProjectTaskComponent,
     ProjectStatusComponent,
-    MyTooltipDirective
+    MyTooltipDirective,
+    CreateProjectOverlayComponent
   ],
   imports: [
     
