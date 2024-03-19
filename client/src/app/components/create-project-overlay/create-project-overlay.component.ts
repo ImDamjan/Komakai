@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -7,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class CreateProjectOverlayComponent {
 
+  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>) { }
+
+  closeOverlay(): void {
+    // Close the overlay dialog
+    this.dialogRef.close();
+  }
+
+  
 }

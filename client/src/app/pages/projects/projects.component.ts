@@ -19,6 +19,13 @@ export class ProjectsComponent {
     const dialogRef = this.dialog.open(CreateProjectOverlayComponent, {
     });
 
+    dialogRef.afterClosed().subscribe(result => {
+      // When overlay is closed
+      this.showProjectPreview = true;
+      this.showCreateButton = true;
+      this.projectText = 'Project list';
+    });
+    
     this.showProjectPreview = false;
     this.showCreateButton = false;
     this.projectText = 'Project list/Create project';
