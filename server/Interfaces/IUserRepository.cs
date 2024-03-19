@@ -21,5 +21,9 @@ namespace server.Interfaces
         Task<List<User>> GetUsersByRoleAsync(string roleName);
 
         Task<User> GetUserByUsernameAsync(string username);
+
+        Task<User> GetUserByEmailAsync(string email);
+
+        Task SaveChangesAsync();
     }
 }
