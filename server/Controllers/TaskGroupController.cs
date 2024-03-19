@@ -52,5 +52,20 @@ namespace server.Controllers
             
             return Ok(t.toTaskGroupDto());
         }
+
+        [HttpGet("getTaskGropsByProject/{project_id}")]
+        public async Task<IActionResult> GetByProjectId([FromRoute] int project_id)
+        {
+            //provera da li projekat postoji
+            var project = await _project_repo.GetProjectByIdAsync(project_id);            
+            if(project==null)
+                return BadRequest("That project does not exist");
+            
+            var group = await _group_repo.GetAllProjectTaskGroupsAsync(project);
+
+            var dtos = group.Select(g=>g.toTaskGroupDto());
+
+            return Ok(dtos);
+        }
     }
 }
