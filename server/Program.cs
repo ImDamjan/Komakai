@@ -59,6 +59,7 @@ builder.Services.AddScoped<IPriorityRepository,PriorityRepository>();
 builder.Services.AddScoped<IAssignmentRepository,AssignmentRepository>();
 builder.Services.AddScoped<IPeriodRepository,PeriodRepository>();
 builder.Services.AddScoped<IRoleRepository,RoleRepository>();
+builder.Services.AddScoped<ITaskGroupRepository, TaskGroupRepository>();
 builder.Services.AddScoped<IStateRepository,StateRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 

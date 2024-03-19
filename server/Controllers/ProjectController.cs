@@ -18,9 +18,11 @@ namespace server.Controllers
     {
         private readonly IProjectRepository _repos;
         private readonly IPeriodRepository _period_repo;
-        public ProjectController(IProjectRepository repos, IPeriodRepository period_repo)
+        private readonly ITaskGroupRepository _group_repo;
+        public ProjectController(IProjectRepository repos, IPeriodRepository period_repo, ITaskGroupRepository group_repo)
         {
             _repos = repos;
+            _group_repo = group_repo;
             _period_repo = period_repo;
         }
 
@@ -63,6 +65,9 @@ namespace server.Controllers
             var response = await _repos.CreateProjectAsync(projectModel,teamMembers, period);
             if(response==null)
                 return BadRequest("User was not found ");
+            var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
+            //kreiranje initial grupe - zove se isto kao i projekat
+            await _group_repo.CreateAsync(group);
             return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto());
         }
 
