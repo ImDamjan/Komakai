@@ -36,5 +36,23 @@ namespace server.Mappers
                 Assignees = asignees
             };
         }
+
+        public static TaskGroup fromCreateTaskGroupDtoToTaskGroup(this CreateTaskGroupDto dto)
+        {
+            return new TaskGroup{
+                Title = dto.Title,
+                ProjectId = dto.ProjectId,
+                ParentTaskGroupId = dto.ParentTaskGroupId
+            };
+        }
+
+        public static TaskGroupDto toTaskGroupDto(this TaskGroup group)
+        {
+            return new TaskGroupDto{
+                Title = group.Title,
+                ProjectId = group.ProjectId,
+                ParentTaskGroupId = group.ParentTaskGroupId
+            };
+        }
     }
 }

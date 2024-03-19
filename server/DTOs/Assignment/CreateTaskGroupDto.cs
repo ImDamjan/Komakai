@@ -9,6 +9,6 @@ namespace server.DTOs.Assignment
     {
         public string Title { get; set; } = null!;
         public int ProjectId { get; set; }
-        public int? ParentTaskGroupId { get; set; }
+        public int? ParentTaskGroupId { get; set; } = null;
     }
 }
