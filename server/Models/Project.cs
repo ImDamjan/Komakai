@@ -63,14 +63,6 @@ namespace server.Models
         [InverseProperty("Project")]
         public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
 
-        [ForeignKey("RelatedProjectId")]
-        [InverseProperty("RelatedProjects")]
-        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
-
-        [ForeignKey("ProjectId")]
-        [InverseProperty("Projects")]
-        public virtual ICollection<Project> RelatedProjects { get; set; } = new List<Project>();
-
         [ForeignKey("ProjectId")]
         [InverseProperty("Projects")]
         public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
