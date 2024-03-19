@@ -24,11 +24,33 @@ namespace server.Controllers
         [HttpPost("createTaskGroup")]
         public async Task<IActionResult> Create([FromBody] CreateTaskGroupDto dto)
         {
-            var project = await _project_repo.GetProjectByIdAsync(dto.ProjectId);
+            //provera da li projekat postoji
+            var project = await _project_repo.GetProjectByIdAsync(dto.ProjectId);            
             if(project==null)
                 return BadRequest("That project does not exist");
+
+            //provera da li parent_task_group postoji i da li pripada datom projektu
+            if(dto.ParentTaskGroupId!=null)
+            {
+                
+                var tg = await _group_repo.GetTaskGroupByIdAsync((int)dto.ParentTaskGroupId);
+                if(tg==null)
+                    return BadRequest("That parent task group does not exist");
+                if(tg.ProjectId!=project.Id)
+                    return BadRequest("That parent task does not belong to the given project");
+            }
+
             var group = await _group_repo.CreateAsync(dto.fromCreateTaskGroupDtoToTaskGroup());
             return Ok(group.toTaskGroupDto());
-        } 
+        }
+        [HttpGet("getTaskGroupById/{task_group_id}")]
+        public async Task<IActionResult> GetById([FromRoute] int task_group_id)
+        {
+            var t = await _group_repo.GetTaskGroupByIdAsync(task_group_id);
+            if(t==null)
+                return BadRequest("That group does not exist");
+            
+            return Ok(t.toTaskGroupDto());
+        }
     }
 }

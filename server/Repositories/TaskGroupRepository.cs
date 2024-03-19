@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.DTOs.Assignment;
 using server.Models;
@@ -28,9 +29,10 @@ namespace server.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<TaskGroup> GetTaskGroupByIdAsync(int id)
+        public async Task<TaskGroup?> GetTaskGroupByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var t = await _context.TaskGroups.FirstOrDefaultAsync(tg=> tg.Id==id);
+            return t;
         }
 
         public Task<TaskGroup> UpdateTaskGroupAsync(TaskGroupDto dto)

@@ -49,6 +49,7 @@ namespace server.Mappers
         public static TaskGroupDto toTaskGroupDto(this TaskGroup group)
         {
             return new TaskGroupDto{
+                Id = group.Id,
                 Title = group.Title,
                 ProjectId = group.ProjectId,
                 ParentTaskGroupId = group.ParentTaskGroupId
