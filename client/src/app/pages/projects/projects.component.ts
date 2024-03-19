@@ -9,11 +9,18 @@ import { CreateProjectOverlayComponent } from '../../components/create-project-o
   styleUrl: './projects.component.css'
 })
 export class ProjectsComponent {
+  showProjectPreview: boolean = true;
+  showCreateButton: boolean = true;
+  projectText: string = 'Project list';
 
   constructor(private dialog: MatDialog) { }
 
   openCreateOverlay(): void {
     const dialogRef = this.dialog.open(CreateProjectOverlayComponent, {
     });
+
+    this.showProjectPreview = false;
+    this.showCreateButton = false;
+    this.projectText = 'Project list/Create project';
   }
 }
