@@ -12,6 +12,6 @@ namespace server.Interfaces
         Task<TaskGroup> CreateAsync(TaskGroup group);
         Task<List<TaskGroup>> GetAllProjectTaskGroupsAsync(Project project);
         Task<TaskGroup?> GetTaskGroupByIdAsync(int id);
-        Task<TaskGroup> UpdateTaskGroupAsync(TaskGroupDto dto);
+        Task<TaskGroup> UpdateTaskGroupAsync(TaskGroup group);
     }
 }

@@ -35,9 +35,10 @@ namespace server.Repositories
             return t;
         }
 
-        public Task<TaskGroup> UpdateTaskGroupAsync(TaskGroupDto dto)
+        public async Task<TaskGroup> UpdateTaskGroupAsync(TaskGroup group)
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
+            return group;
         }
     }
 }

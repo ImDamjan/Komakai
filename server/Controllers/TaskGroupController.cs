@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Assignment;
 using server.Mappers;
+using server.Models;
 
 namespace server.Controllers
 {
@@ -66,6 +67,23 @@ namespace server.Controllers
             var dtos = group.Select(g=>g.toTaskGroupDto());
 
             return Ok(dtos);
+        }
+
+        [HttpPut("updateTaskGroup")]
+        public async Task<IActionResult> Update([FromBody] TaskGroupDto dto)
+        {
+
+            var group = await _group_repo.GetTaskGroupByIdAsync(dto.Id);
+            if(group==null)
+                return BadRequest("Task group does not exist");
+            group.Title = dto.Title;
+            group.ProjectId = dto.ProjectId;
+            group.ParentTaskGroupId = dto.ParentTaskGroupId;
+
+            await _group_repo.UpdateTaskGroupAsync(group);
+            
+            return Ok(group.toTaskGroupDto());
+
         }
     }
 }
