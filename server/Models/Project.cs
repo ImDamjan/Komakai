@@ -60,8 +60,6 @@ namespace server.Models
         [InverseProperty("Projects")]
         public Priority? Priority { get; set; }
         
-        [InverseProperty("Project")]
-        public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
 
         [ForeignKey("ProjectId")]
         [InverseProperty("Projects")]

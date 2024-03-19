@@ -18,24 +18,8 @@ namespace server.Repositories
             _context = context;
         }
 
-        public async Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Priority prio, List<User> users, Period per)
+        public async Task<Assignment> CreateAssignmentAsync(Assignment a)
         {
-
-            a.Users = users;
-            a.Project = project;
-            a.Priority = prio;
-            a.StateId=1;
-            a.Start = DateTime.Now;
-            a.Period = per;
-            a.EstimatedTime = a.EstimatedTime;
-            if(per.Name=="Day")
-                a.End = a.Start.AddDays(per.Value * a.EstimatedTime);
-            else if(per.Name=="Week")
-                a.End = a.Start.AddDays(per.Value * a.EstimatedTime);
-            else if(per.Name == "Month")
-                a.End = a.Start.AddMonths(a.EstimatedTime);
-            else if(per.Name=="Year")
-                a.End = a.Start.AddYears(a.EstimatedTime);
 
             await _context.Assignments.AddAsync(a);
             await _context.SaveChangesAsync();
@@ -44,9 +28,18 @@ namespace server.Repositories
 
         }
 
-        public async Task<List<Assignment>> GetAllProjectAssignmentsAsync(int project_id)
+        public async Task<List<Assignment>> GetAllDependentOnOfAssignmentAsync(int asign_id)
         {
-            return await _context.Assignments.Where(a=>a.ProjectId==project_id).Include(a=>a.Users).ToListAsync();
+            var asgn = await _context.Assignments.Include(a=>a.DependentOnAssignments).FirstOrDefaultAsync(a=>a.Id==asign_id);
+            if(asgn==null)
+                return new List<Assignment>();
+
+            return asgn.DependentOnAssignments.ToList();
+        }
+
+        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id)
+        {
+            return await _context.Assignments.Where(a=>a.TaskGroupId==group_id).Include(a=>a.Users).ToListAsync();
         }
 
         public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId)
@@ -70,29 +63,19 @@ namespace server.Repositories
             return task.Users.ToList();
         }
 
-        public async Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id, Period? per)
+        public async Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id)
         {
             var assignment = await GetAssignmentByidAsync(id);
             if(assignment==null)
                 return null;
             assignment.Title = a.Title;
+            assignment.TaskGroupId = a.TaskGroupId;
+            assignment.Start = a.Start;
+            assignment.End = a.End;
             assignment.Type = a.Type;
             assignment.PriorityId = a.PriorityId;
             assignment.StateId = a.StateId;
             assignment.Description = a.Description;
-            if(per!=null)
-            {
-                assignment.PeriodId = a.PeriodId;
-                assignment.EstimatedTime+= a.EstimatedTime;
-                if(per.Name=="Day")
-                    assignment.End = assignment.End.AddDays(per.Value * a.EstimatedTime);
-                else if(per.Name=="Week")
-                    assignment.End = assignment.End.AddDays(per.Value * a.EstimatedTime);
-                else if(per.Name == "Month")
-                    assignment.End = assignment.End.AddMonths(a.EstimatedTime);
-                else if(per.Name=="Year")
-                    assignment.End = assignment.End.AddYears(a.EstimatedTime);
-            }
             assignment.Percentage = a.Percentage;
 
             await _context.SaveChangesAsync();

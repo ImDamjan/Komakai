@@ -78,7 +78,7 @@ namespace server.Repositories
 
         public async Task<List<Project>> GetAllProjectsAsync()
         {
-            return await _context.Projects.Include(p=> p.Projects).ToListAsync();
+            return await _context.Projects.ToListAsync();
         }
 
         public async Task<Project?> GetProjectByIdAsync(int id)

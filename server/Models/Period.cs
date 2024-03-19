@@ -16,9 +16,6 @@ namespace server.Models
         //koliko dana vredi odredjen period
         [Column("value")]
         public int Value { get; set; }
-
-        [InverseProperty("Period")]
-        public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
         [InverseProperty("Period")]
         public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
     }
