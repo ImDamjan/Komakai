@@ -1,4 +1,5 @@
 export interface Task{
+    priority: any;
     endMilliseconds: number;
     startMilliSeconds: number;
     endSeconds: number;

@@ -71,11 +71,11 @@ export class TasksComponent {
 
         });
 
-        const requests = this.tasks.map(task => this.http.get<any>(this.apiUrl + `/Priority/getPrio` + task.priorityId));
+        const requests = this.taskObj.map(task => this.http.get<any>(this.apiUrl + `/Priority/getById` + task.priorityId));
 
         forkJoin(requests).subscribe((responses: any[]) => {
             responses.forEach((response, index) => {
-                this.tasks[index].priority = response.description;
+                this.taskObj[index].priority = response.description;
 
             });
         });
