@@ -51,5 +51,33 @@ namespace server.Repositories
         {
             return await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
         }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<User> GetUserByResetTokenAsync(string resetToken)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == resetToken);
+        }
+
+        public async Task<bool> DeleteUserByIdAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return false; // User with the specified ID not found
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return true; // User deleted successfully
+        }
     }
 }

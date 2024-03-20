@@ -40,7 +40,6 @@ namespace server.Controllers
             //Kreiranje novog korisnika
             var newUser = new User
             {
-                //Id = request.Id,
                 Username = request.Username,
                 Password = passwordHash,
                 Email = request.Email,
@@ -64,6 +63,7 @@ namespace server.Controllers
                 To = request.Email,
                 Subject = "Registration Successful",
                 Body = $"Dear {request.Username},\n\nYour registration is successful!\n\nUsername: {request.Username}\nPassword: {request.Password}\n\nThank you for registering."
+                //TO DO Napraviti klasu sa telom email-a.
             };
 
             await _emailService.SendEmailAsync(emailRequest);
@@ -122,6 +122,80 @@ namespace server.Controllers
             //return token
             return jwt;
 
+        }
+
+
+
+
+
+        [HttpPost("forgotpassword")]
+        public async Task<ActionResult> ForgotPassword(string email)
+        {
+            var user = await _repos.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                // Korisnik nije pronadjen
+                return Ok("If the provided email exists in our system, a password reset email has been sent.");
+            }
+
+            // Reset token
+            string resetToken = GenerateResetToken();
+            user.PasswordResetToken = resetToken;
+            user.PasswordResetTokenExpiry = DateTime.Now.AddHours(1); // Vreme isticanja tokena
+
+            await _repos.SaveChangesAsync(); 
+
+            // Send email with reset link
+            var resetLink = $"{Request.Scheme}://{Request.Host}/resetpassword?token={resetToken}";
+            var emailRequest = new EmailDto
+            {
+                To = email,
+                Subject = "Password Reset Request",
+                Body = $"Please click the following link to reset your password: <a href=\"{resetLink}\">{resetLink}</a>"
+            };
+            await _emailService.SendEmailAsync(emailRequest);
+
+            return Ok("If the provided email exists in our system, a password reset email has been sent.");
+        }
+
+
+        [HttpPost("resetpassword")]
+        public async Task<ActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            // Find the user by the reset token
+            var user = await _repos.GetUserByResetTokenAsync(model.ResetToken);
+            if (user == null)
+            {
+                // Invalid or expired reset token
+                return BadRequest("Invalid or expired reset token.");
+            }
+
+            // Check if the reset token is expired
+            if (user.PasswordResetTokenExpiry < DateTime.Now)
+            {
+                // Expired reset token
+                return BadRequest("Expired reset token.");
+            }
+
+            // Hash the new password
+            string newPasswordHash = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+            user.Password = newPasswordHash;
+
+            // Clear the reset token and expiry
+            user.PasswordResetToken = null;
+            user.PasswordResetTokenExpiry = null;
+
+            // Update the user in the database
+            await _repos.SaveChangesAsync();
+
+            // Return a success message
+            return Ok("Password reset successful.");
+        }
+
+        // Generisanje tokena
+        private string GenerateResetToken()
+        {
+            return Guid.NewGuid().ToString();
         }
 
     }
