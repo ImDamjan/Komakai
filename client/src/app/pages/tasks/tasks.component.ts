@@ -3,7 +3,7 @@ import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../enviroments/environment';
-import { forkJoin, switchMap } from 'rxjs';
+import { Subscription, forkJoin, interval, map, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
@@ -24,6 +24,8 @@ export class TasksComponent {
 
   satuses: any[] = [];
 
+  remainingTimeSubscriptions: Subscription[] = [];
+
   constructor(private taskService: TaskService, private http: HttpClient) { }
 
   // ngOnInit(): void {
@@ -39,11 +41,16 @@ export class TasksComponent {
   //   });
   // }
 
+  ngOnDestroy(): void {
+    this.remainingTimeSubscriptions.forEach(sub => sub.unsubscribe());
+  }
+
   ngOnInit(): void {
     this.taskService.getAllTasks().subscribe(tasks => {
         this.tasks = tasks;
 
-        for (const task of this.tasks) {
+        this.tasks.forEach(task => {
+
           const start = new Date(task.start);
           task.startDate = start.getDate();
           task.startMonth = start.getMonth() + 1;
@@ -54,6 +61,8 @@ export class TasksComponent {
           task.startMilliseconds = start.getMilliseconds();
 
           const end = new Date(task.end);
+          const endTime = end.getTime();
+
           task.endDate = end.getDate();
           task.endMonth = end.getMonth() + 1;
           task.endYear = end.getFullYear();
@@ -61,7 +70,8 @@ export class TasksComponent {
           task.endMinutes = end.getMinutes();
           task.endSeconds = end.getSeconds();
           task.endMilliseconds = end.getMilliseconds();
-        }
+
+        });
 
         const requests = this.tasks.map(task => this.http.get<any>(this.apiUrl + `/Priority/getPrio` + task.priorityId));
 

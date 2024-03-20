@@ -21,5 +21,6 @@ export class ProjectTaskComponent {
         default:
             return '';
     }
-}
+  }
+  
 }
