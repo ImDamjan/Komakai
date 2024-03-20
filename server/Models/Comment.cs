@@ -19,6 +19,9 @@ namespace server.Models
 
         [Column("time", TypeName = "datetime")]
         public DateTime Time { get; set; }
+        
+        [Column("post_time", TypeName ="datetime")]
+        public DateTime PostTime { get; set; }
 
         [Column("user_id")]
         public int UserId { get; set; }
