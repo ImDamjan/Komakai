@@ -1,8 +1,76 @@
 <div class="overlay-container">
     <div class="overlay-content">
-        <div class="create-cancel">
-            <button class="create">Create</button>
-            <button class="cancel" (click)="closeOverlay()">Cancel</button>
+        <div class="left">
+            <div class="project-title">
+                <span class="name">Project title</span>
+                <input type="text" placeholder="Enter project title">
+            </div>
+            <div class="status-type">
+                <mat-form-field>
+                    <mat-label>Status</mat-label>
+                    <select matNativeControl required>
+                      <option value="Not started">Not started</option>
+                      <option value="Ready">Ready</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Done">Done</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                </mat-form-field>
+                <span class="name">Type</span>
+                <input type="text" placeholder="Type">
+            </div>
+            <div class="dates">
+                <mat-form-field>
+                    <mat-label>Start Date</mat-label>
+                    <input matInput [matDatepicker]="startDatePicker">
+                    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startDatePicker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>End Date</mat-label>
+                    <input matInput [matDatepicker]="endDatePicker">
+                    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #endDatePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="role">
+                <span class="name">Project Roles</span>
+                <mat-form-field>
+                    <mat-label>Team Lead</mat-label>
+                    <select matNativeControl required>
+                    </select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="right">
+            <div class="description">
+                <span class="name">Project Description</span>
+                <input type="text" placeholder="Write your description">
+            </div>
+            <div class="budget-team">
+                <span class="name">Budget</span>
+                <mat-form-field>
+                    <mat-label>Budget</mat-label>
+                    <select matNativeControl required>
+                      
+                    </select>
+                </mat-form-field>
+                <span class="name">Team</span>
+                <mat-form-field>
+                    <mat-label>Team</mat-label>
+                    <select matNativeControl required>
+                      
+                    </select>
+                </mat-form-field>
+            </div>
+            <div class="related">
+                <span>Related projects</span>
+                <button>Link project</button>
+            </div>
+            <div class="create-cancel">
+                <button class="create">Create</button>
+                <button class="cancel" (click)="closeOverlay()">Cancel</button>
+            </div>
         </div>
     </div>
 </div>
