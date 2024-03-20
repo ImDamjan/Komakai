@@ -43,11 +43,23 @@ export class TasksComponent {
     this.taskService.getAllTasks().subscribe(tasks => {
         this.tasks = tasks;
 
+        for (const task of this.tasks) {
+          const start = new Date(task.start);
+          task.startDate = start.getDate();
+          task.startMonth = start.getMonth() + 1;
+          task.startYear = start.getFullYear();
+          task.startHours = start.getHours();
+          task.startMinutes = start.getMinutes();
+          task.startSeconds = start.getSeconds();
+          task.startMilliseconds = start.getMilliseconds();
+        }
+
         const requests = this.tasks.map(task => this.http.get<any>(this.apiUrl + `/Priority/getPrio` + task.priorityId));
 
         forkJoin(requests).subscribe((responses: any[]) => {
             responses.forEach((response, index) => {
                 this.tasks[index].priority = response.description;
+
             });
         });
     });
