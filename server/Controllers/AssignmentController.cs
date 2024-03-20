@@ -39,6 +39,9 @@ namespace server.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateAssignment([FromBody]CreateAssignmentDto dto)
         {
+            //da li su datumi dobri
+            if(dto.Start >= dto.End)
+                return BadRequest("End date comes before start date");
 
             //da li je grupa validna
             var group = await _group_repo.GetTaskGroupByIdAsync(dto.TaskGroupId);
@@ -168,6 +171,9 @@ namespace server.Controllers
         [Route("update/{task_id}")]
         public async Task<IActionResult> UpdateAssignmentById([FromBody]UpdateAssignmentDto dto,[FromRoute] int task_id)
         {
+            //da li su datumi dobri
+            if(dto.Start >= dto.End)
+                return BadRequest("End date comes before start date");
             var asignment = await _asign_repo.UpdateAssignmentAsync(dto,task_id);
 
             if(asignment==null)
