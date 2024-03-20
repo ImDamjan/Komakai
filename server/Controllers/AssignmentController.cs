@@ -195,5 +195,34 @@ namespace server.Controllers
 
             return Ok(asignment.toAssignmentDto(ids,dep));
         }
+
+        [HttpGet("getAssignmentsByProject/{project_id}")]
+        public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id)
+        {
+            var groups = await _group_repo.GetAllProjectTaskGroupsAsync(new Project{Id = project_id});
+            var res = new List<AssignmentDto>();
+            foreach (var group in groups)
+            {
+                var assignments = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id);
+                foreach (var asignment in assignments)
+                {
+                    var users = await _asign_repo.GetAssignmentUsersAsync(asignment.Id);
+                    List<int> dep = new List<int>();
+                    var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asignment.Id);
+                    foreach (var item in dependencies)
+                    {
+                        dep.Add(item.Id);   
+                    }
+                    List<int> ids = new List<int>();
+                    foreach (var user1 in users)
+                    {
+                        ids.Add(user1.Id);
+                    }
+                    res.Add(asignment.toAssignmentDto(ids,dep));
+                }
+            }
+
+            return Ok(res);
+        }
     }
 }
