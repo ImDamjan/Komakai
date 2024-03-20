@@ -9,18 +9,23 @@ namespace server.Mappers
 {
     public static class AssignmentMapper
     {
-        public static Assignment fromCreateDtoToAssignment(this CreateAssignmentDto dto)
+        public static Assignment fromCreateDtoToAssignment(this CreateAssignmentDto dto, List<User> users, List<Assignment> dependencies, TaskGroup group)
         {
             return new Assignment{
                 Title = dto.Title,
                 Type = dto.Type,
+                Start = dto.Start,
+                End = dto.End,
+                StateId = 1,
                 Description = dto.Description,
-                EstimatedTime = dto.EstimatedTime,
-                PeriodId = dto.PeriodId
+                Users = users,
+                TaskGroup = group,
+                DependentOnAssignments = dependencies,
+                PriorityId = dto.PriorityId
             };
         }
 
-        public static AssignmentDto toAssignmentDto(this Assignment a, List<int> asignees)
+        public static AssignmentDto toAssignmentDto(this Assignment a, List<int> asignees, List<int> dependencies)
         {
             return new AssignmentDto{
                 Id = a.Id,
@@ -31,9 +36,29 @@ namespace server.Mappers
                 StateId = a.StateId,
                 Percentage = a.Percentage,
                 PriorityId = a.PriorityId,
-                ProjectId = a.ProjectId,
                 Type = a.Type,
-                Assignees = asignees
+                Assignees = asignees,
+                DependentOn = dependencies,
+                TaskGroupId = a.TaskGroupId 
+            };
+        }
+
+        public static TaskGroup fromCreateTaskGroupDtoToTaskGroup(this CreateTaskGroupDto dto)
+        {
+            return new TaskGroup{
+                Title = dto.Title,
+                ProjectId = dto.ProjectId,
+                ParentTaskGroupId = dto.ParentTaskGroupId
+            };
+        }
+
+        public static TaskGroupDto toTaskGroupDto(this TaskGroup group)
+        {
+            return new TaskGroupDto{
+                Id = group.Id,
+                Title = group.Title,
+                ProjectId = group.ProjectId,
+                ParentTaskGroupId = group.ParentTaskGroupId
             };
         }
     }

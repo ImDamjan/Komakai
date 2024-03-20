@@ -32,9 +32,6 @@ namespace server.Models
         [Column("last_state_changed", TypeName ="datetime")]
         public DateTime LastStateChangedTime { get; set; }
 
-        [Column("estimated_time")]
-        public int EstimatedTime { get; set; }
-
         [Column("budget", TypeName = "double")]
         public double Budget { get; set; }
 
@@ -53,23 +50,10 @@ namespace server.Models
         [Column("priority_id")]
         public int PriorityId { get; set; }
 
-        [Column("period_id")]
-        public int PeriodId { get; set; }
-
         [ForeignKey("PriorityId")]
         [InverseProperty("Projects")]
         public Priority? Priority { get; set; }
         
-        [InverseProperty("Project")]
-        public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
-
-        [ForeignKey("RelatedProjectId")]
-        [InverseProperty("RelatedProjects")]
-        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
-
-        [ForeignKey("ProjectId")]
-        [InverseProperty("Projects")]
-        public virtual ICollection<Project> RelatedProjects { get; set; } = new List<Project>();
 
         [ForeignKey("ProjectId")]
         [InverseProperty("Projects")]
@@ -83,10 +67,6 @@ namespace server.Models
         [ForeignKey("TeamId")]
         [InverseProperty("Projects")]
         public virtual Team? Team { get; set; } = null!;
-
-        [ForeignKey("PeriodId")]
-        [InverseProperty("Projects")]
-        public virtual Period Period { get; set; } = null!;
 
         [InverseProperty("Project")]
         public virtual ICollection<TaskGroup> TaskGroups { get; set; } = new List<TaskGroup>();

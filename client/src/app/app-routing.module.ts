@@ -8,16 +8,17 @@ import { ActivityComponent } from './pages/activity/activity.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
 import { TeamsComponent } from './pages/teams/teams.component';
 import { HelpcentreComponent } from './pages/helpcentre/helpcentre.component';
+import { AuthGuard } from './services/guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full' },
   { path: 'auth' ,component: AuthComponent},
-  {path: 'dashboard', component: DashboardComponent},
-  {path: 'projects', component: ProjectsComponent},
-  {path: 'activity', component: ActivityComponent},
-  {path: 'tasks', component: TasksComponent},
-  {path: 'teams', component: TeamsComponent},
-  {path: 'help', component: HelpcentreComponent}
+  {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard]},
+  {path: 'projects', component: ProjectsComponent,canActivate: [AuthGuard]},
+  {path: 'activity', component: ActivityComponent,canActivate: [AuthGuard]},
+  {path: 'tasks', component: TasksComponent,canActivate: [AuthGuard]},
+  {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
+  {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]}
 ];
 
 @NgModule({

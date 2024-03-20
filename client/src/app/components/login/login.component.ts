@@ -37,26 +37,5 @@ export class LoginComponent{
         console.log(error)
       }
     })
-
-  //   this.http.post('http://localhost:5295/api/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res)=>{
-  //     if(res){
-  //       this.decodedToken=jwtDecode(res);
-        
-  //       this.http.get('http://localhost:5295/api/User',this.decodedToken.nameidentifier).subscribe((res1:any)=>{
-
-  //         if(this.loginObj.username==res1[0].username){
-  //           alert('Login success');
-  //           this.router.navigateByUrl('/dashboard');
-  //         }
-
-  //       },
-  //       )
-
-  //     }
-  //   },
-  //   (err) =>{
-  //     alert(err.error);
-  //   }
-  // )
   }
 }

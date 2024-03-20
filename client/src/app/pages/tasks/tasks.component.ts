@@ -3,7 +3,7 @@ import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../enviroments/environment';
-import { forkJoin, switchMap } from 'rxjs';
+import { Subscription, forkJoin, interval, map, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
@@ -12,9 +12,7 @@ import { forkJoin, switchMap } from 'rxjs';
 })
 export class TasksComponent {
 
-  taskObj: Task = {
-    
-  } as Task; 
+  taskObj: Task [] = [];
 
   private apiUrl = environment.apiUrl;
 
@@ -23,6 +21,8 @@ export class TasksComponent {
   priorities: any[] = [];
 
   satuses: any[] = [];
+
+  remainingTimeSubscriptions: Subscription[] = [];
 
   constructor(private taskService: TaskService, private http: HttpClient) { }
 
@@ -39,15 +39,44 @@ export class TasksComponent {
   //   });
   // }
 
+  ngOnDestroy(): void {
+    this.remainingTimeSubscriptions.forEach(sub => sub.unsubscribe());
+  }
+
   ngOnInit(): void {
     this.taskService.getAllTasks().subscribe(tasks => {
-        this.tasks = tasks;
+        this.taskObj = tasks;
 
-        const requests = this.tasks.map(task => this.http.get<any>(this.apiUrl + `/Priority/getPrio` + task.priorityId));
+        this.taskObj.forEach(task => {
+
+          const start = new Date(task.start);
+          task.startDate = start.getDate();
+          task.startMonth = start.getMonth() + 1;
+          task.startYear = start.getFullYear();
+          task.startHours = start.getHours();
+          task.startMinutes = start.getMinutes();
+          task.startSeconds = start.getSeconds();
+          task.startMilliSeconds = start.getMilliseconds();
+
+          const end = new Date(task.end);
+          const endTime = end.getTime();
+
+          task.endDate = end.getDate();
+          task.endMonth = end.getMonth() + 1;
+          task.endYear = end.getFullYear();
+          task.endHours = end.getHours();
+          task.endMinutes = end.getMinutes();
+          task.endSeconds = end.getSeconds();
+          task.endMilliseconds = end.getMilliseconds();
+
+        });
+
+        const requests = this.taskObj.map(task => this.http.get<any>(this.apiUrl + `/Priority/getById` + task.priorityId));
 
         forkJoin(requests).subscribe((responses: any[]) => {
             responses.forEach((response, index) => {
-                this.tasks[index].priority = response.description;
+                this.taskObj[index].priority = response.description;
+
             });
         });
     });

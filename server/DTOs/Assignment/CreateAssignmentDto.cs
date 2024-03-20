@@ -7,15 +7,15 @@ namespace server.DTOs.Assignment
 {
     public class CreateAssignmentDto
     {
+        public int TaskGroupId { get; set; }
         public List<int> UserIds { get; set; } = new List<int>();
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public List<int> DependentOn { get; set; } = new List<int>();
         public string Title { get; set; } = null!;
         public string Type { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public int Dependent { get; set; }
         public int PriorityId { get; set; }
-        public int EstimatedTime { get; set; }
-        public int PeriodId { get; set; }
-        public int ProjectId { get; set; }
         
     }
 }
