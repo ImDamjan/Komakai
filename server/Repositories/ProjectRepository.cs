@@ -19,7 +19,7 @@ namespace server.Repositories
         }
 
         //TO-DO treba da se proveri da li postoji project manager u prosledjenim idijevima
-        public async Task<Project?> CreateProjectAsync(Project projectModel, List<int> teamMembers, Period per)
+        public async Task<Project?> CreateProjectAsync(Project projectModel, List<int> teamMembers)
         {
             var Users = new List<User>();
             
@@ -50,22 +50,8 @@ namespace server.Repositories
             }
             await _context.Teams.AddAsync(team);
 
-            projectModel.StateId = 1;
-            projectModel.Percentage = 0;
-
             if(projectModel.PriorityId > 4 || projectModel.PriorityId < 1)
                 projectModel.PriorityId = 4;
-            projectModel.Start = DateTime.Now;
-            if(per.Name=="Day")
-                projectModel.End = DateTime.Now.AddDays(per.Value * projectModel.EstimatedTime);
-            else if(per.Name=="Week")
-                projectModel.End = DateTime.Now.AddDays(per.Value * projectModel.EstimatedTime);
-            else if(per.Name == "Month")
-                projectModel.End = DateTime.Now.AddMonths(projectModel.EstimatedTime);
-            else if(per.Name=="Year")
-                projectModel.End = DateTime.Now.AddDays(projectModel.EstimatedTime);
-            else
-                return null;
             projectModel.Team = team;
             projectModel.LastStateChangedTime = DateTime.Now;
 
@@ -99,7 +85,7 @@ namespace server.Repositories
 
             return projects;
         }
-        public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectDto projectDto, Period? per)
+        public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectDto projectDto)
         {
             var project = await GetProjectByIdAsync(id);
             if(project==null)
@@ -112,19 +98,6 @@ namespace server.Repositories
                 project.StateId=projectDto.StateId;
             project.Percentage = projectDto.Percentage;
             project.Title = projectDto.Title;
-            if(per!=null)
-            {
-                project.PeriodId = projectDto.PeriodId;
-                project.EstimatedTime+= projectDto.EstimatedTime;
-                if(per.Name=="Day")
-                    project.End = project.End.AddDays(per.Value * project.EstimatedTime);
-                else if(per.Name=="Week")
-                    project.End = project.End.AddDays(per.Value * project.EstimatedTime);
-                else if(per.Name == "Month")
-                    project.End = project.End.AddMonths(project.EstimatedTime);
-                else if(per.Name=="Year")
-                    project.End = project.End.AddYears(project.EstimatedTime);
-            }
             
             if(projectDto.PriorityId > 0 && projectDto.PriorityId < 5)
                 project.PriorityId = projectDto.PriorityId;
@@ -133,13 +106,13 @@ namespace server.Repositories
 
             return project;
         }
-        public async Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId,Period period)
+        public async Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId,string period)
         {
             DateTime past = DateTime.MinValue;
-            if(period.Value == 30)
-                past = DateTime.Now.AddMonths(-1);
-            else if(period.Value == 7)
-                past = DateTime.Now.AddDays(-period.Value);
+            if(period.ToLower() == "month")
+                past = DateTime.Now.AddMonths(-30);
+            else if(period.ToLower() == "week")
+                past = DateTime.Now.AddDays(-7);
 
             
             var projects = await GetAllUserProjectsAsync(userId);
@@ -160,9 +133,10 @@ namespace server.Repositories
 
             foreach (var project in projects)
             {
+                int res = DateTime.Compare(past,project.LastStateChangedTime);
                 foreach(var item in lista)
                 {
-                    if(item.StateId==project.StateId)
+                    if(item.StateId==project.StateId && res <= 0)
                     {
                         item.count++;
                         break;

@@ -17,34 +17,6 @@ namespace server.Data
 
         public void Seed()
         {
-            //periodi
-            if(!_context.Periods.Any())
-            {
-                var periods = new List<Period>{
-                    new Period{
-                        Id = 1,
-                        Name = "Day",
-                        Value = 1
-                    },
-                    new Period{
-                        Id = 2,
-                        Name = "Week",
-                        Value = 7
-                    },
-                    new Period{
-                        Id = 3,
-                        Name = "Month",
-                        Value = 30
-                    },
-                    new Period{
-                        Id = 4,
-                        Name = "Year",
-                        Value = 365
-                    },
-                };
-                _context.Periods.AddRange(periods);
-                _context.SaveChanges();
-            }
 
             //prioriteti
             if(!_context.Priorities.Any())
@@ -342,12 +314,10 @@ namespace server.Data
                                 End = new DateTime(2023, 5, 30),
                                 Description = "Redesign the company's website with a modern and responsive design.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 120,
                                 Budget = 10000,
                                 Spent = 8000,
                                 Type = "Web",
                                 PriorityId = 2, // Medium Priority
-                                PeriodId = 1
                             },
                             new Project
                             {
@@ -360,12 +330,10 @@ namespace server.Data
                                 End = new DateTime(2023, 6, 30),
                                 Description = "Plan and execute a targeted marketing campaign for new product launch.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 150,
                                 Budget = 12000,
                                 Spent = 10000,
                                 Type = "Marketing",
                                 PriorityId = 1, // High Priority
-                                PeriodId = 1
                             },
                             new Project
                             {
@@ -378,12 +346,10 @@ namespace server.Data
                                 End = DateTime.MinValue, // Project not ended yet
                                 Description = "Develop a tool for analyzing large datasets and generating reports.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 180,
                                 Budget = 15000,
                                 Spent = 12000,
                                 Type = "Data",
                                 PriorityId = 3, // Low Priority
-                                PeriodId = 1
                             },
                             new Project
                             {
@@ -396,12 +362,10 @@ namespace server.Data
                                 End = new DateTime(2023, 8, 31),
                                 Description = "Enhance product features based on user feedback and market trends.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 200,
                                 Budget = 18000,
                                 Spent = 15000,
                                 Type = "Product",
                                 PriorityId = 2, // Medium Priority
-                                PeriodId = 1
                             },
                             new Project
                             {
@@ -414,12 +378,10 @@ namespace server.Data
                                 End = DateTime.MinValue, // Project not ended yet
                                 Description = "Develop an online training platform for employees.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 120,
                                 Budget = 8000,
                                 Spent = 6000,
                                 Type = "Training",
                                 PriorityId = 1, // High Priority
-                                PeriodId = 1
                             },
                             new Project
                             {
@@ -432,12 +394,10 @@ namespace server.Data
                                 End = DateTime.MinValue, // Project not ended yet
                                 Description = "Develop a mobile application for iOS and Android platforms.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 180,
                                 Budget = 8000,
                                 Spent = 6000,
                                 Type = "Mobile",
                                 PriorityId = 3, // Low Priority
-                                PeriodId = 1
                             },
                             new Project
                             {
@@ -450,12 +410,10 @@ namespace server.Data
                                 End = new DateTime(2023, 9, 30),
                                 Description = "Upgrade existing software to the latest version with new features.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 150,
                                 Budget = 10000,
                                 Spent = 9000,
                                 Type = "Software",
                                 PriorityId = 2, // Medium Priority
-                                PeriodId = 1
                             },
                             new Project
                             {
@@ -468,12 +426,10 @@ namespace server.Data
                                 End = new DateTime(2023, 11, 30),
                                 Description = "Optimize database performance for faster data retrieval.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 120,
                                 Budget = 5000,
                                 Spent = 3500,
                                 Type = "Database",
                                 PriorityId = 1, // High Priority
-                                PeriodId = 1
                             },
                             new Project
                             {
@@ -486,12 +442,10 @@ namespace server.Data
                                 End = new DateTime(2023, 12, 15),
                                 Description = "Implement enhanced security measures for the company's network infrastructure.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 200,
                                 Budget = 12000,
                                 Spent = 10000,
                                 Type = "Security",
                                 PriorityId = 2, // Medium Priority
-                                PeriodId = 1
                             },
                             new Project
                             {
@@ -504,12 +458,10 @@ namespace server.Data
                                 End = new DateTime(2024, 3, 31),
                                 Description = "Develop a customer support system to streamline customer inquiries.",
                                 LastStateChangedTime = DateTime.Now,
-                                EstimatedTime = 300,
                                 Budget = 15000,
                                 Spent = 8000,
                                 Type = "Support",
                                 PriorityId = 3, // Low Priority
-                                PeriodId = 1
                             }
                         };
 
