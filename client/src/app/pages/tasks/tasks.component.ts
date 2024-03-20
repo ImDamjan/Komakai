@@ -52,17 +52,15 @@ export class TasksComponent {
           task.startMinutes = start.getMinutes();
           task.startSeconds = start.getSeconds();
           task.startMilliseconds = start.getMilliseconds();
-        }
 
-        for (const task of this.tasks) {
           const end = new Date(task.end);
-          task.startDate = end.getDate();
-          task.startMonth = end.getMonth() + 1;
-          task.startYear = end.getFullYear();
-          task.startHours = end.getHours();
-          task.startMinutes = end.getMinutes();
-          task.startSeconds = end.getSeconds();
-          task.startMilliseconds = end.getMilliseconds();
+          task.endDate = end.getDate();
+          task.endMonth = end.getMonth() + 1;
+          task.endYear = end.getFullYear();
+          task.endHours = end.getHours();
+          task.endMinutes = end.getMinutes();
+          task.endSeconds = end.getSeconds();
+          task.endMilliseconds = end.getMilliseconds();
         }
 
         const requests = this.tasks.map(task => this.http.get<any>(this.apiUrl + `/Priority/getPrio` + task.priorityId));
