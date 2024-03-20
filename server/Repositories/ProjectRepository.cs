@@ -92,10 +92,12 @@ namespace server.Repositories
                 return null;
 
 
-            project.LastStateChangedTime = DateTime.Now;
             project.Spent=projectDto.Spent;
-            if(projectDto.StateId > 0 && projectDto.StateId < 7)
+            if(projectDto.StateId > 0 && projectDto.StateId < 7 && projectDto.StateId!=project.StateId)
+            {
                 project.StateId=projectDto.StateId;
+                project.LastStateChangedTime = DateTime.Now;
+            }
             project.Percentage = projectDto.Percentage;
             project.Title = projectDto.Title;
             
