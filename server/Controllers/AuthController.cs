@@ -40,7 +40,6 @@ namespace server.Controllers
             //Kreiranje novog korisnika
             var newUser = new User
             {
-                //Id = request.Id,
                 Username = request.Username,
                 Password = passwordHash,
                 Email = request.Email,
@@ -127,23 +126,23 @@ namespace server.Controllers
 
 
 
-        // Add the ForgotPassword action method
+
         [HttpPost("forgotpassword")]
         public async Task<ActionResult> ForgotPassword(string email)
         {
             var user = await _repos.GetUserByEmailAsync(email);
             if (user == null)
             {
-                // User not found, return a generic message to avoid enumeration attacks
+                // Korisnik nije pronadjen
                 return Ok("If the provided email exists in our system, a password reset email has been sent.");
             }
 
-            // Generate reset token
+            // Reset token
             string resetToken = GenerateResetToken();
             user.PasswordResetToken = resetToken;
-            user.PasswordResetTokenExpiry = DateTime.Now.AddHours(1); // Set expiry time (e.g., 1 hour from now)
+            user.PasswordResetTokenExpiry = DateTime.Now.AddHours(1); // Vreme isticanja tokena
 
-            await _repos.SaveChangesAsync(); // Save changes to the database
+            await _repos.SaveChangesAsync(); 
 
             // Send email with reset link
             var resetLink = $"{Request.Scheme}://{Request.Host}/resetpassword?token={resetToken}";
@@ -192,7 +191,7 @@ namespace server.Controllers
             return Ok("Password reset successful.");
         }
 
-        // Method to generate a reset token (you can modify this as needed)
+        // Generisanje tokena
         private string GenerateResetToken()
         {
             return Guid.NewGuid().ToString();
