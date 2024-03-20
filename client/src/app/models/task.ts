@@ -1,4 +1,18 @@
 export interface Task{
+    endMilliseconds: number;
+    startMilliSeconds: number;
+    endSeconds: number;
+    endMinutes: number;
+    endHours: number;
+    endYear: number;
+    endMonth: number;
+    endDate: number;
+    startSeconds: number;
+    startMinutes: number;
+    startHours: number;
+    startYear: number;
+    startMonth: number;
+    startDate: number;
     id: number;
     assignees: Array<number>[];
     title: string;

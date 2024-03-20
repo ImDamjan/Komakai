@@ -12,9 +12,7 @@ import { Subscription, forkJoin, interval, map, switchMap, takeUntil } from 'rxj
 })
 export class TasksComponent {
 
-  taskObj: Task = {
-    
-  } as Task; 
+  taskObj: Task [] = [];
 
   private apiUrl = environment.apiUrl;
 
@@ -47,9 +45,9 @@ export class TasksComponent {
 
   ngOnInit(): void {
     this.taskService.getAllTasks().subscribe(tasks => {
-        this.tasks = tasks;
+        this.taskObj = tasks;
 
-        this.tasks.forEach(task => {
+        this.taskObj.forEach(task => {
 
           const start = new Date(task.start);
           task.startDate = start.getDate();
@@ -58,7 +56,7 @@ export class TasksComponent {
           task.startHours = start.getHours();
           task.startMinutes = start.getMinutes();
           task.startSeconds = start.getSeconds();
-          task.startMilliseconds = start.getMilliseconds();
+          task.startMilliSeconds = start.getMilliseconds();
 
           const end = new Date(task.end);
           const endTime = end.getTime();
