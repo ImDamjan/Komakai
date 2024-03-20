@@ -71,6 +71,5 @@ namespace server.Controllers
 
             return Ok(user);
         }
-        //TO-DO treba da se napravi endpoint za getovanje role preko id-ija
     }
 }
