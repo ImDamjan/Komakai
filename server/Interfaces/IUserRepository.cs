@@ -27,5 +27,7 @@ namespace server.Interfaces
         Task SaveChangesAsync();
 
         Task<User> GetUserByResetTokenAsync(string resetToken);
+
+        Task<bool> DeleteUserByIdAsync(int userId);
     }
 }
