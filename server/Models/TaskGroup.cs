@@ -19,11 +19,11 @@ namespace server.Models
         [Column("project_id")]
         public int ProjectId { get; set; }
         [Column("parent_task_group_id")]
-        public int? ParentTaskGroupId { get; set; }
+        public int? ParentTaskGroupId { get; set; } = null;
         [ForeignKey("ProjectId")]
         [InverseProperty("TaskGroups")]
 
-        public virtual Project? Project { get; set; } = null!;
+        public virtual Project Project { get; set; } = null!;
 
         [ForeignKey("ParentTaskGroupId")]
         [InverseProperty("InverseParentNavigation")]

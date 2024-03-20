@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using server.DTOs.Period;
 using server.DTOs.Priority;
 using server.DTOs.Projects;
 using server.DTOs.Role;
@@ -27,23 +26,24 @@ namespace server.Mappers
                 Type = p.Type,
                 TeamId = p.TeamId,
                 PriorityId = p.PriorityId,
+                
 
             };
         }
 
-        public static Project toProjectFromCreateDto(this CreateProjectDto dto, int stateId)
+        public static Project toProjectFromCreateDto(this CreateProjectDto dto)
         {
             return new Project{
                 Title = dto.Title,
                 Type = dto.Type,
-                Start = DateTime.Now, 
-                EstimatedTime = dto.EstimatedTime,
+                Start = dto.Start, 
                 Spent = 0,
                 Percentage = 0,
-                StateId = stateId,
+                StateId = 1,
                 Description = dto.Description,
                 PriorityId = dto.PriorityId,
-                PeriodId =  dto.PeriodId
+                End = dto.End,
+
             };
         }
         public static PriorityDto toPrioDto(this Priority prio)
@@ -68,15 +68,6 @@ namespace server.Mappers
             return new StateDto{
                 Id = state.Id,
                 Name = state.Name
-            };
-        }
-
-        public static PeriodDto toPeriodDto(this Period per)
-        {
-            return new PeriodDto{
-                Id = per.Id,
-                Name = per.Name,
-                Value = per.Value
             };
         }
     }

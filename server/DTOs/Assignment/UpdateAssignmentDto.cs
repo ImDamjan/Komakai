@@ -7,14 +7,16 @@ namespace server.DTOs.Assignment
 {
     public class UpdateAssignmentDto
     {
-        public string Title { get; set; } = null!;
-        public string Description { get; set; } = null!;
+        public int TaskGroupId { get; set; }
+        public List<int> UserIds { get; set; } = new List<int>();
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public List<int> DependentOn { get; set; } = new List<int>();
         public int StateId { get; set; }
         public float Percentage { get; set; }
-        public int Dependent { get; set; }
-        public int EstimatedTime { get; set; }
-        public int PeriodId { get; set; }
-        public int PriorityId { get; set; }
+        public string Title { get; set; } = null!;
         public string Type { get; set; } = null!;
+        public string Description { get; set; } = null!;
+        public int PriorityId { get; set; }
     }
 }
