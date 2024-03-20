@@ -63,6 +63,7 @@ namespace server.Controllers
                 To = request.Email,
                 Subject = "Registration Successful",
                 Body = $"Dear {request.Username},\n\nYour registration is successful!\n\nUsername: {request.Username}\nPassword: {request.Password}\n\nThank you for registering."
+                //TO DO Napraviti klasu sa telom email-a.
             };
 
             await _emailService.SendEmailAsync(emailRequest);
