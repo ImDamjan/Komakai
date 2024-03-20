@@ -61,5 +61,10 @@ namespace server.Repositories
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<User> GetUserByResetTokenAsync(string resetToken)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == resetToken);
+        }
     }
 }

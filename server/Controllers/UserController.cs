@@ -47,6 +47,30 @@ namespace server.Controllers
             return Ok(users);
         }
 
+
+        [HttpGet("user/resettoken/{resetToken}")]
+        public async Task<ActionResult<User>> GetUserByResetToken(string resetToken)
+        {
+            var user = await _repos.GetUserByResetTokenAsync(resetToken);
+            if (user == null)
+            {
+                return NotFound("User not found for the provided reset token.");
+            }
+
+            return Ok(user);
+        }
+
+        [HttpGet("user/email/{email}")]
+        public async Task<ActionResult<User>> GetUserByEmail(string email)
+        {
+            var user = await _repos.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound("User not found for the provided email.");
+            }
+
+            return Ok(user);
+        }
         //TO-DO treba da se napravi endpoint za getovanje role preko id-ija
     }
 }

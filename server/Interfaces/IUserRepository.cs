@@ -25,5 +25,7 @@ namespace server.Interfaces
         Task<User> GetUserByEmailAsync(string email);
 
         Task SaveChangesAsync();
+
+        Task<User> GetUserByResetTokenAsync(string resetToken);
     }
 }

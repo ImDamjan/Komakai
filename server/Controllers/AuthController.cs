@@ -158,6 +158,40 @@ namespace server.Controllers
             return Ok("If the provided email exists in our system, a password reset email has been sent.");
         }
 
+
+        [HttpPost("resetpassword")]
+        public async Task<ActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            // Find the user by the reset token
+            var user = await _repos.GetUserByResetTokenAsync(model.ResetToken);
+            if (user == null)
+            {
+                // Invalid or expired reset token
+                return BadRequest("Invalid or expired reset token.");
+            }
+
+            // Check if the reset token is expired
+            if (user.PasswordResetTokenExpiry < DateTime.Now)
+            {
+                // Expired reset token
+                return BadRequest("Expired reset token.");
+            }
+
+            // Hash the new password
+            string newPasswordHash = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+            user.Password = newPasswordHash;
+
+            // Clear the reset token and expiry
+            user.PasswordResetToken = null;
+            user.PasswordResetTokenExpiry = null;
+
+            // Update the user in the database
+            await _repos.SaveChangesAsync();
+
+            // Return a success message
+            return Ok("Password reset successful.");
+        }
+
         // Method to generate a reset token (you can modify this as needed)
         private string GenerateResetToken()
         {
