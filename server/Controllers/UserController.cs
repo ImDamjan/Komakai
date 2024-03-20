@@ -71,5 +71,17 @@ namespace server.Controllers
 
             return Ok(user);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var deleted = await _repos.DeleteUserByIdAsync(id);
+            if (!deleted)
+            {
+                return NotFound(); // User with the specified ID not found
+            }
+
+            return NoContent(); // User deleted successfully
+        }
     }
 }
