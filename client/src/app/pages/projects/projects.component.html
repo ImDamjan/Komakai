@@ -1,5 +1,5 @@
 <div class="projectlist" >
-    <h1 class="title">Project list</h1>
-    <button class="create">Create</button>
+    <h1 class="title">{{projectText}}</h1>
+    <button class="create" *ngIf="showCreateButton" (click)="openCreateOverlay()">Create</button>
 </div>
-<app-project-preview></app-project-preview>
+<app-project-preview *ngIf="showProjectPreview"></app-project-preview>
