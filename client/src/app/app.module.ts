@@ -24,6 +24,7 @@ import { AuthComponent } from './pages/auth/auth.component';
 import { ProjectStatusComponent } from './components/project-status/project-status.component';
 import { MyTooltipDirective } from './directives/my-tooltip.directive';
 import { ProjectWeeklyAnalizeComponent } from './components/project-weekly-analize/project-weekly-analize.component';
+import { TaskTrackComponent } from './components/task-track/task-track.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ProjectWeeklyAnalizeComponent } from './components/project-weekly-anali
     ProjectTaskComponent,
     ProjectStatusComponent,
     MyTooltipDirective,
-    ProjectWeeklyAnalizeComponent
+    ProjectWeeklyAnalizeComponent,
+    TaskTrackComponent
   ],
   imports: [
     FormsModule,
