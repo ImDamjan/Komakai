@@ -3,73 +3,75 @@
         <div class="left">
             <div class="project-title">
                 <span class="name">Project title</span>
-                <input type="text" placeholder="Enter project title">
+                <input class="input-field" id="title" type="text" placeholder="  Enter project title">
             </div>
+            
             <div class="status-type">
-                <mat-form-field>
-                    <mat-label>Status</mat-label>
-                    <select matNativeControl required>
-                      <option value="Not started">Not started</option>
-                      <option value="Ready">Ready</option>
-                      <option value="In Progress">In Progress</option>
-                      <option value="Done">Done</option>
-                      <option value="Cancelled">Cancelled</option>
+                <div class="labels">
+                    <span class="name">Status</span>
+                    <span class="name" id="type">Type</span>
+                </div>
+                <div class="inputs">
+                    <select id="status-select" class="input-field" required>
+                        <option value=""></option>
+                        <option value="Not started">Not started</option>
+                        <option value="Ready">Ready</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Done">Done</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Blocked">Blocked</option>
                     </select>
-                </mat-form-field>
-                <span class="name">Type</span>
-                <input type="text" placeholder="Type">
+                    <input class="input-field" id="type-input" type="text" placeholder="  Type">
+                </div>
             </div>
             <div class="dates">
-                <mat-form-field>
-                    <mat-label>Start Date</mat-label>
-                    <input matInput [matDatepicker]="startDatePicker">
-                    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-                    <mat-datepicker #startDatePicker></mat-datepicker>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>End Date</mat-label>
-                    <input matInput [matDatepicker]="endDatePicker">
-                    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-                    <mat-datepicker #endDatePicker></mat-datepicker>
-                </mat-form-field>
+                <div class="labels">
+                    <span class="name" id="startdate">Start Date</span>
+                    <span class="name" id="enddate">End Date</span>
+                </div>
+                <div class="inputs">
+                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY">
+                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY">
+                </div>
             </div>
             <div class="role">
                 <span class="name">Project Roles</span>
-                <mat-form-field>
-                    <mat-label>Team Lead</mat-label>
-                    <select matNativeControl required>
-                    </select>
-                </mat-form-field>
+                <select class="input-field" required>
+                    <option value="">Team lead</option>
+                    <option value="">Person 1</option>
+                    <option value="">Person 2</option>
+                </select>
             </div>
         </div>
+        
         <div class="right">
             <div class="description">
                 <span class="name">Project Description</span>
-                <input type="text" placeholder="Write your description">
+                <textarea class="input-field" id="description" placeholder="  Write your description"></textarea>
             </div>
             <div class="budget-team">
-                <span class="name">Budget</span>
-                <mat-form-field>
-                    <mat-label>Budget</mat-label>
-                    <select matNativeControl required>
-                      
+                <div class="labels">
+                    <span class="name" id="budget">Budget</span>
+                    <span class="name" id="team">Team</span>
+                </div>
+                <div class="inputs">
+                    <input class="input-field" id="budget-input" type="text" placeholder="  Budget">
+                    <select class="input-field" id="team-select" required>
+                        <option value="">Team</option>
+                        <option value="">Team 1</option>
+                        <option value="">Team 2</option>
                     </select>
-                </mat-form-field>
-                <span class="name">Team</span>
-                <mat-form-field>
-                    <mat-label>Team</mat-label>
-                    <select matNativeControl required>
-                      
-                    </select>
-                </mat-form-field>
+                </div>
             </div>
             <div class="related">
-                <span>Related projects</span>
-                <button>Link project</button>
-            </div>
-            <div class="create-cancel">
-                <button class="create">Create</button>
-                <button class="cancel" (click)="closeOverlay()">Cancel</button>
+                <span class="name" id="relatedproject">Related projects</span>
+                <div class="link-create-cancel">
+                    <button id="related-button">Link project</button>
+                    <div class="create-cancel">
+                        <button class="create">Create</button>
+                        <button class="cancel" onclick="closeOverlay()">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

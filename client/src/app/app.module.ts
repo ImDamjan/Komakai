@@ -24,9 +24,6 @@ import { AuthComponent } from './pages/auth/auth.component';
 import { ProjectStatusComponent } from './components/project-status/project-status.component';
 import { MyTooltipDirective } from './directives/my-tooltip.directive';
 import { CreateProjectOverlayComponent } from './components/create-project-overlay/create-project-overlay.component';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -57,9 +54,6 @@ import { MatNativeDateModule } from '@angular/material/core';
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,
-    MatDatepickerModule,
-    MatInputModule,
-    MatNativeDateModule
   ],
   providers: [
     provideClientHydration()
