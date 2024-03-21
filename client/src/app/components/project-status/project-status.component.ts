@@ -15,31 +15,43 @@ export class ProjectStatusComponent implements OnInit{
     this.chart = new Chart('canvas', {
       type: 'doughnut',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['Not ready', 'Ready', 'In progress', 'Blocked', 'Done', 'Cancelled'],
         datasets: [{
-          label: 'Sample Data',
+          label: 'Percentage',
           data: [12, 19, 3, 5, 2, 3],
           backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
+            'rgb(33, 28, 106)',
+            'rgb(89, 180, 195)',
+            'rgb(116, 226, 145)',
+            'rgb(239, 243, 150)',
+            'rgb(255, 207, 150)',
+            'rgb(255, 128, 128)'
           ],
           borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
+            'rgb(33, 28, 106, 0.2)',
+            'rgb(89, 180, 195, 0.2)',
+            'rgb(116, 226, 145, 0.2)',
+            'rgb(239, 243, 150, 0.2)',
+            'rgb(255, 207, 150, 0.2)',
+            'rgb(255, 128, 128, 0.2)'
           ],
           borderWidth: 1
         }]
       },
       options: {
-        responsive: true
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Project Status Overview',
+            font: {
+              size: 18
+            }
+          },
+          legend: {
+            position: 'right'
+          }
+        }
       }
     });
   }

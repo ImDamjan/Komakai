@@ -1,12 +1,15 @@
+global using server.DTOs.Email;
+global using server.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using server.Data;
-using server.Interfaces;
 using server.Repositories;
+using server.Services;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +24,7 @@ builder.Services.AddControllers()
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<IEmailService, EmailService > ();
 builder.Services.AddTransient<DataSeeder>();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -53,6 +57,7 @@ builder.Services.AddScoped<ITeamRepository,TeamRepository>();
 builder.Services.AddScoped<IPriorityRepository,PriorityRepository>();
 builder.Services.AddScoped<IAssignmentRepository,AssignmentRepository>();
 builder.Services.AddScoped<IRoleRepository,RoleRepository>();
+builder.Services.AddScoped<ITaskGroupRepository, TaskGroupRepository>();
 builder.Services.AddScoped<IStateRepository,StateRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 

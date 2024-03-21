@@ -24,6 +24,9 @@ import { AuthComponent } from './pages/auth/auth.component';
 import { ProjectStatusComponent } from './components/project-status/project-status.component';
 import { MyTooltipDirective } from './directives/my-tooltip.directive';
 import { CreateProjectOverlayComponent } from './components/create-project-overlay/create-project-overlay.component';
+import { ProjectWeeklyAnalizeComponent } from './components/project-weekly-analize/project-weekly-analize.component';
+import { TaskTrackComponent } from './components/task-track/task-track.component';
+import { TaskTagsComponent } from './components/task-tags/task-tags.component';
 
 @NgModule({
   declarations: [
@@ -43,10 +46,12 @@ import { CreateProjectOverlayComponent } from './components/create-project-overl
     ProjectTaskComponent,
     ProjectStatusComponent,
     MyTooltipDirective,
-    CreateProjectOverlayComponent
+    CreateProjectOverlayComponent,
+    ProjectWeeklyAnalizeComponent,
+    TaskTrackComponent,
+    TaskTagsComponent
   ],
   imports: [
-    
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,

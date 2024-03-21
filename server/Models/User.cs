@@ -38,7 +38,12 @@ namespace server.Models
         [Column("department", TypeName = "varchar(45)")]
         public string Department { get; set; } = string.Empty;
 
-        
+        [Column("password_reset_token", TypeName = "varchar(100)")]
+        public string? PasswordResetToken { get; set; }
+
+        [Column("password_reset_token_expiry", TypeName ="datetime")]
+        public DateTime? PasswordResetTokenExpiry { get; set; }
+
 
         [Column("role_id")]
         public int? RoleId { get; set; }

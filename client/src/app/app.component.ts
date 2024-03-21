@@ -12,10 +12,19 @@ export class AppComponent implements OnInit{
 
   userIsLogged: boolean = false
 
-  constructor(private router: Router, private authService: AuthenticationService){}
+  constructor(private router: Router, private authService: AuthenticationService){
+    router.events.subscribe((url:any) => console.log(url));
+    console.log("filip konstruktor");
+  }
+
   ngOnInit(): void {
     this.userIsLogged = this.authService.isAuthenticated()
-    console.log(this.router.url)
+    console.log("bogdan init")
   }
+  
+
+  // test(): void{
+  //   console.log(this.router.url)
+  // }
 
 }

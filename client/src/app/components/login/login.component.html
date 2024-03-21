@@ -6,7 +6,10 @@
   </div>
   <br>
   <div>
-    <input type="password" [(ngModel)]="loginObj.password" name="password" placeholder="Password">
+    <span id="lozinka">
+      <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="loginObj.password" name="password" placeholder="Password">
+      <img id="eye" [src]="showPassword ? 'assets/login/crossedeye.svg' : 'assets/login/eye.svg'" alt="" width="25" height="25" (click)="togglePasswordVisibility()">
+    </span>
   </div>
   <br>
   <button (click)="onLogin()">Login</button>

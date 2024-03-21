@@ -18,15 +18,8 @@ namespace server.Repositories
             _context = context;
         }
 
-        public async Task<Assignment> CreateAssignmentAsync(Assignment a, Project project, Assignment? dependent, Priority prio, List<User> users)
+        public async Task<Assignment> CreateAssignmentAsync(Assignment a)
         {
-
-            a.Users = users;
-            a.Project = project;
-            a.Priority = prio;
-            a.DependentNavigation = dependent;
-            a.StateId=1;
-            a.Start = DateTime.Now;
 
             await _context.Assignments.AddAsync(a);
             await _context.SaveChangesAsync();
@@ -35,9 +28,18 @@ namespace server.Repositories
 
         }
 
-        public async Task<List<Assignment>> GetAllProjectAssignmentsAsync(int project_id)
+        public async Task<List<Assignment>> GetAllDependentOnOfAssignmentAsync(int asign_id)
         {
-            return await _context.Assignments.Where(a=>a.ProjectId==project_id).Include(a=>a.Users).ToListAsync();
+            var asgn = await _context.Assignments.Include(a=>a.DependentOnAssignments).FirstOrDefaultAsync(a=>a.Id==asign_id);
+            if(asgn==null)
+                return new List<Assignment>();
+
+            return asgn.DependentOnAssignments.ToList();
+        }
+
+        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id)
+        {
+            return await _context.Assignments.Where(a=>a.TaskGroupId==group_id).Include(a=>a.Users).ToListAsync();
         }
 
         public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId)
@@ -66,17 +68,14 @@ namespace server.Repositories
             var assignment = await GetAssignmentByidAsync(id);
             if(assignment==null)
                 return null;
-
-            if(a.Dependent > 0)
-                assignment.Dependent = a.Dependent;
-            else
-                assignment.Dependent = null;
             assignment.Title = a.Title;
+            assignment.TaskGroupId = a.TaskGroupId;
+            assignment.Start = a.Start;
+            assignment.End = a.End;
             assignment.Type = a.Type;
             assignment.PriorityId = a.PriorityId;
             assignment.StateId = a.StateId;
             assignment.Description = a.Description;
-            assignment.End = a.End;
             assignment.Percentage = a.Percentage;
 
             await _context.SaveChangesAsync();

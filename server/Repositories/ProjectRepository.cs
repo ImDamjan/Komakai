@@ -50,12 +50,8 @@ namespace server.Repositories
             }
             await _context.Teams.AddAsync(team);
 
-            projectModel.StateId = 1;
-            projectModel.Percentage = 0;
-
             if(projectModel.PriorityId > 4 || projectModel.PriorityId < 1)
                 projectModel.PriorityId = 4;
-            projectModel.Start = DateTime.Now;
             projectModel.Team = team;
             projectModel.LastStateChangedTime = DateTime.Now;
 
@@ -68,7 +64,7 @@ namespace server.Repositories
 
         public async Task<List<Project>> GetAllProjectsAsync()
         {
-            return await _context.Projects.Include(p=> p.Projects).ToListAsync();
+            return await _context.Projects.ToListAsync();
         }
 
         public async Task<Project?> GetProjectByIdAsync(int id)
@@ -96,13 +92,13 @@ namespace server.Repositories
                 return null;
 
 
-            project.LastStateChangedTime = DateTime.Now;
             project.Spent=projectDto.Spent;
-            if(projectDto.StateId > 0 && projectDto.StateId < 7)
+            if(projectDto.StateId > 0 && projectDto.StateId < 7 && projectDto.StateId!=project.StateId)
+            {
                 project.StateId=projectDto.StateId;
+                project.LastStateChangedTime = DateTime.Now;
+            }
             project.Percentage = projectDto.Percentage;
-            project.End = projectDto.End;
-            project.EstimatedTime = projectDto.EstimatedTime;
             project.Title = projectDto.Title;
             
             if(projectDto.PriorityId > 0 && projectDto.PriorityId < 5)
@@ -115,9 +111,9 @@ namespace server.Repositories
         public async Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId,string period)
         {
             DateTime past = DateTime.MinValue;
-            if(period.ToLower()=="month")
-                past = DateTime.Now.AddDays(-30);
-            else if(period.ToLower()=="week")
+            if(period.ToLower() == "month")
+                past = DateTime.Now.AddMonths(-30);
+            else if(period.ToLower() == "week")
                 past = DateTime.Now.AddDays(-7);
 
             
@@ -139,9 +135,10 @@ namespace server.Repositories
 
             foreach (var project in projects)
             {
+                int res = DateTime.Compare(past,project.LastStateChangedTime);
                 foreach(var item in lista)
                 {
-                    if(item.StateId==project.StateId)
+                    if(item.StateId==project.StateId && res <= 0)
                     {
                         item.count++;
                         break;
