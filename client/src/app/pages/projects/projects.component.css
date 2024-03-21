@@ -3,8 +3,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 80px;
-    padding-bottom: 10px;
+    flex-grow: 1;
+    padding: 25px;
 }
 
 .create {
@@ -18,9 +18,8 @@
 }
 
 .title {
-    padding-left: 35px;
-    font: 400 23px/1.2 Nunito, sans-serif;
-    color: #9A93B3;
+    font-family: 'Poppins',sans-serif;
+    color: #000;
 }
 
 
