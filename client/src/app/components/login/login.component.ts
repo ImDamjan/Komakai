@@ -22,6 +22,8 @@ export class LoginComponent{
 
   idUser='';
 
+  showPassword: boolean = false;
+
   decodedToken: any;
   apiUrl = environment.apiUrl;
   constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService, private authService: AuthenticationService) {
@@ -38,4 +40,9 @@ export class LoginComponent{
       }
     })
   }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
 }
