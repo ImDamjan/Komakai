@@ -77,7 +77,7 @@
   padding: auto;
 }
 
-.cancelled {
+.cancelled, .blocked {
   background-color: grey;
   padding: 8px 5px;
 }

@@ -11,7 +11,8 @@
           'in-progress': card.status === 'In progress',
           'done': card.status === 'Done',
           'not-started': card.status === 'Not started',
-          'cancelled': card.status === 'Cancelled'
+          'cancelled': card.status === 'Cancelled',
+          'blocked': card.status === 'Blocked'
         }">{{ card.status }}</span>
       </div>
       <hr class="divider" />
