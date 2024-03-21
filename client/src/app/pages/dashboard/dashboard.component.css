@@ -1,15 +1,16 @@
 .dashboard{
     flex-grow: 1;
-    padding: 35px;
+    padding: 25px;
 }
 
 .grid-container{
     display: grid;
     grid-template-columns: repeat(2, 1fr); 
     grid-template-rows: repeat(2, auto); 
-    gap: 25px;
+    gap: 15px;
 }
 
 .item{
     width: fit-content;
+    height: fit-content;
 }
