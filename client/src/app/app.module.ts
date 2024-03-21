@@ -22,8 +22,8 @@ import { ProjectPreviewComponent } from './components/project-preview/project-pr
 import { ProjectTaskComponent } from './components/project-task/project-task.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { ProjectStatusComponent } from './components/project-status/project-status.component';
-import { ProjectWeeklyAnalizeComponent } from './components/project-weekly-analize/project-weekly-analizecomponent';
 import { MyTooltipDirective } from './directives/my-tooltip.directive';
+import { ProjectWeeklyAnalizeComponent } from './components/project-weekly-analize/project-weekly-analize.component';
 
 @NgModule({
   declarations: [
@@ -42,8 +42,8 @@ import { MyTooltipDirective } from './directives/my-tooltip.directive';
     ProjectPreviewComponent,
     ProjectTaskComponent,
     ProjectStatusComponent,
-    ProjectWeeklyAnalizeComponent,
-    MyTooltipDirective
+    MyTooltipDirective,
+    ProjectWeeklyAnalizeComponent
   ],
   imports: [
     FormsModule,
