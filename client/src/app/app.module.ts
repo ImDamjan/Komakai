@@ -28,6 +28,7 @@ import { ProjectWeeklyAnalizeComponent } from './components/project-weekly-anali
 import { TaskTrackComponent } from './components/task-track/task-track.component';
 import { TaskTagsComponent } from './components/task-tags/task-tags.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     CreateProjectOverlayComponent,
     ProjectWeeklyAnalizeComponent,
     TaskTrackComponent,
-    TaskTagsComponent
+    TaskTagsComponent,
+    HeaderComponent
   ],
   imports: [
     FormsModule,
