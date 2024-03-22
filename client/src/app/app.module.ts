@@ -27,6 +27,7 @@ import { CreateProjectOverlayComponent } from './components/create-project-overl
 import { ProjectWeeklyAnalizeComponent } from './components/project-weekly-analize/project-weekly-analize.component';
 import { TaskTrackComponent } from './components/task-track/task-track.component';
 import { TaskTagsComponent } from './components/task-tags/task-tags.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { TaskTagsComponent } from './components/task-tags/task-tags.component';
     FontAwesomeModule,
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })

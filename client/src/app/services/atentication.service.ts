@@ -24,12 +24,28 @@ export class AuthenticationService {
   // Services
   setToken(token: string){
     // kada se uspesno ulogujemo, zovemo funkciju da setujemo token dobijen sa beka
-    localStorage.setItem("token", token);
+    let localStorage : Storage;
+    if(typeof window !== 'undefined' && window.localStorage)
+    {
+      localStorage = window.localStorage;
+      console.log("Postavio sam token")
+      localStorage.setItem("token", token);
+    }
+    
   }
 
   isAuthenticated(): boolean {
-    if(localStorage.getItem("token"))
-      return true
+    let localStorage : Storage;
+    if(typeof window !== 'undefined' && window.localStorage)
+    {
+      console.log("Usao sam u if za autentifikaciju")
+      localStorage = window.localStorage;
+      if(localStorage.getItem("token"))
+      {
+        console.log("Autentifikovan sam")
+        return true
+      }
+    }
     return false
   }  
 }
