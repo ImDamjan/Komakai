@@ -1,6 +1,7 @@
 .dashboard{
     flex-grow: 1;
     padding: 25px;
+    margin-top: 50px;
 }
 
 .grid-container{
