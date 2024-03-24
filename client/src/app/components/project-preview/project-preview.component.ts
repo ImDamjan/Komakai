@@ -1,20 +1,16 @@
-<<<<<<< HEAD
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
-=======
-import { Component, OnInit } from '@angular/core';
->>>>>>> develop
 
 @Component({
   selector: 'app-project-preview',
   templateUrl: './project-preview.component.html',
   styleUrls: ['./project-preview.component.css']
 })
-<<<<<<< HEAD
-export class ProjectPreviewComponent implements OnInit{
 
+export class ProjectPreviewComponent implements OnInit {
+  
   projects: any[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
@@ -22,37 +18,6 @@ export class ProjectPreviewComponent implements OnInit{
   data: any;
   projectsData: any;
 
-  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router) {}
-
-  ngOnInit(): void {
-    //this.projectService.setUserId(2);
-    this.projectService.getProjectsData().subscribe(data => {
-      this.projectsData = data;
-    });
-    this.loadProjects();
-  }
-
-  loadProjects() {
-    this.isLoading = true;
-    this.projectService.getProjectsData().subscribe(
-      (projects: any[]) => {
-        this.projects = projects;
-        this.isLoading = false;
-        if (projects.length === 0) {
-          this.errorMessage = 'You don\'t have any projects yet.';
-        }
-      },
-      (error) => {
-        this.isLoading = false;
-        this.errorMessage = 'An error occurred while fetching projects.';
-      }
-    );
-  }
-
-  navigateToProjectDetails(projectId: number) {
-    this.router.navigate(['/projects']);
-=======
-export class ProjectPreviewComponent implements OnInit {
   // Properties for character limits
   titleCharacterLimit: number = 0;
   descriptionCharacterLimit: number = 0;
@@ -62,7 +27,7 @@ export class ProjectPreviewComponent implements OnInit {
   currentPage: number = 1;
   cardsPerPage: number = 6;
 
-  constructor() {
+  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router) {
     // Initialize component
     this.calculateCharacterLimit();
 
@@ -168,12 +133,47 @@ export class ProjectPreviewComponent implements OnInit {
       this.calculateCharacterLimit();
       this.truncateText();
     });
+    this.loadProjects();
+  }
 
-    // Initialize truncated titles and descriptions for cards
-    this.cards.forEach(card => {
-      card.truncatedTitle = this.truncate(card.title, this.titleCharacterLimit);
-      card.truncatedDescription = this.truncate(card.description, this.descriptionCharacterLimit);
-    });
+  loadProjects() {
+    this.isLoading = true;
+    this.projectService.getProjectsData().subscribe(
+      (projects: any[]) => {
+        this.projectsData = projects;
+        this.isLoading = false;
+        console.log(this.projectsData);
+        console.log(projects);
+        projects.forEach(project => {
+          project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
+          project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
+          project.formattedTime = this.formatTime(project.end);
+        });
+        if (projects.length === 0) {
+          this.errorMessage = 'You don\'t have any projects yet.';
+        }
+      },
+      (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'An error occurred while fetching projects.';
+      }
+    );
+  }
+
+  navigateToProjectDetails(projectId: number) {
+    this.router.navigate(['/projects']);
+  }
+
+  formatTime(time: string): string {
+    if (!time) {
+      return 'Not set';
+    }
+    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    const dateParts = time.split('T')[0].split('-');
+    const day = dateParts[2];
+    const month = months[parseInt(dateParts[1]) - 1];
+    const year = dateParts[0];
+    return `${day} ${month} ${year}`;
   }
 
   // Calculate character limits based on screen width
@@ -186,7 +186,7 @@ export class ProjectPreviewComponent implements OnInit {
       this.titleCharacterLimit = 10;
       this.descriptionCharacterLimit = 100;
     } else {
-      this.titleCharacterLimit = 17;
+      this.titleCharacterLimit = 16;
       this.descriptionCharacterLimit = 190;
     }
   }
@@ -268,6 +268,5 @@ export class ProjectPreviewComponent implements OnInit {
   // Method to see if the pagination needs to move
   shouldShowBottomPagination(): boolean {
     return this.cards.length <= 3;
->>>>>>> develop
   }
 }

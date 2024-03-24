@@ -12,7 +12,7 @@ export class ProjectService {
   baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {
-    this.userId = -1;
+    this.userId = 1;
    }
 
    setUserId(userId: number) {
