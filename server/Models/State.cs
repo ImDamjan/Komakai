@@ -16,7 +16,12 @@ namespace server.Models
         [Column(TypeName = "varchar(40)")]
         public string Name { get; set; } = string.Empty;
 
+
+        //1-to-many
         [InverseProperty("State")]
         public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+        [InverseProperty("State")]
+        public ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
     }
 }

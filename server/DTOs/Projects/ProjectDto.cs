@@ -12,12 +12,13 @@ namespace server.DTOs.Projects
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public int? StateId { get; set; }
-        public int? Subproject { get; set; }
-        public DateTime EstimatedTime { get; set; }
         public double Budget { get; set; }
         public double Spent { get; set; }
         public string Type { get; set; } = "";
         public double Percentage { get; set; }
+        public string Description { get; set; } = "";
+        public int? PriorityId { get; set; }
+        public int TeamId { get; set; }
 
     }
 }

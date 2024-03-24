@@ -10,14 +10,20 @@ using server.Models;
 
 namespace server.Controllers
 {
+    //TO-DO treba se odraditi validacija podataka id-jevi svih vezanih modela
+    // takodje treba da se postave odredjeni dependency injection-i
     [ApiController]
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _repos;
-        public ProjectController(IProjectRepository repos)
+
+        private readonly ITaskGroupRepository _group_repo;
+        public ProjectController(IProjectRepository repos, ITaskGroupRepository group_repo)
         {
             _repos = repos;
+            _group_repo = group_repo;
+
         }
 
         [HttpGet("getProjects")]
@@ -48,12 +54,18 @@ namespace server.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto projectDto)
         {
-            var projectModel = projectDto.toProjectFromCreateDto(1);
-            int userId = projectDto.UserId;
+            var projectModel = projectDto.toProjectFromCreateDto();
+            List<int> teamMembers = projectDto.UserIds;
+            //da li su datumi dobri
+            if(projectModel.Start >= projectModel.End)
+                return BadRequest("End date comes before start date");
             
-            var response = await _repos.CreateProjectAsync(projectModel, userId);
+            var response = await _repos.CreateProjectAsync(projectModel,teamMembers);
             if(response==null)
                 return BadRequest("User was not found ");
+            var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
+            //kreiranje initial grupe - zove se isto kao i projekat
+            await _group_repo.CreateAsync(group);
             return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto());
         }
 
@@ -61,6 +73,9 @@ namespace server.Controllers
         [Route("update/{id}")]
         public async Task<IActionResult> Update([FromRoute] int id,[FromBody] UpdateProjectDto projectDto)
         {
+            //da li su datumi dobri
+            if(projectDto.Start >= projectDto.End)
+                return BadRequest("End date comes before start date");
             var project = await _repos.UpdateProjectAsync(id,projectDto);
 
             if(project==null)
@@ -69,18 +84,6 @@ namespace server.Controllers
             return Ok(project.ToProjectDto());
         }
 
-        [HttpDelete]
-        [Route("delete/{id}")]
-
-        public async Task<IActionResult> Delete([FromRoute] int id)
-        {
-            var project =  await _repos.DeleteProjectAsync(id);
-
-            if(project==null)
-                return NotFound("Project with Id:"+id + " was not found !!!");
-            
-            return Ok(project);
-        }
         //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
         [HttpGet("userProjectStates/{userId}/{period}")]
         public async Task<IActionResult> GetAllUserStatesProjects([FromRoute]int userId,[FromRoute] string period)
@@ -88,5 +91,7 @@ namespace server.Controllers
             var res = await _repos.GetAllUserProjectStates(userId,period);
             return Ok(res);
         }
+
+        //TO-DO treba da se uradi endpoint koji kreira projekat sa vec gotovim timom
     }
 }

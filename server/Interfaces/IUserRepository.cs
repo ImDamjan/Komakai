@@ -12,6 +12,8 @@ namespace server.Interfaces
 
         Task AddUserAsync(User user);
 
+        Task<Role> GetRoleByNameAsync(string roleName);
+
         Task <List<User>> GetAllUsersAsync();
 
         Task<User> GetUserByIdAsync(int id);
@@ -19,5 +21,13 @@ namespace server.Interfaces
         Task<List<User>> GetUsersByRoleAsync(string roleName);
 
         Task<User> GetUserByUsernameAsync(string username);
+
+        Task<User> GetUserByEmailAsync(string email);
+
+        Task SaveChangesAsync();
+
+        Task<User> GetUserByResetTokenAsync(string resetToken);
+
+        Task<bool> DeleteUserByIdAsync(int userId);
     }
 }

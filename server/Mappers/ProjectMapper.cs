@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.DTOs.Priority;
 using server.DTOs.Projects;
+using server.DTOs.Role;
+using server.DTOs.State;
 using server.Models;
 
 namespace server.Mappers
@@ -18,24 +21,53 @@ namespace server.Mappers
                 Start=p.Start,
                 Percentage = p.Percentage,
                 End = p.End,
-                EstimatedTime = p.EstimatedTime,
                 Title = p.Title,
                 Budget = p.Budget,
-                Type = p.Type
+                Type = p.Type,
+                TeamId = p.TeamId,
+                PriorityId = p.PriorityId,
+                
 
             };
         }
 
-        public static Project toProjectFromCreateDto(this CreateProjectDto dto, int stateId)
+        public static Project toProjectFromCreateDto(this CreateProjectDto dto)
         {
             return new Project{
                 Title = dto.Title,
                 Type = dto.Type,
-                Start = DateTime.Now, 
-                EstimatedTime = dto.EstimatedTime,
+                Start = dto.Start, 
                 Spent = 0,
                 Percentage = 0,
-                StateId = stateId
+                StateId = 1,
+                Description = dto.Description,
+                PriorityId = dto.PriorityId,
+                End = dto.End,
+
+            };
+        }
+        public static PriorityDto toPrioDto(this Priority prio)
+        {
+            return new PriorityDto{
+                Id = prio.Id,
+                Description = prio.Description,
+                Level = prio.Level
+            };
+        }
+
+        public static RoleDto toRoleDto(this Role role)
+        {
+            return new RoleDto{
+                Id = role.Id,
+                Name = role.Name
+            };
+        }
+
+        public static StateDto toStateDto(this State state)
+        {
+            return new StateDto{
+                Id = state.Id,
+                Name = state.Name
             };
         }
     }

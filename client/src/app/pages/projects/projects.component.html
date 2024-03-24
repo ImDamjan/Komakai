@@ -1,1 +1,5 @@
-<p>projects works!</p>
+<div class="projectlist" >
+    <h1 class="title">{{projectText}}</h1>
+    <button class="create" *ngIf="showCreateButton" (click)="openCreateOverlay()">Create</button>
+</div>
+<app-project-preview *ngIf="showProjectPreview"></app-project-preview>

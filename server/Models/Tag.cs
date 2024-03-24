@@ -30,5 +30,8 @@ namespace server.Models
         [ForeignKey("TagId")]
         [InverseProperty("Tags")]
         public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+        [InverseProperty("Tag")]
+        public virtual ICollection<TeamTag> TeamTags { get; set; } = new List<TeamTag>();
         }
 }

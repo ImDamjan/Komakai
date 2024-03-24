@@ -38,19 +38,19 @@ namespace server.Models
         [Column("department", TypeName = "varchar(45)")]
         public string Department { get; set; } = string.Empty;
 
-        
+        [Column("password_reset_token", TypeName = "varchar(100)")]
+        public string? PasswordResetToken { get; set; }
+
+        [Column("password_reset_token_expiry", TypeName ="datetime")]
+        public DateTime? PasswordResetTokenExpiry { get; set; }
+
 
         [Column("role_id")]
         public int? RoleId { get; set; }
 
-        [InverseProperty("AssigneeNavigation")]
-        public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
 
         [InverseProperty("User")]
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
-        [InverseProperty("User")]
-        public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
 
         [ForeignKey("RoleId")]
         [InverseProperty("Users")]
@@ -60,9 +60,11 @@ namespace server.Models
         [InverseProperty("Users")]
         public virtual ICollection<Assignment> AssignmentsNavigation { get; set; } = new List<Assignment>();
 
-        [ForeignKey("UserId")]
-        [InverseProperty("Users")]
-        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+        //many-to-many-condition
+        [InverseProperty("User")]
+        public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
+    
        
     }
 }

@@ -13,13 +13,10 @@
     margin-bottom: 10px; 
   }
   
-  form {
-    width: 100%; 
-  }
   
   input[type="text"],
   input[type="password"] {
-    width: 100%; 
+    width: 90%; 
     height: 40px; 
     border-radius: 10px;
     padding: 10px;
@@ -62,4 +59,12 @@
   a:hover {
     text-decoration: underline;
   }
-  
+
+  #lozinka{
+    display: flex;
+    align-items: center;
+  }
+
+  #lozinka > img{
+    margin-left: 10px;
+  }

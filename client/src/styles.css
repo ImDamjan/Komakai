@@ -9,3 +9,9 @@ body{
     position: relative;
     font-family: 'Poppins', sans-serif;
 }
+
+app-projects {
+    width: 100%;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

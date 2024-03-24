@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.Interfaces;
 using server.Mappers;
@@ -39,11 +40,48 @@ namespace server.Controllers
             return Ok(user);
         }
 
-        [HttpGet("byRole/{roleName}")]
+        [HttpGet("byRole/{roleName}"), Authorize(Roles ="5")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsersByRole(string roleName)
         {
             var users=await _repos.GetUsersByRoleAsync(roleName);
             return Ok(users);
+        }
+
+
+        [HttpGet("user/resettoken/{resetToken}")]
+        public async Task<ActionResult<User>> GetUserByResetToken(string resetToken)
+        {
+            var user = await _repos.GetUserByResetTokenAsync(resetToken);
+            if (user == null)
+            {
+                return NotFound("User not found for the provided reset token.");
+            }
+
+            return Ok(user);
+        }
+
+        [HttpGet("user/email/{email}")]
+        public async Task<ActionResult<User>> GetUserByEmail(string email)
+        {
+            var user = await _repos.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound("User not found for the provided email.");
+            }
+
+            return Ok(user);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var deleted = await _repos.DeleteUserByIdAsync(id);
+            if (!deleted)
+            {
+                return NotFound(); // User with the specified ID not found
+            }
+
+            return NoContent(); // User deleted successfully
         }
     }
 }

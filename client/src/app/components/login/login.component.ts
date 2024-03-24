@@ -1,11 +1,11 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, OnInit} from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Component} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
-import { AuthService } from '../../services/jwt-decoder.service';
-import { decode } from 'punycode';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { environment } from '../../enviroments/environment';
+import { Login } from '../../models/login';
+import { AuthenticationService } from '../../services/atentication.service';
 
 @Component({
   selector: 'app-login',
@@ -13,37 +13,36 @@ import { environment } from '../../enviroments/environment';
   styleUrl: './login.component.css'
 })
 export class LoginComponent{
-  loginObj: Login;
+  loginObj: Login = {
+    username: "aleksandrastaniic",
+    password: "Boki037"
+  } as Login;
 
   loginForm!: FormGroup;
-  
+
+  idUser='';
+
+  showPassword: boolean = false;
+
   decodedToken: any;
   apiUrl = environment.apiUrl;
-  constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private authService: AuthService) {
-    this.loginObj=new Login();
+  constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService, private authService: AuthenticationService) {
   }
 
   onLogin(): void {
-
-    this.http.post('${this.apiUrl}/Auth/login',this.loginObj,{responseType: 'text'}).subscribe((res:any)=>{
-      if(res){
-        alert("Login success");
+    this.authService.login(this.loginObj).subscribe({
+      next:(response)=>{
+        this.authService.setToken(response)
+        this.router.navigate(['/dashboard']);
+      },
+      error:(error)=>{
+        console.log(error)
       }
-
     })
   }
 
-}
-
-export class Login{
-  Username: string;
-  Lastname: string;
-  Password: string;
-  Email: string;
-  constructor(){
-    this.Username='';
-    this.Lastname='';
-    this.Password='';
-    this.Email='';
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
+
 }

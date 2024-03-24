@@ -1,4 +1,6 @@
 <div class="wrapper">
-    <app-sidenav></app-sidenav>
+    <app-header class="header" *ngIf="userIsLogged"></app-header>
+    <app-sidenav *ngIf="userIsLogged"></app-sidenav>
     <router-outlet></router-outlet>
+    <!-- <button (click)="test()">Test</button> -->
 </div>

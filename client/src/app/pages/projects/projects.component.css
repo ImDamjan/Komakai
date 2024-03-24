@@ -1,0 +1,25 @@
+.projectlist {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    padding: 25px;
+}
+
+.create {
+    width: 110px;
+    height: 40px;
+    border-radius: 10px;
+    margin-right: 73px;
+    background-color: #001B47;
+    color: white;
+    font: 400 12px/1.2 Inter, sans-serif;
+}
+
+.title {
+    font-family: 'Poppins',sans-serif;
+    color: #000;
+}
+
+
