@@ -147,7 +147,6 @@ export class ProjectPreviewComponent implements OnInit {
         projects.forEach(project => {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
-          project.formattedTime = this.formatTime(project.end);
         });
         if (projects.length === 0) {
           this.errorMessage = 'You don\'t have any projects yet.';
@@ -162,18 +161,6 @@ export class ProjectPreviewComponent implements OnInit {
 
   navigateToProjectDetails(projectId: number) {
     this.router.navigate(['/projects']);
-  }
-
-  formatTime(time: string): string {
-    if (!time) {
-      return 'Not set';
-    }
-    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    const dateParts = time.split('T')[0].split('-');
-    const day = dateParts[2];
-    const month = months[parseInt(dateParts[1]) - 1];
-    const year = dateParts[0];
-    return `${day} ${month} ${year}`;
   }
 
   // Calculate character limits based on screen width

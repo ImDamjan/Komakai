@@ -47,7 +47,7 @@
       <p class="description" [title]="project.description">{{ project.truncatedDescription }}</p>
       <div class="date-section">
         <img src="assets\project-preview\time.svg" alt="" />
-        <time>{{ project.formattedTime }}</time>
+        <time *ngIf="project.end">{{ project.end | date: 'dd MMMM yyyy' }}</time>
       </div>
       <div class="issue-section">
         <!-- Team members -->
