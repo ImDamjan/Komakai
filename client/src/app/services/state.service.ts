@@ -1,9 +1,19 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../enviroments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StateService {
+  apiUrl = environment.apiUrl;
+  constructor(private http: HttpClient) { }
 
-  constructor() { }
+  fetchStateName(stateId: number): Observable<string> {
+    const apiUrl = `${this.apiUrl}/State/getById${stateId}`;
+    return this.http.get<any>(apiUrl).pipe(
+      map(response => response.name) // Extracts the name from the response
+    );
+  }
 }
