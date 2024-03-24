@@ -26,20 +26,19 @@
       </div>
       <div class="issue-section">
         <!-- Team members -->
-        <!-- 
-        <div class="team-members">
-          <ng-container *ngFor="let imageUrl of project.teamMemberImages.slice(0, 4); let i = index">
+        <div class="team-members" *ngIf="project">
+          <ng-container *ngFor="let imageUrl of getTeamMemberImages(project).slice(0, 4); let i = index">
             <img class="team-member" [src]="imageUrl" [alt]="'Team Member ' + (i+1)" [style.left.px]="i * 20" />
           </ng-container>
-          <div *ngIf="project.teamMemberImages.length > 4" class="additional-members">
-            +{{ project.teamMemberImages.length - 4 }}
+          <div *ngIf="getTeamMemberImages(project).length > 4" class="additional-members">
+            +{{ getTeamMemberImages(project).length - 4 }}
           </div>
         </div>
-        -->
+        
         <!-- Issue details (you can replace this with actual data) -->
         <div class="issue-details">
           <img src="assets\project-preview\issues.svg" alt=""/>
-          <span>{{ project.issues }} issues</span>
+          <span>14 issues</span>
         </div>
       </div>
     </section>

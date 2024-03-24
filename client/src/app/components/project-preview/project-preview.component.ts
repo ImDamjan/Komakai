@@ -172,4 +172,9 @@ export class ProjectPreviewComponent implements OnInit {
   shouldShowBottomPagination(): boolean {
     return this.cards.length <= 3;
   }
+
+  getTeamMemberImages(project: any): string[] {
+    const mockImages = ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg'];
+    return project && project.teamMemberImages ? mockImages.concat(project.teamMemberImages) : mockImages;
+  }
 }
