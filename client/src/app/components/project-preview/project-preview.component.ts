@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
+import { StateService } from '../../services/state.service';
 
 @Component({
   selector: 'app-project-preview',
@@ -26,7 +27,7 @@ export class ProjectPreviewComponent implements OnInit {
   currentPage: number = 1;
   cardsPerPage: number = 6;
 
-  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router) {
+  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService) {
     // Initialize component
     this.calculateCharacterLimit();
   }
@@ -52,6 +53,16 @@ export class ProjectPreviewComponent implements OnInit {
         projects.forEach(project => {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
+
+            // Fetch state name based on stateId using StateService
+          this.stateService.fetchStateName(project.stateId).subscribe(
+            (stateName: string) => {
+              project.stateName = stateName;
+            },
+            (error) => {
+              console.error('An error occurred while fetching state name:', error);
+            }
+          );
         });
         if (projects.length === 0) {
           this.errorMessage = 'You don\'t have any projects yet.';
@@ -78,7 +89,7 @@ export class ProjectPreviewComponent implements OnInit {
       this.titleCharacterLimit = 10;
       this.descriptionCharacterLimit = 100;
     } else {
-      this.titleCharacterLimit = 16;
+      this.titleCharacterLimit = 15;
       this.descriptionCharacterLimit = 190;
     }
   }

@@ -16,7 +16,7 @@
           'not-started': project.stateId === 1,
           'cancelled': project.stateId === 6,
           'blocked': project.stateId === 4
-        }"></span>
+        }">{{project.stateName}}</span>
       </div>
       <hr class="divider" />
       <p class="description" [title]="project.description">{{ project.truncatedDescription }}</p>
