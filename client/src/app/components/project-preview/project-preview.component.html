@@ -38,7 +38,7 @@
         <!-- Issue details (you can replace this with actual data) -->
         <div class="issue-details">
           <img src="assets\project-preview\issues.svg" alt=""/>
-          <span>14 issues</span>
+          {{ project.assignmentCount === 0 ? 'No issues' : (project.assignmentCount === 1 ? '1 issue' : project.assignmentCount + ' issues') }}
         </div>
       </div>
     </section>

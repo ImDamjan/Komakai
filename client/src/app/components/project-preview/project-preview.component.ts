@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
+import { AssignmentService } from '../../services/assignment.service';
 
 @Component({
   selector: 'app-project-preview',
@@ -27,7 +28,7 @@ export class ProjectPreviewComponent implements OnInit {
   currentPage: number = 1;
   cardsPerPage: number = 6;
 
-  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService) {
+  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService) {
     // Initialize component
     this.calculateCharacterLimit();
   }
@@ -54,7 +55,7 @@ export class ProjectPreviewComponent implements OnInit {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
 
-            // Fetch state name based on stateId using StateService
+          // Fetch state name based on stateId using StateService
           this.stateService.fetchStateName(project.stateId).subscribe(
             (stateName: string) => {
               project.stateName = stateName;
@@ -63,6 +64,16 @@ export class ProjectPreviewComponent implements OnInit {
               console.error('An error occurred while fetching state name:', error);
             }
           );
+
+          this.assignmentService.getAssignmentsByProject(project.id).subscribe(
+            (assignments: any[]) => {
+              project.assignmentCount = assignments.length;
+            },
+            (error) => {
+              console.error('An error occurred while fetching assignments for project:', project.id, error);
+            }
+          );
+
         });
         if (projects.length === 0) {
           this.errorMessage = 'You don\'t have any projects yet.';
