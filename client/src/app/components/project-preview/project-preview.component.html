@@ -2,7 +2,7 @@
   <p>{{ errorMessage }}</p>
 </div>
 <div class="grid-container">
-  <article class="card" *ngFor="let project of projectsData">
+  <article class="card" *ngFor="let project of getPaginatedProjects()">
     <section class="card-content">
       <div class="header-section">
         <header class="title-wrapper">
@@ -46,7 +46,6 @@
 </div>
 
 <!-- Kontrole paginacije -->
-<!-- 
 <div class="pagination-container" [ngClass]="{'bottom': shouldShowBottomPagination()}">
   <div class="pagination-controls">
     <span class="pagination-text-prev" (click)="previousPage()" [class.disabled]="currentPage === 1" [style.visibility]="currentPage === 1 ? 'hidden' : 'visible'">Previous</span>
@@ -57,4 +56,3 @@
     <span class="pagination-text" (click)="nextPage()" [class.disabled]="currentPage === totalPages()" [style.visibility]="currentPage === totalPages() ? 'hidden' : 'visible'">Next</span>
   </div>
 </div>
--->

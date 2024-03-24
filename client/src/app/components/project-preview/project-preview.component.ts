@@ -113,10 +113,13 @@ export class ProjectPreviewComponent implements OnInit {
 
   // Pagination functions
 
-  // Get cards for the current page
-  getPaginatedCards(): any[] {
+  // Get projects for the current page
+  getPaginatedProjects(): any[] {
+    if (!this.projectsData) {
+      return [];
+    }
     const startIndex = (this.currentPage - 1) * this.cardsPerPage;
-    return this.cards.slice(startIndex, startIndex + this.cardsPerPage);
+    return this.projectsData.slice(startIndex, startIndex + this.cardsPerPage);
   }
 
   // Go to the next page
@@ -135,7 +138,10 @@ export class ProjectPreviewComponent implements OnInit {
 
   // Get the total number of pages
   totalPages(): number {
-    return Math.ceil(this.cards.length / this.cardsPerPage);
+    if (!this.projectsData) {
+      return 0;
+    }
+    return Math.ceil(this.projectsData.length / this.cardsPerPage);
   }
 
   // Calculate the pages to show in pagination control
@@ -160,7 +166,7 @@ export class ProjectPreviewComponent implements OnInit {
       pages.push(i);
     }
     return pages;
-}
+  }
   
   // Method to navigate to a specific page
   goToPage(page: number): void {
@@ -170,7 +176,7 @@ export class ProjectPreviewComponent implements OnInit {
 
   // Method to see if the pagination needs to move
   shouldShowBottomPagination(): boolean {
-    return this.cards.length <= 3;
+    return this.projectsData && this.projectsData.length > this.cardsPerPage;
   }
 
   getTeamMemberImages(project: any): string[] {
