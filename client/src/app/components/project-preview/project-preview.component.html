@@ -1,41 +1,44 @@
+<div *ngIf="projectsData && projectsData.length === 0 && !isLoading">
+  <p>{{ errorMessage }}</p>
+</div>
 <div class="grid-container">
-  <article class="card" *ngFor="let card of getPaginatedCards()">
+  <article class="card" *ngFor="let project of getPaginatedProjects()">
     <section class="card-content">
       <div class="header-section">
         <header class="title-wrapper">
-          <h1 [title]="card.title">{{ card.truncatedTitle }}</h1>
+          <h1 [title]="project.title">{{ project.truncatedTitle }}</h1>
           <img src="assets\project-preview\more.svg" alt=""/>
         </header>
         <span class="status-label" [ngClass]="{
-          'ready': card.status === 'Ready',
-          'in-progress': card.status === 'In progress',
-          'done': card.status === 'Done',
-          'not-started': card.status === 'Not started',
-          'cancelled': card.status === 'Cancelled',
-          'blocked': card.status === 'Blocked'
-        }">{{ card.status }}</span>
+          'ready': project.stateId === 2,
+          'in-progress': project.stateId === 3,
+          'done': project.stateId === 5,
+          'not-started': project.stateId === 1,
+          'cancelled': project.stateId === 6,
+          'blocked': project.stateId === 4
+        }">{{project.stateName}}</span>
       </div>
       <hr class="divider" />
-      <p class="description" [title]="card.description">{{ card.truncatedDescription }}</p>
+      <p class="description" [title]="project.description">{{ project.truncatedDescription }}</p>
       <div class="date-section">
         <img src="assets\project-preview\time.svg" alt="" />
-        <time>{{ card.time }}</time>
+        <time *ngIf="project.end">{{ project.end | date: 'dd MMMM yyyy' }}</time>
       </div>
       <div class="issue-section">
         <!-- Team members -->
-        <div class="team-members">
-          <ng-container *ngFor="let imageUrl of card.teamMemberImages.slice(0, 4); let i = index">
+        <div class="team-members" *ngIf="project">
+          <ng-container *ngFor="let imageUrl of getTeamMemberImages(project).slice(0, 4); let i = index">
             <img class="team-member" [src]="imageUrl" [alt]="'Team Member ' + (i+1)" [style.left.px]="i * 20" />
           </ng-container>
-          <div *ngIf="card.teamMemberImages.length > 4" class="additional-members">
-            +{{ card.teamMemberImages.length - 4 }}
+          <div *ngIf="getTeamMemberImages(project).length > 4" class="additional-members">
+            +{{ getTeamMemberImages(project).length - 4 }}
           </div>
         </div>
-
+        
         <!-- Issue details (you can replace this with actual data) -->
         <div class="issue-details">
           <img src="assets\project-preview\issues.svg" alt=""/>
-          <span>{{ card.issues }} issues</span>
+          {{ project.assignmentCount === 0 ? 'No issues' : (project.assignmentCount === 1 ? '1 issue' : project.assignmentCount + ' issues') }}
         </div>
       </div>
     </section>
@@ -53,4 +56,3 @@
     <span class="pagination-text" (click)="nextPage()" [class.disabled]="currentPage === totalPages()" [style.visibility]="currentPage === totalPages() ? 'hidden' : 'visible'">Next</span>
   </div>
 </div>
-
