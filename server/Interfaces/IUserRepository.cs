@@ -33,5 +33,7 @@ namespace server.Interfaces
         Task UpdateUserAsync(User user);
 
         Task DeleteProfilePictureAsync(int userId);
+
+        Task UpdateProfilePicturePathAsync(int userId, IFormFile file);
     }
 }
