@@ -16,9 +16,11 @@ namespace server.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _repos;
-        public UserController(IUserRepository repos)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public UserController(IUserRepository repos, IWebHostEnvironment webHostEnvironment)
         {
             _repos = repos;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
