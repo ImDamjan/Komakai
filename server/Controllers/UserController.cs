@@ -135,6 +135,7 @@ namespace server.Controllers
 
             var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "ProfilePictures");
 
+            /* TO DO: Zasto se stare slike ne obrisu?
             // Delete the old profile picture file, if it exists
             if (!string.IsNullOrEmpty(user.ProfilePicturePath))
             {
@@ -145,6 +146,7 @@ namespace server.Controllers
                     System.IO.File.Delete(oldFilePath);
                 }
             }
+            */
 
             var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
