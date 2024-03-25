@@ -95,7 +95,7 @@ namespace server.Repositories
                 return; // Or throw an exception or handle accordingly
             }
 
-            user.ProfilePicturePath = null; // Set the profile picture path to null to remove it
+            user.ProfilePicturePath = string.Empty; // Set the profile picture path to empty string to remove it
             await _context.SaveChangesAsync();
         }
     }
