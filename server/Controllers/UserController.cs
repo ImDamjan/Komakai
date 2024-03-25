@@ -118,6 +118,36 @@ namespace server.Controllers
             return Ok(new { filePath });
         }
 
+        [HttpPut("{userId}/updateProfilePicture")]
+        public async Task<IActionResult> UpdateProfilePicture(int userId, IFormFile file)
+        {
+            var user = await _repos.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Invalid file");
+            }
+
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "profilePictures");
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            user.ProfilePicturePath = Path.Combine("profilePictures", uniqueFileName);
+            await _repos.SaveChangesAsync();
+
+            return Ok(new { filePath });
+        }
+
         [HttpDelete("{userId}/profilePicture")]
         public async Task<IActionResult> DeleteProfilePicture(int userId)
         {
