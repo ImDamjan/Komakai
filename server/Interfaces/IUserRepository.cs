@@ -31,5 +31,7 @@ namespace server.Interfaces
         Task<bool> DeleteUserByIdAsync(int userId);
 
         Task UpdateUserAsync(User user);
+
+        Task DeleteProfilePictureAsync(int userId);
     }
 }
