@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using server.Interfaces;
 using server.Mappers;
 using server.Models;
@@ -84,6 +85,37 @@ namespace server.Controllers
             }
 
             return NoContent(); // User deleted successfully
+        }
+
+
+        [HttpPost("{userId}/uploadProfilePicture")]
+        public async Task<IActionResult> UploadProfilePicture(int userId, IFormFile file)
+        {
+            var user = await _repos.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Invalid file");
+            }
+
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "profilePictures");
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            user.ProfilePicturePath = Path.Combine("profilePictures", uniqueFileName);
+            await _repos.SaveChangesAsync();
+
+            return Ok(new { filePath });
         }
     }
 }
