@@ -1,8 +1,8 @@
 .sidenav {
     background: #001B47;
     transition: all .5s ease;
-    /*position: fixed;*/
-    z-index: 1;
+    position: relative;
+    z-index: 2;
     top: 0;
     width: 5rem;
     height: 100vh;
@@ -109,6 +109,3 @@ img{
     height: 18px;
 }
 
-.header{
-    margin-bottom: 10px;
-}
