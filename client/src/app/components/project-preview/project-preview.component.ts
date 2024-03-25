@@ -49,8 +49,6 @@ export class ProjectPreviewComponent implements OnInit {
       (projects: any[]) => {
         this.projectsData = projects;
         this.isLoading = false;
-        console.log(this.projectsData);
-        console.log(projects);
         projects.forEach(project => {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
