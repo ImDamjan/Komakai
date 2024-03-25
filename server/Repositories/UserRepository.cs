@@ -85,5 +85,18 @@ namespace server.Repositories
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteProfilePictureAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return; // Or throw an exception or handle accordingly
+            }
+
+            user.ProfilePicturePath = null; // Set the profile picture path to null to remove it
+            await _context.SaveChangesAsync();
+        }
     }
 }
