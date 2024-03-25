@@ -20,7 +20,6 @@ export class TaskTagsComponent implements AfterViewInit{
       data: {
         labels: ['Bug', 'Spike', 'Feature', 'Penest'],
         datasets: [{
-          label: 'Number of tasks',
           data: [15, 20, 24, 29],
           backgroundColor: [
             'rgb(116, 226, 145)',
@@ -57,7 +56,7 @@ export class TaskTagsComponent implements AfterViewInit{
             }
           },
           legend: {
-            position: 'right'
+            display: false 
           }
         }
       }

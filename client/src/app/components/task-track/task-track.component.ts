@@ -21,7 +21,6 @@ export class TaskTrackComponent implements AfterViewInit  {
       data: {
         labels: ['Not ready', 'Ready', 'In progress', 'Blocked', 'Done', 'Cancelled'],
         datasets: [{
-          label: 'Number of tasks',
           data: [15, 20, 24, 29, 73, 12],
           backgroundColor: [
             'rgb(33, 28, 106)',
@@ -58,7 +57,7 @@ export class TaskTrackComponent implements AfterViewInit  {
             }
           },
           legend: {
-            position: 'right'
+            display: false 
           }
         }
       }
