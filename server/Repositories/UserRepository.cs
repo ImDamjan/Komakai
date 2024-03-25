@@ -79,5 +79,11 @@ namespace server.Repositories
             await _context.SaveChangesAsync();
             return true; // User deleted successfully
         }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
     }
 }
