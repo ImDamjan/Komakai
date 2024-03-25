@@ -117,5 +117,12 @@ namespace server.Controllers
 
             return Ok(new { filePath });
         }
+
+        [HttpDelete("{userId}/profilePicture")]
+        public async Task<IActionResult> DeleteProfilePicture(int userId)
+        {
+            await _repos.DeleteProfilePictureAsync(userId);
+            return NoContent();
+        }
     }
 }
