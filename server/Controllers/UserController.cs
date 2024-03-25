@@ -133,7 +133,19 @@ namespace server.Controllers
                 return BadRequest("Invalid file");
             }
 
-            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "profilePictures");
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "ProfilePictures");
+
+            // Delete the old profile picture file, if it exists
+            if (!string.IsNullOrEmpty(user.ProfilePicturePath))
+            {
+                var oldFilePath = Path.Combine(uploadsFolder, user.ProfilePicturePath);
+                
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+            }
+
             var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
