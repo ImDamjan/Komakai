@@ -33,9 +33,7 @@ export class ProjectService implements OnInit{
     console.log(token);
     if (token) {
       const decodedToken: any = jwtDecode(token);
-      console.log(decodedToken); 
       this.userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-      console.log(this.userId);
     } else {
       console.error('JWT token not found in local storage');
     }

@@ -26,7 +26,7 @@ namespace server.Mappers
                 Type = p.Type,
                 TeamId = p.TeamId,
                 PriorityId = p.PriorityId,
-                
+                Description = p.Description,
 
             };
         }
