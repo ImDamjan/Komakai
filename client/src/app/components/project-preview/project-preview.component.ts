@@ -26,7 +26,7 @@ export class ProjectPreviewComponent implements OnInit {
   // Properties for pagination
   cards: any[] = [];
   currentPage: number = 1;
-  cardsPerPage: number = 6;
+  cardsPerPage: number = 8;
 
   constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService) {
     // Initialize component

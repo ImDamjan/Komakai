@@ -1,7 +1,8 @@
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Three columns */
-  grid-gap: 50px; /* Gap between grid items */
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 50px;
+  height: 70%;
 }
 
 .card {
@@ -245,7 +246,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 50px; /* Adjust this value as needed */
+  bottom: 50px;
 }
 
 
