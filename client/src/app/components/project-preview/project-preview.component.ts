@@ -40,6 +40,10 @@ export class ProjectPreviewComponent implements OnInit {
       this.calculateCharacterLimit();
       this.truncateText();
     });
+    this.adjustCardsPerPage();
+    window.addEventListener('resize', () => {
+      this.adjustCardsPerPage(); // Call adjustCardsPerPage whenever the screen size changes
+    });
     this.loadProjects();
   }
 
@@ -93,7 +97,7 @@ export class ProjectPreviewComponent implements OnInit {
     const screenWidth = window.innerWidth;
     if (screenWidth < 768) {
       this.titleCharacterLimit = 5;
-      this.descriptionCharacterLimit = 60;
+      this.descriptionCharacterLimit = 30;
     } else if (screenWidth >= 768 && screenWidth < 1025) {
       this.titleCharacterLimit = 10;
       this.descriptionCharacterLimit = 100;
@@ -105,9 +109,9 @@ export class ProjectPreviewComponent implements OnInit {
 
   // Truncate text to specified character limit
   truncateText() {
-    this.cards.forEach(card => {
-      card.truncatedTitle = this.truncate(card.title, this.titleCharacterLimit);
-      card.truncatedDescription = this.truncate(card.description, this.descriptionCharacterLimit);
+    this.projectsData.forEach((projectsData: { truncatedTitle: string; title: string; truncatedDescription: string; description: string; }) => {
+      projectsData.truncatedTitle = this.truncate(projectsData.title, this.titleCharacterLimit);
+      projectsData.truncatedDescription = this.truncate(projectsData.description, this.descriptionCharacterLimit);
     });
   }
 
@@ -191,5 +195,19 @@ export class ProjectPreviewComponent implements OnInit {
   getTeamMemberImages(project: any): string[] {
     const mockImages = ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg'];
     return project && project.teamMemberImages ? mockImages.concat(project.teamMemberImages) : mockImages;
+  }
+
+  adjustCardsPerPage() {
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 1800 && screenWidth > 1300) {
+      this.cardsPerPage = 6;
+    } else if(screenWidth < 1300 && screenWidth > 820){
+      this.cardsPerPage = 4;
+    }
+    else if(screenWidth < 820 && screenWidth > 300){
+      this.cardsPerPage = 2;
+    }
+    else
+      this.cardsPerPage = 8;
   }
 }
