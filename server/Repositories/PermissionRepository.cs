@@ -30,7 +30,15 @@ namespace server.Repositories
             _context.Entry(permission).State = EntityState.Modified;
             await SaveChangesAsync();
         }
-
+        public async Task DeletePermissionAsync(int permissionId)
+        {
+            var permission = await _context.Permissions.FindAsync(permissionId);
+            if (permission != null)
+            {
+                _context.Permissions.Remove(permission);
+                await SaveChangesAsync();
+            }
+        }
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
