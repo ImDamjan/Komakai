@@ -20,6 +20,14 @@ namespace server.Repositories
         {
             return await _context.Permissions.ToListAsync();
         }
-
+        public async Task AddPermissionAsync(Permission permission)
+        {
+            _context.Permissions.Add(permission);
+            await SaveChangesAsync();
+        }
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
