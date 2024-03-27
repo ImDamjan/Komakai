@@ -1,4 +1,5 @@
-﻿using server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using server.Data;
 using server.Models;
 
 namespace server.Repositories
@@ -14,6 +15,10 @@ namespace server.Repositories
         public async Task<Permission?> GetPermissionByIdAsync(int permissionId)
         {
             return await _context.Permissions.FindAsync(permissionId);
+        }
+        public async Task<List<Permission>> GetAllPermissionsAsync()
+        {
+            return await _context.Permissions.ToListAsync();
         }
 
     }
