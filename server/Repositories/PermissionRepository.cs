@@ -1,4 +1,5 @@
 ﻿using server.Data;
+using server.Models;
 
 namespace server.Repositories
 {
@@ -10,5 +11,10 @@ namespace server.Repositories
         {
             _context = context;
         }
+        public async Task<Permission?> GetPermissionByIdAsync(int permissionId)
+        {
+            return await _context.Permissions.FindAsync(permissionId);
+        }
+
     }
 }
