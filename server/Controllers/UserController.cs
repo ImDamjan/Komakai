@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using server.Interfaces;
 using server.Mappers;
 using server.Models;
@@ -16,9 +17,11 @@ namespace server.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _repos;
-        public UserController(IUserRepository repos)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public UserController(IUserRepository repos, IWebHostEnvironment webHostEnvironment)
         {
             _repos = repos;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -82,6 +85,88 @@ namespace server.Controllers
             }
 
             return NoContent(); // User deleted successfully
+        }
+
+
+        [HttpPost("{userId}/uploadProfilePicture")]
+        public async Task<IActionResult> UploadProfilePicture(int userId, IFormFile file)
+        {
+            var user = await _repos.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Invalid file");
+            }
+
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "profilePictures");
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            user.ProfilePicturePath = Path.Combine("profilePictures", uniqueFileName);
+            await _repos.SaveChangesAsync();
+
+            return Ok(new { filePath });
+        }
+
+        [HttpPut("{userId}/updateProfilePicture")]
+        public async Task<IActionResult> UpdateProfilePicture(int userId, IFormFile file)
+        {
+            var user = await _repos.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Invalid file");
+            }
+
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "ProfilePictures");
+
+            /* TO DO: Zasto se stare slike ne obrisu?
+            // Delete the old profile picture file, if it exists
+            if (!string.IsNullOrEmpty(user.ProfilePicturePath))
+            {
+                var oldFilePath = Path.Combine(uploadsFolder, user.ProfilePicturePath);
+                
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+            }
+            */
+
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            user.ProfilePicturePath = Path.Combine("profilePictures", uniqueFileName);
+            await _repos.SaveChangesAsync();
+
+            return Ok(new { filePath });
+        }
+
+        [HttpDelete("{userId}/profilePicture")]
+        public async Task<IActionResult> DeleteProfilePicture(int userId)
+        {
+            await _repos.DeleteProfilePictureAsync(userId);
+            return NoContent();
         }
     }
 }
