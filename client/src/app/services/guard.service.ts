@@ -15,6 +15,10 @@ export class AuthGuard{
 
   checkLogin(): boolean {
     if (this.authService.isAuthenticated()) {
+      if (this.router.url.includes('/auth')) {
+        this.router.navigate(['/dashboard']);
+        return false;
+      }
       return true;
     } else {
       this.router.navigate(['/auth']);
