@@ -13,6 +13,7 @@ namespace server.Interfaces
         Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId);
         Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id);
         Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a,int id);
+        Task<List<Assignment>> GetAllFilteredAssignmentsByProjectGroupsAsync(List<TaskGroup> groups, AssignmentFilterDto dto);
         Task<List<Assignment>> GetAllDependentOnOfAssignmentAsync(int asign_id);
         Task<List<User>> GetAssignmentUsersAsync(int task_id);
 

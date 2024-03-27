@@ -93,7 +93,7 @@ namespace server.Controllers
         }
 
         [HttpPost("filterUserProject")]
-        public async Task<IActionResult> GetAllFilteredprojects([FromBody] ProjectFilterDto dto)
+        public async Task<IActionResult> GetAllFilteredProjects([FromBody] ProjectFilterDto dto)
         {
             var projects = await _repos.GetAllFilteredProjectsAsync(dto);
             var dtos = projects.Select(p=>p.ToProjectDto());
