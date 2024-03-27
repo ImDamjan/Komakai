@@ -29,6 +29,7 @@ import { TaskTrackComponent } from './components/task-track/task-track.component
 import { TaskTagsComponent } from './components/task-tags/task-tags.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './components/header/header.component';
+import { KanbanComponent } from './components/kanban/kanban.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { HeaderComponent } from './components/header/header.component';
     ProjectWeeklyAnalizeComponent,
     TaskTrackComponent,
     TaskTagsComponent,
-    HeaderComponent
+    HeaderComponent,
+    KanbanComponent
   ],
   imports: [
     FormsModule,
