@@ -60,6 +60,7 @@ builder.Services.AddScoped<IRoleRepository,RoleRepository>();
 builder.Services.AddScoped<ITaskGroupRepository, TaskGroupRepository>();
 builder.Services.AddScoped<IStateRepository,StateRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 
 builder.Services.AddDbContext<ProjectManagmentDbContext>(
     options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
