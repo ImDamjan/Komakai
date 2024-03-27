@@ -25,6 +25,12 @@ namespace server.Repositories
             _context.Permissions.Add(permission);
             await SaveChangesAsync();
         }
+        public async Task UpdatePermissionAsync(Permission permission)
+        {
+            _context.Entry(permission).State = EntityState.Modified;
+            await SaveChangesAsync();
+        }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
