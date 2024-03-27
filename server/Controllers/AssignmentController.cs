@@ -34,7 +34,7 @@ namespace server.Controllers
             _user_repo = user_repo;
             _team_repo = team_repo;
         }
-
+        //Mozda ce morati da se ubaci i project ID u dto ?
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> CreateAssignment([FromBody]CreateAssignmentDto dto)
@@ -225,10 +225,10 @@ namespace server.Controllers
             return Ok(res);
         }
         
-        [HttpPost("getAllFilteredAssignmentProjects")]
-        public async Task<IActionResult> GetAllFilteredAssignmentsForProject([FromBody] AssignmentFilterDto dto)
+        [HttpPost("getAllFilteredAssignmentProjects/{project_id}")]
+        public async Task<IActionResult> GetAllFilteredAssignmentsForProject([FromRoute] int project_id,[FromBody] AssignmentFilterDto dto)
         {
-            var project = await _project_repo.GetProjectByIdAsync(dto.ProjectId);
+            var project = await _project_repo.GetProjectByIdAsync(project_id);
             if(project==null)
                 return BadRequest("project not found");
             var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project);
@@ -253,8 +253,36 @@ namespace server.Controllers
             }
 
             return Ok(res);
-
         }
+
+        [HttpPost("getAllFilteredAssignmentsForUser/{user_id}")]
+        public async Task<IActionResult> GetAllFilteredAssignmentsForUser([FromRoute] int user_id, AssignmentFilterDto dto)
+        {
+            var assignments = await _asign_repo.GetAllUserAssignmentsAsync(user_id);
+
+            assignments = _asign_repo.FilterAssignments(assignments,dto);
+            
+            var res = new List<AssignmentDto>();
+            foreach (var asignment in assignments)
+            {
+                var users = await _asign_repo.GetAssignmentUsersAsync(asignment.Id);
+                List<int> dep = new List<int>();
+                var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asignment.Id);
+                foreach (var item in dependencies)
+                {
+                    dep.Add(item.Id);   
+                }
+                List<int> ids = new List<int>();
+                foreach (var user1 in users)
+                {
+                    ids.Add(user1.Id);
+                }
+                res.Add(asignment.toAssignmentDto(ids,dep));
+            }
+
+            return Ok(res);
+        }
+
 
     }
 }

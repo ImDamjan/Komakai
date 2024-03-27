@@ -7,7 +7,6 @@ namespace server.DTOs.Assignment
 {
     public class AssignmentFilterDto
     {
-        public int ProjectId { get; set; }
         public string SearchTitle { get; set; } = null!;
         public int DateStartFlag { get; set; }
         public DateTime Start { get; set; }
