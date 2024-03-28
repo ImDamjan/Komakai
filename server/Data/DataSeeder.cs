@@ -494,7 +494,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 1,
                                     Users = new List<User>{users[0],users[2]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 2,
@@ -508,7 +508,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 1,
                                     Users = new List<User>{users[6],users[3]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 3,
@@ -522,7 +522,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 1,
                                     Users = new List<User>{users[2],users[3]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 //project 2 rok (2023, 2, 10) do (2023, 6, 30), members:2,5,6,8
                                 new Assignment{
@@ -537,7 +537,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 2,
                                     Users = new List<User>{users[1],users[4]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 5,
@@ -551,7 +551,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 2,
                                     Users = new List<User>{users[5],users[7]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 6,
@@ -565,7 +565,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 2,
                                     Users = new List<User>{users[1]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 //project 3 rok (2024, 3, 5) - jos traje,members:9,1,3,5
                                 new Assignment{
@@ -580,7 +580,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 3,
                                     Users = new List<User>{users[8],users[0]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 8,
@@ -594,7 +594,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 3,
                                     Users = new List<User>{users[2],users[4]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 9,
@@ -608,7 +608,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 3,
                                     Users = new List<User>{users[0],users[4]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                     //project 4 rok (2023, 4, 20) do (2023, 8, 31),members:2,4,5,7
                                 new Assignment{
@@ -623,7 +623,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 4,
                                     Users = new List<User>{users[1],users[4],users[6]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 11,
@@ -637,7 +637,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 4,
                                     Users = new List<User>{users[6],users[3]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 12,
@@ -651,7 +651,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 4,
                                     Users = new List<User>{users[4]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                     //project 5 rok (2023, 5, 15),members:6,8,9,1
                                 new Assignment{
@@ -666,7 +666,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 5,
                                     Users = new List<User>{users[5],users[7]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 14,
@@ -680,7 +680,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 5,
                                     Users = new List<User>{users[8]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 15,
@@ -694,7 +694,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 5,
                                     Users = new List<User>{users[0],users[7]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 //project 6 rok (2023, 6, 15) ,members:1,3,4,7
                                 new Assignment{
@@ -709,7 +709,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 6,
                                     Users = new List<User>{users[0],users[2]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 17,
@@ -723,7 +723,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 6,
                                     Users = new List<User>{users[6],users[3]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 18,
@@ -737,7 +737,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 6,
                                     Users = new List<User>{users[2],users[3]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 //project 7 rok (2023, 7, 1) do (2023, 9, 30),members:2,5,6,8
                                 new Assignment{
@@ -752,7 +752,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 7,
                                     Users = new List<User>{users[1],users[4]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 20,
@@ -766,7 +766,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 7,
                                     Users = new List<User>{users[5],users[7]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 21,
@@ -780,7 +780,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 7,
                                     Users = new List<User>{users[1]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 //project 8 rok (2023, 8, 10) do (2023, 11, 30),members:9,1,3,5
                                 new Assignment{
@@ -795,7 +795,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 8,
                                     Users = new List<User>{users[8],users[0]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 23,
@@ -809,7 +809,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 8,
                                     Users = new List<User>{users[4],users[2]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 24,
@@ -823,7 +823,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 8,
                                     Users = new List<User>{users[0],users[4],users[8]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                     //project 9 rok (2023, 9, 5) do (2023, 12, 15),members:2,4,5,7
                                 new Assignment{
@@ -838,7 +838,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 9,
                                     Users = new List<User>{users[3],users[6],users[4]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 26,
@@ -852,7 +852,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 9,
                                     Users = new List<User>{users[3],users[6]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 27,
@@ -866,7 +866,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 9,
                                     Users = new List<User>{users[1],users[4]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                     //project 10 rok (2023, 10, 20) do (2024, 3, 31),members:6,8,9,1
                                 new Assignment{
@@ -881,7 +881,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 10,
                                     Users = new List<User>{users[8],users[7]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 29,
@@ -895,7 +895,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 10,
                                     Users = new List<User>{users[0],users[7]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                                 new Assignment{
                                     Id = 30,
@@ -909,7 +909,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 10,
                                     Users = new List<User>{users[5]},
-                                    ParentAssignmentId = null
+                                    
                                 },
                             };
 
