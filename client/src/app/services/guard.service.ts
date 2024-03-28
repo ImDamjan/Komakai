@@ -19,7 +19,7 @@ export class AuthGuard{
     if (this.authService.isAuthenticated()) {
       console.log("Logovao sam se")
       console.log(this.router.url)
-      if (!this.isRedirected && this.router.url.includes('/auth')) {
+      if (!this.isRedirected && this.router.url.includes('/')) {
         console.log("Pokusavam da udjem na login, vraca me na dashboard")
         this.router.navigate(['/dashboard']);
         this.isRedirected = true;
