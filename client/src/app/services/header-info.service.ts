@@ -7,11 +7,11 @@ import { environment } from '../enviroments/environment';
   providedIn: 'root'
 })
 export class HeaderInfoService {
-  apiUrl = environment.apiUrl;
-  private baseUrl:string = "${this.apiUrl}/Auth/";
-  constructor(private http: HttpClient) { }
+  // apiUrl = environment.apiUrl;
+  // private baseUrl:string = `${this.apiUrl}/Auth/`;
+  // constructor(private http: HttpClient) { }
 
-   getImenaILokacije(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}`);
-   }
+  //  getImenaILokacije(): Observable<any[]> {
+  //   return this.http.get<any[]>(`${this.baseUrl}`);
+  //  }
 }

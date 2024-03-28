@@ -92,6 +92,23 @@ namespace server.Controllers
             return Ok(res);
         }
 
-        //TO-DO treba da se uradi endpoint koji kreira projekat sa vec gotovim timom
+        [HttpPost("filterUserProject")]
+        public async Task<IActionResult> GetAllFilteredProjects([FromBody] ProjectFilterDto dto)
+        {
+            var projects = await _repos.GetAllFilteredProjectsAsync(dto);
+            var dtos = projects.Select(p=>p.ToProjectDto());
+
+            return Ok(dtos);
+        }
+
+        [HttpDelete("deleteProjectById/{project_id}")]
+        public async Task<IActionResult> DeleteProject([FromRoute] int project_id)
+        {
+            var project = await _repos.DeleteProjectByIdAsync(project_id);
+            if(project==null)
+                return BadRequest("project does not exist");
+            
+            return Ok(project.ToProjectDto());
+        }
     }
 }

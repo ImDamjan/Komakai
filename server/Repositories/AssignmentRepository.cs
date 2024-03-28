@@ -28,6 +28,19 @@ namespace server.Repositories
 
         }
 
+        public async Task<List<Assignment>> GetAllFilteredAssignmentsByProjectGroupsAsync(List<TaskGroup> groups, AssignmentFilterDto dto)
+        {
+            var assignments = new List<Assignment>();
+            foreach (var group in groups)
+            {
+                var group_asign = await GetAllGroupAssignmentsAsync(group.Id);
+
+                assignments.AddRange(group_asign);
+            }
+
+            return FilterAssignments(assignments,dto);
+        }
+
         public async Task<List<Assignment>> GetAllDependentOnOfAssignmentAsync(int asign_id)
         {
             var asgn = await _context.Assignments.Include(a=>a.DependentOnAssignments).FirstOrDefaultAsync(a=>a.Id==asign_id);
@@ -81,6 +94,46 @@ namespace server.Repositories
             await _context.SaveChangesAsync();
 
             return assignment;
+        }
+
+        public List<Assignment> FilterAssignments(List<Assignment> assignments, AssignmentFilterDto dto)
+        {
+            if(dto.StateFilter > 0 && dto.StateFilter < 7)
+               assignments =assignments.Where(p=>p.StateId==dto.StateFilter).ToList();
+            if(dto.PriorityFilter > 0 && dto.PriorityFilter < 5)
+               assignments =assignments.Where(p=>p.PriorityId==dto.PriorityFilter).ToList();
+            
+            if(dto.SearchTitle!=string.Empty)
+               assignments =assignments.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower())).ToList();
+            //datumi
+            if(dto.DateStartFlag==-1)
+               assignments =assignments.Where(p=>p.Start < dto.Start).ToList();
+            else if(dto.DateStartFlag==1)
+               assignments =assignments.Where(p=>p.Start >= dto.Start).ToList();
+
+            if(dto.DateEndFlag==-1)
+               assignments =assignments.Where(p=>p.End < dto.End).ToList();
+            else if(dto.DateEndFlag==1)
+               assignments =assignments.Where(p=>p.End >= dto.End).ToList();
+
+            if(dto.PercentageFlag==-1)
+               assignments =assignments.Where(p=>p.Percentage < dto.PercentageFilter).ToList();
+            else if(dto.PercentageFlag==1)
+               assignments =assignments.Where(p=>p.Percentage >= dto.PercentageFilter).ToList();
+
+            return assignments;
+        }
+
+        public async Task<Assignment?> DeleteAssignmentByIdAsync(int asign_id)
+        {
+            var asignment = await GetAssignmentByidAsync(asign_id);
+            if(asignment==null)
+                return null;
+            _context.Assignments.Remove(asignment);
+            await _context.SaveChangesAsync();
+
+            return asignment;
+            
         }
     }
 }

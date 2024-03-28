@@ -11,8 +11,8 @@ export class HeaderComponent implements OnInit {
   informacije: any[] | undefined;
   constructor(private header_info: HeaderInfoService){}
   ngOnInit(): void {
-    this.header_info.getImenaILokacije().subscribe(data => {
-      this.informacije = data;
-    });
+    // this.header_info.getImenaILokacije().subscribe(data => {
+    //   this.informacije = data;
+    // });
   }
 }

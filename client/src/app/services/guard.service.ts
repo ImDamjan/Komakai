@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthenticationService } from './atentication.service';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -9,30 +10,31 @@ export class AuthGuard{
 
   isRedirected = false;
 
-  constructor(private authService: AuthenticationService, private router: Router) {}
+  link : any;
+
+  constructor(private authService: AuthenticationService, private router: Router,private location: Location) {}
 
   canActivate: CanActivateFn = () =>{
     return this.checkLogin();
   }
 
   checkLogin(): boolean {
+    console.log("U checkLogin-u sam")
     if (this.authService.isAuthenticated()) {
-      console.log("Logovao sam se")
-      console.log(this.router.url)
-      if (!this.isRedirected && this.router.url.includes('/')) {
-        console.log("Pokusavam da udjem na login, vraca me na dashboard")
-        this.router.navigate(['/dashboard']);
-        this.isRedirected = true;
-      }
+      // this.link = this.location.path();
+      console.log("Url u gardu za autentifikovanog je : " + this.location.path());
+      // if(this.isLoggedIn && this.location.path().includes('/auth')){
+      //   console.log(this.link);
+      //   // this.router.navigate([this.location.path()]);
+      //   this.router.navigate(['/dashboard'])
+      //   return false;
+      // }
       return true;
-    } else {
-      console.log("Vraca me nazad na login")
+    }
+    else{
       this.router.navigate(['/auth']);
       return false;
     }
   }
 
-  ngOnDestroy() {
-    this.isRedirected = false;
-  }
 }

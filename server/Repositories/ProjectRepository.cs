@@ -158,5 +158,57 @@ namespace server.Repositories
             return lista;
 
         }
+
+        public async Task<List<Project>> GetAllFilteredProjectsAsync(ProjectFilterDto dto)
+        {
+            var projects = await GetAllUserProjectsAsync(dto.UserId);
+            
+            if(dto.StateFilter > 0 && dto.StateFilter < 7)
+                projects = projects.Where(p=>p.StateId==dto.StateFilter).ToList();
+            if(dto.PriorityFilter > 0 && dto.PriorityFilter < 5)
+                projects = projects.Where(p=>p.PriorityId==dto.PriorityFilter).ToList();
+            
+            if(dto.SearchTitle!=string.Empty)
+                projects = projects.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower())).ToList();
+            //budzet
+            if(dto.BudgetFlag==-1)
+                projects = projects.Where(p=>p.Budget < dto.BudgetFilter).ToList();
+            else if(dto.BudgetFlag==1)
+                projects = projects.Where(p=>p.Budget >= dto.BudgetFilter).ToList();
+            //spent
+            if(dto.SpentFlag==-1)
+                projects = projects.Where(p=>p.Spent < dto.SpentFilter).ToList();
+            else if(dto.SpentFlag==1)
+                projects = projects.Where(p=>p.Spent >= dto.SpentFilter).ToList();
+
+            //datumi
+            if(dto.DateStartFlag==-1)
+                projects = projects.Where(p=>p.Start < dto.Start).ToList();
+            else if(dto.DateStartFlag==1)
+                projects = projects.Where(p=>p.Start >= dto.Start).ToList();
+
+            if(dto.DateEndFlag==-1)
+                projects = projects.Where(p=>p.End < dto.End).ToList();
+            else if(dto.DateEndFlag==1)
+                projects = projects.Where(p=>p.End >= dto.End).ToList();
+
+            if(dto.PercentageFlag==-1)
+                projects = projects.Where(p=>p.Percentage < dto.PercentageFilter).ToList();
+            else if(dto.PercentageFlag==1)
+                projects = projects.Where(p=>p.Percentage >= dto.PercentageFilter).ToList();
+            return projects;
+
+        }
+
+        public async Task<Project?> DeleteProjectByIdAsync(int project_id)
+        {
+            var project = await GetProjectByIdAsync(project_id);
+            if(project==null)
+                return null;
+            
+            _context.Projects.Remove(project);
+            await _context.SaveChangesAsync();
+            return project;
+        }
     }
 }
