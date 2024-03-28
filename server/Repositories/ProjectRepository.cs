@@ -199,5 +199,16 @@ namespace server.Repositories
             return projects;
 
         }
+
+        public async Task<Project?> DeleteProjectByIdAsync(int project_id)
+        {
+            var project = await GetProjectByIdAsync(project_id);
+            if(project==null)
+                return null;
+            
+            _context.Projects.Remove(project);
+            await _context.SaveChangesAsync();
+            return project;
+        }
     }
 }

@@ -123,5 +123,17 @@ namespace server.Repositories
 
             return assignments;
         }
+
+        public async Task<Assignment?> DeleteAssignmentByIdAsync(int asign_id)
+        {
+            var asignment = await GetAssignmentByidAsync(asign_id);
+            if(asignment==null)
+                return null;
+            _context.Assignments.Remove(asignment);
+            await _context.SaveChangesAsync();
+
+            return asignment;
+            
+        }
     }
 }

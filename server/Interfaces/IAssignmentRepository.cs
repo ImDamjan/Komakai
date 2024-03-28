@@ -16,7 +16,8 @@ namespace server.Interfaces
         Task<List<Assignment>> GetAllFilteredAssignmentsByProjectGroupsAsync(List<TaskGroup> groups, AssignmentFilterDto dto);
         List<Assignment> FilterAssignments(List<Assignment> assignments, AssignmentFilterDto dto);
         Task<List<Assignment>> GetAllDependentOnOfAssignmentAsync(int asign_id);
-        Task<List<User>> GetAssignmentUsersAsync(int task_id);
+        Task<List<User>> GetAssignmentUsersAsync(int task_id);//da se prebaci user repositroy mozda
+        Task<Assignment?> DeleteAssignmentByIdAsync(int asign_id);
 
         Task<Assignment> CreateAssignmentAsync(Assignment a);
 
