@@ -37,8 +37,6 @@ namespace server.Models
 
         [Column("priority_id")]
         public int PriorityId { get; set; }
-        [Column("parent_assignment_id")]
-        public int? ParentAssignmentId { get; set; } = null;
 
         [Column("type")]
         public string Type { get; set; } = null!;
@@ -74,12 +72,5 @@ namespace server.Models
         [ForeignKey("AssignmentId")]
         [InverseProperty("Assignments")]
         public virtual ICollection<Assignment> DependentOnAssignments { get; set; } = new List<Assignment>();
-
-        [ForeignKey("ParentAssignmentId")]
-        [InverseProperty("InverseParentNavigation")]
-        public virtual Assignment? ParentNavigation { get; set; }
-
-        [InverseProperty("ParentNavigation")]
-        public virtual ICollection<Assignment> InverseParentNavigation { get; set; } = new List<Assignment>();
     }
 }
