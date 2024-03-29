@@ -18,6 +18,8 @@ namespace server.Repositories
         }
         public async Task<Comment> CreateCommentAsync(Comment comment)
         {
+            comment.PostTime = DateTime.Now;
+            comment.EditedTime = DateTime.Now;
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
             return comment;
@@ -28,9 +30,9 @@ namespace server.Repositories
             throw new NotImplementedException();   
         }
 
-        public Task<List<Comment>> GetAllCommentsByAssignmentIdAsync(int asignment_id)
+        public async Task<List<Comment>> GetAllCommentsByAssignmentIdAsync(int asignment_id)
         {
-            throw new NotImplementedException();
+            return await _context.Comments.Where(c=>c.AssignmentId==asignment_id).ToListAsync();
         }
 
         public async Task<Comment?> GetCommentByIdAsync(int comment_id)
@@ -38,9 +40,18 @@ namespace server.Repositories
             return await _context.Comments.FirstOrDefaultAsync(c=>c.Id==comment_id);
         }
 
-        public Task<Comment> UpdateCommentAsync(UpdateCommentDto dto)
+        public async Task<Comment?> UpdateCommentAsync(UpdateCommentDto dto)
         {
-            throw new NotImplementedException();
+            var comment = await GetCommentByIdAsync(dto.Id);
+            if(comment==null)
+                return null;
+            
+            comment.Content = dto.Content;
+            comment.EditedTime = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return comment;
         }
     }
 }

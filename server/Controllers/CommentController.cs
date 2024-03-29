@@ -23,7 +23,7 @@ namespace server.Controllers
             _comment_repo = comment_repo;
         }
 
-        [HttpPost]
+        [HttpPost("createComment")]
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentDto dto)
         {
             var comment = dto.fromCreateToComment();
@@ -45,6 +45,24 @@ namespace server.Controllers
                 return NotFound("Comment not found.ID:" + comment_id);
             
             return Ok(comment.ToCommentDto());
+        }
+
+        [HttpPut("updateComment")]
+        public async Task<IActionResult> UpdateComment([FromBody] UpdateCommentDto dto)
+        {
+            var comment = await _comment_repo.UpdateCommentAsync(dto);
+            if(comment==null)
+                return NotFound("Comment not found.ID:" + dto.Id);
+
+            return Ok(comment.ToCommentDto());
+        }
+        [HttpGet("getAllCommentsByAssignment/{asign_id}")]
+        public async Task<IActionResult> GetAllByAssignmet([FromRoute] int asign_id)
+        {
+            var comments = await _comment_repo.GetAllCommentsByAssignmentIdAsync(asign_id);
+            var dtos = comments.Select(c=>c.ToCommentDto());
+
+            return Ok(dtos);
         }
 
         
