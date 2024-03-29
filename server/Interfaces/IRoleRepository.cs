@@ -10,5 +10,6 @@ namespace server.Interfaces
     {
         Task<Role?> GetRoleByIdAsync(int role_id);
         Task<List<Role>> GetAllRolesAsync();
+        Task SaveChangesAsync();
     }
 }
