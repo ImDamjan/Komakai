@@ -4,7 +4,7 @@
     justify-content: space-between;
     align-items: center;
     flex-grow: 1;
-    padding: 100px 0px 20px 0px;
+    padding: 80px 0px 5px 0px;
 }
 
 .create {
@@ -14,7 +14,7 @@
     margin-right: 50px;
     background-color: #001B47;
     color: white;
-    font: 400 12px/1.2 Inter, sans-serif;
+    font: 400 12px/1.2 Poppins, sans-serif;
 }
 
 .title {

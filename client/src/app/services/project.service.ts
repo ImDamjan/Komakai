@@ -30,7 +30,6 @@ export class ProjectService implements OnInit{
     
     //uzimanje id-a iz tokena
     const token = localStorage.getItem('token');
-    console.log(token);
     if (token) {
       const decodedToken: any = jwtDecode(token);
       this.userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
