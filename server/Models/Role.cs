@@ -16,6 +16,7 @@ namespace server.Models
 
         [Column("name", TypeName = "varchar(45)")]
         public string Name { get; set; } = null!;
+        public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
 
         [InverseProperty("Role")]
         public virtual ICollection<User> Users { get; set; } = new List<User>();
