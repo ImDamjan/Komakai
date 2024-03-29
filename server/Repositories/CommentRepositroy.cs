@@ -25,9 +25,14 @@ namespace server.Repositories
             return comment;
         }
 
-        public Task<Comment?> DeleteCommentByIdAsync(int comment_id)
+        public async Task<Comment?> DeleteCommentByIdAsync(int comment_id)
         {
-            throw new NotImplementedException();   
+            var comment = await GetCommentByIdAsync(comment_id);
+            if (comment==null)
+                return null;
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
+            return comment;
         }
 
         public async Task<List<Comment>> GetAllCommentsByAssignmentIdAsync(int asignment_id)

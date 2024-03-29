@@ -65,6 +65,15 @@ namespace server.Controllers
             return Ok(dtos);
         }
 
+        [HttpDelete("deleteCommentById/{comment_id}")]
+        public async Task<IActionResult> DeleteCommentById([FromRoute] int comment_id)
+        {
+            var comment = await _comment_repo.DeleteCommentByIdAsync(comment_id);
+            if(comment==null)
+                return NotFound("Comment not found.ID:" + comment_id);
+            
+            return Ok(comment.ToCommentDto());
+        }
         
     }
 }
