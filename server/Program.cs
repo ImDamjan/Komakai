@@ -58,6 +58,7 @@ builder.Services.AddScoped<IPriorityRepository,PriorityRepository>();
 builder.Services.AddScoped<IAssignmentRepository,AssignmentRepository>();
 builder.Services.AddScoped<IRoleRepository,RoleRepository>();
 builder.Services.AddScoped<ITaskGroupRepository, TaskGroupRepository>();
+builder.Services.AddScoped<ICommentRepository,CommentRepositroy>();
 builder.Services.AddScoped<IStateRepository,StateRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 
@@ -95,6 +96,8 @@ app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod())
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.MapControllers();
 

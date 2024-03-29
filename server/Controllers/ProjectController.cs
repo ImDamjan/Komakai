@@ -92,6 +92,41 @@ namespace server.Controllers
             return Ok(res);
         }
 
-        //TO-DO treba da se uradi endpoint koji kreira projekat sa vec gotovim timom
+        [HttpGet("filterUserProject/{user_id}/{date_start_flag}/{start}/{date_end_flag}/{end}/{prio_filter}/{state_filter}/{budget_flag}/{budget_filter}/{spent_flag}/{spent_filter}/{percentage_flag}/{percentage_filter}")]
+        public async Task<IActionResult> GetAllFilteredProjects(int user_id,int date_start_flag,DateTime start,
+        int date_end_flag, DateTime end, int prio_filter, int state_filter, int budget_flag,
+        double budget_filter, int spent_flag, double spent_filter, int percentage_flag, int percentage_filter)
+        {
+            ProjectFilterDto dto =  new ProjectFilterDto{
+                UserId = user_id,
+                DateEndFlag = date_end_flag,
+                DateStartFlag = date_start_flag,
+                Start = start,
+                End = end,
+                PriorityFilter = prio_filter,
+                StateFilter = state_filter,
+                BudgetFilter = budget_filter,
+                BudgetFlag = budget_flag,
+                SpentFilter = spent_filter,
+                SpentFlag = spent_flag,
+                PercentageFilter = percentage_filter,
+                PercentageFlag = percentage_flag,
+                SearchTitle = ""
+            };
+            var projects = await _repos.GetAllFilteredProjectsAsync(dto);
+            var dtos = projects.Select(p=>p.ToProjectDto());
+
+            return Ok(dtos);
+        }
+
+        [HttpDelete("deleteProjectById/{project_id}")]
+        public async Task<IActionResult> DeleteProject([FromRoute] int project_id)
+        {
+            var project = await _repos.DeleteProjectByIdAsync(project_id);
+            if(project==null)
+                return BadRequest("project does not exist");
+            
+            return Ok(project.ToProjectDto());
+        }
     }
 }

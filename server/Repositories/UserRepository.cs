@@ -79,5 +79,24 @@ namespace server.Repositories
             await _context.SaveChangesAsync();
             return true; // User deleted successfully
         }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteProfilePictureAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return; // Or throw an exception or handle accordingly
+            }
+
+            user.ProfilePicturePath = string.Empty; // Set the profile picture path to empty string to remove it
+            await _context.SaveChangesAsync();
+        }
     }
 }
