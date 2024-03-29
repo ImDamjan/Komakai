@@ -15,5 +15,8 @@ namespace server.Models
 
         [ForeignKey("PermissionId")]
         public virtual Permission Permission { get; set; }
+
+        [Column("permission_id")]
+        public int PermissionId { get; set; }
     }
 }
