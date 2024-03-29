@@ -15,9 +15,11 @@ namespace server.Repositories
         {
             _context = context;
         }
-        public Task<Comment> CreateCommentAsync(CreateCommentDto dto)
+        public async Task<Comment> CreateCommentAsync(Comment comment)
         {
-            throw new NotImplementedException();
+            await _context.Comments.AddAsync(comment);
+            await _context.SaveChangesAsync();
+            return comment;
         }
 
         public Task<Comment?> DeleteCommentByIdAsync(int comment_id)
@@ -35,7 +37,7 @@ namespace server.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Comment> UpdateCommentAsync(CommentDto dto)
+        public Task<Comment> UpdateCommentAsync(UpdateCommentDto dto)
         {
             throw new NotImplementedException();
         }
