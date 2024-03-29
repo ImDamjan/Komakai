@@ -36,5 +36,17 @@ namespace server.Controllers
             comment = await _comment_repo.CreateCommentAsync(comment);
             return Ok(comment.ToCommentDto());
         }
+
+        [HttpGet("getCommentById/{comment_id}")]
+        public async Task<IActionResult> GetCommentById([FromRoute] int comment_id)
+        {
+            var comment = await _comment_repo.GetCommentByIdAsync(comment_id);
+            if(comment==null)
+                return NotFound("Comment not found.ID:" + comment_id);
+            
+            return Ok(comment.ToCommentDto());
+        }
+
+        
     }
 }

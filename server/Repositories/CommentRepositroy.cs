@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.DTOs.Comment;
 using server.Models;
@@ -24,7 +25,7 @@ namespace server.Repositories
 
         public Task<Comment?> DeleteCommentByIdAsync(int comment_id)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();   
         }
 
         public Task<List<Comment>> GetAllCommentsByAssignmentIdAsync(int asignment_id)
@@ -32,9 +33,9 @@ namespace server.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Comment?> GetCommentByIdAsync(int comment_id)
+        public async Task<Comment?> GetCommentByIdAsync(int comment_id)
         {
-            throw new NotImplementedException();
+            return await _context.Comments.FirstOrDefaultAsync(c=>c.Id==comment_id);
         }
 
         public Task<Comment> UpdateCommentAsync(UpdateCommentDto dto)
