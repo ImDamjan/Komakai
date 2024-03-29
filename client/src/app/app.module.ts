@@ -30,6 +30,7 @@ import { TaskTagsComponent } from './components/task-tags/task-tags.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './components/header/header.component';
 import { KanbanComponent } from './components/kanban/kanban.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { KanbanComponent } from './components/kanban/kanban.component';
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,
+    DragDropModule
   ],
   providers: [
     provideClientHydration(),
