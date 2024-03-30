@@ -15,8 +15,10 @@ namespace server.Controllers
     public class TeamController : ControllerBase
     {
         private readonly ITeamRepository _team_repo;
-        public TeamController(ITeamRepository team_repo)
+        private readonly IUserRepository _user_repo;
+        public TeamController(ITeamRepository team_repo, IUserRepository user_repo)
         {
+            _user_repo = user_repo;
             _team_repo = team_repo;
         }
 
@@ -69,9 +71,16 @@ namespace server.Controllers
         public async Task<IActionResult> CreateTeam([FromBody]CreateTeamDto dto)
         {
             var team = dto.fromCreateDtoToTeam();
-
-            team = await _team_repo.CreateTeamAsync(team,dto.Members);
-
+            
+            var users =  new List<User>();
+            foreach (var userId in dto.Members)
+            {
+                var user = await _user_repo.GetUserByIdAsync(userId);
+                users.Add(user);
+            }
+            team.Users = users;
+            team = await _team_repo.CreateTeamAsync(team);
+            
             return Ok(team.ToTeamDto(dto.Members));
             
         }

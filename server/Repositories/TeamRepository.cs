@@ -18,15 +18,9 @@ namespace server.Repositories
         {
             _context = context;
         }
-        public async Task<Team> CreateTeamAsync(Team team, List<int> memebers)
+        public async Task<Team> CreateTeamAsync(Team team)
         {
-            foreach (var user in memebers)
-            {
-                // await _context.TeamUsers.AddAsync(new TeamUser{ Team = team, UserId = user});
-            }
-
             await _context.Teams.AddAsync(team);
-
             await _context.SaveChangesAsync();
 
             return team;
@@ -35,31 +29,38 @@ namespace server.Repositories
 
         public async Task<List<Team>> GetAllTeamsAsync()
         {
-            // return await _context.Teams.Include(t=> t.TeamUsers).ToListAsync();
-            return null;
+            return await _context.Teams.Include(t=> t.Users).ToListAsync();
         }
 
         public async Task<List<Team>> GetAllUserTeams(int userid)
         {
-            return null;
-            // return await _context.TeamUsers.Where(t=>t.UserId==userid).Select(t=>t.Team).ToListAsync();
+            var user = await _context.Users.Include(u=>u.Teams).FirstOrDefaultAsync(u=>u.Id==userid);
+            if(user==null)
+                return new List<Team>();
+            
+            return user.Teams.ToList();
+
         }
 
         public async Task<Team?> GetTeamByIdAsync(int id)
         {
             
-            var team = await _context.Teams.FirstOrDefaultAsync(t=> t.Id==id);
-
-            if(team==null)
-                return null;
-
+            var team = await _context.Teams.Include(t=>t.Users).FirstOrDefaultAsync(t=> t.Id==id);
             return team;
         }
 
         public async Task<List<int>> GetTeamUsersByIdAsync(int teamId)
         {
-            // return await _context.TeamUsers.Where(t=>t.TeamId==teamId).Select(t=>t.UserId).ToListAsync();
-            return null;
+            var team = await GetTeamByIdAsync(teamId);
+            List<int> User_ids =  new List<int>();
+            if(team==null)
+                return User_ids;
+            foreach (var user in team.Users)
+            {
+                User_ids.Add(user.Id);
+            }
+
+            return User_ids;
         }
     }
 }
