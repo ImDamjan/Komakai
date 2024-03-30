@@ -22,7 +22,7 @@ namespace server.Repositories
         {
             foreach (var user in memebers)
             {
-                await _context.TeamUsers.AddAsync(new TeamUser{ Team = team, UserId = user});
+                // await _context.TeamUsers.AddAsync(new TeamUser{ Team = team, UserId = user});
             }
 
             await _context.Teams.AddAsync(team);
@@ -35,16 +35,19 @@ namespace server.Repositories
 
         public async Task<List<Team>> GetAllTeamsAsync()
         {
-            return await _context.Teams.Include(t=> t.TeamUsers).ToListAsync();
+            // return await _context.Teams.Include(t=> t.TeamUsers).ToListAsync();
+            return null;
         }
 
         public async Task<List<Team>> GetAllUserTeams(int userid)
         {
-            return await _context.TeamUsers.Where(t=>t.UserId==userid).Select(t=>t.Team).ToListAsync();
+            return null;
+            // return await _context.TeamUsers.Where(t=>t.UserId==userid).Select(t=>t.Team).ToListAsync();
         }
 
         public async Task<Team?> GetTeamByIdAsync(int id)
         {
+            
             var team = await _context.Teams.FirstOrDefaultAsync(t=> t.Id==id);
 
             if(team==null)
@@ -55,7 +58,8 @@ namespace server.Repositories
 
         public async Task<List<int>> GetTeamUsersByIdAsync(int teamId)
         {
-            return await _context.TeamUsers.Where(t=>t.TeamId==teamId).Select(t=>t.UserId).ToListAsync();
+            // return await _context.TeamUsers.Where(t=>t.TeamId==teamId).Select(t=>t.UserId).ToListAsync();
+            return null;
         }
     }
 }

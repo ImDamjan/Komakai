@@ -23,40 +23,40 @@ namespace server.Repositories
         {
             var Users = new List<User>();
             
-            foreach (int userid in teamMembers)
-            {
-                var user = await _context.Users.Where(u=> u.Id==userid).FirstOrDefaultAsync();
-                if(user == null)
-                    return null;
-                Users.Add(user);
-            }
-            var relationship = new List<TeamUser>();
-            var team = new Team{
-                Name = projectModel.Title + " Team",
-                Type = projectModel.Type   
-            };
+            // foreach (int userid in teamMembers)
+            // {
+            //     var user = await _context.Users.Where(u=> u.Id==userid).FirstOrDefaultAsync();
+            //     if(user == null)
+            //         return null;
+            //     Users.Add(user);
+            // }
+            // var relationship = new List<TeamUser>();
+            // var team = new Team{
+            //     Name = projectModel.Title + " Team",
+            //     Type = projectModel.Type   
+            // };
 
-            foreach (var item in Users)
-            {
-                relationship.Add(new TeamUser{
-                    User = item,
-                    Team = team,
-                    ProjectRoleId = item.RoleId
-                });
-            }
-            foreach (var item in relationship)
-            {
-                await _context.TeamUsers.AddAsync(item);
-            }
-            await _context.Teams.AddAsync(team);
+            // foreach (var item in Users)
+            // {
+            //     relationship.Add(new TeamUser{
+            //         User = item,
+            //         Team = team,
+            //         ProjectRoleId = item.RoleId
+            //     });
+            // }
+            // foreach (var item in relationship)
+            // {
+            //     await _context.TeamUsers.AddAsync(item);
+            // }
+            // await _context.Teams.AddAsync(team);
 
-            if(projectModel.PriorityId > 4 || projectModel.PriorityId < 1)
-                projectModel.PriorityId = 4;
-            projectModel.Team = team;
-            projectModel.LastStateChangedTime = DateTime.Now;
+            // if(projectModel.PriorityId > 4 || projectModel.PriorityId < 1)
+            //     projectModel.PriorityId = 4;
+            // projectModel.Team = team;
+            // projectModel.LastStateChangedTime = DateTime.Now;
 
-            await _context.Projects.AddAsync(projectModel);
-            await _context.SaveChangesAsync();
+            // await _context.Projects.AddAsync(projectModel);
+            // await _context.SaveChangesAsync();
 
             return projectModel;
         }
@@ -73,15 +73,15 @@ namespace server.Repositories
         }
         public async Task<List<Project>> GetAllUserProjectsAsync(int id)
         {
-            var teams = await _context.TeamUsers.Where(u=> u.UserId==id).Select(t=>t.Team).ToListAsync();
+            // var teams = await _context.TeamUsers.Where(u=> u.UserId==id).Select(t=>t.Team).ToListAsync();
 
             List<Project> projects = new List<Project>();
-            foreach (var team in teams)
-            {
-                var pom = await _context.Projects.Where(p=>p.TeamId==team.Id).ToListAsync();
+            // foreach (var team in teams)
+            // {
+            //     var pom = await _context.Projects.Where(p=>p.TeamId==team.Id).ToListAsync();
 
-                projects.AddRange(pom);
-            }
+            //     projects.AddRange(pom);
+            // }
 
             return projects;
         }

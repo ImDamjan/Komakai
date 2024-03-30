@@ -260,42 +260,7 @@ namespace server.Data
                     _context.Teams.AddRange(teams);
                     _context.SaveChanges();
 
-                    // Assign users to teams
-                    var teamUsers = new List<TeamUser>
-                    {
-                        // Team A
-                        new TeamUser { TeamId = 1, UserId = 1, ProjectRoleId = 1 }, // John Doe as Project Manager
-                        new TeamUser { TeamId = 1, UserId = 3, ProjectRoleId = 2 }, // Alex Johnson as Developer
-                        new TeamUser { TeamId = 1, UserId = 4, ProjectRoleId = 2 }, // Emily Brown as Developer
-                        new TeamUser { TeamId = 1, UserId = 7, ProjectRoleId = 3 }, // Jessica Lee as User
-
-                        // Team B
-                        new TeamUser { TeamId = 2, UserId = 2, ProjectRoleId = 1 }, // Jane Smith as Project Manager
-                        new TeamUser { TeamId = 2, UserId = 5, ProjectRoleId = 2 }, // Michael Wilson as Developer
-                        new TeamUser { TeamId = 2, UserId = 6, ProjectRoleId = 2 }, // Sarah Martinez as Developer
-                        new TeamUser { TeamId = 2, UserId = 8, ProjectRoleId = 3 }, // William Taylor as User
-
-                        // Team C
-                        new TeamUser { TeamId = 3, UserId = 9, ProjectRoleId = 4 }, // Olivia Anderson as Guest
-                        new TeamUser { TeamId = 3, UserId = 1, ProjectRoleId = 1 }, // John Doe as Project Manager
-                        new TeamUser { TeamId = 3, UserId = 3, ProjectRoleId = 2 }, // Alex Johnson as Developer
-                        new TeamUser { TeamId = 3, UserId = 5, ProjectRoleId = 2 }, // Michael Wilson as Developer
-
-                        // Team D
-                        new TeamUser { TeamId = 4, UserId = 2, ProjectRoleId = 1 }, // Jane Smith as Project Manager
-                        new TeamUser { TeamId = 4, UserId = 4, ProjectRoleId = 2 }, // Emily Brown as Developer
-                        new TeamUser { TeamId = 4, UserId = 5, ProjectRoleId = 2 }, // Michael Wilson as Developer
-                        new TeamUser { TeamId = 4, UserId = 7, ProjectRoleId = 3 }, // Jessica Lee as User
-
-                        // Team E
-                        new TeamUser { TeamId = 5, UserId = 6, ProjectRoleId = 2 }, // Sarah Martinez as Developer
-                        new TeamUser { TeamId = 5, UserId = 8, ProjectRoleId = 3 }, // William Taylor as User
-                        new TeamUser { TeamId = 5, UserId = 9, ProjectRoleId = 4 }, // Olivia Anderson as Guest
-                        new TeamUser { TeamId = 5, UserId = 1, ProjectRoleId = 1 } // John Doe as Project Manager
-                    };
-
-                    _context.TeamUsers.AddRange(teamUsers);
-                    _context.SaveChanges();
+                    // Assign users to teams TO-DO
 
 
                     if(!_context.Projects.Any())
@@ -306,7 +271,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 1,
-                                TeamId = 1,
                                 Title = "Website Redesign",
                                 StateId = 1,
                                 Percentage = 100,
@@ -322,7 +286,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 2,
-                                TeamId = 2,
                                 Title = "Marketing Campaign",
                                 StateId = 2,
                                 Percentage = 80,
@@ -338,7 +301,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 3,
-                                TeamId = 3,
                                 Title = "Data Analysis Tool",
                                 StateId = 3,
                                 Percentage = 60,
@@ -354,7 +316,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 4,
-                                TeamId = 4,
                                 Title = "Product Enhancement",
                                 StateId = 1,
                                 Percentage = 100,
@@ -370,7 +331,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 5,
-                                TeamId = 5,
                                 Title = "Training Platform",
                                 StateId = 2,
                                 Percentage = 40,
@@ -386,7 +346,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 6,
-                                TeamId = 1,
                                 Title = "Mobile App Development",
                                 StateId = 2,
                                 Percentage = 60,
@@ -402,7 +361,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 7,
-                                TeamId = 2,
                                 Title = "Software Upgrade",
                                 StateId = 1,
                                 Percentage = 100,
@@ -418,7 +376,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 8,
-                                TeamId = 3,
                                 Title = "Database Optimization",
                                 StateId = 2,
                                 Percentage = 40,
@@ -434,7 +391,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 9,
-                                TeamId = 4,
                                 Title = "Network Security",
                                 StateId = 3,
                                 Percentage = 80,
@@ -450,7 +406,6 @@ namespace server.Data
                             new Project
                             {
                                 Id = 10,
-                                TeamId = 5,
                                 Title = "Customer Support System",
                                 StateId = 4,
                                 Percentage = 30,

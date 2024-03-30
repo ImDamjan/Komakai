@@ -18,7 +18,6 @@ namespace server.DTOs.Projects
         public double Percentage { get; set; }
         public string Description { get; set; } = "";
         public int? PriorityId { get; set; }
-        public int TeamId { get; set; }
 
     }
 }

@@ -24,7 +24,6 @@ namespace server.Mappers
                 Title = p.Title,
                 Budget = p.Budget,
                 Type = p.Type,
-                TeamId = p.TeamId,
                 PriorityId = p.PriorityId,
                 Description = p.Description,
 
