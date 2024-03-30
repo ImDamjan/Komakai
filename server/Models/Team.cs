@@ -23,11 +23,8 @@ namespace server.Models
 
 
         //many-to-many condition
-        [InverseProperty("Team")]
-        public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
-
-        [InverseProperty("Team")]
-        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+        [InverseProperty("Teams")]
+        public virtual ICollection<User> Users {get; set;} = new List<User>();
 
         [InverseProperty("Team")]
         public virtual ICollection<TeamTag> TeamTags { get; set; } = new List<TeamTag>();

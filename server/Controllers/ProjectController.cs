@@ -17,11 +17,14 @@ namespace server.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _repos;
-
+        private readonly IUserRepository _user_repo;
+        private readonly IPriorityRepository _prio_repo;
         private readonly ITaskGroupRepository _group_repo;
-        public ProjectController(IProjectRepository repos, ITaskGroupRepository group_repo)
+        public ProjectController(IPriorityRepository prio_repo,IProjectRepository repos,IUserRepository user_repo,ITaskGroupRepository group_repo)
         {
             _repos = repos;
+            _prio_repo = prio_repo;
+            _user_repo = user_repo;
             _group_repo = group_repo;
 
         }
@@ -30,15 +33,27 @@ namespace server.Controllers
         public async Task<IActionResult> GetAll()
         {
             var projects = await _repos.GetAllProjectsAsync();
-            var projectDto = projects.Select(p=> p.ToProjectDto());
-            return Ok(projectDto);
+            var dtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var users =  await _user_repo.GetUserByProjectId(project.Id);
+                var ids =  users.Select(u=>u.Id).ToList();
+                dtos.Add(project.ToProjectDto(ids));
+            }
+            return Ok(dtos);
         }
         [HttpGet("userProjects/{userId}")]
         public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId)
         {
             var projects = await _repos.GetAllUserProjectsAsync(userId);
-            var projectDtos = projects.Select(p=>p.ToProjectDto());
-            return Ok(projectDtos);
+            var dtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var users =  await _user_repo.GetUserByProjectId(project.Id);
+                var ids =  users.Select(u=>u.Id).ToList();
+                dtos.Add(project.ToProjectDto(ids));
+            }
+            return Ok(dtos);
         }
 
         [HttpGet("getProject/{id}")]
@@ -48,40 +63,72 @@ namespace server.Controllers
             if(project==null)
                 return NotFound("Project with Id:"+id + " was not found !!!");
             
-            return Ok(project.ToProjectDto());
+            var dto = new ProjectDto();
+
+            var users =  await _user_repo.GetUserByProjectId(project.Id);
+            var ids =  users.Select(u=>u.Id).ToList();
+            dto = project.ToProjectDto(ids);
+    
+            return Ok(dto);
         }
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto projectDto)
         {
-            var projectModel = projectDto.toProjectFromCreateDto();
-            List<int> teamMembers = projectDto.UserIds;
+            
+            List<User> teamMembers = new List<User>();
             //da li su datumi dobri
-            if(projectModel.Start >= projectModel.End)
+            if(projectDto.Start >= projectDto.End)
                 return BadRequest("End date comes before start date");
             
+            
+            //da li je prioritet validan
+            var prio = await _prio_repo.GetPriority(projectDto.PriorityId);
+            if(prio==null)
+                return NotFound("Priority not found.ID:" + projectDto.PriorityId);
+            
+            //da li su korinsici validni
+            foreach (var userId in projectDto.UserIds)
+            {
+                var user = await _user_repo.GetUserByIdAsync(userId);
+                if(user==null)
+                    return NotFound("User not found.ID:" + userId);
+                teamMembers.Add(user);
+            }
+            var projectModel = projectDto.toProjectFromCreateDto();
             var response = await _repos.CreateProjectAsync(projectModel,teamMembers);
-            if(response==null)
-                return BadRequest("User was not found ");
-            var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
+            
+            
             //kreiranje initial grupe - zove se isto kao i projekat
+            var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
+
+            var users =  await _user_repo.GetUserByProjectId(projectModel.Id);
+            var ids =  users.Select(u=>u.Id).ToList();
+       
+    
+            
             await _group_repo.CreateAsync(group);
-            return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto());
+            return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto(ids));
         }
 
         [HttpPut]
-        [Route("update/{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] UpdateProjectDto projectDto)
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] UpdateProjectDto projectDto)
         {
             //da li su datumi dobri
             if(projectDto.Start >= projectDto.End)
                 return BadRequest("End date comes before start date");
-            var project = await _repos.UpdateProjectAsync(id,projectDto);
+            var project = await _repos.UpdateProjectAsync(projectDto);
 
             if(project==null)
-                return NotFound("Project with Id:"+id + " was not found !!!");
+                return NotFound("Project with Id:"+projectDto.Id + " was not found !!!");
+            var dto = new ProjectDto();
 
-            return Ok(project.ToProjectDto());
+            var users =  await _user_repo.GetUserByProjectId(project.Id);
+            var ids =  users.Select(u=>u.Id).ToList();
+            dto = project.ToProjectDto(ids);
+    
+            return Ok(dto);
         }
 
         //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
@@ -114,8 +161,13 @@ namespace server.Controllers
                 SearchTitle = ""
             };
             var projects = await _repos.GetAllFilteredProjectsAsync(dto);
-            var dtos = projects.Select(p=>p.ToProjectDto());
-
+            var dtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var users =  await _user_repo.GetUserByProjectId(project.Id);
+                var ids =  users.Select(u=>u.Id).ToList();
+                dtos.Add(project.ToProjectDto(ids));
+            }
             return Ok(dtos);
         }
 
@@ -126,7 +178,13 @@ namespace server.Controllers
             if(project==null)
                 return BadRequest("project does not exist");
             
-            return Ok(project.ToProjectDto());
+            var dto = new ProjectDto();
+
+            var users =  await _user_repo.GetUserByProjectId(project.Id);
+            var ids =  users.Select(u=>u.Id).ToList();
+            dto = project.ToProjectDto(ids);
+    
+            return Ok(dto);
         }
     }
 }
