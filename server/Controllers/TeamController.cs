@@ -76,6 +76,8 @@ namespace server.Controllers
             foreach (var userId in dto.Members)
             {
                 var user = await _user_repo.GetUserByIdAsync(userId);
+                if(user==null)
+                    return NotFound("User not found.ID:" + userId);
                 users.Add(user);
             }
             team.Users = users;
