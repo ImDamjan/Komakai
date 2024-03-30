@@ -12,7 +12,7 @@ namespace server.Mappers
 {
     public static class ProjectMapper
     {
-        public static ProjectDto ToProjectDto(this Project p)
+        public static ProjectDto ToProjectDto(this Project p, List<int> users)
         {
             return new ProjectDto{
                 Id = p.Id,
@@ -26,6 +26,7 @@ namespace server.Mappers
                 Type = p.Type,
                 PriorityId = p.PriorityId,
                 Description = p.Description,
+                Users = users
 
             };
         }

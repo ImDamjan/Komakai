@@ -33,15 +33,27 @@ namespace server.Controllers
         public async Task<IActionResult> GetAll()
         {
             var projects = await _repos.GetAllProjectsAsync();
-            var projectDto = projects.Select(p=> p.ToProjectDto());
-            return Ok(projectDto);
+            var dtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var users =  await _user_repo.GetUserByProjectId(project.Id);
+                var ids =  users.Select(u=>u.Id).ToList();
+                dtos.Add(project.ToProjectDto(ids));
+            }
+            return Ok(dtos);
         }
         [HttpGet("userProjects/{userId}")]
         public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId)
         {
             var projects = await _repos.GetAllUserProjectsAsync(userId);
-            var projectDtos = projects.Select(p=>p.ToProjectDto());
-            return Ok(projectDtos);
+            var dtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var users =  await _user_repo.GetUserByProjectId(project.Id);
+                var ids =  users.Select(u=>u.Id).ToList();
+                dtos.Add(project.ToProjectDto(ids));
+            }
+            return Ok(dtos);
         }
 
         [HttpGet("getProject/{id}")]
@@ -51,7 +63,13 @@ namespace server.Controllers
             if(project==null)
                 return NotFound("Project with Id:"+id + " was not found !!!");
             
-            return Ok(project.ToProjectDto());
+            var dto = new ProjectDto();
+
+            var users =  await _user_repo.GetUserByProjectId(project.Id);
+            var ids =  users.Select(u=>u.Id).ToList();
+            dto = project.ToProjectDto(ids);
+    
+            return Ok(dto);
         }
 
         [HttpPost("create")]
@@ -83,9 +101,14 @@ namespace server.Controllers
             
             //kreiranje initial grupe - zove se isto kao i projekat
             var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
+
+            var users =  await _user_repo.GetUserByProjectId(projectModel.Id);
+            var ids =  users.Select(u=>u.Id).ToList();
+       
+    
             
             await _group_repo.CreateAsync(group);
-            return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto());
+            return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto(ids));
         }
 
         [HttpPut]
@@ -99,8 +122,13 @@ namespace server.Controllers
 
             if(project==null)
                 return NotFound("Project with Id:"+projectDto.Id + " was not found !!!");
+            var dto = new ProjectDto();
 
-            return Ok(project.ToProjectDto());
+            var users =  await _user_repo.GetUserByProjectId(project.Id);
+            var ids =  users.Select(u=>u.Id).ToList();
+            dto = project.ToProjectDto(ids);
+    
+            return Ok(dto);
         }
 
         //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
@@ -133,8 +161,13 @@ namespace server.Controllers
                 SearchTitle = ""
             };
             var projects = await _repos.GetAllFilteredProjectsAsync(dto);
-            var dtos = projects.Select(p=>p.ToProjectDto());
-
+            var dtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var users =  await _user_repo.GetUserByProjectId(project.Id);
+                var ids =  users.Select(u=>u.Id).ToList();
+                dtos.Add(project.ToProjectDto(ids));
+            }
             return Ok(dtos);
         }
 
@@ -145,7 +178,13 @@ namespace server.Controllers
             if(project==null)
                 return BadRequest("project does not exist");
             
-            return Ok(project.ToProjectDto());
+            var dto = new ProjectDto();
+
+            var users =  await _user_repo.GetUserByProjectId(project.Id);
+            var ids =  users.Select(u=>u.Id).ToList();
+            dto = project.ToProjectDto(ids);
+    
+            return Ok(dto);
         }
     }
 }

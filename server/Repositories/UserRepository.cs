@@ -98,5 +98,18 @@ namespace server.Repositories
             user.ProfilePicturePath = string.Empty; // Set the profile picture path to empty string to remove it
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<User>> GetUserByProjectId(int project_id)
+        {
+            var users = await _context.Users.Include(u=>u.ProjectUsers).ToListAsync();
+            List<User> chosenUsers = new List<User>();
+            foreach (var user in users)
+            {
+                var project_users = user.ProjectUsers.Where(u=>u.ProjectId==project_id).ToList();
+                if(project_users.Count > 0)
+                    chosenUsers.Add(user);
+            }
+            return chosenUsers;
+        }
     }
 }
