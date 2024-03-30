@@ -250,11 +250,11 @@ namespace server.Data
                     //Teams
                     var teams = new List<Team>
                     {
-                        new Team { Id = 1, Name = "Team A", Type = "Type 1" },
-                        new Team { Id = 2, Name = "Team B", Type = "Type 2" },
-                        new Team { Id = 3, Name = "Team C", Type = "Type 1" },
-                        new Team { Id = 4, Name = "Team D", Type = "Type 2" },
-                        new Team { Id = 5, Name = "Team E", Type = "Type 1" }
+                        new Team { Id = 1, Name = "Team A", Type = "Type 1", Users = new List<User>{users[0],users[2],users[3],users[6]} },
+                        new Team { Id = 2, Name = "Team B", Type = "Type 2", Users = new List<User>{users[1],users[5],users[4],users[7]} },
+                        new Team { Id = 3, Name = "Team C", Type = "Type 1", Users = new List<User>{users[8],users[0],users[2],users[4]} },
+                        new Team { Id = 4, Name = "Team D", Type = "Type 2", Users = new List<User>{users[1],users[4],users[3],users[6]} },
+                        new Team { Id = 5, Name = "Team E", Type = "Type 1", Users = new List<User>{users[5],users[7],users[8],users[0]} }
                     };
 
                     _context.Teams.AddRange(teams);
@@ -282,6 +282,28 @@ namespace server.Data
                                 Spent = 8000,
                                 Type = "Web",
                                 PriorityId = 2, // Medium Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 1,
+                                        User = users[2],
+                                        Role = users[2].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 1,
+                                        User = users[3],
+                                        Role = users[3].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 1,
+                                        User = users[6],
+                                        Role = users[6].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 1,
+                                        User = users[0],
+                                        Role = users[0].Role
+                                    },
+                                }
                             },
                             new Project
                             {
@@ -297,6 +319,28 @@ namespace server.Data
                                 Spent = 10000,
                                 Type = "Marketing",
                                 PriorityId = 1, // High Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 2,
+                                        User = users[1],
+                                        Role = users[1].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 2,
+                                        User = users[5],
+                                        Role = users[5].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 2,
+                                        User = users[4],
+                                        Role = users[4].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 2,
+                                        User = users[7],
+                                        Role = users[7].Role
+                                    },
+                                }
                             },
                             new Project
                             {
@@ -312,6 +356,28 @@ namespace server.Data
                                 Spent = 12000,
                                 Type = "Data",
                                 PriorityId = 3, // Low Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 3,
+                                        User = users[8],
+                                        Role = users[8].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 3,
+                                        User = users[0],
+                                        Role = users[0].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 3,
+                                        User = users[2],
+                                        Role = users[2].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId =3,
+                                        User = users[4],
+                                        Role = users[4].Role
+                                    },
+                                }
                             },
                             new Project
                             {
@@ -327,6 +393,28 @@ namespace server.Data
                                 Spent = 15000,
                                 Type = "Product",
                                 PriorityId = 2, // Medium Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 4,
+                                        User = users[1],
+                                        Role = users[1].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 4,
+                                        User = users[3],
+                                        Role = users[3].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 4,
+                                        User = users[4],
+                                        Role = users[4].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 4,
+                                        User = users[6],
+                                        Role = users[6].Role
+                                    },
+                                }
                             },
                             new Project
                             {
@@ -342,6 +430,28 @@ namespace server.Data
                                 Spent = 6000,
                                 Type = "Training",
                                 PriorityId = 1, // High Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 5,
+                                        User = users[5],
+                                        Role = users[5].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 5,
+                                        User = users[7],
+                                        Role = users[7].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 5,
+                                        User = users[8],
+                                        Role = users[8].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 5,
+                                        User = users[0],
+                                        Role = users[0].Role
+                                    },
+                                }
                             },
                             new Project
                             {
@@ -357,6 +467,28 @@ namespace server.Data
                                 Spent = 6000,
                                 Type = "Mobile",
                                 PriorityId = 3, // Low Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 6,
+                                        User = users[2],
+                                        Role = users[2].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 6,
+                                        User = users[3],
+                                        Role = users[3].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 6,
+                                        User = users[6],
+                                        Role = users[6].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 6,
+                                        User = users[0],
+                                        Role = users[0].Role
+                                    },
+                                }
                             },
                             new Project
                             {
@@ -372,6 +504,28 @@ namespace server.Data
                                 Spent = 9000,
                                 Type = "Software",
                                 PriorityId = 2, // Medium Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 7,
+                                        User = users[1],
+                                        Role = users[1].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 7,
+                                        User = users[5],
+                                        Role = users[5].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 7,
+                                        User = users[4],
+                                        Role = users[4].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 7,
+                                        User = users[7],
+                                        Role = users[7].Role
+                                    },
+                                }
                             },
                             new Project
                             {
@@ -387,6 +541,28 @@ namespace server.Data
                                 Spent = 3500,
                                 Type = "Database",
                                 PriorityId = 1, // High Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 8,
+                                        User = users[8],
+                                        Role = users[8].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 8,
+                                        User = users[0],
+                                        Role = users[0].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 8,
+                                        User = users[2],
+                                        Role = users[2].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId =8,
+                                        User = users[4],
+                                        Role = users[4].Role
+                                    },
+                                }
                             },
                             new Project
                             {
@@ -402,6 +578,28 @@ namespace server.Data
                                 Spent = 10000,
                                 Type = "Security",
                                 PriorityId = 2, // Medium Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 9,
+                                        User = users[1],
+                                        Role = users[1].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 9,
+                                        User = users[3],
+                                        Role = users[3].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 9,
+                                        User = users[4],
+                                        Role = users[4].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 9,
+                                        User = users[6],
+                                        Role = users[6].Role
+                                    },
+                                }
                             },
                             new Project
                             {
@@ -417,6 +615,28 @@ namespace server.Data
                                 Spent = 8000,
                                 Type = "Support",
                                 PriorityId = 3, // Low Priority
+                                ProjectUsers = new List<ProjectUser>{
+                                    new ProjectUser{
+                                        ProjectId = 10,
+                                        User = users[5],
+                                        Role = users[5].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 10,
+                                        User = users[7],
+                                        Role = users[7].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 10,
+                                        User = users[8],
+                                        Role = users[8].Role
+                                    },
+                                    new ProjectUser{
+                                        ProjectId = 10,
+                                        User = users[0],
+                                        Role = users[0].Role
+                                    },
+                                }
                             }
                         };
                         //TO-DO uraditi initial task-grupe za projekte
