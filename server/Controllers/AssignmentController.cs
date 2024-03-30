@@ -20,19 +20,17 @@ namespace server.Controllers
         private readonly ITaskGroupRepository _group_repo;
         private readonly IPriorityRepository _prio_repo;
         private readonly IUserRepository _user_repo;
-        private readonly ITeamRepository _team_repo;
 
         private readonly IProjectRepository _project_repo;
 
         public AssignmentController(IAssignmentRepository asign_repo, IUserRepository user_repo
-        , ITaskGroupRepository group_repo, IPriorityRepository prio_repo, ITeamRepository team_repo,IProjectRepository project_repo)
+        , ITaskGroupRepository group_repo, IPriorityRepository prio_repo,IProjectRepository project_repo)
         {
             _asign_repo = asign_repo;
             _group_repo = group_repo;
             _project_repo = project_repo;
             _prio_repo = prio_repo;
             _user_repo = user_repo;
-            _team_repo = team_repo;
         }
         //Mozda ce morati da se ubaci i project ID u dto ?
         [HttpPost]
@@ -53,13 +51,13 @@ namespace server.Controllers
             var project  = await _project_repo.GetProjectByIdAsync(group.ProjectId);
             if(project==null)
                return NotFound("Project does not exist.ID:" + group.ProjectId);
-            var team = await _team_repo.GetTeamUsersByIdAsync(project.TeamId);
+            var team = await _user_repo.GetUserByProjectId(group.ProjectId);
 
             foreach (var userId in dto.UserIds)
             {
-                if(!team.Contains(userId))
+                var user = team.FirstOrDefault(u=>u.Id==userId);
+                if(user==null)
                     return NotFound("User " + userId + " is not on project " + group.ProjectId);
-                var user = await _user_repo.GetUserByIdAsync(userId);
                 users.Add(user);
             }
 
