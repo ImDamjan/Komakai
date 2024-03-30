@@ -1,5 +1,5 @@
 .wrapper{
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 65px;
     padding-left: 80px;
@@ -15,4 +15,8 @@
 
 .info{
     color: white;
+}
+
+.picture{
+    margin-right: 20px;
 }
