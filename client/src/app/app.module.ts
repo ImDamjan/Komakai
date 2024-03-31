@@ -29,6 +29,9 @@ import { TaskTrackComponent } from './components/task-track/task-track.component
 import { TaskTagsComponent } from './components/task-tags/task-tags.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './components/header/header.component';
+import { KanbanComponent } from './components/kanban/kanban.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,9 @@ import { HeaderComponent } from './components/header/header.component';
     ProjectWeeklyAnalizeComponent,
     TaskTrackComponent,
     TaskTagsComponent,
-    HeaderComponent
+    HeaderComponent,
+    KanbanComponent,
+    ProjectDetailsComponent
   ],
   imports: [
     FormsModule,
@@ -62,6 +67,7 @@ import { HeaderComponent } from './components/header/header.component';
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,
+    DragDropModule
   ],
   providers: [
     provideClientHydration(),
