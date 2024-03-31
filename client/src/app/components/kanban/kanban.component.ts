@@ -2,6 +2,7 @@ import { Component, OnInit, VERSION } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
 import { Board } from '../../models/board.model';
 import { Column } from '../../models/column.model';
+import { Task } from '../../models/task';
 
 @Component({
   selector: 'app-kanban',
@@ -13,11 +14,11 @@ export class KanbanComponent implements OnInit{
   public board: Board = new Board('Test Board', [
     new Column('Not started', '1', [
       'Some random idea',
-      'This is another random idea'
+      'Neki tusk'
     ]),
     new Column('Ready', '2', [
       'Lorem ipsum',
-      'foo'
+      'Task'
     ]),
     new Column('In progress', '3', [
       'Lorem ipsum',

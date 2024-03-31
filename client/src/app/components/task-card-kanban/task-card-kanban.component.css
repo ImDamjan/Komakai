@@ -1,25 +1,20 @@
-/* Frame 4 */
-
 .frame-4 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 8px;
-    gap: 8px;
+    padding: 15px;
+    gap: 25px;
     position: relative;
     width: 182px;
-    height: 222px;
+    height: fit-content;
     background: #FFFFFF;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
+    border-radius: .5rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   }
   
-  /* Title */
   
   .title {
-    width: 166px;
-    height: 48px;
-    font-family: 'Inter';
+    font-family: 'Poppins', sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -27,20 +22,15 @@
     color: #000000;
   }
   
-  /* Description */
-  
   .description {
     width: 166px;
-    height: 60px;
-    font-family: 'Inter';
+    height: fit-content;
+    font-family: 'Poppins', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
-    line-height: 15px;
     color: #6C6C6C;
   }
-  
-  /* Assignee Tile */
   
   .assignee-tile {
     display: flex;
@@ -49,17 +39,13 @@
     padding: 0px 12px 0px 0px;
     width: 144px;
     height: 24px;
-    border-radius: 50px;
+    border-radius: .5rem;
   }
-  
-  /* Image slot */
   
   .assignee-tile img {
     width: 24px;
     height: 24px;
   }
-  
-  /* Frame 1 */
   
   .frame-1 {
     display: flex;
@@ -67,24 +53,19 @@
     align-items: flex-start;
     padding: 4px 8px;
     gap: 4px;
-    width: 108px;
-    height: 23px;
+    width: fit-content;
+    height: fit-content;
   }
-  
-  /* Assignee Name */
   
   .assignee-name {
     width: 92px;
     height: 15px;
-    font-family: 'Inter';
+    font-family: 'Poppins', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
-    line-height: 15px;
     color: #6C6C6C;
   }
-  
-  /* Status */
   
   .status {
     display: flex;
@@ -93,12 +74,10 @@
     padding: 2px 4px;
     gap: 4px;
     width: 85px;
-    height: 19px;
+    height: fit-content;
     background: #E8EDF3;
-    border-radius: 100px;
+    border-radius: .5rem;
   }
-  
-  /* Not started */
   
   .status span {
     width: 65px;
@@ -107,34 +86,6 @@
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
-    line-height: 15px;
     color: #000000;
-  }
-  
-  /* Tag */
-  
-  .tag {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 4px;
-    gap: 4px;
-    width: 88px;
-    height: 23px;
-    background: #FFF6E1;
-    border-radius: 4px;
-  }
-  
-  /* Tag Text */
-  
-  .tag span {
-    width: 80px;
-    height: 15px;
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 15px;
-    color: #52565C;
   }
   
