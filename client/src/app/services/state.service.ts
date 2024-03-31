@@ -16,4 +16,8 @@ export class StateService {
       map(response => response.name) // Extracts the name from the response
     );
   }
+
+  getStates(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/State/getAll`);
+  }
 }

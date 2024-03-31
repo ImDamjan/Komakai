@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
+import { StateService } from '../../services/state.service';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -9,14 +10,18 @@ import { UserService } from '../../services/user.service';
 })
 export class CreateProjectOverlayComponent implements OnInit {
   users: any[] | undefined;
+  states: any[] | undefined;
   selectedUsers: string[] = [];
   showDropdown: boolean = false;
 
-  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService) { }
+  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private stateService: StateService) { }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe(users => {
       this.users = users;
+    });
+    this.stateService.getStates().subscribe(states => {
+      this.states = states;
     });
   }
 

@@ -14,12 +14,7 @@
                 <div class="inputs">
                     <select id="status-select" class="input-field" required>
                         <option value=""></option>
-                        <option value="Not started">Not started</option>
-                        <option value="Ready">Ready</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Done">Done</option>
-                        <option value="Cancelled">Cancelled</option>
-                        <option value="Blocked">Blocked</option>
+                        <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
                     </select>
                     <input class="input-field" id="type-input" type="text" placeholder="  Type">
                 </div>
