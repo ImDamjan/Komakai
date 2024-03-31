@@ -38,8 +38,7 @@
                 <span class="name">Project Roles</span>
                 <select class="input-field" required>
                     <option value="">Team lead</option>
-                    <option value="">Person 1</option>
-                    <option value="">Person 2</option>
+                    <option *ngFor="let user of users" [value]="user.id">{{ user.name }} {{user.lastname}}</option>
                 </select>
             </div>
         </div>
