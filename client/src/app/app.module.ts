@@ -32,6 +32,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { KanbanComponent } from './components/kanban/kanban.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
+import { TaskCardKanbanComponent } from './components/task-card-kanban/task-card-kanban.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { ProjectDetailsComponent } from './pages/project-details/project-details
     TaskTagsComponent,
     HeaderComponent,
     KanbanComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
+    TaskCardKanbanComponent
   ],
   imports: [
     FormsModule,
