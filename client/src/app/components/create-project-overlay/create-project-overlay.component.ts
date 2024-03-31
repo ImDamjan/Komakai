@@ -9,6 +9,8 @@ import { UserService } from '../../services/user.service';
 })
 export class CreateProjectOverlayComponent implements OnInit {
   users: any[] | undefined;
+  selectedUser: string | undefined;
+  showDropdown: boolean = false;
 
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService) { }
 
@@ -17,7 +19,14 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.users = users;
     });
   }
+  toggleDropdown(): void {
+    this.showDropdown = !this.showDropdown;
+  }
 
+  onUserSelected(userId: string): void {
+    this.selectedUser = userId;
+    this.showDropdown = false;
+  }
   closeOverlay(): void {
     // Close the overlay dialog
     this.dialogRef.close();

@@ -36,10 +36,15 @@
             </div>
             <div class="role">
                 <span class="name">Project Roles</span>
-                <select class="input-field" required>
-                    <option value="">Team lead</option>
-                    <option *ngFor="let user of users" [value]="user.id">{{ user.name }} {{user.lastname}}</option>
-                </select>
+                <div class="custom-dropdown">
+                    <span class="selected-option" (click)="toggleDropdown()">Team Lead</span>
+                    <div class="options" *ngIf="showDropdown">
+                        <div class="option" *ngFor="let user of users">
+                            <input type="checkbox" [checked]="selectedUser === user.id" (change)="onUserSelected(user.id)">
+                            <span>{{ user.name }} {{ user.lastname }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
