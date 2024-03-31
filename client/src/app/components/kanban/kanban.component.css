@@ -36,7 +36,7 @@
     height: fit-content;
     border-radius: .5rem;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-    background: #222831;
+    background: #0F2167;
   }
   
   .board-column:not(:first-child) {
@@ -48,7 +48,7 @@
     font-family: 'Poppins', sans-serif;
     text-transform: uppercase;
     margin-bottom: 20px;
-    color: #EEEEEE;
+    color: #4CB9E7;
   }
   
   
@@ -60,7 +60,7 @@
   .task {
     display: flex;
     padding: 15px 12px;
-    background: #76ABAE;
+    background: #FFECD6;
     border-bottom: solid 1px #31363F;
     border-radius: 4px;
     margin-bottom: 15px;
