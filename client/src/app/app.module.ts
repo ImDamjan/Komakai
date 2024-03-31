@@ -31,6 +31,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { HeaderComponent } from './components/header/header.component';
 import { KanbanComponent } from './components/kanban/kanban.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     TaskTrackComponent,
     TaskTagsComponent,
     HeaderComponent,
-    KanbanComponent
+    KanbanComponent,
+    ProjectDetailsComponent
   ],
   imports: [
     FormsModule,
