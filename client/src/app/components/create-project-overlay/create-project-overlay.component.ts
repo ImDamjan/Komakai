@@ -9,7 +9,7 @@ import { UserService } from '../../services/user.service';
 })
 export class CreateProjectOverlayComponent implements OnInit {
   users: any[] | undefined;
-  selectedUser: string | undefined;
+  selectedUsers: string[] = [];
   showDropdown: boolean = false;
 
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService) { }
@@ -19,18 +19,32 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.users = users;
     });
   }
+
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
   }
 
   onUserSelected(userId: string): void {
-    this.selectedUser = userId;
-    this.showDropdown = false;
-  }
-  closeOverlay(): void {
-    // Close the overlay dialog
-    this.dialogRef.close();
+      // Handle user selection
+      if (this.isSelected(userId)) {
+          this.selectedUsers = this.selectedUsers.filter(id => id !== userId);
+      } else {
+          this.selectedUsers.push(userId);
+      }
   }
 
-  
+  isSelected(userId: string): boolean {
+      // Check if user is selected
+      return this.selectedUsers.includes(userId);
+  }
+
+  toggleUserSelection(userId: string): void {
+      // Toggle user selection when clicking on the option
+      this.onUserSelected(userId);
+  }
+
+  closeOverlay(): void {
+      // Close the overlay dialog
+      this.dialogRef.close();
+  }
 }
