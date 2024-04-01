@@ -3,7 +3,7 @@
         <div class="left">
             <div class="project-title">
                 <span class="name">Project title</span>
-                <input class="input-field" id="title" type="text" placeholder="  Enter project title">
+                <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="projectObj.title">
             </div>
             
             <div class="status-type">
@@ -25,8 +25,8 @@
                     <span class="name" id="enddate">End Date</span>
                 </div>
                 <div class="inputs">
-                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY">
-                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY">
+                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.start">
+                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.end">
                 </div>
             </div>
             <div class="role">

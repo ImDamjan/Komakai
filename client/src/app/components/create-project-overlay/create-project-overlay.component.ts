@@ -27,6 +27,16 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.stateService.getStates().subscribe(states => {
       this.states = states;
     });
+    this.projectObj = {
+      userIds: [],
+      priorityId: 0,
+      title: "", 
+      start: this.getCurrentDate(), 
+      end: this.getCurrentDate(),
+      budget: 0, 
+      description: "", 
+      type: "" 
+    };
   }
 
   toggleDropdown(): void {
@@ -58,16 +68,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   createProject(): void {
-    this.projectObj = {
-      userIds: this.selectedUserIds,
-      priorityId: 0, // Update with your priority logic
-      title: "string", // Make sure to bind the project title to this variable
-      start: "2024-04-01T00:03:42.241Z", // Bind start date variable
-      end: "2026-04-01T00:03:42.241Z", // Bind end date variable
-      budget: 0, // Bind budget variable
-      description: "string", // Bind project description variable
-      type: "string"// Bind project type variable
-    };
+    this.projectObj.userIds = this.selectedUserIds;
   
     this.projectService.createProject(this.projectObj).subscribe(response => {
       // Handle success response
@@ -76,5 +77,16 @@ export class CreateProjectOverlayComponent implements OnInit {
       // Handle error response
       console.error('Error creating project:', error);
     });
+  }
+
+  getCurrentDate(): string {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Months are zero-based
+    const day = ('0' + currentDate.getDate()).slice(-2);
+    const hours = ('0' + currentDate.getHours()).slice(-2);
+    const minutes = ('0' + currentDate.getMinutes()).slice(-2);
+    const seconds = ('0' + currentDate.getSeconds()).slice(-2);
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
   }
 }
