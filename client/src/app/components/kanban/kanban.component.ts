@@ -45,11 +45,11 @@ export class KanbanComponent implements OnInit{
     console.log(this.board);
   }
 
-  public dropGrid(event: CdkDragDrop<string[]>): void {
+  public dropGrid(event: CdkDragDrop<TaskCardKanbanComponent[]>): void {
     moveItemInArray(this.board.columns, event.previousIndex, event.currentIndex);
   }
 
-  public drop(event: CdkDragDrop<string[]>): void {
+  public drop(event: CdkDragDrop<TaskCardKanbanComponent[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
