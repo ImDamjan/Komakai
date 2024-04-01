@@ -68,8 +68,11 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   createProject(): void {
+    // Log budget value before sending to server
+    console.log('Budget value before sending:', this.projectObj.budget);
+
     this.projectObj.userIds = this.selectedUserIds;
-  
+
     this.projectService.createProject(this.projectObj).subscribe(response => {
       // Handle success response
       console.log('Project created successfully:', response);
