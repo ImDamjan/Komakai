@@ -23,5 +23,6 @@ namespace server.Models
 
         [InverseProperty("Role")]
         public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
+        public virtual ICollection<UserProjectRoles> UserProjectRoles { get; set; } = new List<UserProjectRoles>();
     }
 }
