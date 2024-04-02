@@ -7,6 +7,7 @@ import { TaskCardKanbanComponent } from '../task-card-kanban/task-card-kanban.co
 import { StateService } from '../../services/state.service';
 import { State } from '../../models/state';
 import { ProjectService } from '../../services/project.service';
+import { Project } from '../../models/project';
 
 @Component({
   selector: 'app-kanban',
@@ -19,21 +20,33 @@ export class KanbanComponent implements OnInit{
 
   constructor
   (
-    private state_service : StateService
+    private state_service : StateService,
+    private project_service : ProjectService
   )
   {
     this.board = new Board('Kanban', []);
   }
 
   public ngOnInit(): void {
-    // console.log(this.board);
+    console.log(this.board);
     this.state_service.fetchAllStates().subscribe((states : State[])=>
     {
-      let columns : Column[] = [];
-      states.forEach(state => {
-        columns.push(new Column(state.name,state.id + "",[]))
+      
+        this.project_service.getProjectsData().subscribe((projects : Project[])=>
+        {
+          let columns : Column[] = [];
+          states.forEach(state => {
+            let stateProjects : string[] = [];
+            projects.forEach(project => {
+              if(project.stateId==state.id)
+                stateProjects.push(project.title);
+            });
+            console.log(stateProjects);
+          columns.push(new Column(state.name,state.id + "",stateProjects));
+        });
+        this.board.columns = columns;
       });
-      this.board.columns = columns;
+      
     },
     error=> console.log(error));
   }
@@ -44,8 +57,10 @@ export class KanbanComponent implements OnInit{
 
   public drop(event: CdkDragDrop<TaskCardKanbanComponent[]>): void {
     if (event.previousContainer === event.container) {
+      // console.log("kliknuo sam 1");
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      // console.log("kliknuo sam 2");
       transferArrayItem(event.previousContainer.data,
           event.container.data,
           event.previousIndex,
