@@ -67,6 +67,9 @@ namespace server.Models
         //many-to-many-condition
         [InverseProperty("User")]
         public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
+
+
+        public virtual ICollection<UserProjectRoles> UserProjectRoles { get; set; } = new List<UserProjectRoles>();
     
        
     }
