@@ -29,7 +29,7 @@ export class KanbanComponent implements OnInit{
     this.state_service.fetchAllStates().subscribe({
       next : (states : State[])=>
     {
-      
+      //treba da se stavi od kliknutog projekta id
         this.assignment_service.getAllProjectAssignments(1).subscribe({
           next : (assignments : Assignment[])=>
         {
@@ -52,19 +52,27 @@ export class KanbanComponent implements OnInit{
     error :(error)=> console.log(error)});
   }
 
-  public dropGrid(event: CdkDragDrop<TaskCardKanbanComponent[]>): void {
+  //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)
+  public dropGrid(event: CdkDragDrop<Assignment[]>): void {
     moveItemInArray(this.board.columns, event.previousIndex, event.currentIndex);
   }
-
-  public drop(event: CdkDragDrop<TaskCardKanbanComponent[]>): void {
+  //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)
+  public drop(event: CdkDragDrop<Assignment[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       
+      event.item.data.stateId = Number(event.container.id);
+      this.assignment_service.updateAssignmentById(event.item.data).subscribe({
+        next : (assignment : Assignment)=> {
+          event.item.data = assignment
+        }
+      });
       transferArrayItem(event.previousContainer.data,
           event.container.data,
           event.previousIndex,
           event.currentIndex);
+
     }
     console.log(event.item.data);
   }
