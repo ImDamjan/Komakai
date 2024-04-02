@@ -8,13 +8,13 @@
             
             <div class="status-type">
                 <div class="labels">
-                    <span class="name">Status</span>
+                    <span class="name">Priority</span>
                     <span class="name" id="type">Type</span>
                 </div>
                 <div class="inputs">
-                    <select id="status-select" class="input-field" required>
+                    <select id="status-select" class="input-field" required [(ngModel)]="selectedPriorityId">
                         <option value=""></option>
-                        <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
+                        <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
                     </select>
                     <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="projectObj.type">
                 </div>

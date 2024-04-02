@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
-import { StateService } from '../../services/state.service';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
+import { PriorityService } from '../../services/priority.service';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -12,20 +12,21 @@ import { Project } from '../../models/project';
 })
 export class CreateProjectOverlayComponent implements OnInit {
   users: any[] | undefined;
-  states: any[] | undefined;
+  priorities: any[] | undefined;
   showDropdown: boolean = false;
 
   projectObj!: Project;
 
   selectedUserIds: string[] = [];
-  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private stateService: StateService, private projectService: ProjectService) { }
+  selectedPriorityId!: number;
+  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService) { }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe(users => {
       this.users = users;
     });
-    this.stateService.getStates().subscribe(states => {
-      this.states = states;
+    this.priorityService.getPriorities().subscribe(priorities => {
+      this.priorities = priorities;
     });
     this.projectObj = {
       userIds: [],
@@ -68,11 +69,8 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   createProject(): void {
-    // Log budget value before sending to server
-    console.log('Budget value before sending:', this.projectObj.budget);
-
     this.projectObj.userIds = this.selectedUserIds;
-
+    this.projectObj.priorityId = this.selectedPriorityId;
     this.projectService.createProject(this.projectObj).subscribe(response => {
       // Handle success response
       console.log('Project created successfully:', response);
