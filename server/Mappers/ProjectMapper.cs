@@ -43,7 +43,7 @@ namespace server.Mappers
                 Description = dto.Description,
                 PriorityId = dto.PriorityId,
                 End = dto.End,
-
+                Budget = dto.Budget,
             };
         }
         public static PriorityDto toPrioDto(this Priority prio)
