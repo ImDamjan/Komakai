@@ -1,9 +1,14 @@
-import { Component, OnInit, VERSION } from '@angular/core';
+import { Component, OnInit, VERSION, inject } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
 import { Board } from '../../models/board.model';
 import { Column } from '../../models/column.model';
 import { TaskKanban } from '../../models/kanbantask';
 import { TaskCardKanbanComponent } from '../task-card-kanban/task-card-kanban.component';
+import { StateService } from '../../services/state.service';
+import { State } from '../../models/state';
+import { KanbanAssignmentService } from '../../services/kanban-assignment.service';
+import { Assignment } from '../../models/assignment';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-kanban',
@@ -12,51 +17,69 @@ import { TaskCardKanbanComponent } from '../task-card-kanban/task-card-kanban.co
 })
 export class KanbanComponent implements OnInit{
   name = 'Angular Material ' + VERSION.major + ' Kanban board';
-  public board: Board = new Board('Kanban', [
-    new Column('Not started', '1', [
-      new TaskKanban('Some random idea', 'Opis zadatka 1', TaskCardKanbanComponent),
-      new TaskKanban('Neki tusk', 'Opis zadatka 2', TaskCardKanbanComponent)
-    ]),
-    new Column('Ready', '2', [
-      'Lorem ipsum',
-      'Task'
-    ]),
-    new Column('In progress', '3', [
-      'Lorem ipsum',
-      'foo'
-    ]),
-    new Column('Blocked', '4', [
-      'Lorem ipsum',
-      'foo'
-    ]),
-    new Column('Done', '5', [
-      'Lorem ipsum',
-      'foo'
-    ]),
-    new Column('Cancelled', '6', [
-      'Lorem ipsum',
-      'foo'
-    ])
-  ]);
-
-  constructor(){}
+   public board: Board;
+   private projectId : Number = 0;
+   private state_service = inject(StateService);
+   private assignment_service = inject (KanbanAssignmentService);
+   private route = inject(ActivatedRoute);
+  constructor()
+  {
+    this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+    this.board = new Board('Kanban', []);
+  }
 
   public ngOnInit(): void {
     console.log(this.board);
+    
+    this.state_service.fetchAllStates().subscribe({
+      next : (states : State[])=>
+    {
+      
+      //treba da se stavi od kliknutog projekta id
+        this.assignment_service.getAllProjectAssignments(this.projectId).subscribe({
+          next : (assignments : Assignment[])=>
+        {
+          let columns : Column[] = [];
+          states.forEach(state => {
+            let stateProjects : Assignment[] = [];
+            assignments.forEach(assignment => {
+              if(assignment.stateId==state.id)
+                stateProjects.push(assignment);
+            });
+            console.log(stateProjects);
+          columns.push(new Column(state.name,state.id + "",stateProjects));
+        });
+        this.board.columns = columns;
+      },
+      error : (error:any)=> console.log(error)
+      });
+      
+    },
+    error :(error)=> console.log(error)});
   }
 
-  public dropGrid(event: CdkDragDrop<TaskCardKanbanComponent[]>): void {
+  //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)
+  public dropGrid(event: CdkDragDrop<Assignment[]>): void {
     moveItemInArray(this.board.columns, event.previousIndex, event.currentIndex);
   }
-
-  public drop(event: CdkDragDrop<TaskCardKanbanComponent[]>): void {
+  //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)
+  public drop(event: CdkDragDrop<Assignment[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      
+      event.item.data.stateId = Number(event.container.id);
+      this.assignment_service.updateAssignmentById(event.item.data).subscribe({
+        next : (assignment : Assignment)=> {
+          event.item.data = assignment
+        }
+      });
       transferArrayItem(event.previousContainer.data,
           event.container.data,
           event.previousIndex,
           event.currentIndex);
+
     }
+    console.log(event.item.data);
   }
 }
