@@ -125,7 +125,8 @@
 
 .custom-dropdown {
     position: relative;
-    width: 100%;
+    width: 60%;
+    bottom: 5px;
 }
 
 .selected-option {
@@ -152,22 +153,24 @@
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.12);
     border-radius: 10px;
     z-index: 999;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .options.active {
     display: block;
 }
 
-.option {
+.option,.member-option {
     padding: 10px;
     cursor: pointer;
 }
 
-.option:hover {
+.option:hover, .member-option:hover {
     background-color: #f0f0f0; 
 }
 
-.option input[type="checkbox"] {
+.option input[type="checkbox"],.member-option input[type="checkbox"] {
     margin-right: 10px;
     float: right;
 }
