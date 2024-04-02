@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
 import { PriorityService } from '../../services/priority.service';
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -11,15 +12,17 @@ import { PriorityService } from '../../services/priority.service';
   styleUrl: './create-project-overlay.component.css'
 })
 export class CreateProjectOverlayComponent implements OnInit {
-  users: any[] | undefined;
+  users: any[] = [];
   priorities: any[] | undefined;
+  teams: any[] | undefined;
   showDropdown: boolean = false;
+  hoveredTeam: any;
 
   projectObj!: Project;
 
   selectedUserIds: string[] = [];
   selectedPriorityId!: number;
-  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService) { }
+  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService) { }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe(users => {
@@ -27,6 +30,9 @@ export class CreateProjectOverlayComponent implements OnInit {
     });
     this.priorityService.getPriorities().subscribe(priorities => {
       this.priorities = priorities;
+    });
+    this.teamService.getTeams().subscribe(teams => {
+      this.teams = teams;
     });
     this.projectObj = {
       userIds: [],
@@ -90,4 +96,27 @@ export class CreateProjectOverlayComponent implements OnInit {
     const seconds = ('0' + currentDate.getSeconds()).slice(-2);
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
   }
+
+  showTeamMembers(team: any): void {
+    console.log(team.members);
+    this.hoveredTeam = team; // Set the hovered team
+  }
+
+  hideTeamMembers(event: MouseEvent): void {
+    const target = event.relatedTarget as HTMLElement;
+
+    // Check if the mouse is moving from the overlay to the team members
+    if (target && target.closest('.team-option') === null && target.closest('.team-members') === null) {
+        this.hoveredTeam = null; // Reset the hovered team
+    }
+  }
+
+  getUserName(memberId: string): string {
+    const user = this.users.find(user => user.id === memberId);
+    if (user) {
+        return `${user.name} ${user.lastname}`;
+    } else {
+        return ''; // Handle the case where user is not found
+    }
+}
 }

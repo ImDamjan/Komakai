@@ -161,16 +161,29 @@
     display: block;
 }
 
-.option,.member-option {
+.option,.member-option,.team-option {
     padding: 10px;
     cursor: pointer;
 }
 
-.option:hover, .member-option:hover {
+.option:hover, .member-option:hover, .team-option:hover {
     background-color: #f0f0f0; 
 }
 
-.option input[type="checkbox"],.member-option input[type="checkbox"] {
+.option input[type="checkbox"],.member-option input[type="checkbox"],.team-option input[type="checkbox"] {
     margin-right: 10px;
     float: right;
+}
+
+.team-members {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    z-index: 1; /* Ensure the container stays on top */
+}
+
+.team-option:hover .team-members,
+.team-members:hover {
+    display: block; /* Ensure the container is always visible when hovering over the team name or the team members */
 }
