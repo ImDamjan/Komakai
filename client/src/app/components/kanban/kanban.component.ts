@@ -8,6 +8,7 @@ import { StateService } from '../../services/state.service';
 import { State } from '../../models/state';
 import { KanbanAssignmentService } from '../../services/kanban-assignment.service';
 import { Assignment } from '../../models/assignment';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-kanban',
@@ -17,20 +18,25 @@ import { Assignment } from '../../models/assignment';
 export class KanbanComponent implements OnInit{
   name = 'Angular Material ' + VERSION.major + ' Kanban board';
    public board: Board;
+   private projectId : Number = 0;
    private state_service = inject(StateService);
    private assignment_service = inject (KanbanAssignmentService);
+   private route = inject(ActivatedRoute);
   constructor()
   {
+    this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
     this.board = new Board('Kanban', []);
   }
 
   public ngOnInit(): void {
     console.log(this.board);
+    
     this.state_service.fetchAllStates().subscribe({
       next : (states : State[])=>
     {
+      
       //treba da se stavi od kliknutog projekta id
-        this.assignment_service.getAllProjectAssignments(1).subscribe({
+        this.assignment_service.getAllProjectAssignments(this.projectId).subscribe({
           next : (assignments : Assignment[])=>
         {
           let columns : Column[] = [];
