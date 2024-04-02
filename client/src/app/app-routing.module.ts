@@ -9,6 +9,7 @@ import { TasksComponent } from './pages/tasks/tasks.component';
 import { TeamsComponent } from './pages/teams/teams.component';
 import { HelpcentreComponent } from './pages/helpcentre/helpcentre.component';
 import { AuthGuard } from './services/guard.service';
+import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full' },
@@ -18,7 +19,8 @@ const routes: Routes = [
   {path: 'activity', component: ActivityComponent,canActivate: [AuthGuard]},
   {path: 'tasks', component: TasksComponent,canActivate: [AuthGuard]},
   {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
-  {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]}
+  {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]},
+  {path: 'projects/project-details', component: ProjectDetailsComponent,canActivate: [AuthGuard]}
 ];
 
 @NgModule({

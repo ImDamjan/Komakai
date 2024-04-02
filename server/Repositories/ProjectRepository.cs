@@ -18,44 +18,32 @@ namespace server.Repositories
             _context = context;
         }
 
-        //TO-DO treba da se proveri da li postoji project manager u prosledjenim idijevima
-        public async Task<Project?> CreateProjectAsync(Project projectModel, List<int> teamMembers)
+        
+        public async Task<Project> CreateProjectAsync(Project projectModel, List<User> teamMembers)
         {
-            var Users = new List<User>();
             
-            foreach (int userid in teamMembers)
-            {
-                var user = await _context.Users.Where(u=> u.Id==userid).FirstOrDefaultAsync();
-                if(user == null)
-                    return null;
-                Users.Add(user);
-            }
-            var relationship = new List<TeamUser>();
-            var team = new Team{
-                Name = projectModel.Title + " Team",
-                Type = projectModel.Type   
-            };
+            var relationship = new List<ProjectUser>();
 
-            foreach (var item in Users)
-            {
-                relationship.Add(new TeamUser{
-                    User = item,
-                    Team = team,
-                    ProjectRoleId = item.RoleId
-                });
-            }
-            foreach (var item in relationship)
-            {
-                await _context.TeamUsers.AddAsync(item);
-            }
-            await _context.Teams.AddAsync(team);
 
-            if(projectModel.PriorityId > 4 || projectModel.PriorityId < 1)
-                projectModel.PriorityId = 4;
-            projectModel.Team = team;
+
             projectModel.LastStateChangedTime = DateTime.Now;
 
             await _context.Projects.AddAsync(projectModel);
+            foreach (var user in teamMembers)
+            {
+                relationship.Add(
+                    new ProjectUser{
+                        User = user,
+                        Project = projectModel,
+                        Role = user.Role
+                    }
+                );
+            }
+     
+            foreach (var item in relationship)
+            {
+                await _context.ProjectUsers.AddAsync(item);
+            }
             await _context.SaveChangesAsync();
 
             return projectModel;
@@ -73,21 +61,13 @@ namespace server.Repositories
         }
         public async Task<List<Project>> GetAllUserProjectsAsync(int id)
         {
-            var teams = await _context.TeamUsers.Where(u=> u.UserId==id).Select(t=>t.Team).ToListAsync();
-
-            List<Project> projects = new List<Project>();
-            foreach (var team in teams)
-            {
-                var pom = await _context.Projects.Where(p=>p.TeamId==team.Id).ToListAsync();
-
-                projects.AddRange(pom);
-            }
+            var projects = await _context.ProjectUsers.Where(u=> u.UserId==id).Select(p=>p.Project).ToListAsync();
 
             return projects;
         }
-        public async Task<Project?> UpdateProjectAsync(int id, UpdateProjectDto projectDto)
+        public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto)
         {
-            var project = await GetProjectByIdAsync(id);
+            var project = await GetProjectByIdAsync(projectDto.Id);
             if(project==null)
                 return null;
 

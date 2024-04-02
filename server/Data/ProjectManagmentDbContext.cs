@@ -19,7 +19,7 @@ namespace server.Data
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Priority> Priorities { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
-        public virtual DbSet<TeamUser> TeamUsers {get; set;}
+        public virtual DbSet<ProjectUser> ProjectUsers {get; set;}
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
