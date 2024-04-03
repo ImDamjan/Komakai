@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UrlService {
+export class PreviousUrlService {
 
-  private isRedirected: boolean=false;
+  private previousUrlSubject = new BehaviorSubject<string | null>(null);
+  public previousUrl$ = this.previousUrlSubject.asObservable();
 
-  changeDirected(){
-    this.isRedirected=!this.isRedirected;
+  setPreviousUrl(url: string | null) {
+    this.previousUrlSubject.next(url);
   }
-
-  getRedirected(){
-    return this.isRedirected;
-  }
-
 }
