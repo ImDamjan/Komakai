@@ -14,7 +14,7 @@ import { TeamService } from '../../services/team.service';
 export class CreateProjectOverlayComponent implements OnInit {
   users: any[] = [];
   priorities: any[] | undefined;
-  teams: any[] | undefined;
+  teams: any[] = [];
   showDropdown: boolean = false;
   hoveredTeam: any;
 
@@ -118,5 +118,26 @@ export class CreateProjectOverlayComponent implements OnInit {
     } else {
         return ''; // Handle the case where user is not found
     }
-}
+  }
+
+  onTeamSelected(team: any): void {
+    if (this.isSelectedTeam(team.id)) {
+        // If team is already selected, deselect it and its members
+        this.selectedUserIds = this.selectedUserIds.filter((id: string) => !team.members.includes(id));
+    } else {
+        // If team is not selected, select it and its members
+        this.selectedUserIds = [...this.selectedUserIds, ...team.members];
+    }
+  }
+
+  isSelectedTeam(teamId: string): boolean {
+      // Check if all members of the team are selected
+      const team = this.teams.find((team: any) => team.id === teamId);
+      if (team) {
+          return team.members.every((memberId: string) => this.isSelected(memberId));
+      }
+      return false;
+  }
+
+
 }

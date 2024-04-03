@@ -66,6 +66,7 @@
                             </div>
 
                             <div class="team-option" *ngFor="let team of teams" (mouseover)="showTeamMembers(team)" (mouseout)="hideTeamMembers($event)">
+                                <input type="checkbox" [checked]="isSelectedTeam(team.id)" (change)="onTeamSelected(team)">
                                 {{ team.name }}
                                 <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
                                     <div *ngFor="let memberId of team.members">
