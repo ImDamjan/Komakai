@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from './atentication.service';
+import { Location } from '@angular/common';
+import { PreviousUrlService } from './url.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard{
 
-  constructor(private authService: AuthenticationService, private router: Router) {}
+  constructor(private authService: AuthenticationService, private router: Router, private location: Location, private previousUrlService: PreviousUrlService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -16,21 +18,23 @@ export class AuthGuard{
 
     const isLoggedIn = this.authService.isAuthenticated();
 
+    const previousUrl = this.previousUrlService.getUrl();
+    console.log(previousUrl)
+
     if (isLoggedIn) {
-      // User is logged in, redirect to dashboard if trying to access /auth
+      
       if (route.url[0].path === 'auth') {
+        console.log(this.location.path())
         this.router.navigate(['/dashboard']);
         return false;
       }
-      // User is logged in and trying to access other routes, allow access
       return true;
     } else {
-      // User is not logged in, allow access to /auth but redirect for others
       if (route.url[0].path !== 'auth') {
+        console.log(this.location.path())
         this.router.navigate(['/auth']);
         return false;
       }
-      // User is not logged in and trying to access /auth, allow access
       return true;
     }
   }
