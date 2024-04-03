@@ -13,8 +13,8 @@ import { ProjectDetailsComponent } from './pages/project-details/project-details
 import path from 'path';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/auth', pathMatch: 'full' },
-  {path: 'auth' ,component: AuthComponent},
+  { path: '', redirectTo: '/auth', pathMatch: 'full'},
+  {path: 'auth' ,component: AuthComponent,canActivate: [AuthGuard]},
   {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard]},
   {path: 'projects',component: ProjectsComponent,canActivate: [AuthGuard]},
   {path: 'activity', component: ActivityComponent,canActivate: [AuthGuard]},
