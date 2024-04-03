@@ -64,10 +64,15 @@ export class CreateProjectOverlayComponent implements OnInit {
     return this.selectedUserIds.includes(userId);
   }
 
-  toggleUserSelection(userId: string): void {
-      // Toggle user selection when clicking on the option
-      this.onUserSelected(userId);
+  toggleUserSelection(userId: string, event: Event): void {
+    event.stopPropagation();
+    if (this.isSelected(userId)) {
+        this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
+    } else {
+        this.selectedUserIds.push(userId);
+    }
   }
+
 
   closeOverlay(): void {
       // Close the overlay dialog
@@ -138,6 +143,4 @@ export class CreateProjectOverlayComponent implements OnInit {
       }
       return false;
   }
-
-
 }

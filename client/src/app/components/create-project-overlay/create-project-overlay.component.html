@@ -60,8 +60,8 @@
                     <div class="custom-dropdown">
                         <span class="selected-option" (click)="toggleDropdown()">Select Members</span>
                         <div class="options" *ngIf="showDropdown">
-                            <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id)">
-                                <input type="checkbox" [checked]="isSelected(user.id)" (change)="onUserSelected(user.id)">
+                            <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id, $event)">
+                                <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
                                 {{ user.name }} {{ user.lastname }}
                             </div>
 
