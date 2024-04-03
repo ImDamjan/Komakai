@@ -4,7 +4,7 @@ using server.Models;
 
 namespace server.Repositories
 {
-    public class UserProjectRolesRepository : IUserProjectRepository
+    public class UserProjectRolesRepository : IUserProjectRolesRepository
     {
         private readonly ProjectManagmentDbContext _context;
         public UserProjectRolesRepository(ProjectManagmentDbContext context)
