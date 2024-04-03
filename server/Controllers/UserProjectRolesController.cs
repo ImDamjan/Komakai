@@ -24,5 +24,15 @@ namespace server.Controllers
             var userProjectRolesDto = userProjectRoles.Select(UserProjectRolesMapper.MapToDto);
             return Ok(userProjectRolesDto);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<UserProjectRolesDto>> AddUserProjectRoles(UserProjectRolesDto userProjectRolesDto)
+        {
+            var userProjectRoles = UserProjectRolesMapper.MapToEntity(userProjectRolesDto);
+            await _userProjectRolesRepository.AddUserProjectRoles(userProjectRoles);
+
+            // Return the created user project roles DTO along with the URI of the resource
+            return CreatedAtAction(nameof(GetUserProjectRoles), new { id = userProjectRoles.Id }, userProjectRolesDto);
+        }
     }
 }
