@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthenticationService } from './atentication.service';
 import { Location } from '@angular/common';
+import { UrlService } from './url.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,10 @@ export class AuthGuard{
 
   link : any;
 
-  constructor(private authService: AuthenticationService, private router: Router,private location: Location) {}
+  constructor(private authService: AuthenticationService, private router: Router,private location: Location,private urlService: UrlService) {}
 
   canActivate: CanActivateFn = () =>{
+    this.urlService.setUrl(this.location.path());
     return this.checkLogin();
   }
 
