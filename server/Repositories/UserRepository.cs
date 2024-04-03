@@ -29,13 +29,13 @@ namespace server.Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<User?> GetUserByIdAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users.Include(u=>u.Role).FirstOrDefaultAsync(u=>u.Id==id);
         }
   
 
-        public async Task<User> GetUserByUsernameAsync(string username)
+        public async Task<User?> GetUserByUsernameAsync(string username)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
         }
@@ -47,12 +47,12 @@ namespace server.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Role> GetRoleByNameAsync(string roleName)
+        public async Task<Role?> GetRoleByNameAsync(string roleName)
         {
             return await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
@@ -62,7 +62,7 @@ namespace server.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserByResetTokenAsync(string resetToken)
+        public async Task<User?> GetUserByResetTokenAsync(string resetToken)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == resetToken);
         }
@@ -97,6 +97,19 @@ namespace server.Repositories
 
             user.ProfilePicturePath = string.Empty; // Set the profile picture path to empty string to remove it
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<User>> GetUserByProjectId(int project_id)
+        {
+            var users = await _context.Users.Include(u=>u.ProjectUsers).ToListAsync();
+            List<User> chosenUsers = new List<User>();
+            foreach (var user in users)
+            {
+                var project_users = user.ProjectUsers.Where(u=>u.ProjectId==project_id).ToList();
+                if(project_users.Count > 0)
+                    chosenUsers.Add(user);
+            }
+            return chosenUsers;
         }
     }
 }

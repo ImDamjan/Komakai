@@ -18,7 +18,7 @@ namespace server.Models
         public string Content { get; set; } = null!;
 
         [Column("time", TypeName = "datetime")]
-        public DateTime Time { get; set; }
+        public DateTime EditedTime { get; set; }
         
         [Column("post_time", TypeName ="datetime")]
         public DateTime PostTime { get; set; }

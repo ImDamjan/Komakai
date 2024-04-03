@@ -44,9 +44,6 @@ namespace server.Models
         [Column("percentage", TypeName = "float")]
         public double Percentage { get; set; }
 
-        [Column("team_id")]
-        public int TeamId { get; set; }
-
         [Column("priority_id")]
         public int PriorityId { get; set; }
 
@@ -64,12 +61,12 @@ namespace server.Models
         [InverseProperty("Projects")]
         public virtual State? State { get; set; } = null!;
 
-        [ForeignKey("TeamId")]
-        [InverseProperty("Projects")]
-        public virtual Team? Team { get; set; } = null!;
 
         [InverseProperty("Project")]
         public virtual ICollection<TaskGroup> TaskGroups { get; set; } = new List<TaskGroup>();
+
+        [InverseProperty("Project")]
+        public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
 
         
     }

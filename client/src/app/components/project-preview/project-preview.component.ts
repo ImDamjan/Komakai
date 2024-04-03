@@ -89,7 +89,7 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   navigateToProjectDetails(projectId: number) {
-    this.router.navigate(['/projects']);
+    this.router.navigate(['projects','project-details',projectId]);
   }
 
   // Calculate character limits based on screen width
@@ -189,7 +189,7 @@ export class ProjectPreviewComponent implements OnInit {
 
   // Method to see if the pagination needs to move
   shouldShowBottomPagination(): boolean {
-    return this.projectsData && this.projectsData.length > this.cardsPerPage;
+    return this.projectsData && this.projectsData.length > 0 && this.projectsData.length > this.cardsPerPage;
   }
 
   getTeamMemberImages(project: any): string[] {

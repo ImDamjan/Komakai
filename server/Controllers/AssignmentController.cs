@@ -20,19 +20,17 @@ namespace server.Controllers
         private readonly ITaskGroupRepository _group_repo;
         private readonly IPriorityRepository _prio_repo;
         private readonly IUserRepository _user_repo;
-        private readonly ITeamRepository _team_repo;
 
         private readonly IProjectRepository _project_repo;
 
         public AssignmentController(IAssignmentRepository asign_repo, IUserRepository user_repo
-        , ITaskGroupRepository group_repo, IPriorityRepository prio_repo, ITeamRepository team_repo,IProjectRepository project_repo)
+        , ITaskGroupRepository group_repo, IPriorityRepository prio_repo,IProjectRepository project_repo)
         {
             _asign_repo = asign_repo;
             _group_repo = group_repo;
             _project_repo = project_repo;
             _prio_repo = prio_repo;
             _user_repo = user_repo;
-            _team_repo = team_repo;
         }
         //Mozda ce morati da se ubaci i project ID u dto ?
         [HttpPost]
@@ -52,14 +50,14 @@ namespace server.Controllers
             var users = new List<User>();
             var project  = await _project_repo.GetProjectByIdAsync(group.ProjectId);
             if(project==null)
-                return BadRequest("projekat ne postoji");
-            var team = await _team_repo.GetTeamUsersByIdAsync(project.TeamId);
+               return NotFound("Project does not exist.ID:" + group.ProjectId);
+            var team = await _user_repo.GetUserByProjectId(group.ProjectId);
 
             foreach (var userId in dto.UserIds)
             {
-                if(!team.Contains(userId))
-                    return BadRequest("User " + userId + " is not on project " + group.ProjectId);
-                var user = await _user_repo.GetUserByIdAsync(userId);
+                var user = team.FirstOrDefault(u=>u.Id==userId);
+                if(user==null)
+                    return NotFound("User " + userId + " is not on project " + group.ProjectId);
                 users.Add(user);
             }
 
@@ -76,7 +74,7 @@ namespace server.Controllers
             //da li je prio validan
             var prio = await _prio_repo.GetPriority(dto.PriorityId);
             if(prio==null)
-                return BadRequest("Priority with "+ dto.PriorityId+ " does not exist");
+                return NotFound("Priority with "+ dto.PriorityId+ " does not exist");
             
             var a = await _asign_repo.CreateAssignmentAsync(dto.fromCreateDtoToAssignment(users,dependencies,group));
 
@@ -117,7 +115,7 @@ namespace server.Controllers
         {
             var user =  await _user_repo.GetUserByIdAsync(user_id);
             if(user==null)
-                return BadRequest("User " + user_id + " does not exist");
+                return NotFound("User " + user_id + " does not exist");
             var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
@@ -148,7 +146,7 @@ namespace server.Controllers
             var task = await _asign_repo.GetAssignmentByidAsync(asign_id);
             var users =  await _asign_repo.GetAssignmentUsersAsync(asign_id);
             if(task==null)
-                return BadRequest("Task does not exist");
+                return NotFound("Assignment does not exist.ID:" + asign_id);
 
             
             List<int> ids = new List<int>();
@@ -177,7 +175,7 @@ namespace server.Controllers
             var asignment = await _asign_repo.UpdateAssignmentAsync(dto,asign_id);
 
             if(asignment==null)
-                return BadRequest("Assignment does not exist");
+                return NotFound("Assignment does not exist.ID:" + asign_id);
             
             var users = await _asign_repo.GetAssignmentUsersAsync(asign_id);
             List<int> dep = new List<int>();
@@ -225,12 +223,25 @@ namespace server.Controllers
             return Ok(res);
         }
         
-        [HttpPost("getAllFilteredAssignmentProjects/{project_id}")]
-        public async Task<IActionResult> GetAllFilteredAssignmentsForProject([FromRoute] int project_id,[FromBody] AssignmentFilterDto dto)
+        [HttpGet("getAllFilteredAssignmentProjects/{project_id}/{DateStartFlag}/{Start}/{DateEndFlag}/{End}/{PercentageFlag}/{PercentageFilter}/{PriorityFilter}/{StateFilter}")]
+        public async Task<IActionResult> GetAllFilteredAssignmentsForProject([FromRoute] int project_id, 
+        int DateStartFlag, DateTime Start, int DateEndFlag, DateTime End, 
+        int StateFilter, int PercentageFlag,int PercentageFilter, int PriorityFilter)
         {
             var project = await _project_repo.GetProjectByIdAsync(project_id);
             if(project==null)
-                return BadRequest("project not found");
+                return NotFound("Project does not exist.ID:" + project_id);
+            AssignmentFilterDto dto  = new AssignmentFilterDto{
+                SearchTitle = "",
+                DateStartFlag = DateStartFlag,
+                Start = Start,
+                DateEndFlag = DateEndFlag,
+                End = End,
+                StateFilter = StateFilter,
+                PercentageFilter = PercentageFilter,
+                PercentageFlag = PercentageFlag,
+                PriorityFilter = PriorityFilter
+            };
             var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project);
             var assignments = await _asign_repo.GetAllFilteredAssignmentsByProjectGroupsAsync(groups, dto);
             
@@ -255,11 +266,23 @@ namespace server.Controllers
             return Ok(res);
         }
 
-        [HttpPost("getAllFilteredAssignmentsForUser/{user_id}")]
-        public async Task<IActionResult> GetAllFilteredAssignmentsForUser([FromRoute] int user_id, AssignmentFilterDto dto)
+        [HttpGet("getAllFilteredAssignmentsForUser/{user_id}/{DateStartFlag}/{Start}/{DateEndFlag}/{End}/{PercentageFlag}/{PercentageFilter}/{PriorityFilter}/{StateFilter}")]
+        public async Task<IActionResult> GetAllFilteredAssignmentsForUser([FromRoute] int user_id,
+        int DateStartFlag, DateTime Start, int DateEndFlag, DateTime End, 
+        int StateFilter, int PercentageFlag,int PercentageFilter, int PriorityFilter)
         {
             var assignments = await _asign_repo.GetAllUserAssignmentsAsync(user_id);
-
+            AssignmentFilterDto dto  = new AssignmentFilterDto{
+                SearchTitle = "",
+                DateStartFlag = DateStartFlag,
+                Start = Start,
+                DateEndFlag = DateEndFlag,
+                End = End,
+                StateFilter = StateFilter,
+                PercentageFilter = PercentageFilter,
+                PercentageFlag = PercentageFlag,
+                PriorityFilter = PriorityFilter
+            };
             assignments = _asign_repo.FilterAssignments(assignments,dto);
             
             var res = new List<AssignmentDto>();
@@ -288,7 +311,7 @@ namespace server.Controllers
         {
             var asignment = await _asign_repo.DeleteAssignmentByIdAsync(asign_id);
             if(asignment==null)
-                return BadRequest("assignment does not exist");
+                return NotFound("Assignment does not exist.ID:" + asign_id);
             
                 var users = await _asign_repo.GetAssignmentUsersAsync(asignment.Id);
                 List<int> dep = new List<int>();
