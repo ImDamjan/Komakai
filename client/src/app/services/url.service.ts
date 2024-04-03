@@ -5,14 +5,14 @@ import { Injectable } from '@angular/core';
 })
 export class UrlService {
 
-  private Url: string = '';
+  private isRedirected: boolean=false;
 
-  setUrl(noviUrl: string){
-    this.Url=noviUrl;
+  changeDirected(){
+    this.isRedirected=!this.isRedirected;
   }
 
-  getUrl(){
-    return this.Url;
+  getRedirected(){
+    return this.isRedirected;
   }
 
 }
