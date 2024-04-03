@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using server.DTOs.Permissions;
+using server.Mappers;
 using server.Repositories;
 
 namespace server.Controllers
@@ -8,10 +10,19 @@ namespace server.Controllers
     [ApiController]
     public class UserProjectRolesController : ControllerBase
     {
-        private readonly IUserProjectRepository _userProjectRepository;
+        private readonly IUserProjectRolesRepository _userProjectRolesRepository;
 
-        public UserProjectRolesController(IUserProjectRepository userProjectRepository)
+        public UserProjectRolesController(IUserProjectRolesRepository userProjectRolesRepository)
         {
-            _userProjectRepository = userProjectRepository;
+            _userProjectRolesRepository = userProjectRolesRepository;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserProjectRolesDto>>> GetUserProjectRoles()
+        {
+            var userProjectRoles = await _userProjectRolesRepository.GetAllUserProjectRoles();
+            var userProjectRolesDto = userProjectRoles.Select(UserProjectRolesMapper.MapToDto);
+            return Ok(userProjectRolesDto);
+        }
     }
 }
