@@ -42,13 +42,13 @@ export class CreateProjectOverlayComponent implements OnInit {
       spent: 0,
       percentage: 0,
       userIds: [],
-      priorityId: 0,
+      priorityId: this.selectedPriorityId,
       title: "", 
       start: new Date(), 
       end: new Date(),
       budget: 0, 
       description: "", 
-      type: "" 
+      type: "",
     };
   }
 
@@ -88,7 +88,6 @@ export class CreateProjectOverlayComponent implements OnInit {
   createProject(): void {
     this.projectObj.userIds = this.selectedUserIds;
     this.projectObj.priorityId = this.selectedPriorityId;
-
     this.submitted = true;
     this.submissionError = null;
 
