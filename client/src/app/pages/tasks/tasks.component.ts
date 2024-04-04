@@ -49,7 +49,7 @@ export class TasksComponent {
 
         this.taskObj.forEach(task => {
 
-          const start = new Date(task.start);
+          const start = new Date();
           task.startDate = start.getDate();
           task.startMonth = start.getMonth() + 1;
           task.startYear = start.getFullYear();
@@ -68,6 +68,14 @@ export class TasksComponent {
           task.endMinutes = end.getMinutes();
           task.endSeconds = end.getSeconds();
           task.endMilliseconds = end.getMilliseconds();
+
+          const timeDifference = end.getTime()-start.getTime();
+          if(timeDifference<=0){
+            task.remaining = 0;
+          }
+          else{
+            task.remaining = Math.floor(timeDifference / (1000 * 60));
+          }
 
         });
 
