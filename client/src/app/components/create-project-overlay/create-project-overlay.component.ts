@@ -22,7 +22,7 @@ export class CreateProjectOverlayComponent implements OnInit {
 
   projectObj!: Project;
 
-  selectedUserIds: string[] = [];
+  selectedUserIds: number[] = [];
   selectedPriorityId!: number;
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService) { }
 
@@ -37,11 +37,15 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.teams = teams;
     });
     this.projectObj = {
+      id: 0,
+      stateId: 0,
+      spent: 0,
+      percentage: 0,
       userIds: [],
       priorityId: 0,
       title: "", 
-      start: "", 
-      end: "",
+      start: new Date(), 
+      end: new Date(),
       budget: 0, 
       description: "", 
       type: "" 
@@ -52,21 +56,21 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.showDropdown = !this.showDropdown;
   }
 
-  onUserSelected(userId: string): void {
+  onUserSelected(userId: number): void {
     // Handle user selection
     if (this.isSelected(userId)) {
         this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
     } else {
         this.selectedUserIds.push(userId);
     }
-  }
+}
 
-  isSelected(userId: string): boolean {
+  isSelected(userId: number): boolean {
     // Check if user is selected
     return this.selectedUserIds.includes(userId);
   }
 
-  toggleUserSelection(userId: string, event: Event): void {
+  toggleUserSelection(userId: number, event: Event): void {
     event.stopPropagation();
     if (this.isSelected(userId)) {
         this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
@@ -108,8 +112,8 @@ export class CreateProjectOverlayComponent implements OnInit {
     // Reset all input fields to their default state
     this.projectObj.title = '';
     this.projectObj.priorityId = 0;
-    this.projectObj.start = '';
-    this.projectObj.end = '';
+    this.projectObj.start = new Date();
+    this.projectObj.end = new Date();
     this.projectObj.userIds = [];
     this.selectedUserIds = [];
     this.selectedPriorityId = 0;
@@ -144,18 +148,18 @@ export class CreateProjectOverlayComponent implements OnInit {
   onTeamSelected(team: any): void {
     if (this.isSelectedTeam(team.id)) {
         // If team is already selected, deselect it and its members
-        this.selectedUserIds = this.selectedUserIds.filter((id: string) => !team.members.includes(id));
+        this.selectedUserIds = this.selectedUserIds.filter((id: number) => !team.members.includes(id));
     } else {
         // If team is not selected, select it and its members
         this.selectedUserIds = [...this.selectedUserIds, ...team.members];
     }
   }
 
-  isSelectedTeam(teamId: string): boolean {
+  isSelectedTeam(teamId: number): boolean {
       // Check if all members of the team are selected
       const team = this.teams.find((team: any) => team.id === teamId);
       if (team) {
-          return team.members.every((memberId: string) => this.isSelected(memberId));
+          return team.members.every((memberId: number) => this.isSelected(memberId));
       }
       return false;
   }
