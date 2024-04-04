@@ -49,7 +49,7 @@ export class TasksComponent {
 
         this.taskObj.forEach(task => {
 
-          const start = new Date();
+          const start = new Date(task.start);
           task.startDate = start.getDate();
           task.startMonth = start.getMonth() + 1;
           task.startYear = start.getFullYear();
@@ -71,21 +71,24 @@ export class TasksComponent {
 
           const timeDifference = end.getTime()-start.getTime();
           task.timeDifference = timeDifference;
-          if(timeDifference<=0){
+          const current = new Date();
+          if(end.getTime()<current.getTime()){
             task.remaining = 'No more time';
           }
           else{
-            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor(timeDifference / (1000 * 60 * 60));
-            const minutes = Math.floor(timeDifference / (1000 * 60));
+            const days = Math.floor((end.getTime()-current.getTime()) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((end.getTime()-current.getTime()) / (1000 * 60 * 60));
+            const minutes = Math.floor((end.getTime()-current.getTime()) / (1000 * 60));
             if(hours>24){
               task.remaining = days.toString() + ' days';
             }
-            else if(hours<=24 && minutes>60){
-              task.remaining = hours.toString() + ' hours';
-            }
             else{
-              task.remaining = minutes.toString() + ' minutes';
+              if(minutes>60){
+                task.remaining = hours.toString() + ' hours';
+              }
+              else{
+                task.remaining = minutes.toString() + ' minutes';
+              }
             }
           }
 
