@@ -1,5 +1,6 @@
 export interface Task{
-    remaining: number;
+    timeDifference: number;
+    remaining: string;
     priority: any;
     endMilliseconds: number;
     startMilliSeconds: number;

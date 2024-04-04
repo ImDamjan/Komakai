@@ -70,11 +70,23 @@ export class TasksComponent {
           task.endMilliseconds = end.getMilliseconds();
 
           const timeDifference = end.getTime()-start.getTime();
+          task.timeDifference = timeDifference;
           if(timeDifference<=0){
-            task.remaining = 0;
+            task.remaining = 'No more time';
           }
           else{
-            task.remaining = Math.floor(timeDifference / (1000 * 60));
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+            const minutes = Math.floor(timeDifference / (1000 * 60));
+            if(hours>24){
+              task.remaining = days.toString() + ' days';
+            }
+            else if(hours<=24 && minutes>60){
+              task.remaining = hours.toString() + ' hours';
+            }
+            else{
+              task.remaining = minutes.toString() + ' minutes';
+            }
           }
 
         });
