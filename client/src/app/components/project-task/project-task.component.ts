@@ -23,4 +23,16 @@ export class ProjectTaskComponent {
     }
   }
   
+  getCorrectTime(time: string): string{
+    if(time.includes('days')){
+      return 'high-time';
+    }
+    else if(time.includes('hours')){
+      return 'medium-time';
+    }
+    else{
+      return 'low-time';
+    }
+  }
+
 }
