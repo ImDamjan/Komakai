@@ -2,8 +2,8 @@
     <div class="overlay-content">
         <div class="left">
             <div class="project-title">
-                <span class="name">Project title</span>
-                <input class="input-field" id="title" type="text" placeholder="  Enter project title">
+                <span class="name">Task title</span>
+                <input class="input-field" id="title" type="text" placeholder="  Enter task title">
             </div>
             
             <div class="status-type">
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="role">
-                <span class="name">Project Roles</span>
+                <span class="name">Assignee Roles</span>
                 <select class="input-field" required>
                     <option value="">Team lead</option>
                     <option value="">Person 1</option>
@@ -46,16 +46,14 @@
         
         <div class="right">
             <div class="description">
-                <span class="name">Project Description</span>
+                <span class="name">Task Description</span>
                 <textarea class="input-field" id="description" placeholder="  Write your description"></textarea>
             </div>
             <div class="budget-team">
                 <div class="labels">
-                    <span class="name" id="budget">Budget</span>
                     <span class="name" id="team">Team</span>
                 </div>
                 <div class="inputs">
-                    <input class="input-field" id="budget-input" type="text" placeholder="  Budget">
                     <select class="input-field" id="team-select" required>
                         <option value="">Team</option>
                         <option value="">Team 1</option>
@@ -64,9 +62,7 @@
                 </div>
             </div>
             <div class="related">
-                <span class="name" id="relatedproject">Related projects</span>
                 <div class="link-create-cancel">
-                    <button id="related-button">Link project</button>
                     <div class="create-cancel">
                         <button class="create">Create</button>
                         <button class="cancel" (click)="closeOverlay()">Cancel</button>
