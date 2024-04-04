@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../enviroments/environment';
+import { State } from '../models/state';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,9 @@ export class StateService {
     );
   }
 
-  getStates(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/State/getAll`);
+  fetchAllStates() : Observable<State[]>
+  {
+    const apiUrl = `${this.apiUrl}/State/getAll`;
+    return this.http.get<State[]>(apiUrl);
   }
 }

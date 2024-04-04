@@ -2,7 +2,7 @@
   <h3>{{ errorMessage }}</h3>
 </div>
 <div class="grid-container">
-  <article class="card" *ngFor="let project of getPaginatedProjects()">
+  <article class="card" *ngFor="let project of getPaginatedProjects()" (click)="navigateToProjectDetails(project.id)">
     <section class="card-content">
       <div class="header-section">
         <header class="title-wrapper">
