@@ -76,9 +76,9 @@ export class TasksComponent {
             task.remaining = 'No more time';
           }
           else{
-            const days = Math.floor((end.getTime()-current.getTime()) / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((end.getTime()-current.getTime()) / (1000 * 60 * 60));
-            const minutes = Math.floor((end.getTime()-current.getTime()) / (1000 * 60));
+            const days = (end.getTime()-current.getTime()) / (1000 * 60 * 60 * 24);
+            const hours = (end.getTime()-current.getTime()) / (1000 * 60 * 60);
+            const minutes = (end.getTime()-current.getTime()) / (1000 * 60);
             if(hours>24){
               task.remaining = days.toString() + ' days';
             }
