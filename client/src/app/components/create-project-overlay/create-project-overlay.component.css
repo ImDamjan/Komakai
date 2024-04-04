@@ -187,3 +187,12 @@
 .team-members:hover {
     display: block; /* Ensure the container is always visible when hovering over the team name or the team members */
 }
+
+.error-message {
+    color: red;
+}
+.error {
+    margin-left: 20px;
+    margin-top: 10px;
+    color: red;
+}

@@ -17,6 +17,8 @@ export class CreateProjectOverlayComponent implements OnInit {
   teams: any[] = [];
   showDropdown: boolean = false;
   hoveredTeam: any;
+  submitted = false;
+  submissionError: string | null = null;
 
   projectObj!: Project;
 
@@ -38,8 +40,8 @@ export class CreateProjectOverlayComponent implements OnInit {
       userIds: [],
       priorityId: 0,
       title: "", 
-      start: this.getCurrentDate(), 
-      end: this.getCurrentDate(),
+      start: "", 
+      end: "",
       budget: 0, 
       description: "", 
       type: "" 
@@ -82,6 +84,15 @@ export class CreateProjectOverlayComponent implements OnInit {
   createProject(): void {
     this.projectObj.userIds = this.selectedUserIds;
     this.projectObj.priorityId = this.selectedPriorityId;
+
+    this.submitted = true;
+    this.submissionError = null;
+
+    if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end) {
+      this.submissionError = 'Please fill in all necessary fields.';
+      return;
+    }
+
     this.projectService.createProject(this.projectObj).subscribe(response => {
       // Handle success response
       console.log('Project created successfully:', response);
@@ -89,17 +100,6 @@ export class CreateProjectOverlayComponent implements OnInit {
       // Handle error response
       console.error('Error creating project:', error);
     });
-  }
-
-  getCurrentDate(): string {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Months are zero-based
-    const day = ('0' + currentDate.getDate()).slice(-2);
-    const hours = ('0' + currentDate.getHours()).slice(-2);
-    const minutes = ('0' + currentDate.getMinutes()).slice(-2);
-    const seconds = ('0' + currentDate.getSeconds()).slice(-2);
-    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
   }
 
   showTeamMembers(team: any): void {

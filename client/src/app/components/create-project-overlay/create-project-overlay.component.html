@@ -1,9 +1,12 @@
 <div class="overlay-container">
+    <div class="error" *ngIf="submissionError">{{ submissionError }}</div>
     <div class="overlay-content">
+        
         <div class="left">
             <div class="project-title">
                 <span class="name">Project title</span>
                 <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="projectObj.title">
+                <div *ngIf="!projectObj.title.trim() && submitted" class="error-message">*Please enter a project title.</div>
             </div>
             
             <div class="status-type">
@@ -13,11 +16,11 @@
                 </div>
                 <div class="inputs">
                     <select id="status-select" class="input-field" required [(ngModel)]="selectedPriorityId">
-                        <option value=""></option>
                         <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
                     </select>
                     <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="projectObj.type">
                 </div>
+                <div class="error-message" *ngIf="!projectObj.priorityId && submitted">*Priority is required</div>
             </div>
             <div class="dates">
                 <div class="labels">
@@ -26,8 +29,12 @@
                 </div>
                 <div class="inputs">
                     <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.start">
+                    
                     <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.end">
                 </div>
+                <div class="error-message" *ngIf="!projectObj.start && submitted">*Start Date is required</div>
+                <div class="error-message" *ngIf="!projectObj.end && submitted">*End Date is required</div>
+                <div class="error-message" *ngIf="projectObj.start && projectObj.end && projectObj.start > projectObj.end">*End Date must be after Start Date</div>
             </div>
             <div class="role">
                 <!-- 
