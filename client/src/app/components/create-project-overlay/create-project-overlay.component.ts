@@ -94,12 +94,28 @@ export class CreateProjectOverlayComponent implements OnInit {
     }
 
     this.projectService.createProject(this.projectObj).subscribe(response => {
-      // Handle success response
       console.log('Project created successfully:', response);
+      alert('Project created successfully!');
+      this.resetForm();
+      this.submitted = false;
     }, error => {
-      // Handle error response
       console.error('Error creating project:', error);
+      this.submissionError = 'Error creating project. Please try again.';
     });
+  }
+
+  resetForm(): void {
+    // Reset all input fields to their default state
+    this.projectObj.title = '';
+    this.projectObj.priorityId = 0;
+    this.projectObj.start = '';
+    this.projectObj.end = '';
+    this.projectObj.userIds = [];
+    this.selectedUserIds = [];
+    this.selectedPriorityId = 0;
+    this.projectObj.budget = 0;
+    this.projectObj.description = '';
+    this.projectObj.type = '';
   }
 
   showTeamMembers(team: any): void {
