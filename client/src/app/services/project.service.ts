@@ -43,5 +43,10 @@ export class ProjectService implements OnInit{
     }
     const apiUrl = `${this.baseUrl}/Project/userProjects/${this.userId}`;
     return this.http.get<any[]>(apiUrl);
-  }
+    }
+
+    //pravljenje projekta
+    createProject(data: any): Observable<any> {
+      return this.http.post<any>(`${this.baseUrl}/Project/create`, data);
+    }
 }

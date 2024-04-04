@@ -1,28 +1,26 @@
 <div class="overlay-container">
+    <div class="error" *ngIf="submissionError">{{ submissionError }}</div>
     <div class="overlay-content">
+        
         <div class="left">
             <div class="project-title">
                 <span class="name">Project title</span>
-                <input class="input-field" id="title" type="text" placeholder="  Enter project title">
+                <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="projectObj.title">
+                <div *ngIf="!projectObj.title.trim() && submitted" class="error-message">*Please enter a project title.</div>
             </div>
             
             <div class="status-type">
                 <div class="labels">
-                    <span class="name">Status</span>
+                    <span class="name">Priority</span>
                     <span class="name" id="type">Type</span>
                 </div>
                 <div class="inputs">
-                    <select id="status-select" class="input-field" required>
-                        <option value=""></option>
-                        <option value="Not started">Not started</option>
-                        <option value="Ready">Ready</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Done">Done</option>
-                        <option value="Cancelled">Cancelled</option>
-                        <option value="Blocked">Blocked</option>
+                    <select id="status-select" class="input-field" required [(ngModel)]="selectedPriorityId">
+                        <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
                     </select>
-                    <input class="input-field" id="type-input" type="text" placeholder="  Type">
+                    <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="projectObj.type">
                 </div>
+                <div class="error-message" *ngIf="!projectObj.priorityId && submitted">*Priority is required</div>
             </div>
             <div class="dates">
                 <div class="labels">
@@ -30,45 +28,70 @@
                     <span class="name" id="enddate">End Date</span>
                 </div>
                 <div class="inputs">
-                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY">
-                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY">
+                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.start">
+                    
+                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.end">
                 </div>
+                <div class="error-message" *ngIf="!projectObj.start && submitted">*Start Date is required</div>
+                <div class="error-message" *ngIf="!projectObj.end && submitted">*End Date is required</div>
+                <div class="error-message" *ngIf="projectObj.start && projectObj.end && projectObj.start > projectObj.end">*End Date must be after Start Date</div>
             </div>
             <div class="role">
+                <!-- 
                 <span class="name">Project Roles</span>
-                <select class="input-field" required>
-                    <option value="">Team lead</option>
-                    <option value="">Person 1</option>
-                    <option value="">Person 2</option>
-                </select>
+                <div class="custom-dropdown">
+                    <span class="selected-option" (click)="toggleDropdown()">Select Team Lead</span>
+                    <div class="options" *ngIf="showDropdown">
+                        <div class="option" *ngFor="let user of users" (click)="toggleUserSelection(user.id)">
+                            <input type="checkbox" [checked]="isSelected(user.id)" (change)="onUserSelected(user.id)">
+                            {{ user.name }} {{ user.lastname }}
+                        </div>
+                    </div>
+                </div>
+                 -->
             </div>
         </div>
         
         <div class="right">
             <div class="description">
                 <span class="name">Project Description</span>
-                <textarea class="input-field" id="description" placeholder="  Write your description"></textarea>
+                <textarea class="input-field" id="description" placeholder="  Write your description"  [(ngModel)]="projectObj.description"></textarea>
             </div>
             <div class="budget-team">
                 <div class="labels">
                     <span class="name" id="budget">Budget</span>
-                    <span class="name" id="team">Team</span>
+                    <span class="name" id="team">Members</span>
                 </div>
                 <div class="inputs">
-                    <input class="input-field" id="budget-input" type="text" placeholder="  Budget">
-                    <select class="input-field" id="team-select" required>
-                        <option value="">Team</option>
-                        <option value="">Team 1</option>
-                        <option value="">Team 2</option>
-                    </select>
+                    <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget">
+                    <div class="custom-dropdown">
+                        <span class="selected-option" (click)="toggleDropdown()">Select Members</span>
+                        <div class="options" *ngIf="showDropdown">
+                            <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id, $event)">
+                                <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                                {{ user.name }} {{ user.lastname }}
+                            </div>
+
+                            <div class="team-option" *ngFor="let team of teams" (mouseover)="showTeamMembers(team)" (mouseout)="hideTeamMembers($event)">
+                                <input type="checkbox" [checked]="isSelectedTeam(team.id)" (change)="onTeamSelected(team)">
+                                {{ team.name }}
+                                <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
+                                    <div *ngFor="let memberId of team.members">
+                                        <input type="checkbox" [checked]="isSelected(memberId)" (change)="onUserSelected(memberId)">
+                                        {{ getUserName(memberId) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="related">
-                <span class="name" id="relatedproject">Related projects</span>
+                <!-- <span class="name" id="relatedproject">Related projects</span> -->
                 <div class="link-create-cancel">
-                    <button id="related-button">Link project</button>
+                    <!-- <button id="related-button">Link project</button> --><p></p>
                     <div class="create-cancel">
-                        <button class="create">Create</button>
+                        <button class="create" (click)="createProject()">Create</button>
                         <button class="cancel" (click)="closeOverlay()">Cancel</button>
                     </div>
                 </div>
