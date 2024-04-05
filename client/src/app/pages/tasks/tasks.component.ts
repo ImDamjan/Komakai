@@ -16,7 +16,7 @@ export class TasksComponent {
 
   private apiUrl = environment.apiUrl;
 
-  tasks: any[] = [];
+  tasks: [] = [];
 
   priorities: any[] = [];
 

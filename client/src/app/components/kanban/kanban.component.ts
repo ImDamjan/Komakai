@@ -6,9 +6,9 @@ import { TaskKanban } from '../../models/kanbantask';
 import { TaskCardKanbanComponent } from '../task-card-kanban/task-card-kanban.component';
 import { StateService } from '../../services/state.service';
 import { State } from '../../models/state';
-import { KanbanAssignmentService } from '../../services/kanban-assignment.service';
 import { Assignment } from '../../models/assignment';
 import { ActivatedRoute } from '@angular/router';
+import { AssignmentService } from '../../services/assignment.service';
 
 @Component({
   selector: 'app-kanban',
@@ -20,7 +20,7 @@ export class KanbanComponent implements OnInit{
    public board: Board;
    private projectId : Number = 0;
    private state_service = inject(StateService);
-   private assignment_service = inject (KanbanAssignmentService);
+   private assignment_service = inject (AssignmentService);
    private route = inject(ActivatedRoute);
   constructor()
   {
