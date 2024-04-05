@@ -18,20 +18,17 @@ export class AuthGuard{
 
     const isLoggedIn = this.authService.isAuthenticated();
 
-    const previousUrl = this.previousUrlService.getUrl();
-    console.log(previousUrl)
-
     if (isLoggedIn) {
       
       if (route.url[0].path === 'auth') {
-        console.log(this.location.path())
+        // console.log(this.location.path())
         this.router.navigate(['/dashboard']);
         return false;
       }
       return true;
     } else {
       if (route.url[0].path !== 'auth') {
-        console.log(this.location.path())
+        // console.log(this.location.path())
         this.router.navigate(['/auth']);
         return false;
       }
