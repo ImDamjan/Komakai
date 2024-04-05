@@ -10,5 +10,5 @@ export interface Project {
     percentage : Number,
     description : string,
     priorityId : Number,
-    users : Number[]
+    userIds : Number[]
 }
