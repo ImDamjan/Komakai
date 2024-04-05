@@ -11,7 +11,6 @@ export class AddTaskComponent {
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>) { }
 
   closeOverlay(): void {
-    // Close the overlay dialog
     this.dialogRef.close();
   }
 }

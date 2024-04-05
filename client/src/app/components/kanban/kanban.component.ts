@@ -9,6 +9,8 @@ import { State } from '../../models/state';
 import { KanbanAssignmentService } from '../../services/kanban-assignment.service';
 import { Assignment } from '../../models/assignment';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { AddTaskComponent } from '../add-task/add-task.component';
 
 @Component({
   selector: 'app-kanban',
@@ -22,10 +24,31 @@ export class KanbanComponent implements OnInit{
    private state_service = inject(StateService);
    private assignment_service = inject (KanbanAssignmentService);
    private route = inject(ActivatedRoute);
-  constructor()
+   
+  constructor(private dialog: MatDialog)
   {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
     this.board = new Board('Kanban', []);
+  }
+
+  showProjectDetails: boolean = true;
+  showCreateButton: boolean = true;
+  projectText: string = 'Project details';
+
+
+  openCreateOverlay(): void {
+    const dialogRef = this.dialog.open(AddTaskComponent, {
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.showProjectDetails = true;
+      this.showCreateButton = true;
+      this.projectText = 'Project details';
+    });
+    
+    this.showProjectDetails = false;
+    this.showCreateButton = false;
+    this.projectText = 'Project details/Create task';
   }
 
   public ngOnInit(): void {
