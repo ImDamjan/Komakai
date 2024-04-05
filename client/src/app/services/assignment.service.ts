@@ -39,8 +39,8 @@ export class AssignmentService {
   }
 
 
-  getAllUserAssignments(): Observable<Assignment[]> {
-    return this.http.get<Assignment[]>(this.baseUrl+`/Assignment/getByUser/1`);
+  getAllUserAssignments(user_id: Number): Observable<Assignment[]> {
+    return this.http.get<Assignment[]>(this.baseUrl+`/Assignment/getByUser/` + user_id);
   }
   // "taskGroupId": 1,
   // "userIds": [
