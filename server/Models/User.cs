@@ -70,7 +70,9 @@ namespace server.Models
 
 
         public virtual ICollection<UserProjectRoles> UserProjectRoles { get; set; } = new List<UserProjectRoles>();
-    
-       
+
+        public virtual ICollection<UserProjectPermission> ProjectPermissions { get; set; } = new List<UserProjectPermission>();
+
+
     }
 }
