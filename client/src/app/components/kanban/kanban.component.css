@@ -85,3 +85,24 @@
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
   
+  .create {
+    display: inline-flex;
+    padding: 15px 12px;
+    background: #0F2167;
+    border: dashed 1px #4CB9E7;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    justify-content: center;
+  }
+  
+  .task-button {
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    color: #4CB9E7; 
+    cursor: pointer; 
+  }
+  
