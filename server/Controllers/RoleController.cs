@@ -30,47 +30,5 @@ namespace server.Controllers
 
             return Ok(dtos);
         }
-
-        [HttpGet("getById{id}")]
-        public async Task<IActionResult> GetRoleById([FromRoute] int id)
-        {
-            var role = await _role_repo.GetRoleByIdAsync(id);
-            if(role==null)
-                return NotFound("Role not found");
-
-            return Ok(role.toRoleDto());
-        }
-
-        [HttpGet("{roleId}/permissions")]
-        public async Task<IActionResult> GetRolePermissions(int roleId)
-        {
-            var role = await _role_repo.GetRoleByIdAsync(roleId);
-            if (role == null)
-                return NotFound("Role not found");
-
-            var permissions = role.RolePermissions.Select(rp => rp.Permission).ToList();
-            var dtos = permissions.Select(p => p.ToPermissionDto()).ToList();
-            return Ok(dtos);
-        }
-
-        [HttpPost("{roleId}/assignPermission")]
-        public async Task<IActionResult> AssignPermissionToRole(int roleId, int permissionId)
-        {
-            var role = await _role_repo.GetRoleByIdAsync(roleId);
-            if (role == null)
-                return NotFound("Role not found");
-
-            var permission = await _permission_repo.GetPermissionByIdAsync(permissionId);
-            if (permission == null)
-                return NotFound("Permission not found");
-
-            if (role.RolePermissions.Any(rp => rp.PermissionId == permissionId))
-                return BadRequest("Permission is already assigned to the role");
-
-            role.RolePermissions.Add(new RolePermission { PermissionId = permissionId });
-            await _role_repo.SaveChangesAsync();
-
-            return Ok("Permission assigned to role successfully");
-        }
     }
 }
