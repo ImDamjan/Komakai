@@ -44,6 +44,7 @@ export class KanbanComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.getBoard();
       this.showProjectDetails = true;
       this.showCreateButton = true;
       this.projectText = 'Project details';
@@ -57,8 +58,11 @@ export class KanbanComponent implements OnInit{
   
   //pravljenje kanbana
   public ngOnInit(): void {
-    console.log(this.board);
-    
+    this.getBoard();
+  }
+
+  private getBoard():void
+  {
     this.state_service.fetchAllStates().subscribe({
       next : (states : State[])=>
     {
@@ -75,6 +79,17 @@ export class KanbanComponent implements OnInit{
           states.forEach(state => {
             let stateProjects : Assignment[] = [];
             assignments.forEach(assignment => {
+              assignment.dummyTitle = assignment.title;
+              if(assignment.title.length > 20)
+              {
+                let new_title = "";
+                for (let i = 0; i < 20; i++) {
+                  const element = assignment.title[i];
+                  new_title+=element;
+                }
+                new_title+="...";
+                assignment.dummyTitle = new_title;
+              }
               if(assignment.stateId==state.id)
                 stateProjects.push(assignment);
             });

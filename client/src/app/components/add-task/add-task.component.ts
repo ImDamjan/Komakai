@@ -6,6 +6,11 @@ import { StateService } from '../../services/state.service';
 import { error } from 'console';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
+import { TaskGroup } from '../../models/task-group';
+import { TaskGroupService } from '../../services/task-group.service';
+import { Project } from '../../models/project';
+import { Assignment } from '../../models/assignment';
+import { AssignmentService } from '../../services/assignment.service';
 
 @Component({
   selector: 'app-add-task',
@@ -18,13 +23,49 @@ export class AddTaskComponent implements OnInit {
   public state : State;
   public showDropdown: boolean;
   public users : User[] = [];
+  public taskGroups : TaskGroup[] = [];
+  public message : string = "";
+  private selectedAssignees : number[] = []
+  private selectedDependentOn : number[] = [];
+  public createTaskObj : Assignment = {
+    id : 0,
+    title : "",
+    type : "",
+    description : "",
+    start : 0,
+    end :  0,
+    percentage : 0,
+    taskGroupId : 0,
+    dependentOn : [],
+    assignees : [],
+    stateId : 0,
+    priorityId : 4,
+    dummyTitle : ""
+  };
 
-  private selectedAssignees : Number[] = []
+  
+  // "taskGroupId": 0,
+  // "userIds": [
+  //   0
+  // ],
+  // "start": "2024-04-06T16:22:07.002Z",
+  // "end": "2024-04-06T16:22:07.002Z",
+  // "dependentOn": [
+  //   0
+  // ],
+  // "title": "string",
+  // "type": "string",
+  // "description": "string",
+  // "priorityId": 0,
+  // "stateId": 0
   
   //ovako moze da se dodaje umesto da se pise u konstruktor
   private dialogRef = inject(MatDialogRef<AddTaskComponent>);
   private stateService =  inject(StateService);
   private userService = inject(UserService);
+  private taskGroupService =  inject(TaskGroupService);
+  private assignmentService = inject(AssignmentService);
+
   constructor() { 
     this.showDropdown = false;
     this.state = {
@@ -34,17 +75,57 @@ export class AddTaskComponent implements OnInit {
   }
   ngOnInit(): void {
     this.stateService.fetchStateName(Number(this.data[0])).subscribe({
-      next : (stateName : string) => {this.state = {id : Number(this.data[0]), name : stateName}},
+      next : (stateName : string) => {
+        this.state = {id : Number(this.data[0]), name : stateName};
+        this.createTaskObj.stateId = this.state.id;
+      },
       error: (error)=> console.log(error)
     })
     console.log(this.data);
     this.userService.getProjectUsers(Number(this.data[1])).subscribe({
       next : (users: User[])=>{this.users = users}
     });
+
+    this.taskGroupService.getAllProjectTaskGroups(this.data[1]).subscribe({
+      next : (groups: TaskGroup[])=> {this.taskGroups = groups},
+      error:(error: any)=> console.log(error)
+    });
   }
 
-  closeOverlay(): void {
-    this.dialogRef.close();
+  createTask() : void{
+    this.message = "";
+    this.createTaskObj.assignees = this.selectedAssignees;
+    this.createTaskObj.dependentOn = this.selectedDependentOn;
+    console.log(this.createTaskObj);
+    if(this.createTaskObj.assignees.length == 0 || this.createTaskObj.description =="" || this.createTaskObj.end== 0 || this.createTaskObj.start==0 || this.createTaskObj.taskGroupId==0)
+    {
+      this.message = "Form is not filled properly, check if you entered everything correctly.";
+      return;
+    }
+    let today = new Date().toString();
+    let todayTime = new Date(today);
+    this.createTaskObj.end = new Date(this.createTaskObj.end);
+    this.createTaskObj.start = new Date(this.createTaskObj.start);
+    console.log(todayTime);
+    console.log(this.createTaskObj.start);
+    console.log(this.createTaskObj.end);
+    if(this.createTaskObj.end < this.createTaskObj.start)
+    {
+      this.message = "End date comes before start date.";
+      return;
+    }
+    if(this.createTaskObj.start < todayTime)
+    {
+      this.message = "Start date comes before today.";
+      return;
+
+    }
+    this.assignmentService.createAssignment(this.createTaskObj).subscribe({
+      next : (asign : Assignment) => console.log("Creation succesful"),
+      error: (error)=> console.log(error)
+    });
+
+     
   }
   toggleUserSelection(user_id: number,event: Event) {
     event.stopPropagation();
@@ -60,4 +141,8 @@ export class AddTaskComponent implements OnInit {
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
   }
+  closeOverlay(): void {
+    // Close the overlay dialog
+    this.dialogRef.close();
+}
 }

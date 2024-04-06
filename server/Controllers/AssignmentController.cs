@@ -53,7 +53,7 @@ namespace server.Controllers
                return NotFound("Project does not exist.ID:" + group.ProjectId);
             var team = await _user_repo.GetUserByProjectId(group.ProjectId);
 
-            foreach (var userId in dto.UserIds)
+            foreach (var userId in dto.Assignees)
             {
                 var user = team.FirstOrDefault(u=>u.Id==userId);
                 if(user==null)
@@ -79,7 +79,7 @@ namespace server.Controllers
             var a = await _asign_repo.CreateAssignmentAsync(dto.fromCreateDtoToAssignment(users,dependencies,group));
 
             
-            return Ok(a.toAssignmentDto(dto.UserIds,dto.DependentOn));
+            return Ok(a.toAssignmentDto(dto.Assignees,dto.DependentOn));
         }
         [HttpGet]
         [Route("getByGroup/{group_id}")]
