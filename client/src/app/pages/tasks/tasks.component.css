@@ -3,3 +3,11 @@
     flex-grow: 1;
     padding: 40px;
   }
+
+#task-header {
+  display: flex;
+}
+
+#title {
+  margin-right: 25%;
+}
