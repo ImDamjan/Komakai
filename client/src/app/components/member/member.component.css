@@ -16,7 +16,7 @@
   }
 
   #user-info {
-    display: flex; /* Added for layout */
+    display: flex;
   }
   
   #username-container {
@@ -47,7 +47,6 @@
   display: inline-block;
 }
 
-/* Dropdown Content (Hidden by Default) */
 .dropdown-content {
   display: none;
   position: absolute;
@@ -57,7 +56,6 @@
   z-index: 1;
 }
 
-/* Links inside the dropdown */
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
@@ -65,20 +63,16 @@
   display: block;
 }
 
-/* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #ddd;}
 
-/* Show the dropdown menu on hover */
 #dropdown:hover .dropdown-content {display: block;}
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
 #dropdown:hover .dropbtn {background-color: #3e8e41;}
 
-/* New for centering the dropdown  */
-#dropdown-container {  /* New container for dropdown */
+#dropdown-container { 
   display: inline-block;
 }
 
-#dropdown {  /* Nested within the new container */
-  margin: 0 auto;  /* Centers the dropdown horizontally */
+#dropdown {  
+  margin: 0 auto;  
 }
