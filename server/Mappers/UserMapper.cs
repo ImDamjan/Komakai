@@ -18,7 +18,9 @@ namespace server.Mappers
                 JobTitle = u.JobTitle,
                 Organisation = u.Organisation,
                 Department = u.Department,
-                RoleId = (int)u.RoleId
+                RoleId = (int)u.RoleId,
+                Name = u.Name,
+                Lastname = u.Lastname
             };
         }
     }

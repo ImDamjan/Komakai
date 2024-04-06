@@ -5,6 +5,7 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
 import { PriorityService } from '../../services/priority.service';
 import { TeamService } from '../../services/team.service';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -12,7 +13,7 @@ import { TeamService } from '../../services/team.service';
   styleUrl: './create-project-overlay.component.css'
 })
 export class CreateProjectOverlayComponent implements OnInit {
-  users: any[] = [];
+  users: User[] = [];
   priorities: any[] | undefined;
   teams: any[] = [];
   showDropdown: boolean = false;
@@ -135,7 +136,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     }
   }
 
-  getUserName(memberId: string): string {
+  getUserName(memberId: number): string {
     const user = this.users.find(user => user.id === memberId);
     if (user) {
         return `${user.name} ${user.lastname}`;

@@ -12,15 +12,7 @@
                     <span class="name" id="type">Type</span>
                 </div>
                 <div class="inputs">
-                    <select id="status-select" class="input-field" required>
-                        <option value=""></option>
-                        <option value="Not started">Not started</option>
-                        <option value="Ready">Ready</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Done">Done</option>
-                        <option value="Cancelled">Cancelled</option>
-                        <option value="Blocked">Blocked</option>
-                    </select>
+                    <p id="status-select" class="input-field">{{state.name}}</p>
                     <input class="input-field" id="type-input" type="text" placeholder=" Type">
                 </div>
             </div>
@@ -36,13 +28,15 @@
             </div>
             <div class="role">
                 <span class="name">Assignee</span>
-                <select class="input-field" required>
-                    <option value="">Aleksandra</option>
-                    <option value="">Aleksa</option>
-                    <option value="">Anastasija</option>
-                    <option value="">Stefan</option>
-                    <option value="">Damjan</option>
-                </select>
+                <div class="custom-dropdown">
+                    <span class="selected-option" (click)="toggleDropdown()">Select Assignees</span>
+                    <div class="options" *ngIf="showDropdown">
+                        <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id, $event)">
+                            <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                            {{ user.name }} {{ user.lastname }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         

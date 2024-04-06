@@ -40,7 +40,7 @@ export class KanbanComponent implements OnInit{
   //otvaranje create Taska
   openCreateOverlay(column_id : string): void {
     const dialogRef = this.dialog.open(AddTaskComponent, {
-      data:[column_id]
+      data:[column_id,this.projectId]
     });
 
     dialogRef.afterClosed().subscribe(result => {
