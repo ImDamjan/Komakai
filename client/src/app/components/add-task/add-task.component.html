@@ -1,0 +1,67 @@
+<div class="overlay-container">
+    <div class="overlay-content">
+        <div class="left">
+            <div class="project-title">
+                <span class="name">Task title</span>
+                <input class="input-field" id="title" type="text" placeholder=" Enter task title">
+            </div>
+            
+            <div class="status-type">
+                <div class="labels">
+                    <span class="name">Status</span>
+                    <span class="name" id="type">Type</span>
+                </div>
+                <div class="inputs">
+                    <select id="status-select" class="input-field" required>
+                        <option value=""></option>
+                        <option value="Not started">Not started</option>
+                        <option value="Ready">Ready</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Done">Done</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Blocked">Blocked</option>
+                    </select>
+                    <input class="input-field" id="type-input" type="text" placeholder=" Type">
+                </div>
+            </div>
+            <div class="dates">
+                <div class="labels">
+                    <span class="name" id="startdate">Start Date</span>
+                    <span class="name" id="enddate">End Date</span>
+                </div>
+                <div class="inputs">
+                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY">
+                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY">
+                </div>
+            </div>
+            <div class="role">
+                <span class="name">Assignee</span>
+                <select class="input-field" required>
+                    <option value="">Aleksandra</option>
+                    <option value="">Aleksa</option>
+                    <option value="">Anastasija</option>
+                    <option value="">Stefan</option>
+                    <option value="">Damjan</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="right">
+            <div class="description">
+                <span class="name">Task Description</span>
+                <textarea class="input-field" id="description" placeholder="  Write your description"></textarea>
+            </div>
+            <div class="related">
+                <span class="name" id="relatedproject">Related tasks</span>
+                <div class="link-create-cancel">
+                    <button id="related-button">Link task</button><p></p>
+                    <div class="create-cancel">
+                        <button class="create">Create</button>
+                        <!-- <button class="create" (click)="createProject()">Create</button> -->
+                        <button class="cancel" (click)="closeOverlay()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

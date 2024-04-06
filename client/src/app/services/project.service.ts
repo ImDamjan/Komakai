@@ -3,6 +3,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../enviroments/environment';
 import { jwtDecode } from 'jwt-decode';
+import { Project } from '../models/project';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,18 @@ export class ProjectService implements OnInit{
     }
 
     //pravljenje projekta
-    createProject(data: any): Observable<any> {
-      return this.http.post<any>(`${this.baseUrl}/Project/create`, data);
+    createProject(project: any): Observable<any> {
+      const url = this.baseUrl + "/Project/create";
+      const body = {
+        userIds : project.userIds,
+        priorityId : project.priorityId,
+        title : project.title,
+        start : project.start,
+        end : project.end,
+        budget : project.budget,
+        desciption : project.desciption,
+        type : project.type
+      }
+      return this.http.post<Project>(url,body);
     }
 }

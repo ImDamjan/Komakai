@@ -107,6 +107,30 @@ export class TasksComponent {
         //   task.endMilliseconds = end.getMilliseconds();
 
         // });
+          const timeDifference = end.getTime()-start.getTime();
+          task.timeDifference = timeDifference;
+          const current = new Date();
+          if(end.getTime()<current.getTime()){
+            task.remaining = 'No more time';
+          }
+          else{
+            const days = (end.getTime()-current.getTime()) / (1000 * 60 * 60 * 24);
+            const hours = (end.getTime()-current.getTime()) / (1000 * 60 * 60);
+            const minutes = (end.getTime()-current.getTime()) / (1000 * 60);
+            if(hours>24){
+              task.remaining = days.toString() + ' days';
+            }
+            else{
+              if(minutes>60){
+                task.remaining = hours.toString() + ' hours';
+              }
+              else{
+                task.remaining = minutes.toString() + ' minutes';
+              }
+            }
+          }
+
+        });
 
         const requests = this.taskObj.map(task => this.priorityService.getPriorityById(task.priorityId));
 
