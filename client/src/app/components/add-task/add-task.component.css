@@ -113,11 +113,13 @@
 
 .role {
     margin-bottom: 20px; /* Adjust margin as needed */
+    display: grid;
+    grid-template-columns: 50% 50%;
 }
 
 .custom-dropdown {
     position: relative;
-    width: 60%;
+    width: 90%;
     bottom: 5px;
 }
 

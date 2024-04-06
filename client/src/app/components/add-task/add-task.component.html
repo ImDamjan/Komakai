@@ -1,9 +1,10 @@
 <div class="overlay-container">
     <div class="overlay-content">
         <div class="left">
+            <span style="color: crimson;">{{message}}</span>
             <div class="project-title">
                 <span class="name">Task title</span>
-                <input class="input-field" id="title" type="text" placeholder=" Enter task title">
+                <input class="input-field" id="title" type="text" placeholder=" Enter task title" [(ngModel)] = "createTaskObj.title">
             </div>
             
             <div class="status-type">
@@ -12,16 +13,8 @@
                     <span class="name" id="type">Type</span>
                 </div>
                 <div class="inputs">
-                    <select id="status-select" class="input-field" required>
-                        <option value=""></option>
-                        <option value="Not started">Not started</option>
-                        <option value="Ready">Ready</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Done">Done</option>
-                        <option value="Cancelled">Cancelled</option>
-                        <option value="Blocked">Blocked</option>
-                    </select>
-                    <input class="input-field" id="type-input" type="text" placeholder=" Type">
+                    <p id="status-select" class="input-field">{{state.name}}</p>
+                    <input class="input-field" id="type-input" type="text" placeholder=" Type" [(ngModel)] = "createTaskObj.type">
                 </div>
             </div>
             <div class="dates">
@@ -30,33 +23,43 @@
                     <span class="name" id="enddate">End Date</span>
                 </div>
                 <div class="inputs">
-                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY">
-                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY">
+                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY" [(ngModel)] = "createTaskObj.start">
+                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY" [(ngModel)] = "createTaskObj.end">
                 </div>
             </div>
             <div class="role">
-                <span class="name">Assignee</span>
-                <select class="input-field" required>
-                    <option value="">Aleksandra</option>
-                    <option value="">Aleksa</option>
-                    <option value="">Anastasija</option>
-                    <option value="">Stefan</option>
-                    <option value="">Damjan</option>
-                </select>
+                
+                <div class="custom-dropdown">
+                    <span class="name">Assignee</span>
+                    <span class="selected-option" (click)="toggleDropdown()">Select Assignees</span>
+                    <div class="options" *ngIf="showDropdown">
+                        <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id, $event)">
+                            <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                            {{ user.name }} {{ user.lastname }}
+                        </div>
+                    </div>
+
+                </div>
+                <div class = "custom-dropdown">
+                    <span class = "name">TaskGroup</span><br>
+                    <select id="task_group" [(ngModel)] = "createTaskObj.taskGroupId">
+                        <option *ngFor="let group of taskGroups" [value]="group.id">{{group.title}}</option>
+                    </select>
+                </div>
             </div>
         </div>
         
         <div class="right">
             <div class="description">
                 <span class="name">Task Description</span>
-                <textarea class="input-field" id="description" placeholder="  Write your description"></textarea>
+                <textarea class="input-field" id="description" placeholder="  Write your description" [(ngModel)] = "createTaskObj.description"></textarea>
             </div>
             <div class="related">
                 <span class="name" id="relatedproject">Related tasks</span>
                 <div class="link-create-cancel">
                     <button id="related-button">Link task</button><p></p>
                     <div class="create-cancel">
-                        <button class="create">Create</button>
+                        <button class="create" (click)="createTask()">Create</button>
                         <!-- <button class="create" (click)="createProject()">Create</button> -->
                         <button class="cancel" (click)="closeOverlay()">Cancel</button>
                     </div>
