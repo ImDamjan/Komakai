@@ -20,14 +20,6 @@ namespace server.Repositories
         {
             return await _context.Roles.ToListAsync();
         }
-
-        public async Task<Role?> GetRoleByIdAsync(int role_id)
-        {
-            return await _context.Roles
-                .Include(r=>r.RolePermissions)
-                    .ThenInclude(rp=>rp.Permission)
-                .FirstOrDefaultAsync(r=> r.Id==role_id);
-        }
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
