@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { environment } from '../enviroments/environment';
 import { Assignment } from '../models/assignment';
+import { Task } from '../models/task';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +49,24 @@ export class AssignmentService {
   {
     const url = this.baseUrl + "/Assignment/create";
     return this.http.post<Assignment>(url,createAssignmentData);
+  }
+  getAllTasks(): Observable<Task[]> { // Specify Task[] as the expected response type
+
+    const token = localStorage.getItem('token');
+
+    let nameidentifier = '';
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token) as { 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier': string };
+        nameidentifier = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+        console.log(nameidentifier)
+      } catch (error) {
+        console.error('Error decoding JWT token:', error);
+      }
+    }
+
+    return this.http.get<Task[]>(this.baseUrl+`/Assignment/getByUser/` + nameidentifier);
   }
   // "taskGroupId": 1,
   // "userIds": [

@@ -4,7 +4,6 @@ import { Priority } from "./priority";
 export interface Task{
     timeDifference: number;
     remaining: string;
-    priority: any;
     priority: String;
     endMilliseconds: number;
     startMilliSeconds: Number;

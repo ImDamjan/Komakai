@@ -12,11 +12,11 @@
             {{ column.name }}
           </div>
           <!-- Dodajemo dugme na početak kolone -->
-          <div class="create"><button class="task-button" (click)="openCreateOverlay()">New task</button></div>
+          <div class="create"><button class="task-button" (click)="openCreateOverlay(column.id)">New task</button></div>
           <!-- ovde treba da se omoguci da kada se klikne na task da se otvori task details -->
           <div class="tasks-container"
           id="{{column.id}}"
-          [cdkDropListConnectedTo]="['1', '2','3','4','5','6']"
+          [cdkDropListConnectedTo]="column.columnIds"
           cdkDropList
           [cdkDropListData]="column.tasks"
           (cdkDropListDropped)="drop($event)">

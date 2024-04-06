@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, Input, inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CreateProjectOverlayComponent } from '../create-project-overlay/create-project-overlay.component';
 
 @Component({
@@ -8,7 +8,10 @@ import { CreateProjectOverlayComponent } from '../create-project-overlay/create-
   styleUrl: './add-task.component.css'
 })
 export class AddTaskComponent {
-  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>) { }
+
+  private dat : any =  inject(MAT_DIALOG_DATA)
+  private dialogRef = inject(MatDialogRef<AddTaskComponent>);
+  constructor() { console.log(this.dat)}
 
   closeOverlay(): void {
     this.dialogRef.close();

@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { AssignmentService } from '../../services/assignment.service';
+import { stat } from 'fs';
 
 @Component({
   selector: 'app-kanban',
@@ -36,8 +37,10 @@ export class KanbanComponent implements OnInit{
   projectText: string = 'Project details';
 
 
-  openCreateOverlay(): void {
+  //otvaranje create Taska
+  openCreateOverlay(column_id : string): void {
     const dialogRef = this.dialog.open(AddTaskComponent, {
+      data:[column_id]
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -51,12 +54,18 @@ export class KanbanComponent implements OnInit{
     this.projectText = 'Project details/Create task';
   }
 
+  
+  //pravljenje kanbana
   public ngOnInit(): void {
     console.log(this.board);
     
     this.state_service.fetchAllStates().subscribe({
       next : (states : State[])=>
     {
+      let ids :string[]= []
+      states.forEach(state => {
+        ids.push(state.id + "");
+      });
       
       //treba da se stavi od kliknutog projekta id
         this.assignment_service.getAllProjectAssignments(this.projectId).subscribe({
@@ -70,7 +79,7 @@ export class KanbanComponent implements OnInit{
                 stateProjects.push(assignment);
             });
             console.log(stateProjects);
-          columns.push(new Column(state.name,state.id + "",stateProjects));
+          columns.push(new Column(state.name,state.id + "",stateProjects,ids));
         });
         this.board.columns = columns;
       },

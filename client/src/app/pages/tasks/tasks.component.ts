@@ -79,34 +79,16 @@ export class TasksComponent {
             priorityId: task.priorityId,
             projectId: 1,
             type: task.type,
-            priority: ""
+            priority: "",
+            timeDifference: 0,
+            remaining: ''
           }
           this.taskObj.push(myObj);
         });
-        
-        // this.taskObj.forEach(task => {
 
-        //   const start = new Date(task.start);
-        //   task.startDate = start.getDate();
-        //   task.startMonth = start.getMonth() + 1;
-        //   task.startYear = start.getFullYear();
-        //   task.startHours = start.getHours();
-        //   task.startMinutes = start.getMinutes();
-        //   task.startSeconds = start.getSeconds();
-        //   task.startMilliSeconds = start.getMilliseconds();
-
-        //   const end = new Date(task.end);
-        //   const endTime = end.getTime();
-
-        //   task.endDate = end.getDate();
-        //   task.endMonth = end.getMonth() + 1;
-        //   task.endYear = end.getFullYear();
-        //   task.endHours = end.getHours();
-        //   task.endMinutes = end.getMinutes();
-        //   task.endSeconds = end.getSeconds();
-        //   task.endMilliseconds = end.getMilliseconds();
-
-        // });
+        this.taskObj.forEach(task => {
+          const end = task.end;
+          const start = task.start;
           const timeDifference = end.getTime()-start.getTime();
           task.timeDifference = timeDifference;
           const current = new Date();
