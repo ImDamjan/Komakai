@@ -71,6 +71,7 @@ namespace server.Models
         [InverseProperty("Project")]
         public virtual ICollection<TaskGroup> TaskGroups { get; set; } = new List<TaskGroup>();
 
-        
+        [InverseProperty("Project")]
+        public virtual ICollection<UserProjectPermission> ProjectPermissions { get; set; } = new List<UserProjectPermission>();
     }
 }
