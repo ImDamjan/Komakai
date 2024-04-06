@@ -36,6 +36,7 @@ import { TaskCardKanbanComponent } from './components/task-card-kanban/task-card
 import { AddTaskComponent } from './components/add-task/add-task.component';
 import { GantogramComponent } from './components/gantogram/gantogram.component';
 import { AdminComponent } from './pages/admin/admin.component';
+import { MemberComponent } from './components/member/member.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { AdminComponent } from './pages/admin/admin.component';
     TaskCardKanbanComponent,
     AddTaskComponent,
     GantogramComponent,
-    AdminComponent
+    AdminComponent,
+    MemberComponent
   ],
   imports: [
     FormsModule,
