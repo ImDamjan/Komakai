@@ -5,3 +5,11 @@
     display: flex;
 }
 
+#page {
+    background-image: url("../../../assets/pictures/background.svg");
+}
+
+#title {
+    margin-right: 15%;
+    width: 10%;
+}
