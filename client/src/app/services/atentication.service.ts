@@ -46,11 +46,11 @@ export class AuthenticationService {
     let localStorage : Storage;
     if(typeof window !== 'undefined' && window.localStorage)
     {
-      console.log("Usao sam u if za autentifikaciju")
+      // console.log("Usao sam u if za autentifikaciju")
       localStorage = window.localStorage;
       if(localStorage.getItem("token"))
       {
-        console.log("Autentifikovan sam")
+        // console.log("Autentifikovan sam")
         return true
       }
     }
