@@ -1,5 +1,5 @@
 export interface Assignment {
-    id : Number,
+    id : number,
     assignees : Number[],
     dependentOn : Number[],
     title : String,

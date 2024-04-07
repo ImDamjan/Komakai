@@ -11,6 +11,7 @@ import { TaskGroupService } from '../../services/task-group.service';
 import { Project } from '../../models/project';
 import { Assignment } from '../../models/assignment';
 import { AssignmentService } from '../../services/assignment.service';
+import { start } from 'repl';
 
 @Component({
   selector: 'app-add-task',
@@ -22,6 +23,7 @@ export class AddTaskComponent implements OnInit {
   private data : any =  inject(MAT_DIALOG_DATA)
   public state : State;
   public showDropdown: boolean;
+  public showDropdownTask : boolean;
   public users : User[] = [];
   public taskGroups : TaskGroup[] = [];
   public message : string = "";
@@ -65,15 +67,18 @@ export class AddTaskComponent implements OnInit {
   private userService = inject(UserService);
   private taskGroupService =  inject(TaskGroupService);
   private assignmentService = inject(AssignmentService);
+  public assignments : Assignment[] = [];
 
   constructor() { 
     this.showDropdown = false;
+    this.showDropdownTask = false;
     this.state = {
       id : 0,
       name : ""
     }
   }
   ngOnInit(): void {
+    this.assignments = this.data[2];
     this.stateService.fetchStateName(Number(this.data[0])).subscribe({
       next : (stateName : string) => {
         this.state = {id : Number(this.data[0]), name : stateName};
@@ -90,6 +95,7 @@ export class AddTaskComponent implements OnInit {
       next : (groups: TaskGroup[])=> {this.taskGroups = groups},
       error:(error: any)=> console.log(error)
     });
+    
   }
 
   createTask() : void{
@@ -102,18 +108,19 @@ export class AddTaskComponent implements OnInit {
       this.message = "Form is not filled properly, check if you entered everything correctly.";
       return;
     }
-    let today = new Date().toString();
-    let todayTime = new Date(today);
+    let todayTime = new Date();
     this.createTaskObj.end = new Date(this.createTaskObj.end);
     this.createTaskObj.start = new Date(this.createTaskObj.start);
     console.log(todayTime);
     console.log(this.createTaskObj.start);
-    console.log(this.createTaskObj.end);
     if(this.createTaskObj.end < this.createTaskObj.start)
     {
       this.message = "End date comes before start date.";
       return;
     }
+    todayTime.setTime(this.createTaskObj.start.getTime());
+    console.log(todayTime);
+    console.log(this.createTaskObj.start);
     if(this.createTaskObj.start < todayTime)
     {
       this.message = "Start date comes before today.";
@@ -121,7 +128,7 @@ export class AddTaskComponent implements OnInit {
 
     }
     this.assignmentService.createAssignment(this.createTaskObj).subscribe({
-      next : (asign : Assignment) => console.log("Creation succesful"),
+      next : (asign : Assignment) => {console.log("Creation succesful"); prompt("Task created successfully!")},
       error: (error)=> console.log(error)
     });
 
@@ -144,5 +151,21 @@ export class AddTaskComponent implements OnInit {
   closeOverlay(): void {
     // Close the overlay dialog
     this.dialogRef.close();
-}
+  }
+  toggleDropdownTask()
+  {
+    this.showDropdownTask = !this.showDropdownTask;
+  }
+  isSelectedTask(task_id:number)
+  {
+    return this.selectedDependentOn.includes(task_id);
+  }
+  toggleTaskSelection(task_id:number, event: Event)
+  {
+    event.stopPropagation();
+    if(this.isSelectedTask(task_id))
+      this.selectedDependentOn = this.selectedDependentOn.filter(id=>id !== task_id);
+    else
+      this.selectedDependentOn.push(task_id);
+  }
 }

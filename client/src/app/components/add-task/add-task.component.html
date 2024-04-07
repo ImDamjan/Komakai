@@ -57,7 +57,13 @@
             <div class="related">
                 <span class="name" id="relatedproject">Related tasks</span>
                 <div class="link-create-cancel">
-                    <button id="related-button">Link task</button><p></p>
+                    <span id="related-button" (click)="toggleDropdownTask()">Link task</span>
+                    <div class = "task-options" *ngIf="showDropdownTask">
+                        <div class = "task-option" *ngFor="let task of assignments" (click)="toggleTaskSelection(task.id,$event)" >
+                            <input type="checkbox" [checked]="isSelectedTask(task.id)" (click)="toggleTaskSelection(task.id,$event)"> 
+                            <span [title]="task.title">{{task.dummyTitle}}</span>
+                        </div>
+                    </div>
                     <div class="create-cancel">
                         <button class="create" (click)="createTask()">Create</button>
                         <!-- <button class="create" (click)="createProject()">Create</button> -->
