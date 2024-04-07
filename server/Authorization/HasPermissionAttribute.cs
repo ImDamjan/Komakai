@@ -4,8 +4,8 @@ namespace server.Authorization
 {
     public class HasPermissionAttribute : AuthorizeAttribute
     {
-        public HasPermissionAttribute(string permission) 
-            :base(policy: permission)
+        public HasPermissionAttribute(Permisija permission) 
+            :base(policy: permission.ToString())
         {
 
         }
