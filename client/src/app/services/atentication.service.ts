@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Login } from '../models/login';
 import { environment } from '../enviroments/environment';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { Observable } from 'rxjs';
 export class AuthenticationService {
 
   baseUrl:string = environment.apiUrl
+  private router = inject(Router);
 
   constructor(private httpClient: HttpClient) { }
 
@@ -19,6 +21,12 @@ export class AuthenticationService {
       responseType: 'text' as 'json'  // Postavite responseType na 'text'
     };
     return this.httpClient.post<string>(this.baseUrl+`/Auth/login`, loginData, httpOptions)
+  }
+
+  logout() : void
+  {
+    localStorage.removeItem("token");
+    this.router.navigate(["auth"]);
   }
 
   // Services
@@ -38,11 +46,11 @@ export class AuthenticationService {
     let localStorage : Storage;
     if(typeof window !== 'undefined' && window.localStorage)
     {
-      console.log("Usao sam u if za autentifikaciju")
+      // console.log("Usao sam u if za autentifikaciju")
       localStorage = window.localStorage;
       if(localStorage.getItem("token"))
       {
-        console.log("Autentifikovan sam")
+        // console.log("Autentifikovan sam")
         return true
       }
     }

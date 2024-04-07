@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SvelteGantt, SvelteGanttTable } from 'svelte-gantt';
+// import { SvelteGantt, SvelteGanttTable } from 'svelte-gantt';
 
 @Component({
   selector: 'app-gantogram',
