@@ -111,16 +111,17 @@ export class AddTaskComponent implements OnInit {
     let todayTime = new Date();
     this.createTaskObj.end = new Date(this.createTaskObj.end);
     this.createTaskObj.start = new Date(this.createTaskObj.start);
-    console.log(todayTime);
-    console.log(this.createTaskObj.start);
+    //provera da li je end pre starta
     if(this.createTaskObj.end < this.createTaskObj.start)
     {
       this.message = "End date comes before start date.";
       return;
     }
-    todayTime.setTime(this.createTaskObj.start.getTime());
+    todayTime.setHours(0, 0, 0, 0);
+    this.createTaskObj.start.setHours(0,0,0,0);
     console.log(todayTime);
     console.log(this.createTaskObj.start);
+    //prvera da li je start date pre danasnjeg
     if(this.createTaskObj.start < todayTime)
     {
       this.message = "Start date comes before today.";
@@ -128,7 +129,11 @@ export class AddTaskComponent implements OnInit {
 
     }
     this.assignmentService.createAssignment(this.createTaskObj).subscribe({
-      next : (asign : Assignment) => {console.log("Creation succesful"); prompt("Task created successfully!")},
+      next : (asign : Assignment) => {
+        console.log("Creation succesful");
+        confirm("Task created successfully!");
+        this.closeOverlay();
+      },
       error: (error)=> console.log(error)
     });
 
