@@ -45,6 +45,7 @@ export class SidenavComponent implements OnInit {
 
   faDashboard = faSlack;
 
+
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
 
   collapsed = false;
