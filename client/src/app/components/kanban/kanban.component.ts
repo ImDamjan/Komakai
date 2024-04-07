@@ -25,6 +25,7 @@ export class KanbanComponent implements OnInit{
    private state_service = inject(StateService);
    private assignment_service = inject (AssignmentService);
    private route = inject(ActivatedRoute);
+   private assignments : Assignment[] = [];
    
   constructor(private dialog: MatDialog)
   {
@@ -40,7 +41,7 @@ export class KanbanComponent implements OnInit{
   //otvaranje create Taska
   openCreateOverlay(column_id : string): void {
     const dialogRef = this.dialog.open(AddTaskComponent, {
-      data:[column_id,this.projectId]
+      data:[column_id,this.projectId, this.assignments]
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -75,6 +76,7 @@ export class KanbanComponent implements OnInit{
         this.assignment_service.getAllProjectAssignments(this.projectId).subscribe({
           next : (assignments : Assignment[])=>
         {
+          this.assignments = assignments;
           let columns : Column[] = [];
           states.forEach(state => {
             let stateProjects : Assignment[] = [];
