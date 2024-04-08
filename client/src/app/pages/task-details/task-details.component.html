@@ -1,5 +1,5 @@
 <br><br>
-<div id = "task-details">
+<div id = "task-details" class = "overlay-container">
     <h1>Task Name</h1>
     <br>
     <div class = 'details'>
@@ -20,15 +20,15 @@
         </div>
         <div class = "row">
             <p>Due Date</p>
-            <span>{{asignment.end.toLocaleString()}}</span>
+            <span>{{assignment.end.toLocaleString()}}</span>
         </div>
         <div class = "row">
             <p>Progress</p>
-            <span>{{asignment.percentage}}</span>
+            <span>{{assignment.percentage}}</span>
         </div>
         <div class = "row">
             <p>Type</p>
-            <span>{{asignment.type}}</span>
+            <span>{{assignment.type}}</span>
         </div>
     </div>
     <hr>
@@ -38,7 +38,7 @@
     </div>
     <hr>
     <div id = "description">
-        {{asignment.description}}
+        {{assignment.description}}
     </div>
     <hr>
     <div id = 'comments'>

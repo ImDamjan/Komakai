@@ -13,6 +13,7 @@ export interface Task{
     endYear: Number;
     endMonth: Number;
     endDate: Number;
+    owner: Number;
     startSeconds: Number;
     startMinutes: Number;
     startHours: Number;

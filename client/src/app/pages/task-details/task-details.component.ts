@@ -8,6 +8,8 @@ import { User } from '../../models/user';
 import { Assignment } from '../../models/assignment';
 import { UserService } from '../../services/user.service';
 import { PriorityService } from '../../services/priority.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Task } from '../../models/task';
 
 @Component({
   selector: 'app-task-details',
@@ -20,12 +22,14 @@ export class TaskDetailsComponent implements OnInit{
   private state_service =  inject(StateService);
   private user_service = inject(UserService);
   private priority_service = inject(PriorityService);
+  private dialogRef = inject(MatDialogRef<TaskDetailsComponent>);
+  private data : any =  inject(MAT_DIALOG_DATA)
 
   public priority! :string;
   public state!: string;
   public Owner!: User;
   public assignees : User[] = [];
-  public asignment! : Assignment;
+  public assignment! : Task;
   public dependentTasks : Assignment[] = [];
   private taskId : Number = 0;
   constructor() {
@@ -33,25 +37,26 @@ export class TaskDetailsComponent implements OnInit{
   }
   //zbog ovoga mozda treba izmena dto-a na backu ?
   ngOnInit(): void {
-    this.assignment_service.getAssignmentById(this.taskId.valueOf()).subscribe({
-      next : (assignment: Assignment)=>{
-        this.asignment = assignment;
-        this.state_service.fetchStateName(assignment.stateId.valueOf()).subscribe({
-          next : (name : string)=> {
-            this.state =name;
-          }
-        });
-        this.priority_service.fetchPriorityName(assignment.priorityId.valueOf()).subscribe({
-          next :(name : string) => {
-            this.priority = name;
-          }
-        });
-        this.user_service.getUserById(assignment.owner).subscribe({
-          next :(user : User) => {
-            this.Owner = user;
-          }
-        });
+    this.assignment = this.data[0];
+    this.state_service.fetchStateName(this.assignment.stateId.valueOf()).subscribe({
+      next : (name : string)=> {
+        this.state =name;
       }
     });
+    this.priority_service.fetchPriorityName(this.assignment.priorityId.valueOf()).subscribe({
+      next :(name : string) => {
+        this.priority = name;
+      }
+    });
+    this.user_service.getUserById(this.assignment.owner.valueOf()).subscribe({
+      next :(user : User) => {
+        this.Owner = user;
+      }
+    });
+  }
+
+  closeOverlay()
+  {
+    this.dialogRef.close();
   }
 }

@@ -23,7 +23,6 @@ const routes: Routes = [
   {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
   {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]},
   {path: 'projects/project-details/:projectId', component: ProjectDetailsComponent,canActivate: [AuthGuard]},
-  {path: 'tasks/task-details/:taskId', component: TaskDetailsComponent,canActivate: [AuthGuard]}
 ];
 
 @NgModule({

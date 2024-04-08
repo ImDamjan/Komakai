@@ -1,11 +1,21 @@
 #task-details{
     padding: 40px;
-    width: 100%;
 }
 .row{
-    width: 100%;
     display: flex;
 }
 .row span{
     padding: 0px 50px;
+}
+.overlay-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: auto;
+    background-color: white;
+    z-index: 9999;
+    box-shadow: 10px 20px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
 }
