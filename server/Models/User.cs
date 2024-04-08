@@ -49,7 +49,7 @@ namespace server.Models
 
 
         [Column("role_id")]
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
 
 
         [InverseProperty("User")]

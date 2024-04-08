@@ -14,8 +14,8 @@ import { AuthenticationService } from '../../services/atentication.service';
 })
 export class LoginComponent{
   loginObj: Login = {
-    username: "aleksandrastaniic",
-    password: "Boki037"
+    username: "johndoe",
+    password: "password123"
   } as Login;
 
   loginForm!: FormGroup;
@@ -32,7 +32,8 @@ export class LoginComponent{
   onLogin(): void {
     this.authService.login(this.loginObj).subscribe({
       next:(response)=>{
-        this.authService.setToken(response)
+        this.authService.setToken(response);
+        console.log("logovan sam " + this.authService.isAuthenticated());
         this.router.navigate(['/dashboard']);
       },
       error:(error)=>{

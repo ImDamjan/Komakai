@@ -36,6 +36,10 @@ import { TaskCardKanbanComponent } from './components/task-card-kanban/task-card
 import { AddTaskComponent } from './components/add-task/add-task.component';
 import { TaskHeaderComponent } from './components/task-header/task-header.component';
 import { ProjectHeaderComponent } from './components/project-header/project-header.component';
+import { GantogramComponent } from './components/gantogram/gantogram.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { MemberComponent } from './components/member/member.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +69,11 @@ import { ProjectHeaderComponent } from './components/project-header/project-head
     TaskCardKanbanComponent,
     AddTaskComponent,
     TaskHeaderComponent,
-    ProjectHeaderComponent
+    ProjectHeaderComponent,
+    GantogramComponent,
+    AdminComponent,
+    MemberComponent,
+    LogoutComponent,
   ],
   imports: [
     FormsModule,

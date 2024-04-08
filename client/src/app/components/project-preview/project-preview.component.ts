@@ -67,7 +67,7 @@ export class ProjectPreviewComponent implements OnInit {
             }
           );
 
-          this.assignmentService.getAssignmentsByProject(project.id).subscribe(
+          this.assignmentService.getAllProjectAssignments(project.id).subscribe(
             (assignments: any[]) => {
               project.assignmentCount = assignments.length;
             },

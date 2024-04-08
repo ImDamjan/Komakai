@@ -1,5 +1,4 @@
 <div class="wrapper">
-    <app-sidenav *ngIf="userIsLogged"></app-sidenav>
+    <app-sidenav *ngIf="authService.isAuthenticated()"></app-sidenav>
     <router-outlet class="app"></router-outlet>
-    <!-- <button (click)="test()">Test</button> -->
 </div>
