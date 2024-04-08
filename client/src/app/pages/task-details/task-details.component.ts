@@ -36,6 +36,8 @@ export class TaskDetailsComponent implements OnInit{
     this.taskId = Number(this.route.snapshot.paramMap.get('taskId'));
   }
   //zbog ovoga mozda treba izmena dto-a na backu ?
+  //vracati cele stateove, prioritete?
+  // vracati cele usere?
   ngOnInit(): void {
     this.assignment = this.data[0];
     this.state_service.fetchStateName(this.assignment.stateId.valueOf()).subscribe({
