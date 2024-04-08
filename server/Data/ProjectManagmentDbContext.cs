@@ -27,5 +27,6 @@ namespace server.Data
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<TeamTag> TeamTags { get; set; }
         public DbSet<UserProjectRoles> UserProjectRoles { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
     }
 }
