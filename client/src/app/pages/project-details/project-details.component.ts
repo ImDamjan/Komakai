@@ -1,21 +1,39 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from '../../components/add-task/add-task.component';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ProjectService } from '../../services/project.service';
+import { Project } from '../../models/project';
 
 @Component({
   selector: 'app-project-details',
   templateUrl: './project-details.component.html',
   styleUrl: './project-details.component.css'
 })
-export class ProjectDetailsComponent {
+export class ProjectDetailsComponent implements OnInit{
   showProjectDetails: boolean = true;
   showCreateButton: boolean = true;
   projectText: string = 'Project details';
 
-  currentView: string = 'kanban'; // Default view
+  currentView: string = 'kanban';
   scrolledDown: boolean = false;
+  projectName: string = '';
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private projectService: ProjectService, private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    this.route.url.subscribe(urlSegments => {
+      const projectId = +urlSegments[urlSegments.length - 1].path;
+      this.fetchProjectName(projectId);
+    });
+  }
+
+  fetchProjectName(projectId: number): void {
+    this.projectService.getProjectById(projectId)
+    .subscribe((project: Project) => {
+      this.projectName = project.title; 
+    });
+  }
 
   openCreateOverlay(): void {
     const dialogRef = this.dialog.open(AddTaskComponent, {
