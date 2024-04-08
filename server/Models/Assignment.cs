@@ -16,6 +16,8 @@ namespace server.Models
 
         [Column("title", TypeName ="varchar(45)")]
         public string Title { get; set; } = null!;
+        [Column("owner")]
+        public int Owner { get; set; }
 
         [Column("description")]
         public string Description { get; set; } = null!;
@@ -63,6 +65,10 @@ namespace server.Models
         [ForeignKey("StateId")]
         [InverseProperty("Assignments")]
         public virtual State State { get; set; } = null!; 
+
+        [ForeignKey("Owner")]
+        [InverseProperty("OwnedAssignments")]
+        public virtual User User { get; set; } = null!;
 
         //dependency
         [ForeignKey("DependentOnAssignmentId")]

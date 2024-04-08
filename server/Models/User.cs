@@ -63,6 +63,9 @@ namespace server.Models
         [InverseProperty("Users")]
         public virtual ICollection<Assignment> AssignmentsNavigation { get; set; } = new List<Assignment>();
 
+        [InverseProperty("User")]
+        public virtual ICollection<Assignment> OwnedAssignments { get; set; } = new List<Assignment>();
+
 
         //many-to-many-condition
         [InverseProperty("Users")]

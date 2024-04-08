@@ -12,6 +12,7 @@ namespace server.Mappers
         public static Assignment fromCreateDtoToAssignment(this CreateAssignmentDto dto, List<User> users, List<Assignment> dependencies, TaskGroup group)
         {
             return new Assignment{
+                Owner = dto.Owner,
                 Title = dto.Title,
                 Type = dto.Type,
                 Start = dto.Start,
@@ -30,6 +31,7 @@ namespace server.Mappers
             return new AssignmentDto{
                 Id = a.Id,
                 Title = a.Title,
+                Owner = a.Owner,
                 Description = a.Description,
                 Start = a.Start,
                 End = a.End,
