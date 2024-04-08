@@ -1,4 +1,5 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input, inject} from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-task',
@@ -7,6 +8,7 @@ import { Component, Input} from '@angular/core';
 })
 export class ProjectTaskComponent {
   @Input() task: any;
+  private router = inject(Router);
 
   getPriorityClass(priority: string): string {
     switch (priority) {
@@ -39,7 +41,10 @@ export class ProjectTaskComponent {
       return null;
     }
   }
-
+  navigateToTaskDetails(task_id:number)
+  {
+    this.router.navigate(["tasks","task-details",task_id]);
+  }
   extractNumberAndText(text: string): { number: number | null; text: string | null } {
     const regex = /(\d+\.?\d*)/; // Match digits, optional decimal, and digits
     const match = regex.exec(text);
