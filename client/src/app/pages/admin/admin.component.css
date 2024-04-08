@@ -1,7 +1,8 @@
 .wrapper{
     display: flex;
-    margin: 200px;
-    justify-content: space-around;
+    margin: 35px;
+    margin-top: 70px;
+    justify-content: space-between;
 }
 
 .members{
