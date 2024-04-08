@@ -2,10 +2,13 @@
     display: flex;
     margin: 35px;
     margin-top: 70px;
-    justify-content: space-between;
 }
 
 .members{
-    margin-left: 20px;
-    padding: 20px;
+    flex: 1;
 }
+
+.register { 
+    position: fixed;
+}
+
