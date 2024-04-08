@@ -1,14 +1,11 @@
-.wrapper{
-    display: flex;
-    margin: 35px;
-    margin-top: 70px;
-}
-
 .members{
     flex: 1;
 }
-
-.register { 
-    position: fixed;
+.wrapper {
+    margin-left: 35px;
+    margin-top: 70px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px;
 }
 
