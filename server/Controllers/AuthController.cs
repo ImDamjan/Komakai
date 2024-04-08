@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.ObjectPool;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using server.Data;
 using server.DTOs.Users;
@@ -21,12 +23,14 @@ namespace server.Controllers
         private readonly IUserRepository _repos;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
+        private readonly IRoleRepository _role_repo;
 
-        public AuthController(IUserRepository userRepository, IConfiguration configuration,IEmailService emailService)
+        public AuthController(IUserRepository userRepository, IConfiguration configuration,IEmailService emailService, IRoleRepository role_repo)
         {
             _emailService = emailService;
             _repos = userRepository;
             _configuration = configuration;
+            _role_repo = role_repo;
         }
 
         //Registracija
@@ -87,19 +91,27 @@ namespace server.Controllers
                 return BadRequest("User or Password incorrect");
             }
 
-            string token = CreateToken(user);
+            var token = await CreateToken(user);
+            if(token == null)
+                return BadRequest("Login unsuccessful");
 
             return Ok(token);
         }
 
         [NonAction]
-        public string CreateToken(User user)
+        public async Task<string?> CreateToken(User user)
         {
+            var role = await _role_repo.GetRoleByIdAsync(user.RoleId);
+            if(role==null)
+                return null;
             //postavi username kao claim
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role,user.RoleId.ToString()),
+                //izmenjeno je zbog toga sto na frontu nije moglo da se uzme
+                new Claim("user_id",user.Id.ToString()),
+                new Claim("fullname",user.Name + " "+user.Lastname),
+                new Claim("role_id", user.RoleId.ToString()),
+                new Claim("role", role.Name.ToString())
             };
 
             //kreiraj i verifikuj json token

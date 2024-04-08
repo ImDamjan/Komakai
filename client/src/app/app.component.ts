@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { AuthenticationService } from './services/atentication.service';
 import { Router } from '@angular/router';
 
@@ -12,8 +12,19 @@ export class AppComponent implements OnInit{
 
   userIsLogged: boolean = false
 
-  constructor(private router: Router, private authService: AuthenticationService){ }
 
-  ngOnInit(): void { this.userIsLogged = this.authService.isAuthenticated() }
-  
+  constructor(private router: Router, public authService: AuthenticationService){
+    //router.events.subscribe((url:any) => console.log(url));
+    //console.log("Ovo je neki url: " + this.router.url);
+  }
+
+  ngOnInit(): void {
+    this.userIsLogged = this.authService.isAuthenticated()
+    //console.log("Ovo je url oninit: " + this.router.url)
+    console.log("logovan sam iz app " + this.authService.isAuthenticated());
+  }
+  // test(): void{
+  //   console.log(this.router.url)
+  // }
+
 }

@@ -16,6 +16,12 @@
 .info{
     color: white;
 }
+#name_logout p {
+    padding: 0 20px 0 0px;
+}
+#name_logout{
+    display: flex;
+}
 
 .picture{
     margin-right: 20px;

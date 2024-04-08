@@ -37,6 +37,7 @@ import { AddTaskComponent } from './components/add-task/add-task.component';
 import { GantogramComponent } from './components/gantogram/gantogram.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { MemberComponent } from './components/member/member.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { MemberComponent } from './components/member/member.component';
     AddTaskComponent,
     GantogramComponent,
     AdminComponent,
-    MemberComponent
+    MemberComponent,
+    LogoutComponent,
   ],
   imports: [
     FormsModule,

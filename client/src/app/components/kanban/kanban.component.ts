@@ -6,11 +6,12 @@ import { TaskKanban } from '../../models/kanbantask';
 import { TaskCardKanbanComponent } from '../task-card-kanban/task-card-kanban.component';
 import { StateService } from '../../services/state.service';
 import { State } from '../../models/state';
-import { KanbanAssignmentService } from '../../services/kanban-assignment.service';
 import { Assignment } from '../../models/assignment';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from '../add-task/add-task.component';
+import { AssignmentService } from '../../services/assignment.service';
+import { stat } from 'fs';
 
 @Component({
   selector: 'app-kanban',
@@ -22,8 +23,9 @@ export class KanbanComponent implements OnInit{
    public board: Board;
    private projectId : Number = 0;
    private state_service = inject(StateService);
-   private assignment_service = inject (KanbanAssignmentService);
+   private assignment_service = inject (AssignmentService);
    private route = inject(ActivatedRoute);
+   private assignments : Assignment[] = [];
    
   constructor(private dialog: MatDialog)
   {
@@ -36,11 +38,14 @@ export class KanbanComponent implements OnInit{
   projectText: string = 'Project details';
 
 
-  openCreateOverlay(): void {
+  //otvaranje create Taska
+  openCreateOverlay(column_id : string): void {
     const dialogRef = this.dialog.open(AddTaskComponent, {
+      data:[column_id,this.projectId, this.assignments]
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.getBoard();
       this.showProjectDetails = true;
       this.showCreateButton = true;
       this.projectText = 'Project details';
@@ -51,26 +56,47 @@ export class KanbanComponent implements OnInit{
     this.projectText = 'Project details/Create task';
   }
 
+  
+  //pravljenje kanbana
   public ngOnInit(): void {
-    console.log(this.board);
-    
+    this.getBoard();
+  }
+
+  private getBoard():void
+  {
     this.state_service.fetchAllStates().subscribe({
       next : (states : State[])=>
     {
+      let ids :string[]= []
+      states.forEach(state => {
+        ids.push(state.id + "");
+      });
       
       //treba da se stavi od kliknutog projekta id
         this.assignment_service.getAllProjectAssignments(this.projectId).subscribe({
           next : (assignments : Assignment[])=>
         {
+          this.assignments = assignments;
           let columns : Column[] = [];
           states.forEach(state => {
             let stateProjects : Assignment[] = [];
             assignments.forEach(assignment => {
+              assignment.dummyTitle = assignment.title;
+              if(assignment.title.length > 20)
+              {
+                let new_title = "";
+                for (let i = 0; i < 20; i++) {
+                  const element = assignment.title[i];
+                  new_title+=element;
+                }
+                new_title+="...";
+                assignment.dummyTitle = new_title;
+              }
               if(assignment.stateId==state.id)
                 stateProjects.push(assignment);
             });
             console.log(stateProjects);
-          columns.push(new Column(state.name,state.id + "",stateProjects));
+          columns.push(new Column(state.name,state.id + "",stateProjects,ids));
         });
         this.board.columns = columns;
       },

@@ -16,7 +16,7 @@ namespace server.Mappers
                 Type = dto.Type,
                 Start = dto.Start,
                 End = dto.End,
-                StateId = 1,
+                StateId = dto.StateId,
                 Description = dto.Description,
                 Users = users,
                 TaskGroup = group,
