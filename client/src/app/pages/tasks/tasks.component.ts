@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Injector, inject } from '@angular/core';
 import { Task } from '../../models/task';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../enviroments/environment';
@@ -6,6 +6,7 @@ import { Subscription, forkJoin, interval, map, switchMap, takeUntil } from 'rxj
 import { AssignmentService } from '../../services/assignment.service';
 import { Assignment } from '../../models/assignment';
 import { PriorityService } from '../../services/priority.service';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-tasks',
@@ -24,6 +25,7 @@ export class TasksComponent {
 
   satuses: any[] = [];
 
+  private jwtDecoder = inject(JwtDecoderService);
   remainingTimeSubscriptions: Subscription[] = [];
 
   constructor(private taskService: AssignmentService, private priorityService : PriorityService) { }
@@ -46,7 +48,14 @@ export class TasksComponent {
   }
 
   ngOnInit(): void {
-    this.taskService.getAllUserAssignments(1).subscribe(tasks => {
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+    }
+    this.taskService.getAllUserAssignments(id).subscribe(tasks => {
         this.tasks  = tasks;
         //ispravljeno tako da se assignment kastuje u task (potencijalno ce mozda da se izbaci)
         tasks.forEach(task => {

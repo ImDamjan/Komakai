@@ -32,7 +32,7 @@ namespace server.Controllers
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet("getUserById/{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
             var user=await _repos.GetUserByIdAsync(id);
@@ -40,7 +40,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return Ok(user);
+            return Ok(user.toUserDto());
         }
         [HttpGet("getProjectUsers/{project_id}")]
         public async Task<IActionResult> getProjectUsers([FromRoute] int project_id)
