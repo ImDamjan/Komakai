@@ -4,10 +4,9 @@
     padding: 40px 20px 0px 40px;
     display: flex;
     position: fixed;
-    transition: top 0.3s; /* Add transition for smooth movement */
-    top: 0; /* Initially position it at the top */
-    width: 100%; /* Make sure it spans the full width */
-    z-index: 1000;
+    transition: top 0.3s;
+    top: 0;
+    width: 100%;
 }
 
 #page {
