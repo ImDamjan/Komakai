@@ -17,9 +17,9 @@ namespace server.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public Task<UserProjectPermission> GetUserProjectPermissionById(int id)
+        public async Task<UserProjectPermission> GetUserProjectPermissionById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.UserProjectPermissions.FindAsync(id);
         }
 
         public Task RemoveUserProjectPermission(UserProjectPermission userProjectPermission)
