@@ -29,7 +29,7 @@ export class ProjectService implements OnInit{
     }
   }
 
-   getProjectsData(): Observable<any[]> {
+   getProjectsData(): Observable<Project[]> {
     
     //uzimanje id-a iz tokena
     // const token = localStorage.getItem('token');
@@ -51,6 +51,7 @@ export class ProjectService implements OnInit{
     if (id===0) {
       return of([]);
     }
+
     const apiUrl = `${this.baseUrl}/Project/userProjects/${id}`;
     return this.http.get<any[]>(apiUrl);
     }
@@ -69,5 +70,10 @@ export class ProjectService implements OnInit{
         type : project.type
       }
       return this.http.post<Project>(url,body);
-    }
+  }
+
+  getProjectById(projectId: number): Observable<Project> {
+    const url = `${this.baseUrl}/Project/getProject/${projectId}`; 
+    return this.http.get<Project>(url);
+  }
 }

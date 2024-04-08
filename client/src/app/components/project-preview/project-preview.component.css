@@ -251,7 +251,7 @@
   color: white;
 }
 
-.pagination-container.bottom {
+.pagination-container {
   position: fixed;
   left: 0;
   right: 0;
