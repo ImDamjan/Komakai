@@ -12,6 +12,7 @@ export class AppComponent implements OnInit{
 
   userIsLogged: boolean = false
 
+
   constructor(private router: Router, public authService: AuthenticationService){
     //router.events.subscribe((url:any) => console.log(url));
     //console.log("Ovo je neki url: " + this.router.url);
