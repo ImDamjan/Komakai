@@ -6,6 +6,8 @@
         <button id="create-button">Create</button>
     </div>
     <div class="choose">
-        <select id="choose-project"></select>
+        <select id="choose-project">
+            <option *ngFor="let project of projects" [value]="project.id">{{ project.title }}</option>
+        </select>
     </div>
 </div>
