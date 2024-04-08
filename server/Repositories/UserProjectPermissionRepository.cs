@@ -16,5 +16,15 @@ namespace server.Repositories
             _context.UserProjectPermissions.Add(userProjectPermission);
             await _context.SaveChangesAsync();
         }
+
+        public Task<UserProjectPermission> GetUserProjectPermissionById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveUserProjectPermission(UserProjectPermission userProjectPermission)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
