@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from '../../components/add-task/add-task.component';
 
@@ -11,6 +11,9 @@ export class ProjectDetailsComponent {
   showProjectDetails: boolean = true;
   showCreateButton: boolean = true;
   projectText: string = 'Project details';
+
+  currentView: string = 'kanban'; // Default view
+  scrolledDown: boolean = false;
 
   constructor(private dialog: MatDialog) { }
 
@@ -29,9 +32,16 @@ export class ProjectDetailsComponent {
     this.projectText = 'Project details/Create task';
   }
 
-  currentView: string = 'kanban'; // Default view
-
   changeView(view: string): void {
     this.currentView = view;
   }
+
+  @HostListener('window:scroll')
+onScroll() {
+  if (window.pageYOffset > 50) {
+    this.scrolledDown = true;
+  } else {
+    this.scrolledDown = false;
+  }
+}
 }
