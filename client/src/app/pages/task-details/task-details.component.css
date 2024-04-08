@@ -2,3 +2,10 @@
     padding: 40px;
     width: 100%;
 }
+.row{
+    width: 100%;
+    display: flex;
+}
+.row span{
+    padding: 0px 50px;
+}

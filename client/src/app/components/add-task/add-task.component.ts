@@ -12,6 +12,7 @@ import { Project } from '../../models/project';
 import { Assignment } from '../../models/assignment';
 import { AssignmentService } from '../../services/assignment.service';
 import { start } from 'repl';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-add-task',
@@ -42,7 +43,8 @@ export class AddTaskComponent implements OnInit {
     assignees : [],
     stateId : 0,
     priorityId : 4,
-    dummyTitle : ""
+    dummyTitle : "",
+    owner : 0
   };
 
   
@@ -66,7 +68,9 @@ export class AddTaskComponent implements OnInit {
   private stateService =  inject(StateService);
   private userService = inject(UserService);
   private taskGroupService =  inject(TaskGroupService);
+  private userId : number = 0;
   private assignmentService = inject(AssignmentService);
+  private decoder = inject(JwtDecoderService);
   public assignments : Assignment[] = [];
 
   constructor() { 
@@ -78,7 +82,13 @@ export class AddTaskComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    this.assignments = this.data[2];
+    let token = this.decoder.getToken();
+    if(token!=null)
+    {
+      let decode = this.decoder.decodeToken(token);
+      this.userId = decode.user_id;
+    }
+      this.assignments = this.data[2];
     this.stateService.fetchStateName(Number(this.data[0])).subscribe({
       next : (stateName : string) => {
         this.state = {id : Number(this.data[0]), name : stateName};
@@ -95,6 +105,7 @@ export class AddTaskComponent implements OnInit {
       next : (groups: TaskGroup[])=> {this.taskGroups = groups},
       error:(error: any)=> console.log(error)
     });
+
     
   }
 
@@ -102,6 +113,7 @@ export class AddTaskComponent implements OnInit {
     this.message = "";
     this.createTaskObj.assignees = this.selectedAssignees;
     this.createTaskObj.dependentOn = this.selectedDependentOn;
+    this.createTaskObj.owner = this.userId;
     console.log(this.createTaskObj);
     if(this.createTaskObj.assignees.length == 0 || this.createTaskObj.description =="" || this.createTaskObj.end== 0 || this.createTaskObj.start==0 || this.createTaskObj.taskGroupId==0)
     {

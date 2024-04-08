@@ -11,5 +11,6 @@ export interface Assignment {
     priorityId : Number,
     taskGroupId : Number,
     type : String,
-    dummyTitle : String
+    dummyTitle : String,
+    owner : number
 }
