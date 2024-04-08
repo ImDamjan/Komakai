@@ -14,7 +14,7 @@ namespace server.Repositories
         public async Task AddUserProjectPermission(UserProjectPermission userProjectPermission)
         {
             _context.UserProjectPermissions.Add(userProjectPermission);
-            await SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }
