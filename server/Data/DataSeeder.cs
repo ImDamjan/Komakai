@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.Authorization;
 using server.Models;
 
 namespace server.Data
@@ -78,7 +79,26 @@ namespace server.Data
                 _context.States.AddRange(states);
                 _context.SaveChanges();
             }
-            if(!_context.Roles.Any())
+            if (!_context.Permissions.Any())
+            {
+                var permissions = new List<Permission>
+            {
+                new Permission { Id = (int)Permisija.ViewProjectDetails, Name = "View Project Details", Description = "Allows users to view project details" },
+                new Permission { Id = (int)Permisija.EditProjectDetails, Name = "Edit Project Details", Description = "Allows users to edit project details" },
+                new Permission { Id = (int)Permisija.AddTask, Name = "Add Task", Description = "Allows users to add tasks to the project" },
+                new Permission { Id = (int)Permisija.DeleteTask, Name = "Delete Task", Description = "Allows users to delete tasks from the project" },
+                new Permission { Id = (int)Permisija.EditTask, Name = "Edit Task", Description = "Allows users to edit tasks in the project" },
+                new Permission { Id = (int)Permisija.AssignTask, Name = "Assign Task", Description = "Allows users to assign tasks to team members" },
+                new Permission { Id = (int)Permisija.AddComment, Name = "Add Comment", Description = "Allows users to add comments to tasks" },
+                new Permission { Id = (int)Permisija.DeleteComment, Name = "Delete Comment", Description = "Allows users to delete their comments from tasks" },
+                new Permission { Id = (int)Permisija.ViewTeamMembers, Name = "View Team Members", Description = "Allows users to view members of the project team" },
+                new Permission { Id = (int)Permisija.EditTeamMembers, Name = "Edit Team Members", Description = "Allows users to edit members of the project team" },
+                new Permission { Id = (int)Permisija.ChangeProjectState, Name = "Change Project State", Description = "Allows users to change the state of the project" }
+            };
+                _context.Permissions.AddRange(permissions);
+                _context.SaveChanges();
+            }
+            if (!_context.Roles.Any())
             {
                 var platformRoles = new List<Role>{
                     new Role{
