@@ -3,12 +3,12 @@
         <input id="search-field" type="text" placeholder="Search for project...">
     </div>
     <div id="list">
-        <button id="list-button"><img id="list-img" src="assets\project-header\list.svg"><span>List</span></button>
+        <button id="list-button" (click)="changeView('list')"><img id="list-img" src="assets\project-header\list.svg"><span>List</span></button>
     </div>
     <div id="kanban">
-        <button id="kanban-button"><img id="kanban-img" src="assets\project-header\kanban.svg"><span>Kanban</span></button>
+        <button id="kanban-button" (click)="changeView('kanban')"><img id="kanban-img" src="assets\project-header\kanban.svg"><span>Kanban</span></button>
     </div>
     <div id="gantt">
-        <button id="gantt-button"><img id="gantt-img" src="assets\project-header\gant.svg"><span>Gantogram</span></button>
+        <button id="gantt-button" (click)="changeView('gantt')"><img id="gantt-img" src="assets\project-header\gant.svg"><span>Gantogram</span></button>
     </div>
 </div>

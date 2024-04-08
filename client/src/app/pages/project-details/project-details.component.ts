@@ -28,4 +28,10 @@ export class ProjectDetailsComponent {
     this.showCreateButton = false;
     this.projectText = 'Project details/Create task';
   }
+
+  currentView: string = 'kanban'; // Default view
+
+  changeView(view: string): void {
+    this.currentView = view;
+  }
 }

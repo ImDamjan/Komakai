@@ -5,7 +5,11 @@
 <div id="page">
     <div id="project-header">
         <h1 id="title">Project list</h1>
-        <app-project-header></app-project-header>
+        <app-project-header (viewChange)="changeView($event)"></app-project-header>
     </div>
-    <app-kanban></app-kanban>
+    <div [ngSwitch]="currentView">
+        <app-kanban *ngSwitchCase="'kanban'"></app-kanban>
+        <!-- <app-list *ngSwitchCase="'list'"></app-list> -->
+        <!-- <app-gantt *ngSwitchCase="'gantt'"></app-gantt> -->
+    </div>
 </div>
