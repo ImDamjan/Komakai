@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnInit, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from '../enviroments/environment';
 import { jwtDecode } from 'jwt-decode';
 import { Project } from '../models/project';
+import { JwtDecoderService } from './jwt-decoder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class ProjectService implements OnInit{
   
   userId: number = -1;
   baseUrl = environment.apiUrl;
+  private jwtDecoder = inject(JwtDecoderService);
 
   constructor(private http: HttpClient) { }
 
@@ -30,19 +32,26 @@ export class ProjectService implements OnInit{
    getProjectsData(): Observable<any[]> {
     
     //uzimanje id-a iz tokena
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-      this.userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-    } else {
-      console.error('JWT token not found in local storage');
-    }
+    // const token = localStorage.getItem('token');
+    // if (token) {
+    //   const decodedToken: any = jwtDecode(token);
+    //   this.userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+    // } else {
+    //   console.error('JWT token not found in local storage');
+    // }
 
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+    }
     //deo za uzimanje projekata
-    if (!this.userId) {
+    if (id===0) {
       return of([]);
     }
-    const apiUrl = `${this.baseUrl}/Project/userProjects/${this.userId}`;
+    const apiUrl = `${this.baseUrl}/Project/userProjects/${id}`;
     return this.http.get<any[]>(apiUrl);
     }
 
