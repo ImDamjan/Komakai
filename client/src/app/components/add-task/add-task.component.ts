@@ -13,6 +13,8 @@ import { Assignment } from '../../models/assignment';
 import { AssignmentService } from '../../services/assignment.service';
 import { start } from 'repl';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { PriorityService } from '../../services/priority.service';
+import { Priority } from '../../models/priority';
 
 @Component({
   selector: 'app-add-task',
@@ -71,7 +73,9 @@ export class AddTaskComponent implements OnInit {
   private userId : number = 0;
   private assignmentService = inject(AssignmentService);
   private decoder = inject(JwtDecoderService);
+  private priority_service = inject(PriorityService);
   public assignments : Assignment[] = [];
+  public priorities : Priority[] = [];
 
   constructor() { 
     this.showDropdown = false;
@@ -89,6 +93,12 @@ export class AddTaskComponent implements OnInit {
       this.userId = decode.user_id;
     }
       this.assignments = this.data[2];
+  
+    this.priority_service.getPriorities().subscribe({
+      next : (prios :Priority[]) =>{
+        this.priorities = prios;
+      }
+    })
     this.stateService.fetchStateName(Number(this.data[0])).subscribe({
       next : (stateName : string) => {
         this.state = {id : Number(this.data[0]), name : stateName};

@@ -1,5 +1,5 @@
 export interface Priority {
-    id : Number,
-    level : Number,
-    description : String
+    id : number,
+    level : number,
+    description : string
 }
