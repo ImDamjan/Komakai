@@ -67,15 +67,6 @@ namespace server.Repositories
             return await _context.Assignments.FirstOrDefaultAsync(a=>a.Id==id);
         }
 
-        public async Task<List<User>> GetAssignmentUsersAsync(int task_id)
-        {
-            var task = await _context.Assignments.Include(a=>a.Users).FirstOrDefaultAsync(a=>a.Id==task_id);
-            if(task==null)
-                return new List<User>();
-
-            return task.Users.ToList();
-        }
-
         public async Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id)
         {
             var assignment = await GetAssignmentByidAsync(id);
@@ -133,6 +124,19 @@ namespace server.Repositories
             await _context.SaveChangesAsync();
 
             return asignment;
+            
+        }
+
+        public async Task<List<Assignment>> getDependentAssignments(int asign_id)
+        {
+            var asignment = await _context.Assignments.Include(a=>a.DependentOnAssignments).FirstOrDefaultAsync(a=>a.Id==asign_id);
+            if(asignment==null)
+            {
+                return new List<Assignment>();
+            }
+
+
+            return asignment.DependentOnAssignments.ToList();
             
         }
     }

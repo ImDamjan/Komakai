@@ -31,6 +31,14 @@ namespace server.Controllers
             return Ok(users);
         }
 
+        [HttpGet("getAssignmentUsers/{asign_id}")]
+        public async Task<IActionResult> getAssignmentUsers([FromRoute]int asign_id)
+        {
+            var users = await _repos.GetAssignmentUsersAsync(asign_id);
+            var dtos = users.Select(x => x.toUserDto());
+            return Ok(dtos);
+        }
+
 
         [HttpGet("getUserById/{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)

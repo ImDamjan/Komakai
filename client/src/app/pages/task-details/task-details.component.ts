@@ -88,6 +88,8 @@ export class TaskDetailsComponent implements OnInit{
 
       this.comment_service.createComment(obj).subscribe({
         next: (comm : Comment)=>{
+          comm.editedTime = new Date(comm.editedTime);
+          comm.postTime = new Date(comm.postTime);
           this.comments.push(comm);
         }
       });

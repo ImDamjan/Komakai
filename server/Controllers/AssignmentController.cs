@@ -12,6 +12,7 @@ using server.Models;
 
 namespace server.Controllers
 {
+    //najverovatnije ce trebati da se promene dto-ovi
     [Route("api/[controller]")]
     [ApiController]
     public class AssignmentController : ControllerBase
@@ -81,6 +82,37 @@ namespace server.Controllers
             
             return Ok(a.toAssignmentDto(dto.Assignees,dto.DependentOn));
         }
+
+        [HttpGet("getDependentOnAssignments/{asing_id}")]
+        public async Task<IActionResult> GetDependentAssignments([FromRoute] int asing_id)
+        {
+            var tasks = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asing_id);
+
+            List<AssignmentDto> res = new List<AssignmentDto>();
+
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                List<int> ids = new List<int>();
+                List<int> dep = new List<int>();
+                var users = await _user_repo.GetAssignmentUsersAsync(tasks[i].Id);
+                var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(tasks[i].Id);
+                foreach (var item in dependencies)
+                {
+                    dep.Add(item.Id);   
+                }
+                foreach (var user in users)
+                {
+                    ids.Add(user.Id);
+                }
+                res.Add(tasks[i].toAssignmentDto(ids,dep));
+            }
+
+            return Ok(res);
+
+        }
+
+
+
         [HttpGet]
         [Route("getByGroup/{group_id}")]
 
@@ -93,7 +125,7 @@ namespace server.Controllers
             {
                 List<int> ids = new List<int>();
                 List<int> dep = new List<int>();
-                var users = await _asign_repo.GetAssignmentUsersAsync(tasks[i].Id);
+                var users = await _user_repo.GetAssignmentUsersAsync(tasks[i].Id);
                 var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(tasks[i].Id);
                 foreach (var item in dependencies)
                 {
@@ -128,7 +160,7 @@ namespace server.Controllers
                 {
                     dep.Add(item.Id);   
                 }
-                var users = await _asign_repo.GetAssignmentUsersAsync(tasks[i].Id);
+                var users = await _user_repo.GetAssignmentUsersAsync(tasks[i].Id);
                 foreach (var user1 in users)
                 {
                     ids.Add(user1.Id);
@@ -144,7 +176,7 @@ namespace server.Controllers
         public async Task<IActionResult> GetAssignmentById([FromRoute] int asign_id)
         {
             var task = await _asign_repo.GetAssignmentByidAsync(asign_id);
-            var users =  await _asign_repo.GetAssignmentUsersAsync(asign_id);
+            var users =  await _user_repo.GetAssignmentUsersAsync(asign_id);
             if(task==null)
                 return NotFound("Assignment does not exist.ID:" + asign_id);
 
@@ -177,7 +209,7 @@ namespace server.Controllers
             if(asignment==null)
                 return NotFound("Assignment does not exist.ID:" + asign_id);
             
-            var users = await _asign_repo.GetAssignmentUsersAsync(asign_id);
+            var users = await _user_repo.GetAssignmentUsersAsync(asign_id);
             List<int> dep = new List<int>();
             var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asignment.Id);
             foreach (var item in dependencies)
@@ -204,7 +236,7 @@ namespace server.Controllers
                 var assignments = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id);
                 foreach (var asignment in assignments)
                 {
-                    var users = await _asign_repo.GetAssignmentUsersAsync(asignment.Id);
+                    var users = await _user_repo.GetAssignmentUsersAsync(asignment.Id);
                     List<int> dep = new List<int>();
                     var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asignment.Id);
                     foreach (var item in dependencies)
@@ -248,7 +280,7 @@ namespace server.Controllers
             var res = new List<AssignmentDto>();
             foreach (var asignment in assignments)
             {
-                var users = await _asign_repo.GetAssignmentUsersAsync(asignment.Id);
+                var users = await _user_repo.GetAssignmentUsersAsync(asignment.Id);
                 List<int> dep = new List<int>();
                 var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asignment.Id);
                 foreach (var item in dependencies)
@@ -288,7 +320,7 @@ namespace server.Controllers
             var res = new List<AssignmentDto>();
             foreach (var asignment in assignments)
             {
-                var users = await _asign_repo.GetAssignmentUsersAsync(asignment.Id);
+                var users = await _user_repo.GetAssignmentUsersAsync(asignment.Id);
                 List<int> dep = new List<int>();
                 var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asignment.Id);
                 foreach (var item in dependencies)
@@ -313,7 +345,7 @@ namespace server.Controllers
             if(asignment==null)
                 return NotFound("Assignment does not exist.ID:" + asign_id);
             
-                var users = await _asign_repo.GetAssignmentUsersAsync(asignment.Id);
+                var users = await _user_repo.GetAssignmentUsersAsync(asignment.Id);
                 List<int> dep = new List<int>();
                 var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asignment.Id);
                 foreach (var item in dependencies)
