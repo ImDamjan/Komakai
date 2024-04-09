@@ -34,12 +34,23 @@ export class TaskDetailsComponent implements OnInit{
   public commentText : string = "";
 
 
-  public priority! :string;
-  public state!: string;
-  public Owner!: User;
+  public priority :string = "";
+  public state: string = "";
+  public Owner: User = {
+    id: 0,
+    username: '',
+    email: '',
+    jobTitle: '',
+    organisation: '',
+    department: '',
+    roleId: '',
+    name: '',
+    lastname: ''
+  };
   public assignees : User[] = [];
   public assignment! : Task;
   public dependentTasks : Assignment[] = [];
+  public hasDependent : boolean = true;
   constructor() {
 
   }
@@ -48,6 +59,12 @@ export class TaskDetailsComponent implements OnInit{
   // vracati cele usere?
   ngOnInit(): void {
     this.assignment = this.data[0];
+    this.user_service.getAssignmentUsers(this.assignment.id.valueOf()).subscribe({
+      next: (users : User[]) =>{
+        this.assignees = users;
+        console.log(users);
+      }
+    });
     this.comment_service.getAllComentsByTask(this.assignment.id.valueOf()).subscribe({
       next : (comments : Comment[]) =>{
         this.comments = comments;

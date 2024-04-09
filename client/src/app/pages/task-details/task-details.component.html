@@ -17,6 +17,11 @@
         </div>
         <div class = "row">
             <p>Assignees</p>
+            <div style = "padding: 0 20px; width: 100%;">                
+                <div *ngFor="let u of assignees">
+                    {{u.name + " "+u.lastname}},
+                </div>
+            </div>
         </div>
         <div class = "row">
             <p>Due Date</p>
@@ -34,6 +39,12 @@
     <hr>
     <h2>Dependencies</h2>
     <div class="dependecies">
+        <p *ngIf="hasDependent">There are no dependecies for this task !</p>
+        <div *ngIf="!hasDependent">
+            <div class = "dependecy" *ngFor="let dependent of dependentTasks">
+                {{dependent.title}}
+            </div>
+        </div>
         
     </div>
     <hr>

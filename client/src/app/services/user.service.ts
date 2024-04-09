@@ -25,4 +25,10 @@ export class UserService {
     const url = this.baseUrl + "/User/getUserById/" + user_id;
     return this.http.get<User>(url);
   }
+
+  getAssignmentUsers(asign_id:number) : Observable<User[]>
+  {
+    const url = this.baseUrl + "/User/getAssignmentUsers/"+asign_id;
+    return  this.http.get<User[]>(url);
+  }
 }
