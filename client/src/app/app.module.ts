@@ -40,6 +40,7 @@ import { GantogramComponent } from './components/gantogram/gantogram.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { MemberComponent } from './components/member/member.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 
 @NgModule({
   declarations: [
@@ -71,9 +72,10 @@ import { LogoutComponent } from './components/logout/logout.component';
     TaskHeaderComponent,
     ProjectHeaderComponent,
     GantogramComponent,
+    LogoutComponent,
+    TaskDetailsComponent,
     AdminComponent,
     MemberComponent,
-    LogoutComponent,
   ],
   imports: [
     FormsModule,

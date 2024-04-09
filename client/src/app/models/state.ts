@@ -1,4 +1,4 @@
 export interface State {
-    id : Number,
+    id : number,
     name : string
 }

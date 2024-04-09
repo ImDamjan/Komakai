@@ -39,7 +39,15 @@ export class AssignmentService {
     };
     return this.http.put<Assignment>(url,body);
   }
-
+  getDependentAssignmentsFor(asign_id:number) : Observable<Task[]>
+  {
+    const url = this.baseUrl + "/Assignment/getDependentOnAssignments/" + asign_id;
+    return this.http.get<Task[]>(url);
+  }
+  getAssignmentById(asign_id:number): Observable<Assignment>
+  {
+    return this.http.get<Assignment>(this.baseUrl + "/Assignment/getById/" + asign_id);
+  }
 
   getAllUserAssignments(user_id: Number): Observable<Assignment[]> {
     return this.http.get<Assignment[]>(this.baseUrl+`/Assignment/getByUser/` + user_id);
@@ -50,24 +58,24 @@ export class AssignmentService {
     const url = this.baseUrl + "/Assignment/create";
     return this.http.post<Assignment>(url,createAssignmentData);
   }
-  getAllTasks(): Observable<Task[]> { // Specify Task[] as the expected response type
+  // getAllTasks(): Observable<Task[]> { // Specify Task[] as the expected response type
 
-    const token = localStorage.getItem('token');
+  //   const token = localStorage.getItem('token');
 
-    let nameidentifier = '';
+  //   let nameidentifier = '';
 
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token) as { 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier': string };
-        nameidentifier = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-        console.log(nameidentifier)
-      } catch (error) {
-        console.error('Error decoding JWT token:', error);
-      }
-    }
+  //   if (token) {
+  //     try {
+  //       const decodedToken = jwtDecode(token) as { 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier': string };
+  //       nameidentifier = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+  //       console.log(nameidentifier)
+  //     } catch (error) {
+  //       console.error('Error decoding JWT token:', error);
+  //     }
+  //   }
 
-    return this.http.get<Task[]>(this.baseUrl+`/Assignment/getByUser/` + nameidentifier);
-  }
+  //   return this.http.get<Task[]>(this.baseUrl+`/Assignment/getByUser/` + nameidentifier);
+  // }
   // "taskGroupId": 1,
   // "userIds": [
   //   1,4

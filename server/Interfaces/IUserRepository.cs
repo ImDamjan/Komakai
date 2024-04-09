@@ -13,6 +13,7 @@ namespace server.Interfaces
         Task AddUserAsync(User user);
 
         Task<List<User>> GetUserByProjectId(int project_id);
+        Task<List<User>> GetAssignmentUsersAsync(int task_id);
 
         Task<Role?> GetRoleByNameAsync(string roleName);
 

@@ -1,4 +1,8 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input, inject} from '@angular/core';
+import { Router } from '@angular/router';
+import { Task } from '../../models/task';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
 
 @Component({
   selector: 'app-project-task',
@@ -6,7 +10,9 @@ import { Component, Input} from '@angular/core';
   styleUrl: './project-task.component.css',
 })
 export class ProjectTaskComponent {
-  @Input() task: any;
+  @Input() task!: Task;
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   getPriorityClass(priority: string): string {
     switch (priority) {
@@ -39,6 +45,8 @@ export class ProjectTaskComponent {
       return null;
     }
   }
+
+
 
   extractNumberAndText(text: string): { number: number | null; text: string | null } {
     const regex = /(\d+\.?\d*)/; // Match digits, optional decimal, and digits
@@ -117,6 +125,17 @@ export class ProjectTaskComponent {
     else{
       return 'No more time';
     }
+  }
+
+
+  openShowTaskOverlay(): void {
+    const dialogRef = this.dialog.open(TaskDetailsComponent, {
+      data:[this.task]
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+    
   }
 
 }

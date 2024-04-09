@@ -12,6 +12,7 @@ import { AuthGuard } from './services/guard.service';
 import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
 import path from 'path';
 import { AdminComponent } from './pages/admin/admin.component';
+import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full'},
@@ -22,6 +23,7 @@ const routes: Routes = [
   {path: 'tasks', component: TasksComponent,canActivate: [AuthGuard]},
   // {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
   {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]},
+  
   {path: 'projects/project-details/:projectId', component: ProjectDetailsComponent,canActivate: [AuthGuard]},
   {path: 'admin', component: AdminComponent,canActivate: [AuthGuard]}
 ];

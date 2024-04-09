@@ -7,6 +7,7 @@ namespace server.DTOs.Assignment
 {
     public class CreateAssignmentDto
     {
+        public int Owner { get; set; }
         public int TaskGroupId { get; set; }
         public List<int> Assignees { get; set; } = new List<int>();
         public DateTime Start { get; set; }

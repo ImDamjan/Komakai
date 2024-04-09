@@ -1,6 +1,6 @@
 <table id="task-content">
   <thead>
-    <tr id="row">
+    <tr id="row" (click)="openShowTaskOverlay()">
       <td id="bulb">
         <img src="assets\project-task\bulb.svg" alt="Company Logo" width="20" height="20" />
       </td>
@@ -11,7 +11,7 @@
           <div id="bottom">
             <div id="more">#402236 Opened 10 days ago by <b>Yash Ghori</b></div>
             <div id="status">Confirmed</div>
-            <div [ngClass]="getPriorityClass(task.priority)" id="priority"><b>{{ task.priority }}</b></div>
+            <div [ngClass]="getPriorityClass(task.priority.valueOf())" id="priority"><b>{{ task.priority }}</b></div>
           </div>
       </td>
       <td id="start">

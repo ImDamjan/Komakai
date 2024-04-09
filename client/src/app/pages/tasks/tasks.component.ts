@@ -86,11 +86,12 @@ export class TasksComponent {
             percentage: task.percentage,
             dependent: task.dependentOn,
             priorityId: task.priorityId,
-            projectId: 1,
+            projectId: 0,
             type: task.type,
             priority: "",
             timeDifference: 0,
-            remaining: ''
+            remaining: '',
+            owner : task.owner
           }
           this.taskObj.push(myObj);
         });

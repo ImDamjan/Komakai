@@ -1,15 +1,16 @@
 export interface Assignment {
     id : number,
-    assignees : Number[],
-    dependentOn : Number[],
-    title : String,
-    description : String,
+    assignees : number[],
+    dependentOn : number[],
+    title : string,
+    description : string,
     start : Date | number,
     end : Date | number,
-    stateId : Number,
-    percentage : Number,
-    priorityId : Number,
-    taskGroupId : Number,
-    type : String,
-    dummyTitle : String
+    stateId : number,
+    percentage : number,
+    priorityId : number,
+    taskGroupId : number,
+    type : string,
+    dummyTitle : string,
+    owner : number
 }

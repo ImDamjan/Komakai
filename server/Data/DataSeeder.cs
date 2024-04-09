@@ -126,11 +126,11 @@ namespace server.Data
                     new User
                     {
                         Id = 2,
-                        Name = "Jane",
-                        Lastname = "Smith",
-                        Username = "janesmith",
-                        Password = BCrypt.Net.BCrypt.HashPassword("password456"),
-                        Email = "jane.smith@example.com",
+                        Name = "Aleksandra",
+                        Lastname = "Stanic",
+                        Username = "aleksandra_stanic",
+                        Password = BCrypt.Net.BCrypt.HashPassword("Boki037"),
+                        Email = "a.stanic@example.com",
                         JobTitle = "Project Manager",
                         Organisation = "Organization B",
                         Department = "Department 2",
@@ -660,6 +660,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 1,
                                     Title = "Neki task",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 1, 25),
                                     End = new DateTime(2023, 2, 14),
@@ -674,6 +675,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 2,
                                     Title = "Neki task 2",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 1, 25),
                                     End = new DateTime(2023, 2, 16),
@@ -688,6 +690,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 3,
                                     Title = "Neki task 3",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 1, 25),
                                     End = new DateTime(2023, 2, 14),
@@ -703,6 +706,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 4,
                                     Title = "Neki task 4",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 3, 1),
                                     End = new DateTime(2023, 3, 15),
@@ -717,6 +721,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 5,
                                     Title = "Neki task 5",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 3, 15),
                                     End = new DateTime(2023, 4, 14),
@@ -731,6 +736,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 6,
                                     Title = "Neki task 6",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 3, 3),
                                     End = new DateTime(2023, 3, 20),
@@ -746,6 +752,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 7,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 3, 15),
                                     End = new DateTime(2023, 4, 14),
@@ -760,6 +767,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 8,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 3, 15),
                                     End = new DateTime(2023,5, 14),
@@ -774,6 +782,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 9,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 3, 15),
                                     End = new DateTime(2023, 3, 25),
@@ -789,6 +798,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 10,
                                     Title = "Neki task 5",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 4, 21),
                                     End = new DateTime(2023, 4, 30),
@@ -803,6 +813,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 11,
                                     Title = "Neki task 5",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 4, 22),
                                     End = new DateTime(2023, 5, 14),
@@ -817,6 +828,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 12,
                                     Title = "Neki task 5",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 3, 15),
                                     End = new DateTime(2023, 6, 14),
@@ -832,6 +844,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 13,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 5, 20),
                                     End = new DateTime(2023, 7, 14),
@@ -846,6 +859,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 14,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 6, 15),
                                     End = new DateTime(2023, 6, 25),
@@ -860,6 +874,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 15,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 6, 30),
                                     End = new DateTime(2023, 7, 20),
@@ -875,6 +890,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 16,
                                     Title = "Neki task",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 6, 16),
                                     End = new DateTime(2023, 6, 30),
@@ -889,6 +905,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 17,
                                     Title = "Neki task 2",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 7, 1),
                                     End = new DateTime(2023, 7, 16),
@@ -903,6 +920,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 18,
                                     Title = "Neki task 3",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 6, 18),
                                     End = new DateTime(2023, 7, 1),
@@ -918,6 +936,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 19,
                                     Title = "Neki task 4",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 7, 18),
                                     End = new DateTime(2023, 8, 5),
@@ -932,6 +951,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 20,
                                     Title = "Neki task 5",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 7, 17),
                                     End = new DateTime(2023, 8, 14),
@@ -946,6 +966,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 21,
                                     Title = "Neki task 6",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 8, 13),
                                     End = new DateTime(2023, 9, 20),
@@ -961,6 +982,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 22,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 8, 15),
                                     End = new DateTime(2023, 8, 30),
@@ -975,6 +997,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 23,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 9, 1),
                                     End = new DateTime(2023, 9, 25),
@@ -989,6 +1012,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 24,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 9, 15),
                                     End = new DateTime(2023, 11, 25),
@@ -1004,6 +1028,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 25,
                                     Title = "Neki task 5",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 9, 15),
                                     End = new DateTime(2023, 9, 25),
@@ -1018,6 +1043,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 26,
                                     Title = "Neki task 5",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 9, 25),
                                     End = new DateTime(2023, 10, 10),
@@ -1032,6 +1058,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 27,
                                     Title = "Neki task 5",
+                                    Owner = 2,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 10, 12),
                                     End = new DateTime(2023, 12, 10),
@@ -1047,6 +1074,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 28,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 10, 25),
                                     End = new DateTime(2023, 11, 21),
@@ -1061,6 +1089,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 29,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 11, 25),
                                     End = new DateTime(2023, 12, 21),
@@ -1075,6 +1104,7 @@ namespace server.Data
                                 new Assignment{
                                     Id = 30,
                                     Title = "Neki task 5",
+                                    Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 12, 15),
                                     End = new DateTime(2024, 1, 14),

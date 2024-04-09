@@ -111,5 +111,14 @@ namespace server.Repositories
             }
             return chosenUsers;
         }
+
+        public async Task<List<User>> GetAssignmentUsersAsync(int task_id)
+        {
+            var asign = await _context.Assignments.Include(a=>a.Users).FirstOrDefaultAsync(a=>a.Id==task_id);
+            if (asign == null)
+                return new List<User>();
+            
+            return asign.Users.ToList();
+        }
     }
 }
