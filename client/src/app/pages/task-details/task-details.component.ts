@@ -109,14 +109,16 @@ export class TaskDetailsComponent implements OnInit{
         userId: decode.user_id,
         assignmentId: this.assignment.id
       };
-
-      this.comment_service.createComment(obj).subscribe({
-        next: (comm : Comment)=>{
-          comm.editedTime = new Date(comm.editedTime);
-          comm.postTime = new Date(comm.postTime);
-          this.comments.push(comm);
-        }
-      });
+      if(obj.content!=="")
+      {
+        this.comment_service.createComment(obj).subscribe({
+          next: (comm : Comment)=>{
+            comm.editedTime = new Date(comm.editedTime);
+            comm.postTime = new Date(comm.postTime);
+            this.comments.push(comm);
+          }
+        });
+      }
     }
   }
 
