@@ -39,7 +39,11 @@ export class AssignmentService {
     };
     return this.http.put<Assignment>(url,body);
   }
-
+  getDependentAssignmentsFor(asign_id:number) : Observable<Task[]>
+  {
+    const url = this.baseUrl + "/Assignment/getDependentOnAssignments/" + asign_id;
+    return this.http.get<Task[]>(url);
+  }
   getAssignmentById(asign_id:number): Observable<Assignment>
   {
     return this.http.get<Assignment>(this.baseUrl + "/Assignment/getById/" + asign_id);

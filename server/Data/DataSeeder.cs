@@ -126,11 +126,11 @@ namespace server.Data
                     new User
                     {
                         Id = 2,
-                        Name = "Jane",
-                        Lastname = "Smith",
-                        Username = "janesmith",
-                        Password = BCrypt.Net.BCrypt.HashPassword("password456"),
-                        Email = "jane.smith@example.com",
+                        Name = "Aleksandra",
+                        Lastname = "Stanic",
+                        Username = "aleksandra_stanic",
+                        Password = BCrypt.Net.BCrypt.HashPassword("Boki037"),
+                        Email = "a.stanic@example.com",
                         JobTitle = "Project Manager",
                         Organisation = "Organization B",
                         Department = "Department 2",

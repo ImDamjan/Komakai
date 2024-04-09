@@ -49,7 +49,7 @@ export class TaskDetailsComponent implements OnInit{
   };
   public assignees : User[] = [];
   public assignment! : Task;
-  public dependentTasks : Assignment[] = [];
+  public dependentTasks : Task[] = [];
   public hasDependent : boolean = true;
   constructor() {
 
@@ -59,13 +59,20 @@ export class TaskDetailsComponent implements OnInit{
   // vracati cele usere?
   ngOnInit(): void {
     this.assignment = this.data[0];
-    this.user_service.getAssignmentUsers(this.assignment.id.valueOf()).subscribe({
+    this.assignment_service.getDependentAssignmentsFor(this.assignment.id).subscribe({
+      next : (tasks : Task[]) => {
+        if(tasks.length > 0)
+            this.hasDependent = false;
+        this.dependentTasks = tasks;
+      }
+    })
+    this.user_service.getAssignmentUsers(this.assignment.id).subscribe({
       next: (users : User[]) =>{
         this.assignees = users;
         console.log(users);
       }
     });
-    this.comment_service.getAllComentsByTask(this.assignment.id.valueOf()).subscribe({
+    this.comment_service.getAllComentsByTask(this.assignment.id).subscribe({
       next : (comments : Comment[]) =>{
         this.comments = comments;
         comments.forEach(comment => {
@@ -74,17 +81,17 @@ export class TaskDetailsComponent implements OnInit{
         });
       }
     });
-    this.state_service.fetchStateName(this.assignment.stateId.valueOf()).subscribe({
+    this.state_service.fetchStateName(this.assignment.stateId).subscribe({
       next : (name : string)=> {
         this.state =name;
       }
     });
-    this.priority_service.fetchPriorityName(this.assignment.priorityId.valueOf()).subscribe({
+    this.priority_service.fetchPriorityName(this.assignment.priorityId).subscribe({
       next :(name : string) => {
         this.priority = name;
       }
     });
-    this.user_service.getUserById(this.assignment.owner.valueOf()).subscribe({
+    this.user_service.getUserById(this.assignment.owner).subscribe({
       next :(user : User) => {
         this.Owner = user;
       }
