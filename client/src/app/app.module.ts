@@ -73,7 +73,7 @@ import { TaskDetailsComponent } from './pages/task-details/task-details.componen
     ProjectHeaderComponent,
     GantogramComponent,
     LogoutComponent,
-    TaskDetailsComponent
+    TaskDetailsComponent,
     AdminComponent,
     MemberComponent,
   ],
