@@ -29,5 +29,18 @@ namespace server.Controllers
 
             return Ok(userProjectPermission);
         }
+
+        [HttpDelete("remove/{id}")]
+        public async Task<IActionResult> RemovePermission(int id)
+        {
+            var permission = await _userProjectPermissionRepo.GetUserProjectPermissionById(id);
+            if (permission == null)
+            {
+                return NotFound();
+            }
+
+            await _userProjectPermissionRepo.RemoveUserProjectPermission(permission);
+            return NoContent();
+        }
     }
 }
