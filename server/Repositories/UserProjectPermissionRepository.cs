@@ -22,9 +22,10 @@ namespace server.Repositories
             return await _context.UserProjectPermissions.FindAsync(id);
         }
 
-        public Task RemoveUserProjectPermission(UserProjectPermission userProjectPermission)
+        public async Task RemoveUserProjectPermission(UserProjectPermission userProjectPermission)
         {
-            throw new NotImplementedException();
+            _context.UserProjectPermissions.Remove(userProjectPermission);
+            await SaveChangesAsync();
         }
         private async Task SaveChangesAsync()
         {
