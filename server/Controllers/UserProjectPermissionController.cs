@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Permissions;
+using server.Mappers;
 
 namespace server.Controllers
 {
@@ -23,7 +24,7 @@ namespace server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userProjectPermission = userProjectPermissionDto.ToEntity();
+            var userProjectPermission = UserProjectPermissionMapper.MapToEntity(userProjectPermissionDto);
             await _userProjectPermissionRepo.AddUserProjectPermission(userProjectPermission);
 
             return Ok(userProjectPermission);
