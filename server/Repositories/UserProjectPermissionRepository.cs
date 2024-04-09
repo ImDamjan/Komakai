@@ -13,18 +13,18 @@ namespace server.Repositories
         }
         public async Task AddUserProjectPermission(UserProjectPermission userProjectPermission)
         {
-            _context.UserProjectPermissions.Add(userProjectPermission);
+            _context.UserProjectPermission.Add(userProjectPermission);
             await SaveChangesAsync();
         }
 
         public async Task<UserProjectPermission> GetUserProjectPermissionById(int id)
         {
-            return await _context.UserProjectPermissions.FindAsync(id);
+            return await _context.UserProjectPermission.FindAsync(id);
         }
 
         public async Task RemoveUserProjectPermission(UserProjectPermission userProjectPermission)
         {
-            _context.UserProjectPermissions.Remove(userProjectPermission);
+            _context.UserProjectPermission.Remove(userProjectPermission);
             await SaveChangesAsync();
         }
         private async Task SaveChangesAsync()
