@@ -14,6 +14,15 @@ app-projects {
     width: 100%;
     padding-left: 35px;
 }
+
+app-task-header {
+    width: 100%;
+}
+
+app-project-header {
+    width: 100%;
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Poppins, "Helvetica Neue", sans-serif; }
 

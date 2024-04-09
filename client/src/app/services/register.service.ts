@@ -6,11 +6,11 @@ import { environment } from '../enviroments/environment';
   providedIn: 'root'
 })
 export class RegisterService {
-  // apiUrl = environment.apiUrl;
-  // private baseUrl:string = "${this.apiUrl}/Auth/";
-  // constructor(private http : HttpClient) { }
+  apiUrl = environment.apiUrl;
+  private baseUrl:string = `${this.apiUrl}/Auth/`;
+  constructor(private http : HttpClient) { }
 
-  // register(userObj:any){
-  //   return this.http.post<any>(`${this.baseUrl}register`,userObj);
-  // }
+  register(userObj:any){
+    return this.http.post<any>(`${this.baseUrl}register`,userObj);
+  }
 }

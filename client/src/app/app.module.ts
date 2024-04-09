@@ -34,7 +34,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
 import { TaskCardKanbanComponent } from './components/task-card-kanban/task-card-kanban.component';
 import { AddTaskComponent } from './components/add-task/add-task.component';
+import { TaskHeaderComponent } from './components/task-header/task-header.component';
+import { ProjectHeaderComponent } from './components/project-header/project-header.component';
 import { GantogramComponent } from './components/gantogram/gantogram.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { MemberComponent } from './components/member/member.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 
@@ -65,9 +69,13 @@ import { TaskDetailsComponent } from './pages/task-details/task-details.componen
     ProjectDetailsComponent,
     TaskCardKanbanComponent,
     AddTaskComponent,
+    TaskHeaderComponent,
+    ProjectHeaderComponent,
     GantogramComponent,
     LogoutComponent,
     TaskDetailsComponent
+    AdminComponent,
+    MemberComponent,
   ],
   imports: [
     FormsModule,
