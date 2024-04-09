@@ -10,6 +10,9 @@ import { UserService } from '../../services/user.service';
 import { PriorityService } from '../../services/priority.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Task } from '../../models/task';
+import { CommentService } from '../../services/comment.service';
+import { Comment } from '../../models/comment';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-task-details',
@@ -17,13 +20,19 @@ import { Task } from '../../models/task';
   styleUrl: './task-details.component.css'
 })
 export class TaskDetailsComponent implements OnInit{
-  private route = inject(ActivatedRoute);
   private assignment_service = inject(AssignmentService);
+  private jwt_service = inject(JwtDecoderService);
   private state_service =  inject(StateService);
   private user_service = inject(UserService);
   private priority_service = inject(PriorityService);
+  private comment_service = inject(CommentService);
   private dialogRef = inject(MatDialogRef<TaskDetailsComponent>);
   private data : any =  inject(MAT_DIALOG_DATA)
+
+  public comments : Comment[] = []
+
+  public commentText : string = "";
+
 
   public priority! :string;
   public state!: string;
@@ -31,15 +40,23 @@ export class TaskDetailsComponent implements OnInit{
   public assignees : User[] = [];
   public assignment! : Task;
   public dependentTasks : Assignment[] = [];
-  private taskId : Number = 0;
   constructor() {
-    this.taskId = Number(this.route.snapshot.paramMap.get('taskId'));
+
   }
   //zbog ovoga mozda treba izmena dto-a na backu ?
   //vracati cele stateove, prioritete?
   // vracati cele usere?
   ngOnInit(): void {
     this.assignment = this.data[0];
+    this.comment_service.getAllComentsByTask(this.assignment.id.valueOf()).subscribe({
+      next : (comments : Comment[]) =>{
+        this.comments = comments;
+        comments.forEach(comment => {
+          comment.editedTime = new Date(comment.editedTime);
+          comment.postTime = new Date(comment.postTime);
+        });
+      }
+    });
     this.state_service.fetchStateName(this.assignment.stateId.valueOf()).subscribe({
       next : (name : string)=> {
         this.state =name;
@@ -55,6 +72,26 @@ export class TaskDetailsComponent implements OnInit{
         this.Owner = user;
       }
     });
+  }
+
+  createComment()
+  {
+    let token = this.jwt_service.getToken();
+    if(token!=null)
+    {
+      let decode = this.jwt_service.decodeToken(token);
+      let obj = {
+        content: this.commentText,
+        userId: decode.user_id,
+        assignmentId: this.assignment.id
+      };
+
+      this.comment_service.createComment(obj).subscribe({
+        next: (comm : Comment)=>{
+          this.comments.push(comm);
+        }
+      });
+    }
   }
 
   closeOverlay()

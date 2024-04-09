@@ -44,7 +44,7 @@
     <br>
     <hr>
     <div id = 'comments'>
-        <div class="comment">
+        <div class="comment" *ngFor="let comment of comments">
             <img src="" alt="slika_korinsika">
             <div class = 'comment-box'>
                 <!-- <div class = comment-meni>
@@ -56,7 +56,8 @@
                     <p>ikona</p>
                     <p>ikona2</p>
                 </div> -->
-                <p>tekst komentara</p>
+                <p>{{comment.content}}</p>
+                <p>{{comment.editedTime.toLocaleString().split(',')[0]}}</p>
             </div>
         </div>
         <!-- ovo je komentar koji treba da se doda -->
@@ -72,10 +73,10 @@
                     <p>ikona</p>
                     <p>ikona2</p>
                 </div> -->
-                <textarea name="" id="" cols="30" rows="10" placeholder="Write a comment...">
+                <textarea name="" id="" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText">
 
                 </textarea><br>
-                <button id = 'comment-button'>Comment</button>
+                <button id = 'comment-button' (click)="createComment()">Comment</button>
             </div>
         </div>
     </div>
