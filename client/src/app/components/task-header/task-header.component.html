@@ -1,6 +1,6 @@
 <div class="task-header">
     <div class="search">
-        <input id="search-field" type="text" placeholder="Search for task...">
+        <input id="search-field" type="text" placeholder="Search for task..." (keyup)="onSearch($event)">
     </div>
     <div class="create">
         <button id="create-button">Create</button>

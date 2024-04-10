@@ -21,4 +21,9 @@ export class TaskHeaderComponent implements OnInit {
       this.projects = projects;
     });
   }
+
+  onSearch(event: KeyboardEvent) {
+    const searchValue = (event.target as HTMLInputElement).value;
+    console.log('Search value:', searchValue);
+  }
 }

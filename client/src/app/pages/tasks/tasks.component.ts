@@ -30,19 +30,6 @@ export class TasksComponent {
 
   constructor(private taskService: AssignmentService, private priorityService : PriorityService) { }
 
-  // ngOnInit(): void {
-    
-  //   this.taskService.getAllTasks().subscribe(tasks => {
-  //     this.tasks = tasks;
-
-  //     for (const task of this.tasks) {
-  //       this.http.get<any>(this.apiUrl+`/Priority/getPrio` + task.priorityId).subscribe(priorities =>{
-  //         task.priority = priorities.description;
-  //       });
-  //     }
-  //   });
-  // }
-
   ngOnDestroy(): void {
     this.remainingTimeSubscriptions.forEach(sub => sub.unsubscribe());
   }
