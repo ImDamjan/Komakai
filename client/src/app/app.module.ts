@@ -41,6 +41,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { MemberComponent } from './components/member/member.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
+import { FilterDetailsComponent } from './components/filter-details/filter-details.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { TaskDetailsComponent } from './pages/task-details/task-details.componen
     TaskDetailsComponent,
     AdminComponent,
     MemberComponent,
+    FilterDetailsComponent,
   ],
   imports: [
     FormsModule,

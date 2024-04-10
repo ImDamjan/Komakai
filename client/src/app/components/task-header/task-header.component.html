@@ -3,13 +3,14 @@
         <input id="search-field" type="text" placeholder="Search for task..." (keyup)="onSearch($event)">
     </div>
     <div class="filters">
-        <button><img src="assets\task-header\filter.svg" alt="" height="33" width="25"></button>
+        <button class="filter-button" (click)="openFilterDialog()"><img src="assets\task-header\filter.svg" alt="" height="33" width="25"></button>
     </div>
     <div class="create">
         <button id="create-button">Create</button>
     </div>
     <div class="choose">
         <select id="choose-project">
+            <option value="All">All</option>
             <option *ngFor="let project of projects" [value]="project.id">{{ project.title }}</option>
         </select>
     </div>

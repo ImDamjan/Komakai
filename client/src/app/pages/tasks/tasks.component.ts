@@ -132,22 +132,31 @@ export class TasksComponent {
 
   ngAfterViewInit() {
     this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
-      this.filteredTasks = this.filterTasks(searchValue);
+      this.filteredTasks = this.filterTasks(searchValue.searchText, searchValue.projectId);
     });
   }
 
-  filterTasks(searchValue: string): Task[] {
-    if (!searchValue) {
+  filterTasks(searchText: string, projectId?: string): Task[] {
+    if (!searchText && !projectId) { // No filters applied
       return this.taskObj;
     }
-
-    searchValue = searchValue.toLowerCase();
-
-    return this.taskObj.filter(task => {
-      const title = task.title.toLowerCase();
-
-      return title.includes(searchValue);
-    });
+  
+    searchText = searchText.toLowerCase();
+  
+    let filteredTasks = this.taskObj;
+  
+    if (searchText) { // Apply search filter
+      filteredTasks = filteredTasks.filter(task => {
+        const title = task.title.toLowerCase();
+        return title.includes(searchText);
+      });
+    }
+  
+    if (projectId) { // Apply project filter (if project ID is provided)
+      filteredTasks = filteredTasks.filter(task => task.projectId.toString() === projectId);
+    }
+  
+    return filteredTasks;
   }
 
 }
