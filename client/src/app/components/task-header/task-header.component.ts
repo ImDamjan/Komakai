@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
 
@@ -12,6 +12,8 @@ export class TaskHeaderComponent implements OnInit {
 
   constructor(private projectService: ProjectService) { }
 
+  searchValueChanged = new EventEmitter<string>();
+
   ngOnInit(): void {
     this.fetchProjects();
   }
@@ -24,6 +26,7 @@ export class TaskHeaderComponent implements OnInit {
 
   onSearch(event: KeyboardEvent) {
     const searchValue = (event.target as HTMLInputElement).value;
-    console.log('Search value:', searchValue);
+    this.searchValueChanged.emit(searchValue);
+    // console.log('Search value:', searchValue);
   }
 }

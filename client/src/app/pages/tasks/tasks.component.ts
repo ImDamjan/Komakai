@@ -1,4 +1,4 @@
-import { Component, Injector, inject } from '@angular/core';
+import { Component, EventEmitter, Injector, Output, ViewChild, inject } from '@angular/core';
 import { Task } from '../../models/task';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../enviroments/environment';
@@ -7,6 +7,7 @@ import { AssignmentService } from '../../services/assignment.service';
 import { Assignment } from '../../models/assignment';
 import { PriorityService } from '../../services/priority.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { TaskHeaderComponent } from '../../components/task-header/task-header.component';
 
 @Component({
   selector: 'app-tasks',
@@ -14,6 +15,10 @@ import { JwtDecoderService } from '../../services/jwt-decoder.service';
   styleUrl: './tasks.component.css'
 })
 export class TasksComponent {
+  
+  @Output() searchValueChanged = new EventEmitter<string>();
+
+  @ViewChild('taskHeader', { static: false }) taskHeaderComponent: TaskHeaderComponent | null = null;
 
   taskObj: Task [] = [];
 
@@ -119,6 +124,12 @@ export class TasksComponent {
 
             });
         });
+    });
+  }
+
+  ngAfterViewInit() {
+    this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
+      console.log('Search value from TaskHeaderComponent:', searchValue);
     });
   }
 
