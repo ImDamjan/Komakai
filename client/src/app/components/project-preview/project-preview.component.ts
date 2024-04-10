@@ -4,6 +4,8 @@ import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
 import { AssignmentService } from '../../services/assignment.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EditProjectOverlayComponent } from '../edit-project-overlay/edit-project-overlay.component';
 
 @Component({
   selector: 'app-project-preview',
@@ -28,7 +30,9 @@ export class ProjectPreviewComponent implements OnInit {
   currentPage: number = 1;
   cardsPerPage: number = 8;
 
-  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService) {
+  showProjectPreview: boolean = true;
+
+  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService, private dialog: MatDialog) {
     // Initialize component
     this.calculateCharacterLimit();
   }
@@ -209,5 +213,18 @@ export class ProjectPreviewComponent implements OnInit {
     }
     else
       this.cardsPerPage = 8;
+  }
+
+  openEditOverlay(event: Event): void {
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(EditProjectOverlayComponent, {
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // When overlay is closed
+      this.showProjectPreview = true;
+    });
+    
+    this.showProjectPreview = false;
   }
 }

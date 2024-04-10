@@ -41,6 +41,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { MemberComponent } from './components/member/member.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
+import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { TaskDetailsComponent } from './pages/task-details/task-details.componen
     TaskDetailsComponent,
     AdminComponent,
     MemberComponent,
+    EditProjectOverlayComponent,
   ],
   imports: [
     FormsModule,
