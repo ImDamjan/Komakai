@@ -139,23 +139,19 @@ export class TasksComponent {
       this.filteredTasks = this.filterTasks1(projectValue.projectId)
     });
   }
+
   filterTasks1(projectId: number): Task[] {
-    let filteredTasks = this.taskObj;
-    console.log(projectId)
-    if (projectId) { // Apply project filter (if project ID is provided)
-      if(projectId == 0){
-        filteredTasks = this.taskObj;
-      }
-      else{
-        filteredTasks = filteredTasks.filter(task => task.projectId === projectId);
-      }
-    }
-  
-    return filteredTasks;
+  let filteredTasks = this.taskObj;
+  if (projectId) {
+    filteredTasks = filteredTasks.filter(task => task.projectId === projectId);
+  } else {
+    filteredTasks = this.taskObj;
   }
+  return filteredTasks;
+}
 
   filterTasks(searchText: string, projectId?: number): Task[] {
-    if (!searchText && !projectId) { // No filters applied
+    if (!searchText && !projectId) {
       return this.taskObj;
     }
   
@@ -163,14 +159,14 @@ export class TasksComponent {
   
     let filteredTasks = this.taskObj;
   
-    if (searchText) { // Apply search filter
+    if (searchText) {
       filteredTasks = filteredTasks.filter(task => {
         const title = task.title.toLowerCase();
         return title.includes(searchText);
       });
     }
     console.log(projectId)
-    if (projectId) { // Apply project filter (if project ID is provided)
+    if (projectId) {
       if(projectId == 0){
         filteredTasks = this.taskObj;
       }

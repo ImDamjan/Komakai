@@ -59,19 +59,12 @@ export class TaskHeaderComponent implements OnInit {
   }
 
   onProjectChange(event: Event) {
-    let selectedProjectString: number;
     if (event instanceof Event && event.target instanceof HTMLSelectElement) {
-      if((event.target as HTMLSelectElement).value == '0'){
-        selectedProjectString = 0;
-        this.searchProjectChanged.emit({projectId: selectedProjectString})
-        console.log(selectedProjectString)
-      }
-      else{
-        selectedProjectString = Number((event.target as HTMLSelectElement).value);
-        this.searchProjectChanged.emit({projectId: selectedProjectString})
-        console.log(selectedProjectString)
-      }
-    }
+    const selectedProjectId = Number((event.target as HTMLSelectElement).value); // Convert to number
+    this.searchProjectChanged.emit({ projectId: selectedProjectId });
+    return selectedProjectId;
+  }
+  return 0;
 
   }
 
