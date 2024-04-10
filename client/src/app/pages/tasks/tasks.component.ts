@@ -22,6 +22,8 @@ export class TasksComponent {
 
   taskObj: Task [] = [];
 
+  filteredTasks: Task[] = [];
+
   private apiUrl = environment.apiUrl;
 
   tasks: Assignment[] = [];
@@ -125,11 +127,26 @@ export class TasksComponent {
             });
         });
     });
+    this.filteredTasks = this.filterTasks('');
   }
 
   ngAfterViewInit() {
     this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
-      console.log('Search value from TaskHeaderComponent:', searchValue);
+      this.filteredTasks = this.filterTasks(searchValue);
+    });
+  }
+
+  filterTasks(searchValue: string): Task[] {
+    if (!searchValue) {
+      return this.taskObj;
+    }
+
+    searchValue = searchValue.toLowerCase();
+
+    return this.taskObj.filter(task => {
+      const title = task.title.toLowerCase();
+
+      return title.includes(searchValue);
     });
   }
 

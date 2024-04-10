@@ -4,7 +4,7 @@
         <app-task-header #taskHeader></app-task-header>
     </div>
      <br><br>
-    <div *ngFor="let task of taskObj">
+    <div *ngFor="let task of filteredTasks">
         <app-project-task [task]="task"></app-project-task>
     </div>
 </div>
