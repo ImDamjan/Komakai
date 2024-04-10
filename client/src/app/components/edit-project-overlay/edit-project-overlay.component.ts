@@ -7,6 +7,7 @@ import { PriorityService } from '../../services/priority.service';
 import { TeamService } from '../../services/team.service';
 import { User } from '../../models/user';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-project-overlay',
@@ -22,14 +23,14 @@ export class EditProjectOverlayComponent {
   submitted = false;
   submissionError: string | null = null;
 
-  projectObj!: Project;
   project!: Project;
 
   selectedUserIds: number[] = [];
   selectedPriorityId!: number;
-  constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any) 
+  constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router) 
   {
     this.project = data.project;
+    console.log(this.project);
     this.selectedUserIds = this.project.users ? this.project.users.map(id => Number(id)) : [];
   }
 
@@ -43,20 +44,6 @@ export class EditProjectOverlayComponent {
     this.teamService.getTeams().subscribe(teams => {
       this.teams = teams;
     });
-    this.projectObj = {
-      id: 0,
-      stateId: 0,
-      spent: 0,
-      percentage: 0,
-      users: [],
-      priorityId: this.selectedPriorityId,
-      title: "", 
-      start: new Date(), 
-      end: new Date(),
-      budget: 0, 
-      description: "", 
-      type: "",
-    };
   }
 
   toggleDropdown(): void {
@@ -143,5 +130,25 @@ export class EditProjectOverlayComponent {
     return `${year}-${month}-${day}`;
   }
   
-  
+  editProject(projectId: Number): void {
+    this.project.users = this.selectedUserIds;
+    this.submitted = true;
+    this.submissionError = null;
+
+    if (!this.project.title.trim() || !this.project.priorityId || !this.project.start || !this.project.end) {
+      this.submissionError = 'Please fill in all necessary fields.';
+      return;
+    }
+
+    this.projectService.updateProject(this.project).subscribe(response => {
+      alert('Project edited successfully!');
+      this.submitted = false;
+
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/projects']);
+      });
+    }, error => {
+      this.submissionError = 'Error editing project. Please try again.';
+    });
+  }
 }

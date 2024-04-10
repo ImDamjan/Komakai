@@ -123,7 +123,6 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   showTeamMembers(team: any): void {
-    console.log(team.members);
     this.hoveredTeam = team; // Set the hovered team
   }
 

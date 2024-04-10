@@ -6,7 +6,7 @@
             <div class="project-title">
                 <span class="name">Project title</span>
                 <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="project.title">
-                <div *ngIf="!projectObj.title.trim() && submitted" class="error-message">*Please enter a project title.</div>
+                <div *ngIf="!project.title.trim() && submitted" class="error-message">*Please enter a project title.</div>
             </div>
             
             <div class="status-type">
@@ -20,7 +20,7 @@
                     </select>
                     <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="project.type">
                 </div>
-                <div class="error-message" *ngIf="!projectObj.priorityId && submitted">*Priority is required</div>
+                <div class="error-message" *ngIf="!project.priorityId && submitted">*Priority is required</div>
             </div>
             <div class="dates">
                 <div class="labels">
@@ -31,9 +31,9 @@
                     <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY" [ngModel]="formatDate(project.start)" (ngModelChange)="project.start = $event" >
                     <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY" [ngModel]="formatDate(project.end)" (ngModelChange)="project.end = $event">
                 </div>
-                <div class="error-message" *ngIf="!projectObj.start && submitted">*Start Date is required</div>
-                <div class="error-message" *ngIf="!projectObj.end && submitted">*End Date is required</div>
-                <div class="error-message" *ngIf="projectObj.start && projectObj.end && projectObj.start > projectObj.end">*End Date must be after Start Date</div>
+                <div class="error-message" *ngIf="!project.start && submitted">*Start Date is required</div>
+                <div class="error-message" *ngIf="!project.end && submitted">*End Date is required</div>
+                <div class="error-message" *ngIf="project.start && project.end && project.start > project.end">*End Date must be after Start Date</div>
             </div>
             <div class="role">
                 <!-- 
@@ -90,7 +90,7 @@
                 <div class="link-save-cancel">
                     <!-- <button id="related-button">Link project</button> --><p></p>
                     <div class="save-cancel">
-                        <button class="save">Save changes</button>
+                        <button class="save" (click)="editProject(project.id)">Save changes</button>
                         <button class="cancel" (click)="closeOverlay()">Cancel</button>
                     </div>
                 </div>
