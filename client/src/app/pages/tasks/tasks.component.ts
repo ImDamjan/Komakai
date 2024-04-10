@@ -17,6 +17,7 @@ import { TaskHeaderComponent } from '../../components/task-header/task-header.co
 export class TasksComponent {
   
   @Output() searchValueChanged = new EventEmitter<string>();
+  @Output() searchProjectChanged = new EventEmitter<string>();
 
   @ViewChild('taskHeader', { static: false }) taskHeaderComponent: TaskHeaderComponent | null = null;
 
@@ -134,9 +135,26 @@ export class TasksComponent {
     this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
       this.filteredTasks = this.filterTasks(searchValue.searchText, searchValue.projectId);
     });
+    this.taskHeaderComponent?.searchProjectChanged.subscribe(projectValue => {
+      this.filteredTasks = this.filterTasks1(projectValue.projectId)
+    });
+  }
+  filterTasks1(projectId: number): Task[] {
+    let filteredTasks = this.taskObj;
+    console.log(projectId)
+    if (projectId) { // Apply project filter (if project ID is provided)
+      if(projectId == 0){
+        filteredTasks = this.taskObj;
+      }
+      else{
+        filteredTasks = filteredTasks.filter(task => task.projectId === projectId);
+      }
+    }
+  
+    return filteredTasks;
   }
 
-  filterTasks(searchText: string, projectId?: string): Task[] {
+  filterTasks(searchText: string, projectId?: number): Task[] {
     if (!searchText && !projectId) { // No filters applied
       return this.taskObj;
     }
@@ -151,9 +169,14 @@ export class TasksComponent {
         return title.includes(searchText);
       });
     }
-  
+    console.log(projectId)
     if (projectId) { // Apply project filter (if project ID is provided)
-      filteredTasks = filteredTasks.filter(task => task.projectId.toString() === projectId);
+      if(projectId == 0){
+        filteredTasks = this.taskObj;
+      }
+      else{
+        filteredTasks = filteredTasks.filter(task => task.projectId === projectId);
+      }
     }
   
     return filteredTasks;

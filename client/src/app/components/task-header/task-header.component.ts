@@ -17,7 +17,9 @@ export class TaskHeaderComponent implements OnInit {
 
   constructor(private projectService: ProjectService) { }
 
-  searchValueChanged = new EventEmitter< { searchText: string; projectId?: string }>();
+  searchValueChanged = new EventEmitter< { searchText: string; projectId?: number }>();
+
+  searchProjectChanged = new EventEmitter<{projectId: number}>;
 
   ngOnInit(): void {
     this.fetchProjects();
@@ -40,20 +42,37 @@ export class TaskHeaderComponent implements OnInit {
   onSearch(event: KeyboardEvent) {
 
     let searchText: string ='';
-    let selectedProjectId: string | undefined;
+    let selectedProjectId;
     
-    if ('type' in event && event.type === 'keyup') { // Check for keyboard event (search)
+    if ('type' in event && event.type === 'keyup') {
       const searchValue = (event.target as HTMLInputElement).value;
       this.searchValueChanged.emit( {searchText: searchValue});
-    } else if (event instanceof MouseEvent && event.type === 'click') { // Check for click event (filter)
+    } else if (event instanceof MouseEvent && event.type === 'click') {
       this.openFilterDialog();
-    }else if (event instanceof Event && event.target instanceof HTMLSelectElement) { // Check for project selection change
-      selectedProjectId = (event.target as HTMLSelectElement).value;
+    }else if (event instanceof Event && event.target instanceof HTMLSelectElement) {
+      selectedProjectId=this.onProjectChange(event)
     }
 
-    if (searchText || selectedProjectId) {
-      this.searchValueChanged.emit({ searchText, projectId: selectedProjectId });
+    if (searchText) {
+      this.searchValueChanged.emit({ searchText, projectId: Number(selectedProjectId) });
     }
+  }
+
+  onProjectChange(event: Event) {
+    let selectedProjectString: number;
+    if (event instanceof Event && event.target instanceof HTMLSelectElement) {
+      if((event.target as HTMLSelectElement).value == '0'){
+        selectedProjectString = 0;
+        this.searchProjectChanged.emit({projectId: selectedProjectString})
+        console.log(selectedProjectString)
+      }
+      else{
+        selectedProjectString = Number((event.target as HTMLSelectElement).value);
+        this.searchProjectChanged.emit({projectId: selectedProjectString})
+        console.log(selectedProjectString)
+      }
+    }
+
   }
 
   openFilterDialog() {
