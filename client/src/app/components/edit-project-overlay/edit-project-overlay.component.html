@@ -5,7 +5,7 @@
         <div class="left">
             <div class="project-title">
                 <span class="name">Project title</span>
-                <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="projectObj.title">
+                <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="project.title">
                 <div *ngIf="!projectObj.title.trim() && submitted" class="error-message">*Please enter a project title.</div>
             </div>
             
@@ -15,10 +15,10 @@
                     <span class="name" id="type">Type</span>
                 </div>
                 <div class="inputs">
-                    <select id="status-select" class="input-field" required [(ngModel)]="selectedPriorityId">
+                    <select id="status-select" class="input-field" required [(ngModel)]="project.priorityId">
                         <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
                     </select>
-                    <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="projectObj.type">
+                    <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="project.type">
                 </div>
                 <div class="error-message" *ngIf="!projectObj.priorityId && submitted">*Priority is required</div>
             </div>
@@ -28,9 +28,8 @@
                     <span class="name" id="enddate">End Date</span>
                 </div>
                 <div class="inputs">
-                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.start">
-                    
-                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.end">
+                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY" [ngModel]="formatDate(project.start)" (ngModelChange)="project.start = $event" >
+                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY" [ngModel]="formatDate(project.end)" (ngModelChange)="project.end = $event">
                 </div>
                 <div class="error-message" *ngIf="!projectObj.start && submitted">*Start Date is required</div>
                 <div class="error-message" *ngIf="!projectObj.end && submitted">*End Date is required</div>
@@ -55,7 +54,7 @@
         <div class="right">
             <div class="description">
                 <span class="name">Project Description</span>
-                <textarea class="input-field" id="description" placeholder="  Write your description"  [(ngModel)]="projectObj.description"></textarea>
+                <textarea class="input-field" id="description" placeholder="  Write your description"  [(ngModel)]="project.description"></textarea>
             </div>
             <div class="budget-team">
                 <div class="labels">
@@ -63,7 +62,7 @@
                     <span class="name" id="team">Members</span>
                 </div>
                 <div class="inputs">
-                    <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget">
+                    <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="project.budget">
                     <div class="custom-dropdown">
                         <span class="selected-option" (click)="toggleDropdown()">Select Members</span>
                         <div class="options" *ngIf="showDropdown">

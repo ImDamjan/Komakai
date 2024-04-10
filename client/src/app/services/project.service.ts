@@ -60,7 +60,7 @@ export class ProjectService implements OnInit{
     createProject(project: any): Observable<any> {
       const url = this.baseUrl + "/Project/create";
       const body = {
-        userIds : project.userIds,
+        users : project.users,
         priorityId : project.priorityId,
         title : project.title,
         start : project.start,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
@@ -6,6 +6,7 @@ import { Project } from '../../models/project';
 import { PriorityService } from '../../services/priority.service';
 import { TeamService } from '../../services/team.service';
 import { User } from '../../models/user';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-project-overlay',
@@ -22,10 +23,15 @@ export class EditProjectOverlayComponent {
   submissionError: string | null = null;
 
   projectObj!: Project;
+  project!: Project;
 
   selectedUserIds: number[] = [];
   selectedPriorityId!: number;
-  constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService) { }
+  constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any) 
+  {
+    this.project = data.project;
+    this.selectedUserIds = this.project.users ? this.project.users.map(id => Number(id)) : [];
+  }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe(users => {
@@ -42,7 +48,7 @@ export class EditProjectOverlayComponent {
       stateId: 0,
       spent: 0,
       percentage: 0,
-      userIds: [],
+      users: [],
       priorityId: this.selectedPriorityId,
       title: "", 
       start: new Date(), 
@@ -86,7 +92,6 @@ export class EditProjectOverlayComponent {
   }
 
   showTeamMembers(team: any): void {
-    console.log(team.members);
     this.hoveredTeam = team; // Set the hovered team
   }
 
@@ -126,4 +131,17 @@ export class EditProjectOverlayComponent {
       }
       return false;
   }
+
+  formatDate(date: Date | string): string {
+    if (!date) return '';
+  
+    if (typeof date === 'string') return date.split('T')[0];
+  
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+  
+  
 }
