@@ -102,7 +102,7 @@ export class ProjectPreviewComponent implements OnInit {
       this.titleCharacterLimit = 10;
       this.descriptionCharacterLimit = 100;
     } else {
-      this.titleCharacterLimit = 15;
+      this.titleCharacterLimit = 12;
       this.descriptionCharacterLimit = 190;
     }
   }
