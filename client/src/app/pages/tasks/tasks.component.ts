@@ -81,7 +81,7 @@ export class TasksComponent {
             percentage: task.percentage,
             dependent: task.dependentOn,
             priorityId: task.priorityId,
-            projectId: 0,
+            projectId: task.taskGroupId,
             type: task.type,
             priority: "",
             timeDifference: 0,
@@ -144,8 +144,10 @@ export class TasksComponent {
   let filteredTasks = this.taskObj;
   if (projectId) {
     filteredTasks = filteredTasks.filter(task => task.projectId === projectId);
+    // console.log(filteredTasks)
   } else {
     filteredTasks = this.taskObj;
+    // console.log(filteredTasks)
   }
   return filteredTasks;
 }
@@ -165,14 +167,11 @@ export class TasksComponent {
         return title.includes(searchText);
       });
     }
-    console.log(projectId)
+    //console.log(projectId)
     if (projectId) {
-      if(projectId == 0){
-        filteredTasks = this.taskObj;
-      }
-      else{
-        filteredTasks = filteredTasks.filter(task => task.projectId === projectId);
-      }
+      filteredTasks = filteredTasks.filter(task => task.projectId === projectId);
+    } else {
+      filteredTasks = this.taskObj;
     }
   
     return filteredTasks;

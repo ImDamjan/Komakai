@@ -1,6 +1,6 @@
 <div class="task-header">
     <div class="search">
-        <input id="search-field" type="text" placeholder="Search for task..." (keyup)="onSearch($event)">
+        <input id="search-field" type="text" placeholder="Search for task..." (keyup)="onSearch($event)" #Search>
     </div>
     <div class="filters">
         <button class="filter-button" (click)="openFilterDialog()"><img src="assets\task-header\filter.svg" alt="" height="33" width="25"></button>
@@ -9,7 +9,7 @@
         <button id="create-button">Create</button>
     </div>
     <div class="choose">
-        <select id="choose-project" (change)="onProjectChange($event)">
+        <select id="choose-project" (change)="onProjectChange($event)" #Select>
             <option value="0">All</option>
             <option *ngFor="let project of projects" [value]="project.id">{{ project.title }}</option>
         </select>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -9,7 +9,10 @@ import { FilterDetailsComponent } from '../filter-details/filter-details.compone
   templateUrl: './task-header.component.html',
   styleUrl: './task-header.component.css'
 })
+
 export class TaskHeaderComponent implements OnInit {
+
+  @ViewChild('Select') selectElement: HTMLSelectElement | undefined;
 
   private overlay = inject(MatDialog);
 
@@ -49,22 +52,20 @@ export class TaskHeaderComponent implements OnInit {
       this.searchValueChanged.emit( {searchText: searchValue});
     } else if (event instanceof MouseEvent && event.type === 'click') {
       this.openFilterDialog();
-    }else if (event instanceof Event && event.target instanceof HTMLSelectElement) {
-      selectedProjectId=this.onProjectChange(event)
     }
 
-    if (searchText) {
+    if (searchText && selectedProjectId) {
       this.searchValueChanged.emit({ searchText, projectId: Number(selectedProjectId) });
     }
   }
 
   onProjectChange(event: Event) {
     if (event instanceof Event && event.target instanceof HTMLSelectElement) {
-    const selectedProjectId = Number((event.target as HTMLSelectElement).value); // Convert to number
-    this.searchProjectChanged.emit({ projectId: selectedProjectId });
-    return selectedProjectId;
-  }
-  return 0;
+      const selectedProjectId = Number((event.target as HTMLSelectElement).value); // Convert to number
+      this.searchProjectChanged.emit({ projectId: selectedProjectId });
+      return selectedProjectId;
+    }
+    return 0;
 
   }
 
