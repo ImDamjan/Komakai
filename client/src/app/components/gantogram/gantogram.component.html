@@ -1,4 +1,28 @@
 <div class="wrapper">
+  <thy-layout>
+    <thy-header class="header-with-baseline">
+      <ng-template #headerContent>
+        <thy-button-group thySize="sm" thyType="outline-default">
+          <button  *ngFor="let view of views" [class.active]="view.value === selectedViewType" (click)="selectView(view.value)">
+            {{ view.name }}
+          </button>
+        </thy-button-group>
+        &nbsp; &nbsp; &nbsp;
+        <thy-button thyType="primary" thySize="sm" (click)="refresh()">Refresh</thy-button>
+        &nbsp; &nbsp; &nbsp;
+        <thy-button thyType="primary" thySize="sm" (click)="scrollToToday()">scrollToToday</thy-button>
+        &nbsp; &nbsp; &nbsp;
+        <thy-button thyType="primary" thySize="sm" (click)="print('gantt-example')"> gantt-example </thy-button>
+        &nbsp; &nbsp; &nbsp;
+        <span>toolbar</span>
+        <thy-switch class="baseline-switch" [(ngModel)]="isShowToolbarChecked"> </thy-switch>
+        &nbsp; &nbsp; &nbsp;
+        <span>Baseline comparison:        </span>
+        <thy-switch class="baseline-switch" [(ngModel)]="isBaselineChecked" (ngModelChange)="switchChange()">switchChange </thy-switch>
+      </ng-template>
+      
+    </thy-header>
+    <thy-content>
     <ngx-gantt
     #gantt
     [items]="items"
@@ -47,5 +71,6 @@
       <span style="color: #fff">&nbsp;&nbsp;{{ item.title }} </span>
     </ng-template>
   </ngx-gantt>
-
+</thy-content>
+</thy-layout>
 </div>

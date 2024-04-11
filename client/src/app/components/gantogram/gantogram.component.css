@@ -1,7 +1,9 @@
 .wrapper{
-    height: 100vh;
+    /* height: calc(100vh - 160px); */
+    height: calc(100vh - 220px);
     margin-top: 150px;
     margin-left: 50px;
-    width: calc(100vw - 140px);
+    width: calc(100vw - 200px);
+    /* width: calc(100vw - 140px); */
     /* z-index: -200 !important; */
 }
