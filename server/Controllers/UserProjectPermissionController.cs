@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Permissions;
 using server.Mappers;
+using server.Models;
 
 namespace server.Controllers
 {
@@ -28,6 +29,24 @@ namespace server.Controllers
             await _userProjectPermissionRepo.AddUserProjectPermission(userProjectPermission);
 
             return Ok(userProjectPermission);
+        }
+        [HttpPost("addPermissions")]
+        public async Task<IActionResult> AddUserProjectPermissions([FromBody] IEnumerable<UserProjectPermissionDto> userProjectPermissionDtos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userProjectPermissions = new List<UserProjectPermission>();
+            foreach (var dto in userProjectPermissionDtos)
+            {
+                userProjectPermissions.Add(UserProjectPermissionMapper.MapToEntity(dto));
+            }
+
+            await _userProjectPermissionRepo.AddUserProjectPermissions(userProjectPermissions);
+
+            return Ok(userProjectPermissions);
         }
 
         [HttpDelete("remove/{id}")]
