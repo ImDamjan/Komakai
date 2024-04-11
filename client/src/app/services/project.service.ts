@@ -60,7 +60,7 @@ export class ProjectService implements OnInit{
     createProject(project: any): Observable<any> {
       const url = this.baseUrl + "/Project/create";
       const body = {
-        users : project.users,
+        userIds : project.userIds,
         priorityId : project.priorityId,
         title : project.title,
         start : project.start,
@@ -81,7 +81,7 @@ export class ProjectService implements OnInit{
     const url = this.baseUrl + "/Project/update";
       const body = {
         id: project.id,
-        users : project.users,
+        userIds : project.userIds,
         priorityId : project.priorityId,
         title : project.title,
         start : project.start,

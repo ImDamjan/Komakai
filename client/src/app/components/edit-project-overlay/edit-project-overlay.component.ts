@@ -31,7 +31,7 @@ export class EditProjectOverlayComponent {
   {
     this.project = data.project;
     console.log(this.project);
-    this.selectedUserIds = this.project.users ? this.project.users.map(id => Number(id)) : [];
+    this.selectedUserIds = this.project.userIds ? this.project.userIds.map(id => Number(id)) : [];
   }
 
   ngOnInit(): void {
@@ -131,7 +131,7 @@ export class EditProjectOverlayComponent {
   }
   
   editProject(projectId: Number): void {
-    this.project.users = this.selectedUserIds;
+    this.project.userIds = this.selectedUserIds;
     this.submitted = true;
     this.submissionError = null;
 
