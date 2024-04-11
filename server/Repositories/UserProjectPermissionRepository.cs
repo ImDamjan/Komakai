@@ -17,6 +17,12 @@ namespace server.Repositories
             await SaveChangesAsync();
         }
 
+        public async Task AddUserProjectPermissions(IEnumerable<UserProjectPermission> userProjectPermissions)
+        {
+            _context.UserProjectPermission.AddRange(userProjectPermissions);
+            await SaveChangesAsync();
+        }
+
         public async Task<UserProjectPermission> GetUserProjectPermissionById(int id)
         {
             return await _context.UserProjectPermission.FindAsync(id);
