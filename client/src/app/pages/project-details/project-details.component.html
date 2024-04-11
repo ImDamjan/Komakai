@@ -7,9 +7,9 @@
         <h1 id="title">Project list/{{ projectName.length > 23 ? (projectName.substring(0, 23) + '...') : projectName }}</h1>
         <app-project-header (viewChange)="changeView($event)"></app-project-header>
     </div>
-    <div [ngSwitch]="currentView">
+    <div class="product" [ngSwitch]="currentView">
         <app-kanban *ngSwitchCase="'kanban'"></app-kanban>
         <!-- <app-list *ngSwitchCase="'list'"></app-list> -->
-        <!-- <app-gantt *ngSwitchCase="'gantt'"></app-gantt> -->
+        <app-gantogram *ngSwitchCase="'gantt'"></app-gantogram>
     </div>
 </div>
