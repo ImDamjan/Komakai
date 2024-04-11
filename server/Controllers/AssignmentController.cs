@@ -250,7 +250,7 @@ namespace server.Controllers
         [HttpGet("getAssignmentsByProject/{project_id}")]
         public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id)
         {
-            var groups = await _group_repo.GetAllProjectTaskGroupsAsync(new Project{Id = project_id});
+            var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project_id);
             var res = new List<AssignmentDto>();
             foreach (var group in groups)
             {

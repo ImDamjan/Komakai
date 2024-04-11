@@ -62,7 +62,7 @@ namespace server.Controllers
             if(project==null)
                 return BadRequest("That project does not exist");
             
-            var group = await _group_repo.GetAllProjectTaskGroupsAsync(project);
+            var group = await _group_repo.GetAllProjectTaskGroupsAsync(project_id);
 
             var dtos = group.Select(g=>g.toTaskGroupDto());
 

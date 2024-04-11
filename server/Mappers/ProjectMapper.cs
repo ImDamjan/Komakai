@@ -6,25 +6,26 @@ using server.DTOs.Priority;
 using server.DTOs.Projects;
 using server.DTOs.Role;
 using server.DTOs.State;
+using server.DTOs.Users;
 using server.Models;
 
 namespace server.Mappers
 {
     public static class ProjectMapper
     {
-        public static ProjectDto ToProjectDto(this Project p, List<int> users)
+        public static ProjectDto ToProjectDto(this Project p, List<UserDto> users, StateDto state, PriorityDto priority)
         {
             return new ProjectDto{
                 Id = p.Id,
                 Spent=p.Spent,
-                StateId=p.StateId,
+                State=state,
                 Start=p.Start,
                 Percentage = p.Percentage,
                 End = p.End,
                 Title = p.Title,
                 Budget = p.Budget,
                 Type = p.Type,
-                PriorityId = p.PriorityId,
+                Priority = priority,
                 Description = p.Description,
                 Users = users
 

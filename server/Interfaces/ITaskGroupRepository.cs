@@ -10,7 +10,7 @@ namespace server.Interfaces
     public interface ITaskGroupRepository
     {
         Task<TaskGroup> CreateAsync(TaskGroup group);
-        Task<List<TaskGroup>> GetAllProjectTaskGroupsAsync(Project project);
+        Task<List<TaskGroup>> GetAllProjectTaskGroupsAsync(int project_id);
         Task<TaskGroup?> GetTaskGroupByIdAsync(int id);
         Task<TaskGroup> UpdateTaskGroupAsync(TaskGroup group);
     }
