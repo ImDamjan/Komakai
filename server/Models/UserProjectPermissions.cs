@@ -19,6 +19,6 @@ namespace server.Models
         // Additional properties
         [ForeignKey("PermissionId")]
         public int PermissionId { get; set; }
-        public virtual Permission Permission { get; set; }
+        public virtual ICollection<Permission> Permissions { get; set; } = new List<Permission>();
     }
 }
