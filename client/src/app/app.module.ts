@@ -42,6 +42,26 @@ import { MemberComponent } from './components/member/member.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 
+
+import { ThyLayoutModule } from 'ngx-tethys/layout';
+import { setPrintErrorWhenIconNotFound } from 'ngx-tethys/icon';
+import { ThyNavModule } from 'ngx-tethys/nav';
+import { ThyButtonModule } from 'ngx-tethys/button';
+import { ThyCheckboxModule } from 'ngx-tethys/checkbox';
+import { ThySwitchModule } from 'ngx-tethys/switch';
+import { ThyNotifyModule } from 'ngx-tethys/notify';
+import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
+
+
+
+import { NgxGanttModule } from '@worktile/gantt';
+import { RouterModule } from '@angular/router';
+
+
+
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,7 +105,17 @@ import { TaskDetailsComponent } from './pages/task-details/task-details.componen
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,
-    DragDropModule
+    DragDropModule,
+
+    NgxGanttModule,
+    RouterModule.forRoot([]),
+    ThyButtonModule,
+    ThyNavModule,
+    ThyLayoutModule,
+    ThyCheckboxModule,
+    ThyNotifyModule,
+    ThySwitchModule,
+    ThyDatePickerModule
   ],
   providers: [
     provideClientHydration(),

@@ -1,0 +1,7 @@
+.wrapper{
+    height: 100vh;
+    margin-top: 150px;
+    margin-left: 50px;
+    width: calc(100vw - 140px);
+    /* z-index: -200 !important; */
+}

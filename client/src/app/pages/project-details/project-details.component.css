@@ -23,3 +23,7 @@
 .scrolled-down #project-header {
     display: none;
 }
+
+.product{
+    z-index: -1;
+}
