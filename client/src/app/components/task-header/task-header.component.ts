@@ -18,11 +18,13 @@ export class TaskHeaderComponent implements OnInit {
 
   projects : Project[] = [];
 
+  selectedProjectId: number = 0;
+
   constructor(private projectService: ProjectService) { }
 
-  searchValueChanged = new EventEmitter< { searchText: string; projectId?: number }>();
+  searchValueChanged = new EventEmitter< { searchText: string }>();
 
-  searchProjectChanged = new EventEmitter<{projectId: number}>;
+  searchProjectChanged = new EventEmitter<{searchText: string; projectId: number}>;
 
   ngOnInit(): void {
     this.fetchProjects();
@@ -31,42 +33,60 @@ export class TaskHeaderComponent implements OnInit {
   fetchProjects(): void {
     this.projectService.getProjectsData().subscribe(projects => {
       this.projects = projects;
+      // console.log(this.projects)
     });
   }
 
-  ngAfterViewInit(){
-    console.log(this.projects)
-  }
+  // ngAfterViewInit(){
+  //   this.fetchProjects();
+  // }
 
   isButtonElement(target: EventTarget): target is HTMLElement {
     return target instanceof HTMLElement;
   }
 
-  onSearch(event: KeyboardEvent) {
+  async onSearch(event: KeyboardEvent) {
 
-    let searchText: string ='';
-    let selectedProjectId;
-    
-    if ('type' in event && event.type === 'keyup') {
-      const searchValue = (event.target as HTMLInputElement).value;
-      this.searchValueChanged.emit( {searchText: searchValue});
-    } else if (event instanceof MouseEvent && event.type === 'click') {
-      this.openFilterDialog();
-    }
+    // let searchText: string = '';
+    // let selectedProjectId;
 
-    if (searchText && selectedProjectId) {
-      this.searchValueChanged.emit({ searchText, projectId: Number(selectedProjectId) });
-    }
+    // await this.fetchProjects(); 
+
+    // if ('type' in event && event.type === 'keyup') {
+    //   const searchValue = (event.target as HTMLInputElement).value;
+    //   if(this.projects.length>0){
+    //     console.log(this.projects)
+    //     selectedProjectId = this.selectElement?.value;
+    //     console.log(selectedProjectId);
+    //   }
+    //   this.searchValueChanged.emit({ searchText: searchValue });
+    // } else if (event instanceof MouseEvent && event.type === 'click') {
+    //   this.openFilterDialog();
+    // }
+
+    // if (searchText) {
+    //   this.searchValueChanged.emit({ searchText, projectId: Number(selectedProjectId) });
+    // }
+
+    const searchText = (event.target as HTMLInputElement).value;
+    // console.log((document.getElementById('search-field') as HTMLInputElement).value)
+    const selectedProjectId = Number(this.selectElement?.value) || 0;
+    // console.log(this.selectedProjectId)
+    // console.log(searchText)
+    this.searchProjectChanged.emit({ searchText,projectId: this.selectedProjectId});
+
   }
 
   onProjectChange(event: Event) {
     if (event instanceof Event && event.target instanceof HTMLSelectElement) {
-      const selectedProjectId = Number((event.target as HTMLSelectElement).value); // Convert to number
-      this.searchProjectChanged.emit({ projectId: selectedProjectId });
-      return selectedProjectId;
+      const selectedProjectId = Number((event.target as HTMLSelectElement).value);
+      this.searchProjectChanged.emit({ searchText: this.searchInputValue, projectId: selectedProjectId });
     }
-    return 0;
 
+  }
+
+  get searchInputValue(): string {
+    return (document.getElementById('search-field') as HTMLInputElement).value;
   }
 
   openFilterDialog() {

@@ -133,27 +133,45 @@ export class TasksComponent {
 
   ngAfterViewInit() {
     this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
-      this.filteredTasks = this.filterTasks(searchValue.searchText, searchValue.projectId);
+      this.filteredTasks = this.filterTasks(searchValue.searchText);
     });
     this.taskHeaderComponent?.searchProjectChanged.subscribe(projectValue => {
-      this.filteredTasks = this.filterTasks1(projectValue.projectId)
+      this.filteredTasks = this.filterTasks1(projectValue.searchText,projectValue.projectId)
     });
   }
 
-  filterTasks1(projectId: number): Task[] {
-  let filteredTasks = this.taskObj;
-  if (projectId) {
-    filteredTasks = filteredTasks.filter(task => task.projectId === projectId);
-    // console.log(filteredTasks)
-  } else {
-    filteredTasks = this.taskObj;
-    // console.log(filteredTasks)
-  }
-  return filteredTasks;
-}
+  filterTasks1(searchText: string, projectId?: number): Task[] {
+    console.log(searchText)
+    console.log(projectId)
+    let filteredTasks = this.taskObj;
+  
+    // Apply project ID filter (if provided)
+    if (projectId) {
+      filteredTasks = filteredTasks.filter(task => task.projectId == projectId);
+    }
+    else{
+      filteredTasks=this.taskObj;
+    }
 
-  filterTasks(searchText: string, projectId?: number): Task[] {
-    if (!searchText && !projectId) {
+    console.log(filteredTasks)
+  
+    // Apply search text filter (if provided and after project ID filter)
+    if (searchText) {
+      searchText = searchText.toLowerCase();
+      filteredTasks = filteredTasks.filter(task => {
+        const title = task.title.toLowerCase();
+        return title.includes(searchText);
+      });
+    }
+
+    console.log(filteredTasks)
+  
+    return filteredTasks;
+  }
+
+  filterTasks(searchText: string): Task[] {
+    // console.log(searchText)
+    if (!searchText) {
       return this.taskObj;
     }
   
@@ -166,12 +184,6 @@ export class TasksComponent {
         const title = task.title.toLowerCase();
         return title.includes(searchText);
       });
-    }
-    //console.log(projectId)
-    if (projectId) {
-      filteredTasks = filteredTasks.filter(task => task.projectId === projectId);
-    } else {
-      filteredTasks = this.taskObj;
     }
   
     return filteredTasks;
