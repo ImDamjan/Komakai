@@ -30,8 +30,8 @@ namespace server.Controllers
 
             return Ok(userProjectPermission);
         }
-        [HttpPost("addPermissions")]
-        public async Task<IActionResult> AddUserProjectPermissions([FromBody] IEnumerable<UserProjectPermissionDto> userProjectPermissionDtos)
+        [HttpPost("add-array")]
+        public async Task<IActionResult> AddUserProjectPermissionsArray([FromBody] UserProjectPermissionArrayDto permissionArrayDto)
         {
             if (!ModelState.IsValid)
             {
@@ -39,7 +39,7 @@ namespace server.Controllers
             }
 
             var userProjectPermissions = new List<UserProjectPermission>();
-            foreach (var dto in userProjectPermissionDtos)
+            foreach (var dto in permissionArrayDto.Permissions)
             {
                 userProjectPermissions.Add(UserProjectPermissionMapper.MapToEntity(dto));
             }
