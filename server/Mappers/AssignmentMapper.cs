@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using server.DTOs.Assignment;
+using server.DTOs.Priority;
+using server.DTOs.State;
+using server.DTOs.Users;
 using server.Models;
 
 namespace server.Mappers
@@ -26,22 +29,21 @@ namespace server.Mappers
             };
         }
 
-        public static AssignmentDto toAssignmentDto(this Assignment a, List<int> asignees, List<int> dependencies)
+        public static AssignmentDto toAssignmentDto(this Assignment a, List<UserDto> asignees, PriorityDto priority, StateDto state, UserDto owner, TaskGroupDto group)
         {
             return new AssignmentDto{
                 Id = a.Id,
                 Title = a.Title,
-                Owner = a.Owner,
+                Owner = owner,
                 Description = a.Description,
                 Start = a.Start,
                 End = a.End,
-                StateId = a.StateId,
+                State = state,
                 Percentage = a.Percentage,
-                PriorityId = a.PriorityId,
+                Priority = priority,
                 Type = a.Type,
                 Assignees = asignees,
-                DependentOn = dependencies,
-                TaskGroupId = a.TaskGroupId 
+                TaskGroup =  group
             };
         }
 

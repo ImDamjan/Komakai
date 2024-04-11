@@ -20,7 +20,7 @@ namespace server.Repositories
 
         public async Task<Assignment> CreateAssignmentAsync(Assignment a)
         {
-
+            a.LastTimeChanged = DateTime.Now;
             await _context.Assignments.AddAsync(a);
             await _context.SaveChangesAsync();
             
@@ -43,40 +43,61 @@ namespace server.Repositories
 
         public async Task<List<Assignment>> GetAllDependentOnOfAssignmentAsync(int asign_id)
         {
-            var asgn = await _context.Assignments.Include(a=>a.DependentOnAssignments).FirstOrDefaultAsync(a=>a.Id==asign_id);
+            var asgn = await _context.Assignments
+            .Include(a=>a.DependentOnAssignments).FirstOrDefaultAsync(a=>a.Id==asign_id);
             if(asgn==null)
                 return new List<Assignment>();
 
-            return asgn.DependentOnAssignments.ToList();
+            return asgn.DependentOnAssignments.OrderByDescending(a=>a.LastTimeChanged).ToList();
         }
 
         public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id)
         {
-            return await _context.Assignments.Where(a=>a.TaskGroupId==group_id).Include(a=>a.Users).ToListAsync();
+            return await _context.Assignments.Where(a=>a.TaskGroupId==group_id)
+            .Include(a=>a.Users)
+            .Include(a=>a.TaskGroup)
+            .Include(a=>a.User)
+            .Include(a=>a.Priority)
+            .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged)
+            .ToListAsync();
         }
 
         public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId)
         {
-            var pom = await _context.Assignments.Include(a=>a.Users.Where(u=>u.Id==userId)).ToListAsync();
+            var pom = await _context.Assignments.Include(a=>a.Users.Where(u=>u.Id==userId))
+            .Include(a=>a.Users)
+            .Include(a=>a.TaskGroup)
+            .Include(a=>a.User)
+            .Include(a=>a.Priority)
+            .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged).ToListAsync();
 
             return pom.Where(t=>t.Users.Count > 0).ToList();
         }
 
         public async Task<Assignment?> GetAssignmentByidAsync(int id)
         {
-            return await _context.Assignments.FirstOrDefaultAsync(a=>a.Id==id);
+            return await _context.Assignments
+            .Include(a=>a.Users)
+            .Include(a=>a.TaskGroup)
+            .Include(a=>a.User)
+            .Include(a=>a.Priority)
+            .Include(a=>a.State)
+            .FirstOrDefaultAsync(a=>a.Id==id);
         }
 
-        public async Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id)
+        public async Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a, int id, List<User> users, List<Assignment> dependentOn)
         {
             var assignment = await GetAssignmentByidAsync(id);
             if(assignment==null)
                 return null;
             assignment.Title = a.Title;
+            assignment.Users = users;
+            assignment.DependentOnAssignments = dependentOn;
             assignment.TaskGroupId = a.TaskGroupId;
             assignment.Start = a.Start;
             assignment.End = a.End;
             assignment.Type = a.Type;
+            assignment.LastTimeChanged = DateTime.Now;
             assignment.PriorityId = a.PriorityId;
             assignment.StateId = a.StateId;
             assignment.Description = a.Description;
