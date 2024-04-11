@@ -92,8 +92,8 @@ export class TaskHeaderComponent implements OnInit {
   openFilterDialog() {
     const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.width = '400px';
-    dialogConfig.height = '400px';
+    // dialogConfig.width = '400px';
+    // dialogConfig.height = '400px';
 
     this.overlay.open(FilterDetailsComponent, dialogConfig);
   }

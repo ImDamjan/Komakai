@@ -149,9 +149,6 @@ export class TasksComponent {
     if (projectId) {
       filteredTasks = filteredTasks.filter(task => task.projectId == projectId);
     }
-    else{
-      filteredTasks=this.taskObj;
-    }
 
     console.log(filteredTasks)
   
