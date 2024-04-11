@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.DTOs.Users;
 using server.Models;
 
 namespace server.DTOs.Team
@@ -13,6 +14,6 @@ namespace server.DTOs.Team
         public string Name { get; set; } = null!;
         public string Type { get; set; } = null!;
 
-        public List<int> Members { get; set; } =  new List<int>();
+        public List<UserDto> Members { get; set; } =  new List<UserDto>();
     }
 }

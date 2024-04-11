@@ -30,7 +30,7 @@ namespace server.Controllers
             var teamDtos = new List<TeamDto>();
             foreach (var team in teams)
             {
-                var members = await _team_repo.GetTeamUsersByIdAsync(team.Id);
+                var members = team.Users.Select(u=>u.toUserDto()).ToList();
                 teamDtos.Add(team.ToTeamDto(members));
             }
 
@@ -46,7 +46,7 @@ namespace server.Controllers
             if(team==null)
                 return NotFound("Team not found!");
 
-            var members = await _team_repo.GetTeamUsersByIdAsync(teamId);
+            var members = team.Users.Select(u=>u.toUserDto()).ToList();
 
             return Ok(team.ToTeamDto(members));
         }
@@ -58,10 +58,10 @@ namespace server.Controllers
             var teams = await _team_repo.GetAllUserTeams(userId);
             
             var timovi = new List<TeamDto>();
-            foreach (var item in teams)
+            foreach (var team in teams)
             {
-                var members = await _team_repo.GetTeamUsersByIdAsync(item.Id);
-                timovi.Add(item.ToTeamDto(members));
+                var members = team.Users.Select(u=>u.toUserDto()).ToList();
+                timovi.Add(team.ToTeamDto(members));
             }
 
             return Ok(timovi);
@@ -82,8 +82,10 @@ namespace server.Controllers
             }
             team.Users = users;
             team = await _team_repo.CreateTeamAsync(team);
+
+            var members = users.Select(u=>u.toUserDto()).ToList();
             
-            return Ok(team.ToTeamDto(dto.Members));
+            return Ok(team.ToTeamDto(members));
             
         }
 
