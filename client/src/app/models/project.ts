@@ -1,14 +1,20 @@
+import { Priority } from "./priority"
+import { State } from "./state"
+import { User } from "./user"
+
 export interface Project {
-    id : Number, 
+    id : number, 
     title : string,
     start : Date, 
     end : Date,
-    stateId : Number
-    budget : Number
-    spent : Number
+    state : State,
+    budget : number,
+    spent : number,
     type : string,
-    percentage : Number,
+    percentage : number,
     description : string,
-    priorityId : Number,
-    userIds : Number[]
+    priority : Priority,
+    users : User[],
+    truncatedTitle : string,
+    truncatedDescription : string
 }

@@ -6,12 +6,12 @@ import { TaskKanban } from '../../models/kanbantask';
 import { TaskCardKanbanComponent } from '../task-card-kanban/task-card-kanban.component';
 import { StateService } from '../../services/state.service';
 import { State } from '../../models/state';
-import { Assignment } from '../../models/assignment';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { AssignmentService } from '../../services/assignment.service';
 import { stat } from 'fs';
+import { Task } from '../../models/task';
 
 @Component({
   selector: 'app-kanban',
@@ -21,11 +21,11 @@ import { stat } from 'fs';
 export class KanbanComponent implements OnInit{
   name = 'Angular Material ' + VERSION.major + ' Kanban board';
    public board: Board;
-   private projectId : Number = 0;
+   private projectId : number = 0;
    private state_service = inject(StateService);
    private assignment_service = inject (AssignmentService);
    private route = inject(ActivatedRoute);
-   private assignments : Assignment[] = [];
+   private assignments : Task[] = [];
    
   constructor(private dialog: MatDialog)
   {
@@ -74,12 +74,12 @@ export class KanbanComponent implements OnInit{
       
       //treba da se stavi od kliknutog projekta id
         this.assignment_service.getAllProjectAssignments(this.projectId).subscribe({
-          next : (assignments : Assignment[])=>
+          next : (assignments : Task[])=>
         {
           this.assignments = assignments;
           let columns : Column[] = [];
           states.forEach(state => {
-            let stateProjects : Assignment[] = [];
+            let stateProjects : Task[] = [];
             assignments.forEach(assignment => {
               assignment.dummyTitle = assignment.title;
               if(assignment.title.length > 20)
@@ -92,7 +92,7 @@ export class KanbanComponent implements OnInit{
                 new_title+="...";
                 assignment.dummyTitle = new_title;
               }
-              if(assignment.stateId==state.id)
+              if(assignment.state.id==state.id)
                 stateProjects.push(assignment);
             });
             console.log(stateProjects);
@@ -108,18 +108,19 @@ export class KanbanComponent implements OnInit{
   }
 
   //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)
-  public dropGrid(event: CdkDragDrop<Assignment[]>): void {
+  public dropGrid(event: CdkDragDrop<Task[]>): void {
     moveItemInArray(this.board.columns, event.previousIndex, event.currentIndex);
   }
   //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)
-  public drop(event: CdkDragDrop<Assignment[]>): void {
+  public drop(event: CdkDragDrop<Task[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       
       event.item.data.stateId = Number(event.container.id);
-      this.assignment_service.updateAssignmentById(event.item.data).subscribe({
-        next : (assignment : Assignment)=> {
+      // treba se menja na prave dependent taskove
+      this.assignment_service.updateAssignmentById(event.item.data,[]).subscribe({
+        next : (assignment : Task)=> {
           event.item.data = assignment
         }
       });

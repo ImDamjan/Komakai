@@ -6,6 +6,7 @@ import { Project } from '../../models/project';
 import { PriorityService } from '../../services/priority.service';
 import { TeamService } from '../../services/team.service';
 import { User } from '../../models/user';
+import { CreateProject } from '../../models/create-project';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -21,7 +22,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   submitted = false;
   submissionError: string | null = null;
 
-  projectObj!: Project;
+  projectObj!: CreateProject;
 
   selectedUserIds: number[] = [];
   selectedPriorityId!: number;
@@ -38,18 +39,16 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.teams = teams;
     });
     this.projectObj = {
-      id: 0,
-      stateId: 0,
-      spent: 0,
-      percentage: 0,
-      userIds: [],
-      priorityId: this.selectedPriorityId,
-      title: "", 
-      start: new Date(), 
-      end: new Date(),
-      budget: 0, 
-      description: "", 
-      type: "",
+      userIds : [],
+      priorityId : this.selectedPriorityId,
+      title : "",
+      start : new Date(),
+      end : new Date(),
+      budget : 0,
+      description : "",
+      type : ""
+
+
     };
   }
 

@@ -13,12 +13,12 @@
         </div>
         <div class = "row">
             <p>Owner</p>
-            <span>{{Owner.name + " "+ Owner.lastname}}</span>
+            <span>{{assignment.owner.name + " "+ assignment.owner.lastname}}</span>
         </div>
         <div class = "row">
             <p>Assignees</p>
             <div style = "padding: 0 20px; width: 100%;">                
-                <div *ngFor="let u of assignees">
+                <div *ngFor="let u of assignment.assignees">
                     {{u.name + " "+u.lastname}},
                 </div>
             </div>

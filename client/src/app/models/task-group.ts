@@ -1,6 +1,10 @@
+import { Task } from "./task";
+
 export interface TaskGroup {
-    id: Number,
-    title: String,
-    projectId: Number,
-    parentTaskGroupId: Number
+    id: number,
+    title: string,
+    projectId: number,
+    parentTaskGroupId: number,
+    children : TaskGroup[],
+    assignments : Task[]
 }

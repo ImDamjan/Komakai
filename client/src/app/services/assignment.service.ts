@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { environment } from '../enviroments/environment';
-import { Assignment } from '../models/assignment';
 import { Task } from '../models/task';
 import { jwtDecode } from 'jwt-decode';
 
@@ -15,48 +14,48 @@ export class AssignmentService {
   constructor() { }
 
 
-  getAllProjectAssignments(project_id : Number) : Observable<Assignment[]>
+  getAllProjectAssignments(project_id : number) : Observable<Task[]>
   {
     const url = this.baseUrl + "/Assignment/getAssignmentsByProject/"+project_id;
-    return this.http.get<Assignment[]>(url);
+    return this.http.get<Task[]>(url);
   }
 
-  updateAssignmentById(asignment : Assignment) : Observable<Assignment>
+  updateAssignmentById(asignment : Task, taskDependentOn : number[]) : Observable<Task>
   {
     const url = this.baseUrl + "/Assignment/update/" + asignment.id;
     const body = {
-      taskGroupId : asignment.taskGroupId,
+      taskGroupId : asignment.taskGroup.id,
       userIds : asignment.assignees,
       start : asignment.start,
       end : asignment.end,
-      dependentOn : asignment.dependentOn,
-      stateId : asignment.stateId,
+      dependentOn : taskDependentOn,
+      stateId : asignment.state.id,
       percentage : asignment.percentage,
       title : asignment.title,
       type : asignment.type,
       description : asignment.description,
-      priorityId : asignment.priorityId
+      priorityId : asignment.priority.id
     };
-    return this.http.put<Assignment>(url,body);
+    return this.http.put<Task>(url,body);
   }
   getDependentAssignmentsFor(asign_id:number) : Observable<Task[]>
   {
     const url = this.baseUrl + "/Assignment/getDependentOnAssignments/" + asign_id;
     return this.http.get<Task[]>(url);
   }
-  getAssignmentById(asign_id:number): Observable<Assignment>
+  getAssignmentById(asign_id:number): Observable<Task>
   {
-    return this.http.get<Assignment>(this.baseUrl + "/Assignment/getById/" + asign_id);
+    return this.http.get<Task>(this.baseUrl + "/Assignment/getById/" + asign_id);
   }
 
-  getAllUserAssignments(user_id: Number): Observable<Assignment[]> {
-    return this.http.get<Assignment[]>(this.baseUrl+`/Assignment/getByUser/` + user_id);
+  getAllUserAssignments(user_id: number): Observable<Task[]> {
+    return this.http.get<Task[]>(this.baseUrl+`/Assignment/getByUser/` + user_id);
   }
 
-  createAssignment(createAssignmentData : any) : Observable<Assignment>
+  createAssignment(createAssignmentData : any) : Observable<Task>
   {
     const url = this.baseUrl + "/Assignment/create";
-    return this.http.post<Assignment>(url,createAssignmentData);
+    return this.http.post<Task>(url,createAssignmentData);
   }
   // getAllTasks(): Observable<Task[]> { // Specify Task[] as the expected response type
 

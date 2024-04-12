@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../enviroments/environment';
 import { Subscription, forkJoin, interval, map, switchMap, takeUntil } from 'rxjs';
 import { AssignmentService } from '../../services/assignment.service';
-import { Assignment } from '../../models/assignment';
 import { PriorityService } from '../../services/priority.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
@@ -19,7 +18,7 @@ export class TasksComponent {
 
   private apiUrl = environment.apiUrl;
 
-  tasks: Assignment[] = [];
+  tasks: Task[] = [];
 
   priorities: any[] = [];
 
@@ -82,16 +81,15 @@ export class TasksComponent {
             assignees: task.assignees,
             title: task.title,
             description: task.description,
-            stateId: task.stateId,
+            state: task.state,
             percentage: task.percentage,
-            dependent: task.dependentOn,
-            priorityId: task.priorityId,
-            projectId: 0,
             type: task.type,
-            priority: "",
+            priority: task.priority,
             timeDifference: 0,
             remaining: '',
-            owner : task.owner
+            owner: task.owner,
+            taskGroup: task.taskGroup,
+            dummyTitle: ''
           }
           this.taskObj.push(myObj);
         });
@@ -122,15 +120,6 @@ export class TasksComponent {
             }
           }
 
-        });
-
-        const requests = this.taskObj.map(task => this.priorityService.getPriorityById(task.priorityId));
-
-        forkJoin(requests).subscribe((responses: any[]) => {
-            responses.forEach((response, index) => {
-                this.taskObj[index].priority = response.description;
-
-            });
         });
     });
   }

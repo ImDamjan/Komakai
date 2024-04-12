@@ -22,7 +22,7 @@ export class PriorityService {
   getPriorities(): Observable<Priority[]> {
     return this.http.get<Priority[]>(`${this.apiUrl}/Priority/getAll`);
   }
-  getPriorityById(prio_id: Number) : Observable<Priority>
+  getPriorityById(prio_id: number) : Observable<Priority>
   {
     const url = this.apiUrl + "/Priority/getById/" + prio_id;
     return this.http.get<Priority>(url);
