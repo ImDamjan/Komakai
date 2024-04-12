@@ -35,7 +35,7 @@ namespace server.Controllers
         public async Task<IActionResult> getAssignmentUsers([FromRoute]int asign_id)
         {
             var users = await _repos.GetAssignmentUsersAsync(asign_id);
-            var dtos = users.Select(x => x.toUserDto());
+            var dtos = users.Select(x => x.toUserDto(x.Role.toRoleDto()));
             return Ok(dtos);
         }
 
@@ -48,13 +48,13 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return Ok(user.toUserDto());
+            return Ok(user.toUserDto(user.Role.toRoleDto()));
         }
         [HttpGet("getProjectUsers/{project_id}")]
         public async Task<IActionResult> getProjectUsers([FromRoute] int project_id)
         {
             var users = await _repos.GetUserByProjectId(project_id);
-            var dtos = users.Select(u=>u.toUserDto());
+            var dtos = users.Select(u=>u.toUserDto(u.Role.toRoleDto()));
             return Ok(dtos);
         }
 

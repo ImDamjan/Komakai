@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.DTOs.Team;
 using server.Interfaces;
 using server.Mappers;
 using server.Models;
@@ -49,18 +50,28 @@ namespace server.Repositories
             return team;
         }
 
-        public async Task<List<int>> GetTeamUsersByIdAsync(int teamId)
-        {
-            var team = await GetTeamByIdAsync(teamId);
-            List<int> User_ids =  new List<int>();
-            if(team==null)
-                return User_ids;
-            foreach (var user in team.Users)
-            {
-                User_ids.Add(user.Id);
-            }
+        // public async Task<List<User>> GetTeamUsersByIdAsync(int teamId)
+        // {
+        //     var team = await GetTeamByIdAsync(teamId);
+        //     if(team==null)
+        //         return new List<User>();
+        //     return team.Users.ToList();
+        // }
 
-            return User_ids;
+        public async Task<Team?> UpdateTeamAsync(CreateTeamDto dto, int team_id, List<User> members)
+        {
+            var team = await GetTeamByIdAsync(team_id);
+
+            if(team==null)
+                return null;
+            
+            team.Name = dto.Name;
+            team.Users = members;
+            team.Type = dto.Type;
+            
+            await _context.SaveChangesAsync();
+
+            return team;
         }
     }
 }

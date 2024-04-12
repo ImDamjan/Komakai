@@ -30,7 +30,7 @@ namespace server.Controllers
             var teamDtos = new List<TeamDto>();
             foreach (var team in teams)
             {
-                var members = team.Users.Select(u=>u.toUserDto()).ToList();
+                var members = team.Users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
                 teamDtos.Add(team.ToTeamDto(members));
             }
 
@@ -46,7 +46,7 @@ namespace server.Controllers
             if(team==null)
                 return NotFound("Team not found!");
 
-            var members = team.Users.Select(u=>u.toUserDto()).ToList();
+            var members = team.Users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
 
             return Ok(team.ToTeamDto(members));
         }
@@ -60,7 +60,7 @@ namespace server.Controllers
             var timovi = new List<TeamDto>();
             foreach (var team in teams)
             {
-                var members = team.Users.Select(u=>u.toUserDto()).ToList();
+                var members = team.Users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
                 timovi.Add(team.ToTeamDto(members));
             }
 
@@ -83,13 +83,26 @@ namespace server.Controllers
             team.Users = users;
             team = await _team_repo.CreateTeamAsync(team);
 
-            var members = users.Select(u=>u.toUserDto()).ToList();
+            var members = users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
             
             return Ok(team.ToTeamDto(members));
             
         }
 
-        //TO-DO treba da se uradi jos update timova moguce
+        [HttpPut]
+        public async Task<IActionResult> UpdateTeam([FromBody] CreateTeamDto dto, [FromRoute] int team_id)
+        {
+            var users =  new List<User>();
+            foreach (var userId in dto.Members)
+            {
+                var user = await _user_repo.GetUserByIdAsync(userId);
+                if(user==null)
+                    return NotFound("User not found.ID:" + userId);
+                users.Add(user);
+            }
+
+            return Ok();
+        }
 
     }
 }

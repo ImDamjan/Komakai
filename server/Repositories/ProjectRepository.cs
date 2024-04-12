@@ -64,6 +64,7 @@ namespace server.Repositories
             .Include(p=>p.TaskGroups)
             .Include(p=>p.State)
             .Include(p=>p.Priority)
+            .Include(p=>p.ProjectUsers)
             .FirstOrDefaultAsync(p=>p.Id==id);
         }
         //naslov, description, state, memberi,prioprity ,broj_aktivnih_taskova_projekta
@@ -82,7 +83,7 @@ namespace server.Repositories
 
             return projects;
         }
-        public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id)
+        public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users)
         {
             var project = await GetProjectByIdAsync(project_id);
             if(project==null)
@@ -95,8 +96,22 @@ namespace server.Repositories
                 project.StateId=projectDto.StateId;
                 project.LastStateChangedTime = DateTime.Now;
             }
+            List<ProjectUser> users = new List<ProjectUser>();
+            foreach(var user in project_users)
+            {
+                users.Add(new ProjectUser{
+                    Project = project,
+                    User = user,
+                    ProjectRoleId = user.RoleId
+                });
+            }
             project.Percentage = projectDto.Percentage;
+            project.ProjectUsers = users;
             project.Title = projectDto.Title;
+            project.Description = projectDto.Description;
+            project.End = projectDto.End;
+            project.Start = projectDto.Start;
+            project.Spent = projectDto.Spent;
             
             if(projectDto.PriorityId > 0 && projectDto.PriorityId < 5)
                 project.PriorityId = projectDto.PriorityId;

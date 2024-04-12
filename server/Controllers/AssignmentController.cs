@@ -85,9 +85,9 @@ namespace server.Controllers
             var owner = await _user_repo.GetUserByIdAsync(dto.Owner);
             if(owner==null)
                 return NotFound("Owner with "+ dto.Owner+ " does not exist");
-            var ownerDto = owner.toUserDto();
+            var ownerDto = owner.toUserDto(owner.Role.toRoleDto());
             var stateDto = state.toStateDto();
-            var teamDto = users.Select(u=>u.toUserDto()).ToList();
+            var teamDto = users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
             var groupdto = group.toTaskGroupDto();
             var prioDto = prio.toPrioDto();
             var a = await _asign_repo.CreateAssignmentAsync(dto.fromCreateDtoToAssignment(users,dependencies,group));
@@ -118,9 +118,9 @@ namespace server.Controllers
                     return NotFound("That task group does not exist");
                 var team = await _user_repo.GetAssignmentUsersAsync(tasks[i].Id);
 
-                var ownerDto = owner.toUserDto();
+                var ownerDto = owner.toUserDto(owner.Role.toRoleDto());
                 var stateDto = state.toStateDto();
-                var teamDto = team.Select(u=>u.toUserDto()).ToList();
+                var teamDto = team.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
                 var groupdto = group.toTaskGroupDto();
                 var prioDto = prio.toPrioDto();
                 res.Add(tasks[i].toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
@@ -142,9 +142,9 @@ namespace server.Controllers
 
             for (int i = 0; i < tasks.Count; i++)
             {
-                var ownerDto = tasks[i].User.toUserDto();
+                var ownerDto = tasks[i].User.toUserDto(tasks[i].User.Role.toRoleDto());
                 var stateDto = tasks[i].State.toStateDto();
-                var teamDto = tasks[i].Users.Select(u=>u.toUserDto()).ToList();
+                var teamDto = tasks[i].Users.Select(u=>u.toUserDto(tasks[i].User.Role.toRoleDto())).ToList();
                 var groupdto = tasks[i].TaskGroup.toTaskGroupDto();
                 var prioDto = tasks[i].Priority.toPrioDto();
                 res.Add(tasks[i].toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
@@ -165,9 +165,9 @@ namespace server.Controllers
 
             for (int i = 0; i < tasks.Count; i++)
             {
-                var ownerDto = tasks[i].User.toUserDto();
+                var ownerDto = tasks[i].User.toUserDto(tasks[i].User.Role.toRoleDto());
                 var stateDto = tasks[i].State.toStateDto();
-                var teamDto = tasks[i].Users.Select(u=>u.toUserDto()).ToList();
+                var teamDto = tasks[i].Users.Select(u=>u.toUserDto(tasks[i].User.Role.toRoleDto())).ToList();
                 var groupdto = tasks[i].TaskGroup.toTaskGroupDto();
                 var prioDto = tasks[i].Priority.toPrioDto();
                 res.Add(tasks[i].toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
@@ -184,9 +184,9 @@ namespace server.Controllers
             if(task==null)
                 return NotFound("Assignment does not exist.ID:" + asign_id);
 
-                var ownerDto = task.User.toUserDto();
+                var ownerDto = task.User.toUserDto(task.User.Role.toRoleDto());
                 var stateDto = task.State.toStateDto();
-                var teamDto = task.Users.Select(u=>u.toUserDto()).ToList();
+                var teamDto = task.Users.Select(u=>u.toUserDto(task.User.Role.toRoleDto())).ToList();
                 var groupdto = task.TaskGroup.toTaskGroupDto();
                 var prioDto = task.Priority.toPrioDto();
             
@@ -237,9 +237,9 @@ namespace server.Controllers
 
             if(asignment==null)
                 return NotFound("Assignment does not exist.ID:" + asign_id);
-            var ownerDto = asignment.User.toUserDto();
+            var ownerDto = asignment.User.toUserDto(asignment.User.Role.toRoleDto());
             var stateDto = state.toStateDto();
-            var teamDto = users.Select(u=>u.toUserDto()).ToList();
+            var teamDto = users.Select(u=>u.toUserDto(asignment.User.Role.toRoleDto())).ToList();
             var groupdto = group.toTaskGroupDto();
             var prioDto = prio.toPrioDto();
             
@@ -259,9 +259,9 @@ namespace server.Controllers
                 {
 
 
-                    var ownerDto = tasks[i].User.toUserDto();
+                    var ownerDto = tasks[i].User.toUserDto(tasks[i].User.Role.toRoleDto());
                     var stateDto = tasks[i].State.toStateDto();
-                    var teamDto = tasks[i].Users.Select(u=>u.toUserDto()).ToList();
+                    var teamDto = tasks[i].Users.Select(u=>u.toUserDto(tasks[i].User.Role.toRoleDto())).ToList();
                     var groupdto = tasks[i].TaskGroup.toTaskGroupDto();
                     var prioDto = tasks[i].Priority.toPrioDto();
                     res.Add(tasks[i].toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));

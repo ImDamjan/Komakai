@@ -39,7 +39,7 @@ namespace server.Controllers
             foreach (var project in projects)
             {
                 var users =  await _user_repo.GetUserByProjectId(project.Id);
-                var userDtos = users.Select(u=>u.toUserDto()).ToList();
+                var userDtos = users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
                 dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
             }
             return Ok(dtos);
@@ -52,7 +52,7 @@ namespace server.Controllers
             foreach (var project in projects)
             {
                 var users =  await _user_repo.GetUserByProjectId(project.Id);
-                var userDtos = users.Select(u=>u.toUserDto()).ToList();
+                var userDtos = users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
                 dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
             }
             return Ok(dtos);
@@ -68,7 +68,7 @@ namespace server.Controllers
             var dto = new ProjectDto();
 
             var users =  await _user_repo.GetUserByProjectId(project.Id);
-            var ids =  users.Select(u=>u.toUserDto()).ToList();
+            var ids =  users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
             dto = project.ToProjectDto(ids,project.State.toStateDto(),project.Priority.toPrioDto());
     
             return Ok(dto);
@@ -105,7 +105,7 @@ namespace server.Controllers
             var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
 
             var users =  await _user_repo.GetUserByProjectId(projectModel.Id);
-            var ids =  users.Select(u=>u.toUserDto()).ToList();
+            var ids =  users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
             var state = await _state_repo.GetStateByIdAsync(response.StateId);
             if(state==null)
                 return NotFound("error");
@@ -131,15 +131,22 @@ namespace server.Controllers
                     return Ok("user not found");
                 users.Add(user);
             }
-            var project = await _repos.UpdateProjectAsync(projectDto, project_id);
+            var prio = await _prio_repo.GetPriority(projectDto.PriorityId);
+            if(prio==null)
+                return NotFound("Priority with "+ projectDto.PriorityId+ " does not exist");
+            var state = await _state_repo.GetStateByIdAsync(projectDto.StateId);
+            if(state==null)
+                return NotFound("State with "+ projectDto.StateId+ " does not exist");
+
+            var project = await _repos.UpdateProjectAsync(projectDto, project_id, users);
 
             if(project==null)
                 return NotFound("Project with Id:"+project_id + " was not found !!!");
             var dto = new ProjectDto();
 
             
-            var ids =  users.Select(u=>u.toUserDto()).ToList();
-            dto = project.ToProjectDto(ids, project.State.toStateDto(),project.Priority.toPrioDto());
+            var ids =  users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+            dto = project.ToProjectDto(ids, state.toStateDto(),prio.toPrioDto());
     
             return Ok(dto);
         }

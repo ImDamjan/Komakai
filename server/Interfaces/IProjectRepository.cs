@@ -14,7 +14,7 @@ namespace server.Interfaces
         Task<List<Project>> GetAllFilteredProjectsAsync(ProjectFilterDto dto);
         Task<Project?> GetProjectByIdAsync(int id);
         Task<Project> CreateProjectAsync(Project projectModel,List<User> teamMembers);
-        Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id);
+        Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users);
         Task<List<Project>> GetAllUserProjectsAsync(int id);
         Task<Project?> DeleteProjectByIdAsync(int project_id);
     }
