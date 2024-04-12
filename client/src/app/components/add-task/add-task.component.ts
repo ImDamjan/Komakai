@@ -135,8 +135,8 @@ export class AddTaskComponent implements OnInit {
     }
     todayTime.setHours(0, 0, 0, 0);
     this.createTaskObj.start.setHours(0,0,0,0);
-    console.log(todayTime);
-    console.log(this.createTaskObj.start);
+    // console.log(todayTime);
+    // console.log(this.createTaskObj.start);
     //prvera da li je start date pre danasnjeg
     if(this.createTaskObj.start < todayTime)
     {
@@ -144,6 +144,7 @@ export class AddTaskComponent implements OnInit {
       return;
 
     }
+    console.log(this.createTaskObj);
     this.assignmentService.createAssignment(this.createTaskObj).subscribe({
       next : (asign : Task) => {
         console.log("Creation succesful");

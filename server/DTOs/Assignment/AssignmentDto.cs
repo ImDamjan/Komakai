@@ -13,6 +13,7 @@ namespace server.DTOs.Assignment
     {
         public int Id { get; set; }
         public List<UserDto> Assignees {get; set;} = new List<UserDto>();
+        public List<int> DepndentOn { get; set; } = new List<int>();   
         public string Title { get; set; } = null!;
         public UserDto Owner { get; set; } = null!;
         public string Description { get; set; } = null!;

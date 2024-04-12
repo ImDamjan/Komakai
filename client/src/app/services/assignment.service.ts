@@ -4,6 +4,7 @@ import { Observable} from 'rxjs';
 import { environment } from '../enviroments/environment';
 import { Task } from '../models/task';
 import { jwtDecode } from 'jwt-decode';
+import { UpdateTask } from '../models/update-task';
 
 @Injectable({
   providedIn: 'root'
@@ -20,22 +21,9 @@ export class AssignmentService {
     return this.http.get<Task[]>(url);
   }
 
-  updateAssignmentById(asignment : Task, taskDependentOn : number[]) : Observable<Task>
+  updateAssignmentById(body : UpdateTask, asign_id: number) : Observable<Task>
   {
-    const url = this.baseUrl + "/Assignment/update/" + asignment.id;
-    const body = {
-      taskGroupId : asignment.taskGroup.id,
-      userIds : asignment.assignees,
-      start : asignment.start,
-      end : asignment.end,
-      dependentOn : taskDependentOn,
-      stateId : asignment.state.id,
-      percentage : asignment.percentage,
-      title : asignment.title,
-      type : asignment.type,
-      description : asignment.description,
-      priorityId : asignment.priority.id
-    };
+    const url = this.baseUrl + "/Assignment/update/" + asign_id;
     return this.http.put<Task>(url,body);
   }
   getDependentAssignmentsFor(asign_id:number) : Observable<Task[]>

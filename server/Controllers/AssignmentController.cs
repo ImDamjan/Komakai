@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.Extensions.DependencyModel;
 using server.DTOs.Assignment;
 using server.Interfaces;
 using server.Mappers;
@@ -12,7 +13,7 @@ using server.Models;
 
 namespace server.Controllers
 {
-    //najverovatnije ce trebati da se promene dto-ovi
+    //treba da se dodaju dependent idjevi tamo gde treba
     [Route("api/[controller]")]
     [ApiController]
     public class AssignmentController : ControllerBase
@@ -244,7 +245,13 @@ namespace server.Controllers
             var prioDto = prio.toPrioDto();
             
 
-            return Ok(asignment.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
+            var dep = new List<int>();
+            var dependent = await _asign_repo.getDependentAssignments(asign_id);
+            
+            dep = dependent.Select(d=>d.Id).ToList();
+            var Rdto = asignment.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto);
+            Rdto.DepndentOn = dep;
+            return Ok(Rdto);
         }
 
         [HttpGet("getAssignmentsByProject/{project_id}")]
@@ -257,14 +264,18 @@ namespace server.Controllers
                 var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id);
                 for (int i = 0; i< tasks.Count;i++)
                 {
-
-
+                    var dep = new List<int>();
+                    var dependent = await _asign_repo.getDependentAssignments(tasks[i].Id);
+                    
+                    dep = dependent.Select(d=>d.Id).ToList();
                     var ownerDto = tasks[i].User.toUserDto(tasks[i].User.Role.toRoleDto());
                     var stateDto = tasks[i].State.toStateDto();
                     var teamDto = tasks[i].Users.Select(u=>u.toUserDto(tasks[i].User.Role.toRoleDto())).ToList();
                     var groupdto = tasks[i].TaskGroup.toTaskGroupDto();
                     var prioDto = tasks[i].Priority.toPrioDto();
-                    res.Add(tasks[i].toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
+                    var dto = tasks[i].toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto);
+                    dto.DepndentOn = dep;
+                    res.Add(dto);
                 }
             }
 

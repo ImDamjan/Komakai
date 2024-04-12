@@ -34,4 +34,5 @@ export interface Task{
     startYear: number,
     startMonth: number,
     startDate: number,
+    depndentOn: number[],
 }

@@ -46,6 +46,7 @@ export class TaskDetailsComponent implements OnInit{
   // vracati cele usere?
   ngOnInit(): void {
     this.assignment = this.data[0];
+    console.log(this.assignment);
     this.assignment_service.getDependentAssignmentsFor(this.assignment.id).subscribe({
       next : (tasks : Task[]) => {
         if(tasks.length > 0)

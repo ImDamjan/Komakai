@@ -56,7 +56,7 @@ namespace server.Controllers
             return Ok(t.toTaskGroupDto());
         }
 
-        [HttpGet("getTaskGroupsByProject/{project_id}")]
+        [HttpGet("getTaskGroupsByProjectWithTasks/{project_id}")]
         public async Task<IActionResult> GetByProjectId([FromRoute] int project_id)
         {
             //provera da li projekat postoji
@@ -70,6 +70,13 @@ namespace server.Controllers
             var tree = await makeTree(initial);
 
             return Ok(tree);
+        }
+        [HttpGet("getTaskGroupsByProjectId/{project_id}")]
+        public async Task<IActionResult> GetAllTaskGroupsByProjectId(int project_id)
+        {
+            var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project_id);
+            var dtos = groups.Select(group => group.toTaskGroupDto());
+            return Ok(dtos);
         }
 
 

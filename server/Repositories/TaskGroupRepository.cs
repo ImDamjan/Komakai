@@ -26,7 +26,7 @@ namespace server.Repositories
 
         public async Task<List<TaskGroup>> GetAllProjectTaskGroupsAsync(int project_id)
         {
-            return await _context.TaskGroups.Include(tg=>tg.Assignments).Include(tg=>tg.InverseParentNavigation).Where(tg=>tg.ProjectId==project_id).ToListAsync();
+            return await _context.TaskGroups.Where(tg=>tg.ProjectId==project_id).ToListAsync();
         }
 
         public async Task<TaskGroup?> GetTaskGroupByIdAsync(int id)

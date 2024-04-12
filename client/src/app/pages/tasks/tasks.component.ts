@@ -89,8 +89,10 @@ export class TasksComponent {
             remaining: '',
             owner: task.owner,
             taskGroup: task.taskGroup,
-            dummyTitle: ''
+            dummyTitle: '',
+            depndentOn: []
           }
+          // console.log(myObj);
           this.taskObj.push(myObj);
         });
 

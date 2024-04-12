@@ -12,6 +12,7 @@ import { AddTaskComponent } from '../add-task/add-task.component';
 import { AssignmentService } from '../../services/assignment.service';
 import { stat } from 'fs';
 import { Task } from '../../models/task';
+import { UpdateTask } from '../../models/update-task';
 
 @Component({
   selector: 'app-kanban',
@@ -116,10 +117,28 @@ export class KanbanComponent implements OnInit{
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      let user_ids :number[] = [];
+
+      for (let i = 0; i < event.item.data.assignees.length; i++) {
+        const element = event.item.data.assignees[i].id;
+        user_ids.push(element);
+        
+      }
       
-      event.item.data.stateId = Number(event.container.id);
-      // treba se menja na prave dependent taskove
-      this.assignment_service.updateAssignmentById(event.item.data,[]).subscribe({
+      let body : UpdateTask ={
+        taskGroupId: event.item.data.taskGroup.id,
+        userIds: user_ids,
+        start: event.item.data.start,
+        end: event.item.data.end,
+        dependentOn: event.item.data.dependentOn,
+        stateId: Number(event.container.id),
+        percentage: event.item.data.percentage,
+        title: event.item.data.title,
+        type: event.item.data.type,
+        description: event.item.data.description,
+        priorityId: event.item.data.priority.id
+      }
+      this.assignment_service.updateAssignmentById(body,event.item.data.id).subscribe({
         next : (assignment : Task)=> {
           event.item.data = assignment
         }
