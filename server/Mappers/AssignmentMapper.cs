@@ -65,5 +65,16 @@ namespace server.Mappers
                 ParentTaskGroupId = group.ParentTaskGroupId
             };
         }
+
+        public static TaskGroupTasksDto toTaskGroupTasksDto(this TaskGroup taskGroup, List<TaskGroupTasksDto> children, List<AssignmentDto> tasks)
+        {
+            return new TaskGroupTasksDto{
+                Id = taskGroup.Id,
+                Children = children,
+                Assignments = tasks,
+                Title = taskGroup.Title,
+                ProjectId = taskGroup.ProjectId,
+            };
+        }
     }
 }
