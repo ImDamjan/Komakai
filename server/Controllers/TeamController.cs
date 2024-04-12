@@ -89,7 +89,7 @@ namespace server.Controllers
             
         }
 
-        [HttpPut]
+        [HttpPut("update/{team_id}")]
         public async Task<IActionResult> UpdateTeam([FromBody] CreateTeamDto dto, [FromRoute] int team_id)
         {
             var users =  new List<User>();
@@ -101,7 +101,12 @@ namespace server.Controllers
                 users.Add(user);
             }
 
-            return Ok();
+            var response = await _team_repo.UpdateTeamAsync(dto, team_id,users);
+            if(response==null)
+                return NotFound("team update failed");
+
+            var user_dtos = users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+            return Ok(response.ToTeamDto(user_dtos));
         }
 
     }

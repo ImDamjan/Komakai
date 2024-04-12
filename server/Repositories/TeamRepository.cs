@@ -30,23 +30,28 @@ namespace server.Repositories
 
         public async Task<List<Team>> GetAllTeamsAsync()
         {
-            return await _context.Teams.Include(t=> t.Users).ToListAsync();
+            return await _context.Teams.Include(t=> t.Users).ThenInclude(u=>u.Role).ToListAsync();
         }
 
         public async Task<List<Team>> GetAllUserTeams(int userid)
         {
-            var user = await _context.Users.Include(u=>u.Teams).FirstOrDefaultAsync(u=>u.Id==userid);
-            if(user==null)
-                return new List<Team>();
+            var teams = await _context.Teams.Include(t=>t.Users).ThenInclude(t=>t.Role).ToListAsync();
+
+            var user_teams = new List<Team>();
+            foreach (var team in teams)
+            {
+                if(team.Users.Any(u=>u.Id==userid))
+                    user_teams.Add(team);
+            }
             
-            return user.Teams.ToList();
+            return user_teams;
 
         }
 
         public async Task<Team?> GetTeamByIdAsync(int id)
         {
             
-            var team = await _context.Teams.Include(t=>t.Users).FirstOrDefaultAsync(t=> t.Id==id);
+            var team = await _context.Teams.Include(t=>t.Users).ThenInclude(u=>u.Role).FirstOrDefaultAsync(t=> t.Id==id);
             return team;
         }
 

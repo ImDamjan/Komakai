@@ -63,10 +63,6 @@ namespace server.Controllers
             var project = await _project_repo.GetProjectByIdAsync(project_id);            
             if(project==null)
                 return BadRequest("That project does not exist");
-            
-            // var group = await _group_repo.GetAllProjectTaskGroupsAsync(project_id);
-
-            // var dtos = group.Select(g=>g.toTaskGroupDto());
 
             var initial = await _group_repo.getInitialTaskGroupOfProject(project_id);
             if(initial==null)

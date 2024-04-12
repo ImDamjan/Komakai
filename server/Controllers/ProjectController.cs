@@ -11,7 +11,6 @@ using server.Models;
 namespace server.Controllers
 {
     //TO-DO treba se odraditi validacija podataka id-jevi svih vezanih modela
-    // takodje treba da se postave odredjeni dependency injection-i
     [ApiController]
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
