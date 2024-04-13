@@ -98,7 +98,7 @@ namespace server.Controllers
         [HttpGet("getDependentOnAssignments/{asing_id}")]
         public async Task<IActionResult> GetDependentAssignments([FromRoute] int asing_id)
         {
-            var tasks = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asing_id);
+            var tasks = await _asign_repo.getDependentAssignments(asing_id);
 
             List<DependentAssignmentDto> res = new List<DependentAssignmentDto>();
 
@@ -138,9 +138,9 @@ namespace server.Controllers
         [HttpGet]
         [Route("getByGroup/{group_id}")]
 
-        public async Task<IActionResult> GetAllAssignmentsByGroup([FromRoute] int group_id)
+        public async Task<IActionResult> GetAllAssignmentsByGroup([FromRoute] int group_id, [FromQuery] AssignmentFilterDto filter)
         {
-            var tasks =  await _asign_repo.GetAllGroupAssignmentsAsync(group_id);
+            var tasks =  await _asign_repo.GetAllGroupAssignmentsAsync(group_id, filter);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)
@@ -158,12 +158,12 @@ namespace server.Controllers
 
         [HttpGet]
         [Route("getByUser/{user_id}")]
-        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id)
+        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] AssignmentFilterDto filter)
         {
             var user =  await _user_repo.GetUserByIdAsync(user_id);
             if(user==null)
                 return NotFound("User " + user_id + " does not exist");
-            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id);
+            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)
@@ -257,13 +257,13 @@ namespace server.Controllers
         }
 
         [HttpGet("getAssignmentsByProject/{project_id}")]
-        public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id)
+        public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id, [FromQuery] AssignmentFilterDto filter)
         {
             var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project_id);
             var res = new List<AssignmentDto>();
             foreach (var group in groups)
             {
-                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id);
+                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id, filter);
                 for (int i = 0; i< tasks.Count;i++)
                 {
                     var dep = new List<int>();
@@ -283,89 +283,6 @@ namespace server.Controllers
 
             return Ok(res);
         }
-        
-        // [HttpGet("getAllFilteredAssignmentProjects/{project_id}/{DateStartFlag}/{Start}/{DateEndFlag}/{End}/{PercentageFlag}/{PercentageFilter}/{PriorityFilter}/{StateFilter}")]
-        // public async Task<IActionResult> GetAllFilteredAssignmentsForProject([FromRoute] int project_id, 
-        // int DateStartFlag, DateTime Start, int DateEndFlag, DateTime End, 
-        // int StateFilter, int PercentageFlag,int PercentageFilter, int PriorityFilter)
-        // {
-        //     var project = await _project_repo.GetProjectByIdAsync(project_id);
-        //     if(project==null)
-        //         return NotFound("Project does not exist.ID:" + project_id);
-        //     AssignmentFilterDto dto  = new AssignmentFilterDto{
-        //         SearchTitle = "",
-        //         DateStartFlag = DateStartFlag,
-        //         Start = Start,
-        //         DateEndFlag = DateEndFlag,
-        //         End = End,
-        //         StateFilter = StateFilter,
-        //         PercentageFilter = PercentageFilter,
-        //         PercentageFlag = PercentageFlag,
-        //         PriorityFilter = PriorityFilter
-        //     };
-        //     var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project);
-        //     var assignments = await _asign_repo.GetAllFilteredAssignmentsByProjectGroupsAsync(groups, dto);
-            
-        //     var res = new List<AssignmentDto>();
-        //     foreach (var asignment in assignments)
-        //     {
-        //         var users = await _user_repo.GetAssignmentUsersAsync(asignment.Id);
-        //         List<int> dep = new List<int>();
-        //         var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asignment.Id);
-        //         foreach (var item in dependencies)
-        //         {
-        //             dep.Add(item.Id);   
-        //         }
-        //         List<int> ids = new List<int>();
-        //         foreach (var user1 in users)
-        //         {
-        //             ids.Add(user1.Id);
-        //         }
-        //         res.Add(asignment.toAssignmentDto(ids,dep));
-        //     }
-
-        //     return Ok(res);
-        // }
-
-        // [HttpGet("getAllFilteredAssignmentsForUser/{user_id}/{DateStartFlag}/{Start}/{DateEndFlag}/{End}/{PercentageFlag}/{PercentageFilter}/{PriorityFilter}/{StateFilter}")]
-        // public async Task<IActionResult> GetAllFilteredAssignmentsForUser([FromRoute] int user_id,
-        // int DateStartFlag, DateTime Start, int DateEndFlag, DateTime End, 
-        // int StateFilter, int PercentageFlag,int PercentageFilter, int PriorityFilter)
-        // {
-        //     var assignments = await _asign_repo.GetAllUserAssignmentsAsync(user_id);
-        //     AssignmentFilterDto dto  = new AssignmentFilterDto{
-        //         SearchTitle = "",
-        //         DateStartFlag = DateStartFlag,
-        //         Start = Start,
-        //         DateEndFlag = DateEndFlag,
-        //         End = End,
-        //         StateFilter = StateFilter,
-        //         PercentageFilter = PercentageFilter,
-        //         PercentageFlag = PercentageFlag,
-        //         PriorityFilter = PriorityFilter
-        //     };
-        //     assignments = _asign_repo.FilterAssignments(assignments,dto);
-            
-        //     var res = new List<AssignmentDto>();
-        //     foreach (var asignment in assignments)
-        //     {
-        //         var users = await _user_repo.GetAssignmentUsersAsync(asignment.Id);
-        //         List<int> dep = new List<int>();
-        //         var dependencies = await _asign_repo.GetAllDependentOnOfAssignmentAsync(asignment.Id);
-        //         foreach (var item in dependencies)
-        //         {
-        //             dep.Add(item.Id);   
-        //         }
-        //         List<int> ids = new List<int>();
-        //         foreach (var user1 in users)
-        //         {
-        //             ids.Add(user1.Id);
-        //         }
-        //         res.Add(asignment.toAssignmentDto(ids,dep));
-        //     }
-
-        //     return Ok(res);
-        // }
 
         [HttpDelete("deleteAssignmentById/{asign_id}")]
         public async Task<IActionResult> DeleteAssignment([FromRoute] int asign_id)

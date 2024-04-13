@@ -50,7 +50,7 @@ namespace server.Repositories
         }
 
 
-        public async Task<List<Project>> GetAllProjectsAsync(ProjectFilterDto? filter)
+        public async Task<List<Project>> GetAllProjectsAsync(ProjectFilterDto? filter=null)
         {
             var projects_query = _context.Projects
             .Include(p=>p.TaskGroups)
@@ -71,7 +71,7 @@ namespace server.Repositories
             .Include(p=>p.ProjectUsers)
             .FirstOrDefaultAsync(p=>p.Id==id);
         }
-        public async Task<List<Project>> GetAllUserProjectsAsync(int id,ProjectFilterDto? filter)
+        public async Task<List<Project>> GetAllUserProjectsAsync(int id,ProjectFilterDto? filter=null)
         {
             var projects_query = _context.ProjectUsers
             .Where(u=> u.UserId==id)
@@ -133,7 +133,7 @@ namespace server.Repositories
 
 
             // trebace flter za dashboard mozda
-            var projects = await GetAllUserProjectsAsync(userId,null);
+            var projects = await GetAllUserProjectsAsync(userId);
 
 
             List<ProjectStatesDto> lista = new List<ProjectStatesDto>();

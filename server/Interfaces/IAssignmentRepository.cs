@@ -9,16 +9,21 @@ namespace server.Interfaces
 {
     public interface IAssignmentRepository
     {
+        // uzmi taskove od koga zavisi zadat task
         Task<List<Assignment>> getDependentAssignments(int asign_id);
+        // Uzima task po id-ju
         Task<Assignment?> GetAssignmentByidAsync(int id);
-        Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId);
-        Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id);
+        // uzima sve taskove za nekog usera
+        Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null);
+        // uzima sve taskove jedne grupe taskova
+        Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null);
+        // update taska
         Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a,int id, List<User> users,List<Assignment> dependentOn);
-        Task<List<Assignment>> GetAllFilteredAssignmentsByProjectGroupsAsync(List<TaskGroup> groups, AssignmentFilterDto dto);
-        List<Assignment> FilterAssignments(List<Assignment> assignments, AssignmentFilterDto dto);
-        Task<List<Assignment>> GetAllDependentOnOfAssignmentAsync(int asign_id);
+        // filtiranje taskova
+        Task<List<Assignment>> FilterAssignments(IQueryable<Assignment> assignments, AssignmentFilterDto? dto);
+        //brisanje
         Task<Assignment?> DeleteAssignmentByIdAsync(int asign_id);
-
+        //kreiranje
         Task<Assignment> CreateAssignmentAsync(Assignment a);
 
     }
