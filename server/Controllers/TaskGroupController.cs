@@ -89,10 +89,10 @@ namespace server.Controllers
             List<TaskGroupTasksDto> children = new List<TaskGroupTasksDto>();
             foreach (var task in tasks)
             {
-                var userDtos = task.Users.Select(x=>x.toUserDto(x.Role.toRoleDto())).ToList();
+                var userDtos = task.Users.Select(x=>x.toAssignmentUserDto()).ToList();
                 
                 asignments.Add(task.toAssignmentDto(userDtos,task.Priority.toPrioDto(),
-                task.State.toStateDto(),task.User.toUserDto(task.User.Role.toRoleDto()),initial.toTaskGroupDto()));
+                task.State.toStateDto(),task.User.toAssignmentUserDto(),initial.toTaskGroupDto()));
             }
             
             foreach (var child in task_group_children)

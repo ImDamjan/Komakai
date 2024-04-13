@@ -44,7 +44,7 @@ namespace server.Repositories
         public async Task<List<Assignment>> GetAllDependentOnOfAssignmentAsync(int asign_id)
         {
             var asgn = await _context.Assignments
-            .Include(a=>a.DependentOnAssignments).FirstOrDefaultAsync(a=>a.Id==asign_id);
+            .Include(a=>a.DependentOnAssignments).ThenInclude(a=>a.TaskGroup).FirstOrDefaultAsync(a=>a.Id==asign_id);
             if(asgn==null)
                 return new List<Assignment>();
 
@@ -65,23 +65,22 @@ namespace server.Repositories
 
         public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId)
         {
-            var pom = await _context.Assignments.Include(a=>a.Users.Where(u=>u.Id==userId))
-            .Include(a=>a.Users).ThenInclude(u=>u.Role)
+            var pom = await _context.Assignments.Include
+            (a=>a.Users)
             .Include(a=>a.TaskGroup)
-            .Include(a=>a.User).ThenInclude(u=>u.Role)
+            .Include(a=>a.User)
             .Include(a=>a.Priority)
-            .Include(a=>a.DependentOnAssignments)
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged).ToListAsync();
 
-            return pom.Where(t=>t.Users.Count > 0).ToList();
+            return pom.Where(t=>t.Users.Any(u=>u.Id==userId)).ToList();
         }
 
         public async Task<Assignment?> GetAssignmentByidAsync(int id)
         {
             return await _context.Assignments
-            .Include(a=>a.Users).ThenInclude(u=>u.Role)
+            .Include(a=>a.Users)
             .Include(a=>a.TaskGroup)
-            .Include(a=>a.User).ThenInclude(u=>u.Role)
+            .Include(a=>a.User)
             .Include(a=>a.Priority)
             .Include(a=>a.State)
             .Include(a=>a.DependentOnAssignments)

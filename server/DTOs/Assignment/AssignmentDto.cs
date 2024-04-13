@@ -12,10 +12,10 @@ namespace server.DTOs.Assignment
     public class AssignmentDto
     {
         public int Id { get; set; }
-        public List<UserDto> Assignees {get; set;} = new List<UserDto>();
+        public List<AssignmentUserDto> Assignees {get; set;} = new List<AssignmentUserDto>();
         public List<int> DepndentOn { get; set; } = new List<int>();   
         public string Title { get; set; } = null!;
-        public UserDto Owner { get; set; } = null!;
+        public AssignmentUserDto Owner { get; set; } = null!;
         public string Description { get; set; } = null!;
         public DateTime Start { get; set; }
         public DateTime End { get; set; }

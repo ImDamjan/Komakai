@@ -29,7 +29,7 @@ namespace server.Mappers
             };
         }
 
-        public static AssignmentDto toAssignmentDto(this Assignment a, List<UserDto> asignees, PriorityDto priority, StateDto state, UserDto owner, TaskGroupDto group)
+        public static AssignmentDto toAssignmentDto(this Assignment a, List<AssignmentUserDto> asignees, PriorityDto priority, StateDto state, AssignmentUserDto owner, TaskGroupDto group)
         {
             return new AssignmentDto{
                 Id = a.Id,
@@ -46,7 +46,17 @@ namespace server.Mappers
                 TaskGroup =  group
             };
         }
-
+        public static DependentAssignmentDto toDependentAssignmentDto(this Assignment a, TaskGroupDto group)
+        {
+            return new DependentAssignmentDto{
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                Start = a.Start,
+                End = a.End,
+                TaskGroup =  group
+            };
+        }
         public static TaskGroup fromCreateTaskGroupDtoToTaskGroup(this CreateTaskGroupDto dto)
         {
             return new TaskGroup{

@@ -38,7 +38,7 @@ namespace server.Controllers
             foreach (var project in projects)
             {
                 var users =  await _user_repo.GetUserByProjectId(project.Id);
-                var userDtos = users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+                var userDtos = users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
                 dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
             }
             return Ok(dtos);
@@ -51,7 +51,7 @@ namespace server.Controllers
             foreach (var project in projects)
             {
                 var users =  await _user_repo.GetUserByProjectId(project.Id);
-                var userDtos = users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+                var userDtos = users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
                 dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
             }
             return Ok(dtos);
@@ -67,7 +67,7 @@ namespace server.Controllers
             var dto = new ProjectDto();
 
             var users =  await _user_repo.GetUserByProjectId(project.Id);
-            var ids =  users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
             dto = project.ToProjectDto(ids,project.State.toStateDto(),project.Priority.toPrioDto());
     
             return Ok(dto);
@@ -104,7 +104,7 @@ namespace server.Controllers
             var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
 
             var users =  await _user_repo.GetUserByProjectId(projectModel.Id);
-            var ids =  users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
             var state = await _state_repo.GetStateByIdAsync(response.StateId);
             if(state==null)
                 return NotFound("error");
@@ -144,7 +144,7 @@ namespace server.Controllers
             var dto = new ProjectDto();
 
             
-            var ids =  users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
             dto = project.ToProjectDto(ids, state.toStateDto(),prio.toPrioDto());
     
             return Ok(dto);

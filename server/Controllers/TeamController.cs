@@ -30,7 +30,7 @@ namespace server.Controllers
             var teamDtos = new List<TeamDto>();
             foreach (var team in teams)
             {
-                var members = team.Users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+                var members = team.Users.Select(u=>u.toUserDto()).ToList();
                 teamDtos.Add(team.ToTeamDto(members));
             }
 
@@ -46,7 +46,7 @@ namespace server.Controllers
             if(team==null)
                 return NotFound("Team not found!");
 
-            var members = team.Users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+            var members = team.Users.Select(u=>u.toUserDto()).ToList();
 
             return Ok(team.ToTeamDto(members));
         }
@@ -60,7 +60,7 @@ namespace server.Controllers
             var timovi = new List<TeamDto>();
             foreach (var team in teams)
             {
-                var members = team.Users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+                var members = team.Users.Select(u=>u.toUserDto()).ToList();
                 timovi.Add(team.ToTeamDto(members));
             }
 
@@ -83,7 +83,7 @@ namespace server.Controllers
             team.Users = users;
             team = await _team_repo.CreateTeamAsync(team);
 
-            var members = users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+            var members = users.Select(u=>u.toUserDto()).ToList();
             
             return Ok(team.ToTeamDto(members));
             
@@ -105,7 +105,7 @@ namespace server.Controllers
             if(response==null)
                 return NotFound("team update failed");
 
-            var user_dtos = users.Select(u=>u.toUserDto(u.Role.toRoleDto())).ToList();
+            var user_dtos = users.Select(u=>u.toUserDto()).ToList();
             return Ok(response.ToTeamDto(user_dtos));
         }
 

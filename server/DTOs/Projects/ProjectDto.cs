@@ -22,7 +22,7 @@ namespace server.DTOs.Projects
         public double Percentage { get; set; }
         public string Description { get; set; } = "";
         public PriorityDto Priority { get; set; } = null!;
-        public List<UserDto> Users { get; set; } = new List<UserDto>();
+        public List<ProjectUserDto> Users { get; set; } = new List<ProjectUserDto>();
 
     }
 }
