@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.DTOs;
 using server.DTOs.Assignment;
 using server.Interfaces;
 using server.Models;
@@ -27,7 +28,7 @@ namespace server.Repositories
             return a;
 
         }
-        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null)
+        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null)
         {
             var assingments_query = _context.Assignments.Where(a=>a.TaskGroupId==group_id)
             .Include(a=>a.Users).ThenInclude(u=>u.Role)
@@ -41,7 +42,7 @@ namespace server.Repositories
             return await FilterAssignments(assingments_query,filter);
         }
 
-        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null)
+        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null)
         {
             var pom = _context.Assignments.Include
             (a=>a.Users)
@@ -90,7 +91,7 @@ namespace server.Repositories
             return assignment;
         }
 
-        public async Task<List<Assignment>> FilterAssignments(IQueryable<Assignment> assignments, AssignmentFilterDto? dto)
+        public async Task<List<Assignment>> FilterAssignments(IQueryable<Assignment> assignments, AssignmentFilterDto? dto,SortDto? sort = null)
         {
             if(dto!=null)
             {
@@ -124,7 +125,64 @@ namespace server.Repositories
                         assignments =assignments.Where(p=>p.Percentage >= dto.PercentageFilter);
                 }
             }
+            if(sort!=null)
+            {
+                if(sort.PropertyName.ToLower()=="title")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.Title);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.Title);
 
+                }
+                else if(sort.PropertyName.ToLower()=="state")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.State.Name);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.State.Name);
+                }
+                else if(sort.PropertyName.ToLower()=="priority")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.Priority.Level);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.Priority.Level);
+                }
+                else if(sort.PropertyName.ToLower()=="start")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.Start);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.Start);
+                }
+                else if(sort.PropertyName.ToLower()=="end")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.End);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.End);
+                }
+                else if(sort.PropertyName.ToLower()=="percentage")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.Percentage);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.Percentage);
+                }
+            }
             return await assignments.ToListAsync();
         }
 

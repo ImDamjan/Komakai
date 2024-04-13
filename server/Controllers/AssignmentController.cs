@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.Extensions.DependencyModel;
+using server.DTOs;
 using server.DTOs.Assignment;
 using server.Interfaces;
 using server.Mappers;
@@ -138,9 +139,9 @@ namespace server.Controllers
         [HttpGet]
         [Route("getByGroup/{group_id}")]
 
-        public async Task<IActionResult> GetAllAssignmentsByGroup([FromRoute] int group_id, [FromQuery] AssignmentFilterDto filter)
+        public async Task<IActionResult> GetAllAssignmentsByGroup([FromRoute] int group_id,[FromQuery] SortDto sort,[FromQuery] AssignmentFilterDto filter)
         {
-            var tasks =  await _asign_repo.GetAllGroupAssignmentsAsync(group_id, filter);
+            var tasks =  await _asign_repo.GetAllGroupAssignmentsAsync(group_id, filter,sort);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)
@@ -158,12 +159,12 @@ namespace server.Controllers
 
         [HttpGet]
         [Route("getByUser/{user_id}")]
-        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] AssignmentFilterDto filter)
+        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] SortDto sort,[FromQuery] AssignmentFilterDto filter)
         {
             var user =  await _user_repo.GetUserByIdAsync(user_id);
             if(user==null)
                 return NotFound("User " + user_id + " does not exist");
-            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter);
+            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter,sort);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)
@@ -257,13 +258,13 @@ namespace server.Controllers
         }
 
         [HttpGet("getAssignmentsByProject/{project_id}")]
-        public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id, [FromQuery] AssignmentFilterDto filter)
+        public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id,[FromQuery] SortDto sort,[FromQuery] AssignmentFilterDto filter)
         {
             var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project_id);
             var res = new List<AssignmentDto>();
             foreach (var group in groups)
             {
-                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id, filter);
+                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id, filter,sort);
                 for (int i = 0; i< tasks.Count;i++)
                 {
                     var dep = new List<int>();
