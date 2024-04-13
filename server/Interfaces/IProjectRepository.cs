@@ -9,13 +9,21 @@ namespace server.Interfaces
 {
     public interface IProjectRepository
     {
+        //dashboard podaci
         Task<List<ProjectStatesDto>> GetAllUserProjectStates(int userId,string period);
-        Task<List<Project>> GetAllProjectsAsync();
-        Task<List<Project>> GetAllFilteredProjectsAsync(ProjectFilterDto dto);
+        //uzimanje svih projekata
+        Task<List<Project>> GetAllProjectsAsync(ProjectFilterDto? filter);
+        //filtriranje projekata
+        Task<List<Project>> GetAllFilteredProjectsAsync(IQueryable<Project> projects, ProjectFilterDto? dto);
+        //uzimanje projekta po idju
         Task<Project?> GetProjectByIdAsync(int id);
+        //kreiranje
         Task<Project> CreateProjectAsync(Project projectModel,List<User> teamMembers);
+        //update
         Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users);
-        Task<List<Project>> GetAllUserProjectsAsync(int id);
+        // koirniskove projekte
+        Task<List<Project>> GetAllUserProjectsAsync(int id,ProjectFilterDto? filter);
+        //brisanje
         Task<Project?> DeleteProjectByIdAsync(int project_id);
     }
 }

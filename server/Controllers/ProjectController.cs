@@ -30,10 +30,11 @@ namespace server.Controllers
 
         }
 
+        //treba filter
         [HttpGet("getProjects")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]ProjectFilterDto dto)
         {
-            var projects = await _repos.GetAllProjectsAsync();
+            var projects = await _repos.GetAllProjectsAsync(dto);
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
@@ -43,10 +44,11 @@ namespace server.Controllers
             }
             return Ok(dtos);
         }
+        //ovde treba filter
         [HttpGet("userProjects/{userId}")]
-        public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId)
+        public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId,[FromQuery] ProjectFilterDto filter)
         {
-            var projects = await _repos.GetAllUserProjectsAsync(userId);
+            var projects = await _repos.GetAllUserProjectsAsync(userId,filter);
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
