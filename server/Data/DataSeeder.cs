@@ -669,6 +669,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 1,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[0],users[2]},
                                     
                                 },
@@ -684,6 +685,7 @@ namespace server.Data
                                     PriorityId = 2,
                                     Type = "Neki tip",
                                     TaskGroupId = 1,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[6],users[3]},
                                     
                                 },
@@ -699,6 +701,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 1,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[2],users[3]},
                                     
                                 },
@@ -715,6 +718,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 2,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[1],users[4]},
                                     
                                 },
@@ -730,6 +734,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 2,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[5],users[7]},
                                     
                                 },
@@ -745,6 +750,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 2,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[1]},
                                     
                                 },
@@ -761,6 +767,7 @@ namespace server.Data
                                     PriorityId = 3,
                                     Type = "Neki tip",
                                     TaskGroupId = 3,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[8],users[0]},
                                     
                                 },
@@ -776,6 +783,7 @@ namespace server.Data
                                     PriorityId = 3,
                                     Type = "Neki tip",
                                     TaskGroupId = 3,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[2],users[4]},
                                     
                                 },
@@ -791,6 +799,7 @@ namespace server.Data
                                     PriorityId = 1,
                                     Type = "Neki tip",
                                     TaskGroupId = 3,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[0],users[4]},
                                     
                                 },
@@ -807,6 +816,7 @@ namespace server.Data
                                     PriorityId = 1,
                                     Type = "Neki tip",
                                     TaskGroupId = 4,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[1],users[4],users[6]},
                                     
                                 },
@@ -822,6 +832,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 4,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[6],users[3]},
                                     
                                 },
@@ -837,6 +848,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 4,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[4]},
                                     
                                 },
@@ -853,6 +865,7 @@ namespace server.Data
                                     PriorityId = 1,
                                     Type = "Neki tip",
                                     TaskGroupId = 5,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[5],users[7]},
                                     
                                 },
@@ -868,6 +881,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 5,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[8]},
                                     
                                 },
@@ -883,6 +897,7 @@ namespace server.Data
                                     PriorityId = 2,
                                     Type = "Neki tip",
                                     TaskGroupId = 5,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[0],users[7]},
                                     
                                 },
@@ -899,6 +914,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 6,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[0],users[2]},
                                     
                                 },
@@ -914,6 +930,7 @@ namespace server.Data
                                     PriorityId = 2,
                                     Type = "Neki tip",
                                     TaskGroupId = 6,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[6],users[3]},
                                     
                                 },
@@ -929,6 +946,7 @@ namespace server.Data
                                     PriorityId = 1,
                                     Type = "Neki tip",
                                     TaskGroupId = 6,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[2],users[3]},
                                     
                                 },
@@ -945,6 +963,7 @@ namespace server.Data
                                     PriorityId = 2,
                                     Type = "Neki tip",
                                     TaskGroupId = 7,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[1],users[4]},
                                     
                                 },
@@ -960,6 +979,7 @@ namespace server.Data
                                     PriorityId = 3,
                                     Type = "Neki tip",
                                     TaskGroupId = 7,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[5],users[7]},
                                     
                                 },
@@ -975,6 +995,7 @@ namespace server.Data
                                     PriorityId = 3,
                                     Type = "Neki tip",
                                     TaskGroupId = 7,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[1]},
                                     
                                 },
@@ -991,6 +1012,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 8,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[8],users[0]},
                                     
                                 },
@@ -1006,6 +1028,7 @@ namespace server.Data
                                     PriorityId = 3,
                                     Type = "Neki tip",
                                     TaskGroupId = 8,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[4],users[2]},
                                     
                                 },
@@ -1021,6 +1044,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 8,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[0],users[4],users[8]},
                                     
                                 },
@@ -1037,6 +1061,7 @@ namespace server.Data
                                     PriorityId = 3,
                                     Type = "Neki tip",
                                     TaskGroupId = 9,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[3],users[6],users[4]},
                                     
                                 },
@@ -1052,6 +1077,7 @@ namespace server.Data
                                     PriorityId = 2,
                                     Type = "Neki tip",
                                     TaskGroupId = 9,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[3],users[6]},
                                     
                                 },
@@ -1067,6 +1093,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 9,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[1],users[4]},
                                     
                                 },
@@ -1083,6 +1110,7 @@ namespace server.Data
                                     PriorityId = 4,
                                     Type = "Neki tip",
                                     TaskGroupId = 10,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[8],users[7]},
                                     
                                 },
@@ -1098,6 +1126,7 @@ namespace server.Data
                                     PriorityId = 3,
                                     Type = "Neki tip",
                                     TaskGroupId = 10,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[0],users[7]},
                                     
                                 },
@@ -1113,6 +1142,7 @@ namespace server.Data
                                     PriorityId = 3,
                                     Type = "Neki tip",
                                     TaskGroupId = 10,
+                                    LastTimeChanged = DateTime.Now,
                                     Users = new List<User>{users[5]},
                                     
                                 },

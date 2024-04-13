@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.DTOs.Role;
 using server.DTOs.Users;
 using server.Models;
 
@@ -18,9 +19,28 @@ namespace server.Mappers
                 JobTitle = u.JobTitle,
                 Organisation = u.Organisation,
                 Department = u.Department,
-                RoleId = (int)u.RoleId,
                 Name = u.Name,
                 Lastname = u.Lastname
+            };
+        }
+        public static AssignmentUserDto toAssignmentUserDto(this User u)
+        {
+            return new AssignmentUserDto{
+                Id = u.Id,
+                Username = u.Username,
+                Name = u.Name,
+                Lastname = u.Lastname
+            };
+        }
+
+        public static ProjectUserDto toProjectUserDto(this User u, RoleDto role)
+        {
+            return new ProjectUserDto{
+                Id = u.Id,
+                Username = u.Username,
+                Name = u.Name,
+                Lastname = u.Lastname,
+                Role = role
             };
         }
     }

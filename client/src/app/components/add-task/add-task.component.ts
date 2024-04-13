@@ -1,20 +1,17 @@
 import { Component, Inject, Input, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CreateProjectOverlayComponent } from '../create-project-overlay/create-project-overlay.component';
 import { State } from '../../models/state';
 import { StateService } from '../../services/state.service';
-import { error } from 'console';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { TaskGroup } from '../../models/task-group';
 import { TaskGroupService } from '../../services/task-group.service';
-import { Project } from '../../models/project';
-import { Assignment } from '../../models/assignment';
 import { AssignmentService } from '../../services/assignment.service';
-import { start } from 'repl';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { PriorityService } from '../../services/priority.service';
 import { Priority } from '../../models/priority';
+import { Task } from '../../models/task';
+import { CreateTask } from '../../models/create-task';
 
 @Component({
   selector: 'app-add-task',
@@ -32,21 +29,18 @@ export class AddTaskComponent implements OnInit {
   public message : string = "";
   private selectedAssignees : number[] = []
   private selectedDependentOn : number[] = [];
-  public createTaskObj : Assignment = {
-    id : 0,
-    title : "",
-    type : "",
-    description : "",
-    start : 0,
-    end :  0,
-    percentage : 0,
-    taskGroupId : 0,
-    dependentOn : [],
-    assignees : [],
-    stateId : 0,
-    priorityId : 4,
-    dummyTitle : "",
-    owner : 0
+  public createTaskObj : CreateTask = {
+    title: "",
+    type: "",
+    description: "",
+    start: 0,
+    end: 0,
+    taskGroupId: 0,
+    dependentOn: [],
+    assignees: [],
+    stateId: 0,
+    priorityId: 4,
+    owner: 0
   };
 
   
@@ -74,7 +68,7 @@ export class AddTaskComponent implements OnInit {
   private assignmentService = inject(AssignmentService);
   private decoder = inject(JwtDecoderService);
   private priority_service = inject(PriorityService);
-  public assignments : Assignment[] = [];
+  public assignments : Task[] = [];
   public priorities : Priority[] = [];
 
   constructor() { 
@@ -141,8 +135,8 @@ export class AddTaskComponent implements OnInit {
     }
     todayTime.setHours(0, 0, 0, 0);
     this.createTaskObj.start.setHours(0,0,0,0);
-    console.log(todayTime);
-    console.log(this.createTaskObj.start);
+    // console.log(todayTime);
+    // console.log(this.createTaskObj.start);
     //prvera da li je start date pre danasnjeg
     if(this.createTaskObj.start < todayTime)
     {
@@ -150,8 +144,9 @@ export class AddTaskComponent implements OnInit {
       return;
 
     }
+    console.log(this.createTaskObj);
     this.assignmentService.createAssignment(this.createTaskObj).subscribe({
-      next : (asign : Assignment) => {
+      next : (asign : Task) => {
         console.log("Creation succesful");
         confirm("Task created successfully!");
         this.closeOverlay();

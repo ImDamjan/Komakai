@@ -52,22 +52,40 @@ namespace server.Repositories
 
         public async Task<List<Project>> GetAllProjectsAsync()
         {
-            return await _context.Projects.ToListAsync();
+            return await _context.Projects
+            .Include(p=>p.TaskGroups)
+            .Include(p=>p.State)
+            .Include(p=>p.Priority).ToListAsync();
         }
 
         public async Task<Project?> GetProjectByIdAsync(int id)
         {
-            return await _context.Projects.FirstOrDefaultAsync(p=>p.Id==id);
+            return await _context.Projects
+            .Include(p=>p.TaskGroups)
+            .Include(p=>p.State)
+            .Include(p=>p.Priority)
+            .Include(p=>p.ProjectUsers)
+            .FirstOrDefaultAsync(p=>p.Id==id);
         }
+        //naslov, description, state, memberi,prioprity ,broj_aktivnih_taskova_projekta
         public async Task<List<Project>> GetAllUserProjectsAsync(int id)
         {
-            var projects = await _context.ProjectUsers.Where(u=> u.UserId==id).Select(p=>p.Project).ToListAsync();
+            var projects = await _context.ProjectUsers
+            .Where(u=> u.UserId==id)
+            .Include(u=>u.Project)
+            .ThenInclude(p=>p.State)
+            .Include(p=>p.Project)
+            .ThenInclude(p=>p.TaskGroups)
+            .Include(p=>p.Project)
+            .ThenInclude(p=>p.Priority)
+            .Select(p=>p.Project)
+            .OrderByDescending(p=>p.LastStateChangedTime).ToListAsync();
 
             return projects;
         }
-        public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto)
+        public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users)
         {
-            var project = await GetProjectByIdAsync(projectDto.Id);
+            var project = await GetProjectByIdAsync(project_id);
             if(project==null)
                 return null;
 
@@ -78,8 +96,22 @@ namespace server.Repositories
                 project.StateId=projectDto.StateId;
                 project.LastStateChangedTime = DateTime.Now;
             }
+            List<ProjectUser> users = new List<ProjectUser>();
+            foreach(var user in project_users)
+            {
+                users.Add(new ProjectUser{
+                    Project = project,
+                    User = user,
+                    ProjectRoleId = user.RoleId
+                });
+            }
             project.Percentage = projectDto.Percentage;
+            project.ProjectUsers = users;
             project.Title = projectDto.Title;
+            project.Description = projectDto.Description;
+            project.End = projectDto.End;
+            project.Start = projectDto.Start;
+            project.Spent = projectDto.Spent;
             
             if(projectDto.PriorityId > 0 && projectDto.PriorityId < 5)
                 project.PriorityId = projectDto.PriorityId;

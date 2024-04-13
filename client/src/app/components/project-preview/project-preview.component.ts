@@ -4,6 +4,7 @@ import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
 import { AssignmentService } from '../../services/assignment.service';
+import { Project } from '../../models/project';
 
 @Component({
   selector: 'app-project-preview',
@@ -17,7 +18,7 @@ export class ProjectPreviewComponent implements OnInit {
   errorMessage: string = '';
   
   data: any;
-  projectsData: any;
+  projectsData: Project[] = [];
 
   // Properties for character limits
   titleCharacterLimit: number = 0;
@@ -50,7 +51,7 @@ export class ProjectPreviewComponent implements OnInit {
   loadProjects() {
     this.isLoading = true;
     this.projectService.getProjectsData().subscribe(
-      (projects: any[]) => {
+      (projects: Project[]) => {
         this.projectsData = projects;
         this.isLoading = false;
         projects.forEach(project => {
@@ -58,23 +59,23 @@ export class ProjectPreviewComponent implements OnInit {
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
 
           // Fetch state name based on stateId using StateService
-          this.stateService.fetchStateName(project.stateId).subscribe(
-            (stateName: string) => {
-              project.stateName = stateName;
-            },
-            (error) => {
-              console.error('An error occurred while fetching state name:', error);
-            }
-          );
+          // this.stateService.fetchStateName(project.stateId).subscribe(
+          //   (stateName: string) => {
+          //     project.stateName = stateName;
+          //   },
+          //   (error) => {
+          //     console.error('An error occurred while fetching state name:', error);
+          //   }
+          // );
 
-          this.assignmentService.getAllProjectAssignments(project.id).subscribe(
-            (assignments: any[]) => {
-              project.assignmentCount = assignments.length;
-            },
-            (error) => {
-              console.error('An error occurred while fetching assignments for project:', project.id, error);
-            }
-          );
+          // this.assignmentService.getAllProjectAssignments(project.id).subscribe(
+          //   (assignments: any[]) => {
+          //     project.assignmentCount = assignments.length;
+          //   },
+          //   (error) => {
+          //     console.error('An error occurred while fetching assignments for project:', project.id, error);
+          //   }
+          // );
 
         });
         if (projects.length === 0) {
