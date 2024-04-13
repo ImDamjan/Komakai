@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.DTOs;
 using server.DTOs.Assignment;
 using server.Interfaces;
 using server.Models;
@@ -27,52 +28,32 @@ namespace server.Repositories
             return a;
 
         }
-
-        public async Task<List<Assignment>> GetAllFilteredAssignmentsByProjectGroupsAsync(List<TaskGroup> groups, AssignmentFilterDto dto)
+        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null)
         {
-            var assignments = new List<Assignment>();
-            foreach (var group in groups)
-            {
-                var group_asign = await GetAllGroupAssignmentsAsync(group.Id);
-
-                assignments.AddRange(group_asign);
-            }
-
-            return FilterAssignments(assignments,dto);
-        }
-
-        public async Task<List<Assignment>> GetAllDependentOnOfAssignmentAsync(int asign_id)
-        {
-            var asgn = await _context.Assignments
-            .Include(a=>a.DependentOnAssignments).ThenInclude(a=>a.TaskGroup).FirstOrDefaultAsync(a=>a.Id==asign_id);
-            if(asgn==null)
-                return new List<Assignment>();
-
-            return asgn.DependentOnAssignments.OrderByDescending(a=>a.LastTimeChanged).ToList();
-        }
-
-        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id)
-        {
-            return await _context.Assignments.Where(a=>a.TaskGroupId==group_id)
+            var assingments_query = _context.Assignments.Where(a=>a.TaskGroupId==group_id)
             .Include(a=>a.Users).ThenInclude(u=>u.Role)
             .Include(a=>a.TaskGroup)
             .Include(a=>a.User).ThenInclude(u=>u.Role)
             .Include(a=>a.Priority)
             .Include(a=>a.DependentOnAssignments)
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged)
-            .ToListAsync();
+            .AsQueryable();
+
+            return await FilterAssignments(assingments_query,filter);
         }
 
-        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId)
+        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null)
         {
-            var pom = await _context.Assignments.Include
+            var pom = _context.Assignments.Include
             (a=>a.Users)
             .Include(a=>a.TaskGroup)
             .Include(a=>a.User)
             .Include(a=>a.Priority)
-            .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged).ToListAsync();
+            .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged).AsQueryable();
 
-            return pom.Where(t=>t.Users.Any(u=>u.Id==userId)).ToList();
+            var query = pom.Where(t=>t.Users.Any(u=>u.Id==userId));
+
+            return await FilterAssignments(query,filter);
         }
 
         public async Task<Assignment?> GetAssignmentByidAsync(int id)
@@ -110,32 +91,99 @@ namespace server.Repositories
             return assignment;
         }
 
-        public List<Assignment> FilterAssignments(List<Assignment> assignments, AssignmentFilterDto dto)
+        public async Task<List<Assignment>> FilterAssignments(IQueryable<Assignment> assignments, AssignmentFilterDto? dto,SortDto? sort = null)
         {
-            if(dto.StateFilter > 0 && dto.StateFilter < 7)
-               assignments =assignments.Where(p=>p.StateId==dto.StateFilter).ToList();
-            if(dto.PriorityFilter > 0 && dto.PriorityFilter < 5)
-               assignments =assignments.Where(p=>p.PriorityId==dto.PriorityFilter).ToList();
-            
-            if(dto.SearchTitle!=string.Empty)
-               assignments =assignments.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower())).ToList();
-            //datumi
-            if(dto.DateStartFlag==-1)
-               assignments =assignments.Where(p=>p.Start < dto.Start).ToList();
-            else if(dto.DateStartFlag==1)
-               assignments =assignments.Where(p=>p.Start >= dto.Start).ToList();
+            if(dto!=null)
+            {
+                if(dto.StateFilter > 0 && dto.StateFilter < 7)
+                    assignments =assignments.Where(p=>p.StateId==dto.StateFilter);
+                if(dto.PriorityFilter > 0 && dto.PriorityFilter < 5)
+                    assignments =assignments.Where(p=>p.PriorityId==dto.PriorityFilter);
+                
+                if(dto.SearchTitle!=string.Empty)
+                    assignments =assignments.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower()));
+                //datumi
+                if(dto.Start!=null)
+                {
+                    if(dto.DateStartFlag==-1)
+                        assignments =assignments.Where(p=>p.Start < dto.Start);
+                    else if(dto.DateStartFlag==1)
+                        assignments =assignments.Where(p=>p.Start >= dto.Start);
+                }
+                if(dto.End!=null)
+                {
+                    if(dto.DateEndFlag==-1)
+                        assignments =assignments.Where(p=>p.End < dto.End);
+                    else if(dto.DateEndFlag==1)
+                        assignments =assignments.Where(p=>p.End >= dto.End);
+                }
+                if(dto.PercentageFilter!=null)
+                {
+                    if(dto.PercentageFlag==-1)
+                        assignments =assignments.Where(p=>p.Percentage < dto.PercentageFilter);
+                    else if(dto.PercentageFlag==1)
+                        assignments =assignments.Where(p=>p.Percentage >= dto.PercentageFilter);
+                }
+            }
+            if(sort!=null)
+            {
+                if(sort.PropertyName.ToLower()=="title")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.Title);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.Title);
 
-            if(dto.DateEndFlag==-1)
-               assignments =assignments.Where(p=>p.End < dto.End).ToList();
-            else if(dto.DateEndFlag==1)
-               assignments =assignments.Where(p=>p.End >= dto.End).ToList();
-
-            if(dto.PercentageFlag==-1)
-               assignments =assignments.Where(p=>p.Percentage < dto.PercentageFilter).ToList();
-            else if(dto.PercentageFlag==1)
-               assignments =assignments.Where(p=>p.Percentage >= dto.PercentageFilter).ToList();
-
-            return assignments;
+                }
+                else if(sort.PropertyName.ToLower()=="state")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.State.Name);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.State.Name);
+                }
+                else if(sort.PropertyName.ToLower()=="priority")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.Priority.Level);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.Priority.Level);
+                }
+                else if(sort.PropertyName.ToLower()=="start")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.Start);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.Start);
+                }
+                else if(sort.PropertyName.ToLower()=="end")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.End);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.End);
+                }
+                else if(sort.PropertyName.ToLower()=="percentage")
+                {
+                    if(sort.SortFlag==1)
+                    {
+                        assignments = assignments.OrderBy(a=>a.Percentage);
+                    }
+                    else
+                        assignments = assignments.OrderByDescending(a=>a.Percentage);
+                }
+            }
+            return await assignments.ToListAsync();
         }
 
         public async Task<Assignment?> DeleteAssignmentByIdAsync(int asign_id)
@@ -152,7 +200,7 @@ namespace server.Repositories
 
         public async Task<List<Assignment>> getDependentAssignments(int asign_id)
         {
-            var asignment = await _context.Assignments.Include(a=>a.DependentOnAssignments).FirstOrDefaultAsync(a=>a.Id==asign_id);
+            var asignment = await _context.Assignments.Include(a=>a.DependentOnAssignments).ThenInclude(a=>a.TaskGroup).FirstOrDefaultAsync(a=>a.Id==asign_id);
             if(asignment==null)
             {
                 return new List<Assignment>();
