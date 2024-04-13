@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.DTOs;
 using server.DTOs.Projects;
 using server.Interfaces;
 using server.Models;
@@ -50,7 +51,7 @@ namespace server.Repositories
         }
 
 
-        public async Task<List<Project>> GetAllProjectsAsync(ProjectFilterDto? filter=null)
+        public async Task<List<Project>> GetAllProjectsAsync(ProjectFilterDto? filter=null,SortDto? sort = null)
         {
             var projects_query = _context.Projects
             .Include(p=>p.TaskGroups)
@@ -59,7 +60,7 @@ namespace server.Repositories
 
             //filter za sve projekte
 
-            return await GetAllFilteredProjectsAsync(projects_query, filter);
+            return await GetAllFilteredProjectsAsync(projects_query, filter,sort);
         }
 
         public async Task<Project?> GetProjectByIdAsync(int id)
@@ -71,7 +72,7 @@ namespace server.Repositories
             .Include(p=>p.ProjectUsers)
             .FirstOrDefaultAsync(p=>p.Id==id);
         }
-        public async Task<List<Project>> GetAllUserProjectsAsync(int id,ProjectFilterDto? filter=null)
+        public async Task<List<Project>> GetAllUserProjectsAsync(int id,ProjectFilterDto? filter=null,SortDto? sort = null)
         {
             var projects_query = _context.ProjectUsers
             .Where(u=> u.UserId==id)
@@ -84,7 +85,7 @@ namespace server.Repositories
             .Select(p=>p.Project)
             .OrderByDescending(p=>p.LastStateChangedTime).AsQueryable();
 
-            return await GetAllFilteredProjectsAsync(projects_query,filter);
+            return await GetAllFilteredProjectsAsync(projects_query,filter,sort);
         }
         public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users)
         {
@@ -170,7 +171,7 @@ namespace server.Repositories
             return lista;
         }
 
-        public async Task<List<Project>> GetAllFilteredProjectsAsync(IQueryable<Project> projects, ProjectFilterDto? dto)
+        public async Task<List<Project>> GetAllFilteredProjectsAsync(IQueryable<Project> projects, ProjectFilterDto? dto,SortDto? sort = null)
         {   if(dto!=null)
             {
 
@@ -222,6 +223,65 @@ namespace server.Repositories
                         projects = projects.Where(p=>p.Percentage < dto.PercentageFilter);
                     else if(dto.PercentageFlag==1)
                         projects = projects.Where(p=>p.Percentage >= dto.PercentageFilter);
+                }
+            }
+            if(sort!=null)
+            {
+                if(sort.PropertyName.ToLower()=="title")
+                {
+                    if(sort.SortFlag==1)
+                        projects = projects.OrderBy(p=>p.Title);
+                    else
+                        projects = projects.OrderByDescending(p=>p.Title);
+                }
+                else if(sort.PropertyName.ToLower()=="state")
+                {
+                    if(sort.SortFlag==1)
+                        projects = projects.OrderBy(p=>p.State.Name);
+                    else
+                        projects = projects.OrderByDescending(p=>p.State.Name);
+                }
+                else if(sort.PropertyName.ToLower()=="priority")
+                {
+                    if(sort.SortFlag==1)
+                        projects = projects.OrderBy(p=>p.Priority.Level);
+                    else
+                        projects = projects.OrderByDescending(p=>p.Priority.Level);
+                }
+                else if(sort.PropertyName.ToLower()=="budget")
+                {
+                    if(sort.SortFlag==1)
+                        projects = projects.OrderBy(p=>p.Budget);
+                    else
+                        projects = projects.OrderByDescending(p=>p.Budget);
+                }
+                else if(sort.PropertyName.ToLower()=="spent")
+                {
+                    if(sort.SortFlag==1)
+                        projects = projects.OrderBy(p=>p.Spent);
+                    else
+                        projects = projects.OrderByDescending(p=>p.Spent);
+                }
+                else if(sort.PropertyName.ToLower()=="start")
+                {
+                    if(sort.SortFlag==1)
+                        projects = projects.OrderBy(p=>p.Start);
+                    else
+                        projects = projects.OrderByDescending(p=>p.Start);
+                }
+                else if(sort.PropertyName.ToLower()=="end")
+                {
+                    if(sort.SortFlag==1)
+                        projects = projects.OrderBy(p=>p.End);
+                    else
+                        projects = projects.OrderByDescending(p=>p.End);
+                }
+                else if(sort.PropertyName.ToLower()=="percentage")
+                {
+                    if(sort.SortFlag==1)
+                        projects = projects.OrderBy(p=>p.Percentage);
+                    else
+                        projects = projects.OrderByDescending(p=>p.Percentage);
                 }
             }
             return await projects.ToListAsync();

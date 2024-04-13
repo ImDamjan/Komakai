@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using server.DTOs;
 using server.DTOs.Projects;
 using server.Interfaces;
 using server.Mappers;
@@ -32,9 +33,9 @@ namespace server.Controllers
 
         //treba filter
         [HttpGet("getProjects")]
-        public async Task<IActionResult> GetAll([FromQuery]ProjectFilterDto dto)
+        public async Task<IActionResult> GetAll([FromQuery]ProjectFilterDto dto,[FromQuery]SortDto sort)
         {
-            var projects = await _repos.GetAllProjectsAsync(dto);
+            var projects = await _repos.GetAllProjectsAsync(dto,sort);
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
@@ -46,9 +47,9 @@ namespace server.Controllers
         }
         //ovde treba filter
         [HttpGet("userProjects/{userId}")]
-        public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId,[FromQuery] ProjectFilterDto filter)
+        public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId,[FromQuery] ProjectFilterDto filter,[FromQuery] SortDto sort)
         {
-            var projects = await _repos.GetAllUserProjectsAsync(userId,filter);
+            var projects = await _repos.GetAllUserProjectsAsync(userId,filter,sort);
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
