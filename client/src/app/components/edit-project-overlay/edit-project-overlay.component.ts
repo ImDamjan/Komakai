@@ -2,10 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
-import { Project } from '../../models/project';
+import { Project } from '../../models/project/project';
 import { PriorityService } from '../../services/priority.service';
 import { TeamService } from '../../services/team.service';
-import { User } from '../../models/user';
+import { User } from '../../models/user/user';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
@@ -25,13 +25,13 @@ export class EditProjectOverlayComponent {
 
   project!: Project;
 
-  selectedUserIds: number[] = [];
+  selectedUserIds: User[] = [];
   selectedPriorityId!: number;
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router) 
   {
     this.project = data.project;
     console.log(this.project);
-    this.selectedUserIds = this.project.userIds ? this.project.userIds.map(id => Number(id)) : [];
+    this.selectedUserIds = this.project.users;
   }
 
   ngOnInit(): void {
@@ -52,24 +52,34 @@ export class EditProjectOverlayComponent {
 
   onUserSelected(userId: number): void {
     // Handle user selection
-    if (this.isSelected(userId)) {
-        this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
-    } else {
-        this.selectedUserIds.push(userId);
+    const user = this.users.find(user => user.id === userId);
+    if (user) {
+        if (this.isSelected(userId)) {
+            this.selectedUserIds = this.selectedUserIds.filter(selectedUser => selectedUser.id !== userId);
+        } else {
+            this.selectedUserIds.push(user);
+        }
     }
 }
 
   isSelected(userId: number): boolean {
     // Check if user is selected
-    return this.selectedUserIds.includes(userId);
+    return this.selectedUserIds.some(user => user.id === userId);
   }
 
   toggleUserSelection(userId: number, event: Event): void {
     event.stopPropagation();
-    if (this.isSelected(userId)) {
-        this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
+    const userIndex = this.selectedUserIds.findIndex(user => user.id === userId);
+
+    if (userIndex !== -1) {
+        // User is already selected, remove them
+        this.selectedUserIds.splice(userIndex, 1);
     } else {
-        this.selectedUserIds.push(userId);
+        // User is not selected, add them
+        const user = this.users.find(user => user.id === userId);
+        if (user) {
+            this.selectedUserIds.push(user);
+        }
     }
   }
 
@@ -102,8 +112,8 @@ export class EditProjectOverlayComponent {
 
   onTeamSelected(team: any): void {
     if (this.isSelectedTeam(team.id)) {
-        // If team is already selected, deselect it and its members
-        this.selectedUserIds = this.selectedUserIds.filter((id: number) => !team.members.includes(id));
+      // If team is already selected, deselect it and its members
+      this.selectedUserIds = this.selectedUserIds.filter(user => !team.members.find((member: User) => member.id === user.id));
     } else {
         // If team is not selected, select it and its members
         this.selectedUserIds = [...this.selectedUserIds, ...team.members];
@@ -131,16 +141,16 @@ export class EditProjectOverlayComponent {
   }
   
   editProject(projectId: Number): void {
-    this.project.userIds = this.selectedUserIds;
+    this.project.users = this.selectedUserIds;
     this.submitted = true;
     this.submissionError = null;
 
-    if (!this.project.title.trim() || !this.project.priorityId || !this.project.start || !this.project.end) {
+    if (!this.project.title.trim() || !this.project.priority || !this.project.start || !this.project.end) {
       this.submissionError = 'Please fill in all necessary fields.';
       return;
     }
 
-    this.projectService.updateProject(this.project).subscribe(response => {
+    this.projectService.updateProject(this.project.id, this.project).subscribe(response => {
       alert('Project edited successfully!');
       this.submitted = false;
 

@@ -78,22 +78,20 @@ export class ProjectService implements OnInit{
     return this.http.get<Project>(url);
   }
 
-  updateProject(project: Project): Observable<Project> {
-    const url = this.baseUrl + "/Project/update";
-      const body = {
-        id: project.id,
-        userIds : project.userIds,
-        priorityId : project.priorityId,
-        title : project.title,
-        start : project.start,
-        end : project.end,
-        budget : project.budget,
-        desciption : project.description,
-        type : project.type,
-        stateId: project.stateId,
-        spent: project.spent,
-        percentage: project.percentage
-      }
+  updateProject(projectId: number, project: Project): Observable<Project> {
+    const url = this.baseUrl + `/Project/update/${projectId}`;
+    const body = {
+      id: projectId,
+      members: project.users.map(user => user.id),
+      title: project.title,
+      stateId: project.state.id,
+      priorityId: project.priority.id,
+      description: project.description,
+      start: project.start,
+      end: project.end,
+      spent: project.spent,
+      percentage: project.percentage
+    };
       return this.http.put<Project>(url,body);
   }
 }

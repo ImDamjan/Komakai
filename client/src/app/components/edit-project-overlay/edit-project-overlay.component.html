@@ -15,12 +15,12 @@
                     <span class="name" id="type">Type</span>
                 </div>
                 <div class="inputs">
-                    <select id="status-select" class="input-field" required [(ngModel)]="project.priorityId">
+                    <select id="status-select" class="input-field" required [(ngModel)]="project.priority">
                         <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
                     </select>
                     <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="project.type">
                 </div>
-                <div class="error-message" *ngIf="!project.priorityId && submitted">*Priority is required</div>
+                <div class="error-message" *ngIf="!project.priority && submitted">*Priority is required</div>
             </div>
             <div class="dates">
                 <div class="labels">
