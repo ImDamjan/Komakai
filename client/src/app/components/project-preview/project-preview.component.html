@@ -11,13 +11,13 @@
           <img class="cursor" src="assets\project-preview\edit.svg" alt="" (click)="openEditOverlay(project,$event)" />
         </header>
         <span class="status-label" [ngClass]="{
-          'ready': project.stateId === 2,
-          'in-progress': project.stateId === 3,
-          'done': project.stateId === 5,
-          'not-started': project.stateId === 1,
-          'cancelled': project.stateId === 6,
-          'blocked': project.stateId === 4
-        }">{{project.stateName}}</span>
+          'ready': project.state.id === 2,
+          'in-progress': project.state.id === 3,
+          'done': project.state.id === 5,
+          'not-started': project.state.id === 1,
+          'cancelled': project.state.id === 6,
+          'blocked': project.state.id === 4
+        }">{{project.state.name}}</span>
       </div>
       <hr class="divider" />
       <p class="description" [title]="project.description">{{ project.truncatedDescription }}</p>
@@ -38,7 +38,7 @@
 
         <div class="issue-details">
           <img src="assets\project-preview\issues.svg" alt=""/>
-          {{ project.assignmentCount === 0 ? 'No issues' : (project.assignmentCount === 1 ? '1 issue' : project.assignmentCount + ' issues') }}
+          {{ getAssignmentCount(project.id) === 0 ? 'No issues' : (getAssignmentCount(project.id) === 1 ? '1 issue' : getAssignmentCount(project.id) + ' issues') }}
         </div>
       </div>
     </section>
