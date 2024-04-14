@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
-import { Project } from '../../models/project';
+import { Project } from '../../models/project/project';
 import { PriorityService } from '../../services/priority.service';
 import { TeamService } from '../../services/team.service';
-import { User } from '../../models/user';
-import { CreateProject } from '../../models/create-project';
+import { User } from '../../models/user/user';
+import { CreateProject } from '../../models/project/create-project';
 import { Team } from '../../models/team';
 
 @Component({

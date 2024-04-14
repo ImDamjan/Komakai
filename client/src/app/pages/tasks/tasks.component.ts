@@ -1,7 +1,5 @@
 import { Component, Injector, inject } from '@angular/core';
-import { Task } from '../../models/task';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../enviroments/environment';
+import { Task } from '../../models/task/task';
 import { Subscription, forkJoin, interval, map, switchMap, takeUntil } from 'rxjs';
 import { AssignmentService } from '../../services/assignment.service';
 import { PriorityService } from '../../services/priority.service';
@@ -16,7 +14,6 @@ export class TasksComponent {
 
   taskObj: Task [] = [];
 
-  private apiUrl = environment.apiUrl;
 
   tasks: Task[] = [];
 

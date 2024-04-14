@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Login } from '../models/login';
-import { environment } from '../enviroments/environment';
+import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 

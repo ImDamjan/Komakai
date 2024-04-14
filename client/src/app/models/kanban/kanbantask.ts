@@ -1,4 +1,4 @@
-import { TaskCardKanbanComponent } from "../components/task-card-kanban/task-card-kanban.component";
+import { TaskCardKanbanComponent } from "../../components/task-card-kanban/task-card-kanban.component";
 
 export class TaskKanban {
     constructor(

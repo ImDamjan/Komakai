@@ -1,17 +1,17 @@
 import { Component, Inject, Input, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { State } from '../../models/state';
+import { State } from '../../models/state/state';
 import { StateService } from '../../services/state.service';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/user';
-import { TaskGroup } from '../../models/task-group';
+import { User } from '../../models/user/user';
+import { TaskGroup } from '../../models/task/task-group';
 import { TaskGroupService } from '../../services/task-group.service';
 import { AssignmentService } from '../../services/assignment.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { PriorityService } from '../../services/priority.service';
-import { Priority } from '../../models/priority';
-import { Task } from '../../models/task';
-import { CreateTask } from '../../models/create-task';
+import { Priority } from '../../models/priority/priority';
+import { Task } from '../../models/task/task';
+import { CreateTask } from '../../models/task/create-task';
 
 @Component({
   selector: 'app-add-task',

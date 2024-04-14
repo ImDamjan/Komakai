@@ -1,6 +1,6 @@
-import { Priority } from "./priority"
-import { State } from "./state"
-import { User } from "./user"
+import { Priority } from "../priority/priority"
+import { State } from "../state/state"
+import { User } from "../user/user"
 
 export interface Project {
     id : number, 

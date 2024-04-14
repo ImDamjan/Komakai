@@ -1,5 +1,5 @@
-import { TaskCardKanbanComponent } from "../components/task-card-kanban/task-card-kanban.component";
-import { Task } from "./task";
+import { TaskCardKanbanComponent } from "../../components/task-card-kanban/task-card-kanban.component";
+import { Task } from "../task/task";
 
 export class Column {
   //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)

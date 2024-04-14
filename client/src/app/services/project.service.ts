@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { environment } from '../enviroments/environment';
+import { environment } from '../environments/environment';
 import { jwtDecode } from 'jwt-decode';
-import { Project } from '../models/project';
+import { Project } from '../models/project/project';
 import { JwtDecoderService } from './jwt-decoder.service';
+import { ProjectFilter } from '../models/project/project-filter';
 
 @Injectable({
   providedIn: 'root'

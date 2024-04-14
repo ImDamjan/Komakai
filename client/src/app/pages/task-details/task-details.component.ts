@@ -2,15 +2,15 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { StateService } from '../../services/state.service';
-import { Priority } from '../../models/priority';
-import { State } from '../../models/state';
-import { User } from '../../models/user';
+import { Priority } from '../../models/priority/priority';
+import { State } from '../../models/state/state';
+import { User } from '../../models/user/user';
 import { UserService } from '../../services/user.service';
 import { PriorityService } from '../../services/priority.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Task } from '../../models/task';
+import { Task } from '../../models/task/task';
 import { CommentService } from '../../services/comment.service';
-import { Comment } from '../../models/comment';
+import { Comment } from '../../models/comment/comment';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({

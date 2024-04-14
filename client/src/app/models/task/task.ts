@@ -1,8 +1,8 @@
 
-import { Priority } from "./priority";
-import { State } from "./state";
+import { Priority } from "../priority/priority";
+import { State } from "../state/state";
 import { TaskGroup } from "./task-group";
-import { User } from "./user";
+import { User } from "../user/user";
 
 export interface Task{
     id : number,

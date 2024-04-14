@@ -174,6 +174,10 @@ namespace server.Repositories
         public async Task<List<Project>> GetAllFilteredProjectsAsync(IQueryable<Project> projects, ProjectFilterDto? dto,SortDto? sort = null)
         {   if(dto!=null)
             {
+                if(dto.PageNumber!= 0 && dto.PageSize!= 0)
+                {
+                    projects = projects.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
+                }
 
                 if(dto.StateFilter > 0 && dto.StateFilter < 7)
                     projects = projects.Where(p=>p.StateId==dto.StateFilter);
@@ -284,6 +288,7 @@ namespace server.Repositories
                         projects = projects.OrderByDescending(p=>p.Percentage);
                 }
             }
+
             return await projects.ToListAsync();
 
         }
