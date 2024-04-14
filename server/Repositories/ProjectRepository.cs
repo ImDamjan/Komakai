@@ -174,7 +174,7 @@ namespace server.Repositories
         public async Task<List<Project>> GetAllFilteredProjectsAsync(IQueryable<Project> projects, ProjectFilterDto? dto,SortDto? sort = null)
         {   if(dto!=null)
             {
-                if(dto.PageNumber!= 0)
+                if(dto.PageNumber!= 0 && dto.PageSize!= 0)
                 {
                     projects = projects.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
                 }
