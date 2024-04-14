@@ -4,7 +4,7 @@ import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
 import { AssignmentService } from '../../services/assignment.service';
-import { Project } from '../../models/project';
+import { Project } from '../../models/project/project';
 
 @Component({
   selector: 'app-project-preview',

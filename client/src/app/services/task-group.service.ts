@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TaskGroup } from '../models/task-group';
-import { environment } from '../enviroments/environment';
+import { TaskGroup } from '../models/task/task-group';
+import { environment } from '../environments/environment';
 
 
 @Injectable({

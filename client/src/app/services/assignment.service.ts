@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable} from 'rxjs';
-import { environment } from '../enviroments/environment';
-import { Task } from '../models/task';
+import { environment } from '../environments/environment';
+import { Task } from '../models/task/task';
 import { jwtDecode } from 'jwt-decode';
-import { UpdateTask } from '../models/update-task';
+import { UpdateTask } from '../models/task/update-task';
 
 @Injectable({
   providedIn: 'root'

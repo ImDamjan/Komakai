@@ -1,6 +1,6 @@
 import { Component, Input, inject} from '@angular/core';
 import { Router } from '@angular/router';
-import { Task } from '../../models/task';
+import { Task } from '../../models/task/task';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
 

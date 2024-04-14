@@ -1,18 +1,18 @@
 import { Component, OnInit, VERSION, inject } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
-import { Board } from '../../models/board.model';
-import { Column } from '../../models/column.model';
-import { TaskKanban } from '../../models/kanbantask';
+import { Board } from '../../models/kanban/board.model';
+import { Column } from '../../models/kanban/column.model';
+import { TaskKanban } from '../../models/kanban/kanbantask';
 import { TaskCardKanbanComponent } from '../task-card-kanban/task-card-kanban.component';
 import { StateService } from '../../services/state.service';
-import { State } from '../../models/state';
+import { State } from '../../models/state/state';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { AssignmentService } from '../../services/assignment.service';
 import { stat } from 'fs';
-import { Task } from '../../models/task';
-import { UpdateTask } from '../../models/update-task';
+import { Task } from '../../models/task/task';
+import { UpdateTask } from '../../models/task/update-task';
 
 @Component({
   selector: 'app-kanban',
