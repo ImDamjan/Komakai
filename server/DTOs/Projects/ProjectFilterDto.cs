@@ -7,6 +7,8 @@ namespace server.DTOs.Projects
 {
     public class ProjectFilterDto
     {
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
         public string SearchTitle { get; set; } = string.Empty;
         public int DateStartFlag { get; set; }
         public int DateEndFlag { get; set; }
