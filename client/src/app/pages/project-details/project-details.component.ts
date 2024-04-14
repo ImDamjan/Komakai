@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from '../../components/add-task/add-task.component';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
-import { Project } from '../../models/project';
+import { Project } from '../../models/project/project';
 
 @Component({
   selector: 'app-project-details',

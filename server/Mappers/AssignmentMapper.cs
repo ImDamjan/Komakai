@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using server.DTOs.Assignment;
+using server.DTOs.Priority;
+using server.DTOs.State;
+using server.DTOs.Users;
 using server.Models;
 
 namespace server.Mappers
@@ -26,25 +29,34 @@ namespace server.Mappers
             };
         }
 
-        public static AssignmentDto toAssignmentDto(this Assignment a, List<int> asignees, List<int> dependencies)
+        public static AssignmentDto toAssignmentDto(this Assignment a, List<AssignmentUserDto> asignees, PriorityDto priority, StateDto state, AssignmentUserDto owner, TaskGroupDto group)
         {
             return new AssignmentDto{
                 Id = a.Id,
                 Title = a.Title,
-                Owner = a.Owner,
+                Owner = owner,
                 Description = a.Description,
                 Start = a.Start,
                 End = a.End,
-                StateId = a.StateId,
+                State = state,
                 Percentage = a.Percentage,
-                PriorityId = a.PriorityId,
+                Priority = priority,
                 Type = a.Type,
                 Assignees = asignees,
-                DependentOn = dependencies,
-                TaskGroupId = a.TaskGroupId 
+                TaskGroup =  group
             };
         }
-
+        public static DependentAssignmentDto toDependentAssignmentDto(this Assignment a, TaskGroupDto group)
+        {
+            return new DependentAssignmentDto{
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                Start = a.Start,
+                End = a.End,
+                TaskGroup =  group
+            };
+        }
         public static TaskGroup fromCreateTaskGroupDtoToTaskGroup(this CreateTaskGroupDto dto)
         {
             return new TaskGroup{
@@ -61,6 +73,17 @@ namespace server.Mappers
                 Title = group.Title,
                 ProjectId = group.ProjectId,
                 ParentTaskGroupId = group.ParentTaskGroupId
+            };
+        }
+
+        public static TaskGroupTasksDto toTaskGroupTasksDto(this TaskGroup taskGroup, List<TaskGroupTasksDto> children, List<AssignmentDto> tasks)
+        {
+            return new TaskGroupTasksDto{
+                Id = taskGroup.Id,
+                Children = children,
+                Assignments = tasks,
+                Title = taskGroup.Title,
+                ProjectId = taskGroup.ProjectId,
             };
         }
     }

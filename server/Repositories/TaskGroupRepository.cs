@@ -24,14 +24,14 @@ namespace server.Repositories
             return group;
         }
 
-        public async Task<List<TaskGroup>> GetAllProjectTaskGroupsAsync(Project project)
+        public async Task<List<TaskGroup>> GetAllProjectTaskGroupsAsync(int project_id)
         {
-            return await _context.TaskGroups.Where(tg=>tg.ProjectId==project.Id).ToListAsync();
+            return await _context.TaskGroups.Where(tg=>tg.ProjectId==project_id).ToListAsync();
         }
 
         public async Task<TaskGroup?> GetTaskGroupByIdAsync(int id)
         {
-            var t = await _context.TaskGroups.FirstOrDefaultAsync(tg=> tg.Id==id);
+            var t = await _context.TaskGroups.Include(tg=>tg.Assignments).Include(tg=>tg.InverseParentNavigation).FirstOrDefaultAsync(tg=> tg.Id==id);
             return t;
         }
 
@@ -39,6 +39,24 @@ namespace server.Repositories
         {
             await _context.SaveChangesAsync();
             return group;
+        }
+
+
+
+
+        public async Task<TaskGroup?> getInitialTaskGroupOfProject(int project_id)
+        {
+            return await _context.TaskGroups.Include(tg=>tg.InverseParentNavigation).FirstOrDefaultAsync(tg=>tg.ProjectId==project_id && tg.ParentTaskGroupId==null);
+        }
+        public async Task<List<TaskGroup>> getChildrenGroups(int task_group)
+        {
+            var group = await GetTaskGroupByIdAsync(task_group);
+            if(group==null)
+                return new List<TaskGroup>();
+            
+            var children = group.InverseParentNavigation.ToList();
+
+            return children;
         }
     }
 }

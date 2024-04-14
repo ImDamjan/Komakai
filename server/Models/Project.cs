@@ -27,7 +27,7 @@ namespace server.Models
         public string Description { get; set; } = null!;
 
         [Column("state")]
-        public int? StateId { get; set; }
+        public int StateId { get; set; }
 
         [Column("last_state_changed", TypeName ="datetime")]
         public DateTime LastStateChangedTime { get; set; }
@@ -49,7 +49,7 @@ namespace server.Models
 
         [ForeignKey("PriorityId")]
         [InverseProperty("Projects")]
-        public Priority? Priority { get; set; }
+        public virtual Priority Priority { get; set; } = null!;
         
 
         [ForeignKey("ProjectId")]
@@ -59,7 +59,7 @@ namespace server.Models
         //1-to-many
         [ForeignKey("StateId")]
         [InverseProperty("Projects")]
-        public virtual State? State { get; set; } = null!;
+        public virtual State State { get; set; } = null!;
 
 
         [InverseProperty("Project")]

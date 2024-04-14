@@ -2,16 +2,15 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { StateService } from '../../services/state.service';
-import { Priority } from '../../models/priority';
-import { State } from '../../models/state';
-import { User } from '../../models/user';
-import { Assignment } from '../../models/assignment';
+import { Priority } from '../../models/priority/priority';
+import { State } from '../../models/state/state';
+import { User } from '../../models/user/user';
 import { UserService } from '../../services/user.service';
 import { PriorityService } from '../../services/priority.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Task } from '../../models/task';
+import { Task } from '../../models/task/task';
 import { CommentService } from '../../services/comment.service';
-import { Comment } from '../../models/comment';
+import { Comment } from '../../models/comment/comment';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
@@ -36,18 +35,6 @@ export class TaskDetailsComponent implements OnInit{
 
   public priority :string = "";
   public state: string = "";
-  public Owner: User = {
-    id: 0,
-    username: '',
-    email: '',
-    jobTitle: '',
-    organisation: '',
-    department: '',
-    roleId: '',
-    name: '',
-    lastname: ''
-  };
-  public assignees : User[] = [];
   public assignment! : Task;
   public dependentTasks : Task[] = [];
   public hasDependent : boolean = true;
@@ -59,6 +46,7 @@ export class TaskDetailsComponent implements OnInit{
   // vracati cele usere?
   ngOnInit(): void {
     this.assignment = this.data[0];
+    console.log(this.assignment);
     this.assignment_service.getDependentAssignmentsFor(this.assignment.id).subscribe({
       next : (tasks : Task[]) => {
         if(tasks.length > 0)
@@ -66,12 +54,6 @@ export class TaskDetailsComponent implements OnInit{
         this.dependentTasks = tasks;
       }
     })
-    this.user_service.getAssignmentUsers(this.assignment.id).subscribe({
-      next: (users : User[]) =>{
-        this.assignees = users;
-        console.log(users);
-      }
-    });
     this.comment_service.getAllComentsByTask(this.assignment.id).subscribe({
       next : (comments : Comment[]) =>{
         this.comments = comments;
@@ -79,21 +61,6 @@ export class TaskDetailsComponent implements OnInit{
           comment.editedTime = new Date(comment.editedTime);
           comment.postTime = new Date(comment.postTime);
         });
-      }
-    });
-    this.state_service.fetchStateName(this.assignment.stateId).subscribe({
-      next : (name : string)=> {
-        this.state =name;
-      }
-    });
-    this.priority_service.fetchPriorityName(this.assignment.priorityId).subscribe({
-      next :(name : string) => {
-        this.priority = name;
-      }
-    });
-    this.user_service.getUserById(this.assignment.owner).subscribe({
-      next :(user : User) => {
-        this.Owner = user;
       }
     });
   }

@@ -3,7 +3,7 @@ import { Component} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
-import { environment } from '../../enviroments/environment';
+import { environment } from '../../environments/environment';
 import { Login } from '../../models/login';
 import { AuthenticationService } from '../../services/atentication.service';
 
@@ -14,8 +14,8 @@ import { AuthenticationService } from '../../services/atentication.service';
 })
 export class LoginComponent{
   loginObj: Login = {
-    username: "johndoe",
-    password: "password123"
+    // username: "johndoe",
+    // password: "password123"
   } as Login;
 
   loginForm!: FormGroup;

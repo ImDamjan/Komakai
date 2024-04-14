@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../enviroments/environment';
+import { environment } from '../environments/environment';
 import { Observable, map } from 'rxjs';
-import { Priority } from '../models/priority';
+import { Priority } from '../models/priority/priority';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class PriorityService {
   getPriorities(): Observable<Priority[]> {
     return this.http.get<Priority[]>(`${this.apiUrl}/Priority/getAll`);
   }
-  getPriorityById(prio_id: Number) : Observable<Priority>
+  getPriorityById(prio_id: number) : Observable<Priority>
   {
     const url = this.apiUrl + "/Priority/getById/" + prio_id;
     return this.http.get<Priority>(url);
