@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject} from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
@@ -8,6 +8,8 @@ import { TeamService } from '../../services/team.service';
 import { User } from '../../models/user/user';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { State } from '../../models/state/state';
+import { StateService } from '../../services/state.service';
 
 @Component({
   selector: 'app-edit-project-overlay',
@@ -18,6 +20,8 @@ export class EditProjectOverlayComponent {
   users: User[] = [];
   priorities: any[] | undefined;
   teams: any[] = [];
+  states: State[] = [];
+
   showDropdown: boolean = false;
   hoveredTeam: any;
   submitted = false;
@@ -27,7 +31,16 @@ export class EditProjectOverlayComponent {
 
   selectedUserIds: User[] = [];
   selectedPriorityId!: number;
-  constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router) 
+
+  disabled = false;
+  max = 100;
+  min = 0;
+  showTicks = false;
+  step = 1;
+  thumbLabel = false;
+  value = 0;
+
+  constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
     console.log(this.project);
@@ -44,6 +57,9 @@ export class EditProjectOverlayComponent {
     this.teamService.getTeams().subscribe(teams => {
       this.teams = teams;
     });
+    this.stateService.fetchAllStates().subscribe(states => {
+      this.states = states;
+    })
   }
 
   toggleDropdown(): void {

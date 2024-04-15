@@ -15,7 +15,7 @@
                     <span class="name" id="type">Type</span>
                 </div>
                 <div class="inputs">
-                    <select id="status-select" class="input-field" required [(ngModel)]="project.priority">
+                    <select id="status-select" class="input-field" required [(ngModel)]="project.priority.id">
                         <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
                     </select>
                     <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="project.type">
@@ -36,18 +36,26 @@
                 <div class="error-message" *ngIf="project.start && project.end && project.start > project.end">*End Date must be after Start Date</div>
             </div>
             <div class="role">
-                <!-- 
-                <span class="name">Project Roles</span>
-                <div class="custom-dropdown">
-                    <span class="selected-option" (click)="toggleDropdown()">Select Team Lead</span>
-                    <div class="options" *ngIf="showDropdown">
-                        <div class="option" *ngFor="let user of users" (click)="toggleUserSelection(user.id)">
-                            <input type="checkbox" [checked]="isSelected(user.id)" (change)="onUserSelected(user.id)">
-                            {{ user.name }} {{ user.lastname }}
-                        </div>
-                    </div>
+                <div class="labels">
+                    <span class="name" id="startdate">Percentage <label class="example-value-label">{{slider.value}} %</label></span>
+                    <span class="name" id="enddate">State</span>
                 </div>
-                 -->
+                <div class="inputs">
+                      <mat-slider
+                          class="custom-slider"
+                          [disabled]="disabled"
+                          [max]="max"
+                          [min]="min"
+                          [step]="step"
+                          [discrete]="thumbLabel"
+                          [showTickMarks]="showTicks">
+                        <input matSliderThumb [(ngModel)]="value" #slider [(ngModel)]="project.percentage">
+                      </mat-slider>
+                    <!-- <input class="input-field" id="status-select" type="number" placeholder="  Spent"  [(ngModel)]="project.percentage"> -->
+                    <select id="status-select" class="input-field" required [(ngModel)]="project.state.id">
+                        <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
+                    </select>
+                </div>
             </div>
         </div>
         
@@ -58,11 +66,11 @@
             </div>
             <div class="budget-team">
                 <div class="labels">
-                    <span class="name" id="budget">Budget</span>
+                    <span class="name" id="budget">Spent</span>
                     <span class="name" id="team">Members</span>
                 </div>
                 <div class="inputs">
-                    <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="project.budget">
+                    <input class="input-field" id="budget-input" type="number" placeholder="  Spent"  [(ngModel)]="project.spent">
                     <div class="custom-dropdown">
                         <span class="selected-option" (click)="toggleDropdown()">Select Members</span>
                         <div class="options" *ngIf="showDropdown">
