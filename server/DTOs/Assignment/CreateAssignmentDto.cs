@@ -7,8 +7,9 @@ namespace server.DTOs.Assignment
 {
     public class CreateAssignmentDto
     {
+        public int Owner { get; set; }
         public int TaskGroupId { get; set; }
-        public List<int> UserIds { get; set; } = new List<int>();
+        public List<int> Assignees { get; set; } = new List<int>();
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public List<int> DependentOn { get; set; } = new List<int>();
@@ -16,6 +17,7 @@ namespace server.DTOs.Assignment
         public string Type { get; set; } = null!;
         public string Description { get; set; } = null!;
         public int PriorityId { get; set; }
+        public int StateId { get; set; }
         
     }
 }

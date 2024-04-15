@@ -1,0 +1,15 @@
+<!-- <div class="projectlist" >
+    <h1 class="title">Project name</h1>
+    <button class="create"  (click)="openCreateOverlay()">Create</button>
+</div> -->
+<div id="page" [class.scrolled-down]="scrolledDown">
+    <div id="project-header">
+        <h1 id="title">Project list/{{ projectName.length > 23 ? (projectName.substring(0, 23) + '...') : projectName }}</h1>
+        <app-project-header (viewChange)="changeView($event)"></app-project-header>
+    </div>
+    <div class="product" [ngSwitch]="currentView">
+        <app-kanban *ngSwitchCase="'kanban'"></app-kanban>
+        <!-- <app-list *ngSwitchCase="'list'"></app-list> -->
+        <app-gantogram *ngSwitchCase="'gantt'"></app-gantogram>
+    </div>
+</div>

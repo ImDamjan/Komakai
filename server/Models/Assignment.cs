@@ -16,12 +16,16 @@ namespace server.Models
 
         [Column("title", TypeName ="varchar(45)")]
         public string Title { get; set; } = null!;
+        [Column("owner")]
+        public int Owner { get; set; }
 
         [Column("description")]
         public string Description { get; set; } = null!;
 
         [Column("start", TypeName ="datetime")]
         public DateTime Start { get; set; }
+        [Column("lastTimeChanged", TypeName ="datetime")]
+        public DateTime LastTimeChanged { get; set; }
 
         [Column("end", TypeName ="datetime")]
         public DateTime End { get; set; }
@@ -37,8 +41,6 @@ namespace server.Models
 
         [Column("priority_id")]
         public int PriorityId { get; set; }
-        [Column("parent_assignment_id")]
-        public int? ParentAssignmentId { get; set; } = null;
 
         [Column("type")]
         public string Type { get; set; } = null!;
@@ -47,7 +49,7 @@ namespace server.Models
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         [InverseProperty("Assignments")]
-        public virtual TaskGroup? TaskGroup { get; set; } = null!;
+        public virtual TaskGroup TaskGroup { get; set; } = null!;
         [ForeignKey("PriorityId")]
         [InverseProperty("Assignments")]
         public virtual Priority Priority { get; set; } = null!;
@@ -66,6 +68,10 @@ namespace server.Models
         [InverseProperty("Assignments")]
         public virtual State State { get; set; } = null!; 
 
+        [ForeignKey("Owner")]
+        [InverseProperty("OwnedAssignments")]
+        public virtual User User { get; set; } = null!;
+
         //dependency
         [ForeignKey("DependentOnAssignmentId")]
         [InverseProperty("DependentOnAssignments")]
@@ -74,12 +80,5 @@ namespace server.Models
         [ForeignKey("AssignmentId")]
         [InverseProperty("Assignments")]
         public virtual ICollection<Assignment> DependentOnAssignments { get; set; } = new List<Assignment>();
-
-        [ForeignKey("ParentAssignmentId")]
-        [InverseProperty("InverseParentNavigation")]
-        public virtual Assignment? ParentNavigation { get; set; }
-
-        [InverseProperty("ParentNavigation")]
-        public virtual ICollection<Assignment> InverseParentNavigation { get; set; } = new List<Assignment>();
     }
 }

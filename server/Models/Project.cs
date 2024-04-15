@@ -27,7 +27,7 @@ namespace server.Models
         public string Description { get; set; } = null!;
 
         [Column("state")]
-        public int? StateId { get; set; }
+        public int StateId { get; set; }
 
         [Column("last_state_changed", TypeName ="datetime")]
         public DateTime LastStateChangedTime { get; set; }
@@ -44,15 +44,12 @@ namespace server.Models
         [Column("percentage", TypeName = "float")]
         public double Percentage { get; set; }
 
-        [Column("team_id")]
-        public int TeamId { get; set; }
-
         [Column("priority_id")]
         public int PriorityId { get; set; }
 
         [ForeignKey("PriorityId")]
         [InverseProperty("Projects")]
-        public Priority? Priority { get; set; }
+        public virtual Priority Priority { get; set; } = null!;
         
 
         [ForeignKey("ProjectId")]
@@ -62,15 +59,16 @@ namespace server.Models
         //1-to-many
         [ForeignKey("StateId")]
         [InverseProperty("Projects")]
-        public virtual State? State { get; set; } = null!;
+        public virtual State State { get; set; } = null!;
 
-        [ForeignKey("TeamId")]
-        [InverseProperty("Projects")]
-        public virtual Team? Team { get; set; } = null!;
 
         [InverseProperty("Project")]
         public virtual ICollection<TaskGroup> TaskGroups { get; set; } = new List<TaskGroup>();
 
+        [InverseProperty("Project")]
+        public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
+
+        
         [InverseProperty("Project")]
         public virtual ICollection<UserProjectPermission> ProjectPermissions { get; set; } = new List<UserProjectPermission>();
     }

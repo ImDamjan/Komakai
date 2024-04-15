@@ -1,0 +1,33 @@
+<div class="root">
+  <div class ="board" *ngIf="showProjectDetails">
+    <div class="board-wrapper">
+      <div class="board-columns">
+        <div cdkDropList 
+            cdkDropListOrientation="horizontal" class="board-columns"
+            (cdkDropListDropped)="dropGrid($event)">
+        <div 
+           cdkDragLockAxis="x" class="board-column" 
+           *ngFor="let column of board.columns" cdkDrag>
+          <div class="column-title" cdkDragHandle>
+            {{ column.name }}
+          </div>
+          <!-- Dodajemo dugme na početak kolone -->
+          <div class="create" *ngIf="showCreateButton"><button class="task-button" (click)="openCreateOverlay(column.id)">New task</button></div>
+          <!-- ovde treba da se omoguci da kada se klikne na task da se otvori task details -->
+          <div class="tasks-container"
+          id="{{column.id}}"
+          [cdkDropListConnectedTo]="column.columnIds"
+          cdkDropList
+          [cdkDropListData]="column.tasks"
+          (cdkDropListDropped)="drop($event)">
+            <div class="task" *ngFor="let item of column.tasks" cdkDrag [cdkDragData]="item">
+              <p [title]="item.title">{{ item.dummyTitle }}</p>
+            </div>
+          </div>
+
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

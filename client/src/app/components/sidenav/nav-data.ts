@@ -20,9 +20,9 @@ export const navbarData = [
         label: 'Activity'
     },
     {
-        routeLink: 'teams',
-        icon: '/assets/sidenavigation/teams.svg',
-        label: 'Teams'
+        routeLink: 'admin',
+        icon: '/assets/sidenavigation/admin.svg',
+        label: 'Admin'
     },
     {
         routeLink: 'help',

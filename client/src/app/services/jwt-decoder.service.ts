@@ -19,7 +19,7 @@ export class JwtDecoderService {
 
   public getToken(): string | null {
     // Implement logic to retrieve the token from storage (e.g., localStorage, cookies)
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('token');
     return token ? token : null;
   }
 }

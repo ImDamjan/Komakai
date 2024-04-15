@@ -1,24 +1,38 @@
 import { Injectable } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AuthenticationService } from './atentication.service';
+import { Location } from '@angular/common';
+import { PreviousUrlService } from './url.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard{
 
-  constructor(private authService: AuthenticationService, private router: Router) {}
+  constructor(private authService: AuthenticationService, private router: Router, private location: Location) {}
 
-  canActivate: CanActivateFn = () =>{
-    return this.checkLogin();
-  }
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> | boolean | UrlTree {
 
-  checkLogin(): boolean {
-    if (this.authService.isAuthenticated()) {
+    const isLoggedIn = this.authService.isAuthenticated();
+
+    if (isLoggedIn) {
+      
+      if (route.url[0].path === 'auth') {
+        // console.log(this.location.path())
+        this.router.navigate(['/dashboard']);
+        return false;
+      }
       return true;
     } else {
-      this.router.navigate(['/auth']);
-      return false;
+      if (route.url[0].path !== 'auth') {
+        // console.log(this.location.path())
+        this.router.navigate(['/auth']);
+        return false;
+      }
+      return true;
     }
   }
 }

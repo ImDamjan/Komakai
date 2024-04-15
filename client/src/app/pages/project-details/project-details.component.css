@@ -1,0 +1,28 @@
+#project-header{
+    margin-top: 35px;
+    flex-grow: 1;
+    padding: 40px 20px 0px 40px;
+    display: flex;
+    position: fixed;
+    transition: top 0.3s;
+    top: 0;
+    width: 100%;
+}
+
+#page {
+    background-image: url("../../../assets/pictures/background.svg");
+    overflow-x: auto; 
+    white-space: nowrap;
+    width: calc(100wv - 50px);
+    height: 100vh;
+}
+
+#title {
+    margin-right: 20%;
+    width: 10%;
+}
+
+.scrolled-down #project-header {
+    display: none;
+}
+

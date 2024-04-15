@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.DTOs.Team;
 using server.Interfaces;
 using server.Mappers;
 using server.Models;
@@ -18,15 +19,9 @@ namespace server.Repositories
         {
             _context = context;
         }
-        public async Task<Team> CreateTeamAsync(Team team, List<int> memebers)
+        public async Task<Team> CreateTeamAsync(Team team)
         {
-            foreach (var user in memebers)
-            {
-                await _context.TeamUsers.AddAsync(new TeamUser{ Team = team, UserId = user});
-            }
-
             await _context.Teams.AddAsync(team);
-
             await _context.SaveChangesAsync();
 
             return team;
@@ -35,27 +30,53 @@ namespace server.Repositories
 
         public async Task<List<Team>> GetAllTeamsAsync()
         {
-            return await _context.Teams.Include(t=> t.TeamUsers).ToListAsync();
+            return await _context.Teams.Include(t=> t.Users).ThenInclude(u=>u.Role).ToListAsync();
         }
 
         public async Task<List<Team>> GetAllUserTeams(int userid)
         {
-            return await _context.TeamUsers.Where(t=>t.UserId==userid).Select(t=>t.Team).ToListAsync();
+            var teams = await _context.Teams.Include(t=>t.Users).ThenInclude(t=>t.Role).ToListAsync();
+
+            var user_teams = new List<Team>();
+            foreach (var team in teams)
+            {
+                if(team.Users.Any(u=>u.Id==userid))
+                    user_teams.Add(team);
+            }
+            
+            return user_teams;
+
         }
 
         public async Task<Team?> GetTeamByIdAsync(int id)
         {
-            var team = await _context.Teams.FirstOrDefaultAsync(t=> t.Id==id);
-
-            if(team==null)
-                return null;
-
+            
+            var team = await _context.Teams.Include(t=>t.Users).ThenInclude(u=>u.Role).FirstOrDefaultAsync(t=> t.Id==id);
             return team;
         }
 
-        public async Task<List<int>> GetTeamUsersByIdAsync(int teamId)
+        // public async Task<List<User>> GetTeamUsersByIdAsync(int teamId)
+        // {
+        //     var team = await GetTeamByIdAsync(teamId);
+        //     if(team==null)
+        //         return new List<User>();
+        //     return team.Users.ToList();
+        // }
+
+        public async Task<Team?> UpdateTeamAsync(CreateTeamDto dto, int team_id, List<User> members)
         {
-            return await _context.TeamUsers.Where(t=>t.TeamId==teamId).Select(t=>t.UserId).ToListAsync();
+            var team = await GetTeamByIdAsync(team_id);
+
+            if(team==null)
+                return null;
+            
+            team.Name = dto.Name;
+            team.Users = members;
+            team.Type = dto.Type;
+            
+            await _context.SaveChangesAsync();
+
+            return team;
         }
     }
 }

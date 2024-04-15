@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HeaderInfoService } from '../../services/header-info.service';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-header',
@@ -8,11 +9,19 @@ import { HeaderInfoService } from '../../services/header-info.service';
 })
 export class HeaderComponent implements OnInit {
   
-  informacije: any[] | undefined;
+  public fullname : string = "";
+  public role : string = "";
+  private jwtService = inject(JwtDecoderService);
   constructor(private header_info: HeaderInfoService){}
   ngOnInit(): void {
-    this.header_info.getImenaILokacije().subscribe(data => {
-      this.informacije = data;
-    });
+    let token = this.jwtService.getToken();
+    if(token!=null)
+    {
+      let decode = this.jwtService.decodeToken(token);
+      console.log(decode);
+      this.fullname = decode.fullname;
+      this.role = decode.role
+    }
+    console.log(token);
   }
 }

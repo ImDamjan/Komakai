@@ -29,6 +29,40 @@ import { TaskTrackComponent } from './components/task-track/task-track.component
 import { TaskTagsComponent } from './components/task-tags/task-tags.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './components/header/header.component';
+import { KanbanComponent } from './components/kanban/kanban.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
+import { TaskCardKanbanComponent } from './components/task-card-kanban/task-card-kanban.component';
+import { AddTaskComponent } from './components/add-task/add-task.component';
+import { TaskHeaderComponent } from './components/task-header/task-header.component';
+import { ProjectHeaderComponent } from './components/project-header/project-header.component';
+import { GantogramComponent } from './components/gantogram/gantogram.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { MemberComponent } from './components/member/member.component';
+import { LogoutComponent } from './components/logout/logout.component';
+import { TaskDetailsComponent } from './pages/task-details/task-details.component';
+import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
+import { MatSliderModule } from '@angular/material/slider';
+
+
+import { ThyLayoutModule } from 'ngx-tethys/layout';
+import { setPrintErrorWhenIconNotFound } from 'ngx-tethys/icon';
+import { ThyNavModule } from 'ngx-tethys/nav';
+import { ThyButtonModule } from 'ngx-tethys/button';
+import { ThyCheckboxModule } from 'ngx-tethys/checkbox';
+import { ThySwitchModule } from 'ngx-tethys/switch';
+import { ThyNotifyModule } from 'ngx-tethys/notify';
+import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
+
+
+
+import { NgxGanttModule } from '@worktile/gantt';
+import { RouterModule } from '@angular/router';
+
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -52,7 +86,19 @@ import { HeaderComponent } from './components/header/header.component';
     ProjectWeeklyAnalizeComponent,
     TaskTrackComponent,
     TaskTagsComponent,
-    HeaderComponent
+    HeaderComponent,
+    KanbanComponent,
+    ProjectDetailsComponent,
+    TaskCardKanbanComponent,
+    AddTaskComponent,
+    TaskHeaderComponent,
+    ProjectHeaderComponent,
+    GantogramComponent,
+    LogoutComponent,
+    TaskDetailsComponent,
+    AdminComponent,
+    MemberComponent,
+    EditProjectOverlayComponent,
   ],
   imports: [
     FormsModule,
@@ -62,6 +108,18 @@ import { HeaderComponent } from './components/header/header.component';
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,
+    DragDropModule,
+    MatSliderModule,
+
+    NgxGanttModule,
+    RouterModule.forRoot([]),
+    ThyButtonModule,
+    ThyNavModule,
+    ThyLayoutModule,
+    ThyCheckboxModule,
+    ThyNotifyModule,
+    ThySwitchModule,
+    ThyDatePickerModule
   ],
   providers: [
     provideClientHydration(),

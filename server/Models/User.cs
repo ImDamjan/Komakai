@@ -49,7 +49,7 @@ namespace server.Models
 
 
         [Column("role_id")]
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
 
 
         [InverseProperty("User")]
@@ -63,9 +63,18 @@ namespace server.Models
         [InverseProperty("Users")]
         public virtual ICollection<Assignment> AssignmentsNavigation { get; set; } = new List<Assignment>();
 
+        [InverseProperty("User")]
+        public virtual ICollection<Assignment> OwnedAssignments { get; set; } = new List<Assignment>();
+
 
         //many-to-many-condition
+        [InverseProperty("Users")]
+        public virtual ICollection<Team> Teams {get; set;} = new List<Team>();
+
         [InverseProperty("User")]
+        public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
+    
+       
         public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
 
 

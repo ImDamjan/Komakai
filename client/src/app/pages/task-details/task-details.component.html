@@ -1,0 +1,95 @@
+<br><br>
+<div id = "task-details" class = "overlay-container">
+    <h1>{{assignment.title}}</h1>
+    <br>
+    <div class = 'details'>
+        <div class = "row">
+            <p>Priority</p>
+            <span>{{assignment.priority.description}}</span>
+        </div>
+        <div class = "row">
+            <p>Status</p>
+            <span>{{assignment.state.name}}</span>
+        </div>
+        <div class = "row">
+            <p>Owner</p>
+            <span>{{assignment.owner.name + " "+ assignment.owner.lastname}}</span>
+        </div>
+        <div class = "row">
+            <p>Assignees</p>
+            <div style = "padding: 0 20px; width: 100%;">                
+                <div *ngFor="let u of assignment.assignees">
+                    {{u.name + " "+u.lastname}},
+                </div>
+            </div>
+        </div>
+        <div class = "row">
+            <p>Due Date</p>
+            <span>{{assignment.end.toLocaleString().split(',')[0]}}</span>
+        </div>
+        <div class = "row">
+            <p>Progress</p>
+            <span>{{assignment.percentage}}%</span>
+        </div>
+        <div class = "row">
+            <p>Type</p>
+            <span>{{assignment.type}}</span>
+        </div>
+    </div>
+    <hr>
+    <h2>Dependencies</h2>
+    <div class="dependecies">
+        <p *ngIf="hasDependent">There are no dependecies for this task !</p>
+        <div *ngIf="!hasDependent">
+            <div class = "dependecy" *ngFor="let dependent of dependentTasks">
+                {{dependent.title}}
+            </div>
+        </div>
+        
+    </div>
+    <hr>
+    <h2>Description</h2>
+    <div id = "description">
+        {{assignment.description}}
+    </div>
+    <br>
+    <hr>
+    <div id = 'comments'>
+        <div class="comment" *ngFor="let comment of comments">
+            <img src="" alt="slika_korinsika">
+            <div class = 'comment-box'>
+                <!-- <div class = comment-meni>
+                    <select name="" id=""></select>
+                    <p>B</p>
+                    <p>I</p>
+                    <p>...</p>
+                    <p>_</p>
+                    <p>ikona</p>
+                    <p>ikona2</p>
+                </div> -->
+                <p>{{comment.content}}</p>
+                <p>{{comment.editedTime.toLocaleString().split(',')[0]}}</p>
+            </div>
+        </div>
+        <!-- ovo je komentar koji treba da se doda -->
+        <div class="comment" id="add-comment">
+            <img src="" alt="slika_korinsika">
+            <div class = 'comment-box'>
+                <!-- <div class = comment-meni>
+                    <select name="" id=""></select>
+                    <p>B</p>
+                    <p>I</p>
+                    <p>...</p>
+                    <p>_</p>
+                    <p>ikona</p>
+                    <p>ikona2</p>
+                </div> -->
+                <textarea name="" id="" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText">
+
+                </textarea><br>
+                <button id = 'comment-button' (click)="createComment()">Comment</button>
+            </div>
+        </div>
+    </div>
+
+</div>

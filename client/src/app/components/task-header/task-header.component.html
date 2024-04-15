@@ -1,0 +1,13 @@
+<div class="task-header">
+    <div class="search">
+        <input id="search-field" type="text" placeholder="Search for task...">
+    </div>
+    <div class="create">
+        <button id="create-button">Create</button>
+    </div>
+    <div class="choose">
+        <select id="choose-project">
+            <option *ngFor="let project of projects" [value]="project.id">{{ project.title }}</option>
+        </select>
+    </div>
+</div>

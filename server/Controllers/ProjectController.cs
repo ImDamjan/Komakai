@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using server.DTOs;
 using server.DTOs.Projects;
 using server.Interfaces;
 using server.Mappers;
@@ -11,34 +12,52 @@ using server.Models;
 namespace server.Controllers
 {
     //TO-DO treba se odraditi validacija podataka id-jevi svih vezanih modela
-    // takodje treba da se postave odredjeni dependency injection-i
     [ApiController]
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _repos;
-
+        private readonly IUserRepository _user_repo;
+        private readonly IPriorityRepository _prio_repo;
         private readonly ITaskGroupRepository _group_repo;
-        public ProjectController(IProjectRepository repos, ITaskGroupRepository group_repo)
+        private readonly IStateRepository _state_repo;
+        public ProjectController(IPriorityRepository prio_repo,IProjectRepository repos,IUserRepository user_repo,ITaskGroupRepository group_repo, IStateRepository stateRepository)
         {
             _repos = repos;
+            _prio_repo = prio_repo;
+            _user_repo = user_repo;
             _group_repo = group_repo;
+            _state_repo = stateRepository;
 
         }
 
+        //treba filter
         [HttpGet("getProjects")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]ProjectFilterDto dto,[FromQuery]SortDto sort)
         {
-            var projects = await _repos.GetAllProjectsAsync();
-            var projectDto = projects.Select(p=> p.ToProjectDto());
-            return Ok(projectDto);
+            var projects = await _repos.GetAllProjectsAsync(dto,sort);
+            var dtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var users =  await _user_repo.GetUserByProjectId(project.Id);
+                var userDtos = users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
+            }
+            return Ok(dtos);
         }
+        //ovde treba filter
         [HttpGet("userProjects/{userId}")]
-        public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId)
+        public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId,[FromQuery] ProjectFilterDto filter,[FromQuery] SortDto sort)
         {
-            var projects = await _repos.GetAllUserProjectsAsync(userId);
-            var projectDtos = projects.Select(p=>p.ToProjectDto());
-            return Ok(projectDtos);
+            var projects = await _repos.GetAllUserProjectsAsync(userId,filter,sort);
+            var dtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var users =  await _user_repo.GetUserByProjectId(project.Id);
+                var userDtos = users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
+            }
+            return Ok(dtos);
         }
 
         [HttpGet("getProject/{id}")]
@@ -48,40 +67,90 @@ namespace server.Controllers
             if(project==null)
                 return NotFound("Project with Id:"+id + " was not found !!!");
             
-            return Ok(project.ToProjectDto());
+            var dto = new ProjectDto();
+
+            var users =  await _user_repo.GetUserByProjectId(project.Id);
+            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+            dto = project.ToProjectDto(ids,project.State.toStateDto(),project.Priority.toPrioDto());
+    
+            return Ok(dto);
         }
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto projectDto)
         {
-            var projectModel = projectDto.toProjectFromCreateDto();
-            List<int> teamMembers = projectDto.UserIds;
+            
+            List<User> teamMembers = new List<User>();
             //da li su datumi dobri
-            if(projectModel.Start >= projectModel.End)
+            if(projectDto.Start >= projectDto.End)
                 return BadRequest("End date comes before start date");
             
+            
+            //da li je prioritet validan
+            var prio = await _prio_repo.GetPriority(projectDto.PriorityId);
+            if(prio==null)
+                return NotFound("Priority not found.ID:" + projectDto.PriorityId);
+            
+            //da li su korinsici validni
+            foreach (var userId in projectDto.UserIds)
+            {
+                var user = await _user_repo.GetUserByIdAsync(userId);
+                if(user==null)
+                    return NotFound("User not found.ID:" + userId);
+                teamMembers.Add(user);
+            }
+            var projectModel = projectDto.toProjectFromCreateDto();
             var response = await _repos.CreateProjectAsync(projectModel,teamMembers);
-            if(response==null)
-                return BadRequest("User was not found ");
-            var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
+            
+            
             //kreiranje initial grupe - zove se isto kao i projekat
+            var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
+
+            var users =  await _user_repo.GetUserByProjectId(projectModel.Id);
+            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+            var state = await _state_repo.GetStateByIdAsync(response.StateId);
+            if(state==null)
+                return NotFound("error");
+            
             await _group_repo.CreateAsync(group);
-            return CreatedAtAction(nameof(getById), new {id = projectModel.Id}, projectModel.ToProjectDto());
+
+            return Ok(response.ToProjectDto(ids,state.toStateDto(),prio.toPrioDto()));
         }
 
         [HttpPut]
-        [Route("update/{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] UpdateProjectDto projectDto)
+        [Route("update/{project_id}")]
+        public async Task<IActionResult> Update([FromBody] UpdateProjectDto projectDto, [FromRoute] int project_id)
         {
             //da li su datumi dobri
             if(projectDto.Start >= projectDto.End)
                 return BadRequest("End date comes before start date");
-            var project = await _repos.UpdateProjectAsync(id,projectDto);
+
+            var users =  new List<User>();
+            foreach (var userId in projectDto.Members)
+            {
+                var user = await _user_repo.GetUserByIdAsync(userId);
+                if(user==null)
+                    return Ok("user not found");
+                users.Add(user);
+            }
+            var prio = await _prio_repo.GetPriority(projectDto.PriorityId);
+            if(prio==null)
+                return NotFound("Priority with "+ projectDto.PriorityId+ " does not exist");
+            var state = await _state_repo.GetStateByIdAsync(projectDto.StateId);
+            if(state==null)
+                return NotFound("State with "+ projectDto.StateId+ " does not exist");
+
+            var project = await _repos.UpdateProjectAsync(projectDto, project_id, users);
 
             if(project==null)
-                return NotFound("Project with Id:"+id + " was not found !!!");
+                return NotFound("Project with Id:"+project_id + " was not found !!!");
+            var dto = new ProjectDto();
 
-            return Ok(project.ToProjectDto());
+            
+            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+            dto = project.ToProjectDto(ids, state.toStateDto(),prio.toPrioDto());
+    
+            return Ok(dto);
         }
 
         //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
@@ -92,6 +161,15 @@ namespace server.Controllers
             return Ok(res);
         }
 
-        //TO-DO treba da se uradi endpoint koji kreira projekat sa vec gotovim timom
+
+        [HttpDelete("deleteProjectById/{project_id}")]
+        public async Task<IActionResult> DeleteProject([FromRoute] int project_id)
+        {
+            var project = await _repos.DeleteProjectByIdAsync(project_id);
+            if(project==null)
+                return BadRequest("project does not exist");
+    
+            return Ok("Project deleted successfully!");
+        }
     }
 }

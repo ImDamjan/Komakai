@@ -21,6 +21,7 @@ namespace server.Models
         public virtual ICollection<User> Users { get; set; } = new List<User>();
 
         [InverseProperty("Role")]
+        public virtual ICollection<ProjectUser> ProjectUsers {get; set;} = new List<ProjectUser>();
         public virtual ICollection<TeamUser> TeamUsers {get; set;} = new List<TeamUser>();
         public virtual ICollection<UserProjectRoles> UserProjectRoles { get; set; } = new List<UserProjectRoles>();
     }
