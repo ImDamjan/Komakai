@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { StateService } from '../../services/state.service';
@@ -14,13 +14,14 @@ import { Comment } from '../../models/comment/comment';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UpdateTask } from '../../models/task/update-task';
 import { error } from 'console';
+import { DateConverterService } from '../../services/date-converter.service';
 
 @Component({
   selector: 'app-task-details',
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.css'
 })
-export class TaskDetailsComponent implements OnInit{
+export class TaskDetailsComponent implements OnInit,OnDestroy{
   private assignment_service = inject(AssignmentService);
   private jwt_service = inject(JwtDecoderService);
   private state_service =  inject(StateService);
@@ -28,6 +29,7 @@ export class TaskDetailsComponent implements OnInit{
   private priority_service = inject(PriorityService);
   private comment_service = inject(CommentService);
   private dialogRef = inject(MatDialogRef<TaskDetailsComponent>);
+  private date_task_service = inject(DateConverterService);
   private data : any =  inject(MAT_DIALOG_DATA)
 
 
@@ -74,6 +76,9 @@ export class TaskDetailsComponent implements OnInit{
 
   constructor() {
 
+  }
+  ngOnDestroy(): void {
+    this.closeOverlay();
   }
   ngOnInit(): void {
     this.assignment = this.data[0];
@@ -163,20 +168,28 @@ export class TaskDetailsComponent implements OnInit{
     this.updateObj.end = new Date(this.currentDueDate);
     this.updateObj.dependentOn = this.selectedDependentOn;
     this.updateObj.userIds = this.selectedAssignees;
-
-    this.assignment_service.updateAssignmentById(this.updateObj,this.assignment.id).subscribe({
-      next : (updatedTask :Task) =>
-        {
-          this.assignment = updatedTask;
-          confirm("Task successfully created!");
-          this.showUpdate = false;
-        },
-        error :(error)=>
-        {
-            alert("Task update failed!");
-            console.log(error);
-        }
-    })
+    if(this.selectedAssignees.length > 0)
+    {
+      this.assignment_service.updateAssignmentById(this.updateObj,this.assignment.id).subscribe
+      ({
+        next : (updatedTask :Task) =>
+          {
+            this.assignment = updatedTask;
+            this.date_task_service.setDateParametersForTask(this.assignment);
+            confirm("Task successfully updated!");
+            this.showUpdate = false;
+          },
+          error :(error)=>
+          {
+              alert("Task update failed!");
+              console.log(error);
+          }
+      });
+    }
+    else
+    {
+      alert("there must be at least one perosn that is assigned to this task");
+    }
   }
 
   createComment()
@@ -205,8 +218,11 @@ export class TaskDetailsComponent implements OnInit{
 
   closeOverlay()
   {
-    this.dialogRef.close();
+    
+    this.dialogRef.close(this.assignment);
   }
+
+  
 
   private transformDate(date : Date) : string
   {
@@ -258,4 +274,5 @@ export class TaskDetailsComponent implements OnInit{
   {
     this.showUpdate=false;
   }
+
 }

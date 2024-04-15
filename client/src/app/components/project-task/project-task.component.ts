@@ -134,6 +134,7 @@ export class ProjectTaskComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.task = result;
     });
     
   }
