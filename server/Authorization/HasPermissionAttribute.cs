@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace server.Authorization
 {
-    public class HasPermissionAttribute : AuthorizeAttribute
+    public class HasPermissionAttribute : TypeFilterAttribute
     {
         public HasPermissionAttribute(Permisija permission) 
-            :base(policy: permission.ToString())
+            :base(typeof(HasPermissionFilter)
         {
-
+            Arguments = new object[] { permission };
         }
+
     }
 }
