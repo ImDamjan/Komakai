@@ -21,9 +21,9 @@ namespace server.Repositories
             return await _context.Roles.ToListAsync();
         }
 
-        public Task GetRoleByIdAsync(int roleId)
+        public async Task<Role?> GetRoleByIdAsync(int role_id)
         {
-            throw new NotImplementedException();
+            return await _context.Roles.FirstOrDefaultAsync(r => r.Id == role_id);
         }
 
         public async Task SaveChangesAsync()

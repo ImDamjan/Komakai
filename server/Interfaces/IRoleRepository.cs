@@ -9,7 +9,7 @@ namespace server.Interfaces
     public interface IRoleRepository
     {
         Task<List<Role>> GetAllRolesAsync();
-        Task GetRoleByIdAsync(int roleId);
+        Task<Role?> GetRoleByIdAsync(int roleId);
         Task SaveChangesAsync();
     }
 }
