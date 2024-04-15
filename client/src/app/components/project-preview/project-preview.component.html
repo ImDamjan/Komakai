@@ -1,7 +1,7 @@
 <div *ngIf="projectsData && projectsData.length === 0 && !isLoading">
   <h3>{{ errorMessage }}</h3>
 </div>
-<div class="grid-container">
+<div class="grid-container" *ngIf="showProjectPreview">
   <article class="card" *ngFor="let project of getPaginatedProjects()" (click)="navigateToProjectDetails(project.id)">
     <section class="card-content">
       <div class="header-section">
@@ -46,7 +46,7 @@
 </div>
 
 <!-- Kontrole paginacije -->
-<div class="pagination-container" [ngClass]="{'bottom': shouldShowBottomPagination()}">
+<div class="pagination-container" [ngClass]="{'bottom': shouldShowBottomPagination()}" *ngIf="showProjectPreview">
   <div class="pagination-controls">
     <span class="pagination-text-prev" (click)="previousPage()" [class.disabled]="currentPage === 1" [style.visibility]="currentPage === 1 ? 'hidden' : 'visible'">Previous</span>
     <ng-container *ngFor="let page of pagesToShow()">
