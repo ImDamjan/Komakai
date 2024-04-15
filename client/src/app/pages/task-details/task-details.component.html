@@ -1,15 +1,17 @@
 <br><br>
 <div id = "task-details" class = "overlay-container">
-    <h1>{{assignment.title}}</h1>
+    <h1>Task Title</h1>
+    <h2 *ngIf="!showUpdate">{{assignment.title}}</h2><input type="text" class="task-title" *ngIf="showUpdate" [(ngModel)]="updateObj.title">
+    <button style="float: right;" (click)="updateTask()" *ngIf="!showUpdate">Update</button>
     <br>
     <div class = 'details'>
         <div class = "row">
             <p>Priority</p>
-            <span>{{assignment.priority.description}}</span>
+            <span *ngIf="!showUpdate">{{assignment.priority.description}}</span><span *ngIf="showUpdate"><select id="priority" [(ngModel)] = "updateObj.priorityId"><option *ngFor="let prio of priorities" [value]="prio.id">{{prio.description}}</option></select></span>
         </div>
         <div class = "row">
             <p>Status</p>
-            <span>{{assignment.state.name}}</span>
+            <span *ngIf="!showUpdate">{{assignment.state.name}}</span><span *ngIf="showUpdate"><select id="state" [(ngModel)] = "updateObj.stateId"><option *ngFor="let state of states" [value]="state.id">{{state.name}}</option></select></span>
         </div>
         <div class = "row">
             <p>Owner</p>
@@ -17,43 +19,82 @@
         </div>
         <div class = "row">
             <p>Assignees</p>
-            <div style = "padding: 0 20px; width: 100%;">                
+            <span *ngIf="!showUpdate" style = "padding: 0 20px; width: 100%;">                
                 <div *ngFor="let u of assignment.assignees">
                     {{u.name + " "+u.lastname}},
                 </div>
-            </div>
+            </span>
+            <span *ngIf="showUpdate" class = "chooseAssignees">
+                <div class="custom-dropdown">
+                    <span class="selected-option" (click)="toggleDropdown()">Select Assignees</span>
+                    <div class="options" *ngIf="showDropdown">
+                        <div class="member-option" *ngFor="let user of projectUsers" (click)="toggleUserSelection(user.id, $event)">
+                            <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                            {{ user.name }} {{ user.lastname }}
+                        </div>
+                    </div>
+
+                </div>
+            </span>
+        </div>
+        <div class = "row">
+            <p>Start Date</p>
+            <span *ngIf="!showUpdate">{{assignment.start.toLocaleString().split(',')[0]}}</span><span *ngIf="showUpdate"><input type="date" value="{{currentStartDate}}" [(ngModel)] = "currentStartDate"></span>
         </div>
         <div class = "row">
             <p>Due Date</p>
-            <span>{{assignment.end.toLocaleString().split(',')[0]}}</span>
+            <span *ngIf="!showUpdate">{{assignment.end.toLocaleString().split(',')[0]}}</span><span *ngIf="showUpdate"><input type="date" value="{{currentDueDate}}" [(ngModel)] = "currentDueDate"></span>
         </div>
         <div class = "row">
             <p>Progress</p>
-            <span>{{assignment.percentage}}%</span>
+            <span *ngIf="!showUpdate">{{assignment.percentage}}%</span> 
+            <span *ngIf="showUpdate">
+                <div class="slidecontainer">
+                    <input type="range" min="0" max="100" class="slider" id="myRange" [(ngModel)]="updateObj.percentage">{{updateObj.percentage}}%
+                </div>
+            </span>
         </div>
         <div class = "row">
             <p>Type</p>
-            <span>{{assignment.type}}</span>
+            <span *ngIf="!showUpdate">{{assignment.type}}</span><span><input type="text" class="task-title" *ngIf="showUpdate" [(ngModel)]="updateObj.type"></span>
         </div>
     </div>
     <hr>
     <h2>Dependencies</h2>
     <div class="dependecies">
-        <p *ngIf="hasDependent">There are no dependecies for this task !</p>
-        <div *ngIf="!hasDependent">
+        <p *ngIf="hasDependent && !showUpdate">There are no dependecies for this task !</p>
+        <div *ngIf="!hasDependent && !showUpdate">
             <div class = "dependecy" *ngFor="let dependent of dependentTasks">
                 {{dependent.title}}
             </div>
+        </div>
+        <div *ngIf="showUpdate" class="custom-dropdown">
+            <span class="selected-option" (click)="toggleDropdownTask()">Select DependentTasks</span>
+            <div class="options" *ngIf="showDropdownTask">
+                <div class="member-option" *ngFor="let asign of projectAssignments" (click)="toggleTaskSelection(asign.id, $event)">
+                    <input type="checkbox" [checked]="isSelectedTask(asign.id)" (click)="toggleTaskSelection(asign.id, $event)">
+                    {{ asign.title }}
+                </div>
+            </div>
+
         </div>
         
     </div>
     <hr>
     <h2>Description</h2>
-    <div id = "description">
+    <div *ngIf="!showUpdate" class = "description">
         {{assignment.description}}
     </div>
+    <div *ngIf="showUpdate" class = "description">
+        <textarea cols="30" rows="10" class="description-content" [(ngModel)]="updateObj.description">
+
+        </textarea>
+    </div>
     <br>
+    <button *ngIf="showUpdate" (click)="createUpdateRequest()">Update</button>
+    <button *ngIf="showUpdate" (click)="cancelUpdateRequest()" style="background-color: crimson;">Cancel</button>
     <hr>
+    
     <div id = 'comments'>
         <div class="comment" *ngFor="let comment of comments">
             <img src="" alt="slika_korinsika">
