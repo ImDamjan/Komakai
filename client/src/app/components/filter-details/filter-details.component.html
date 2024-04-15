@@ -4,13 +4,15 @@
     <div id="state-priority">
         <div id="state">
             Choose a task state: <br>
-            <select name="choose-state" id="choose-state">
+            <select name="choose-state" id="choose-state" [(ngModel)]="selectedState">
+                <option value="0">Any</option>
                 <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
             </select>
         </div>
         <div id="priority">
             Choose a task priority: <br>
-            <select name="choose-priority" id="choose-priority">
+            <select name="choose-priority" id="choose-priority" [(ngModel)]="selectedPriority">
+                <option value="0">Any</option>
                 <option *ngFor="let priority of priorities" [value]="priority.id">{{priority.description}}</option>
             </select>
         </div>
@@ -18,19 +20,23 @@
     <div id="dates">
         <div id="start">
             Choose a start date: <br>
-            <input type="date"><br><br>
-            <span id="less"><input type="radio" name="less-more"> &lt;</span>
-            <span id="more"><input type="radio" name="less-more"> &#8805;</span>
+            <input type="date" [(ngModel)]="startDate"><br><br>
+            <span id="less"><input type="radio" name="less-more-start" checked="true"> &lt;</span>
+            <span id="more"><input type="radio" name="less-more-start"> &#8805;</span>
         </div>
         <div id="end">
             Choose an end date: <br>
-            <input type="date"><br><br>
-            <span id="less"><input type="radio" name="less-more"> &lt;</span>
-            <span id="more"><input type="radio" name="less-more"> &#8805;</span>
+            <input type="date" [(ngModel)]="endDate"><br><br>
+            <span id="less"><input type="radio" name="less-more-end" checked="true"> &lt;</span>
+            <span id="more"><input type="radio" name="less-more-end"> &#8805;</span>
         </div>
     </div> <br><br><br><br><br><br><br>
     <div id="slider">
         <p>Selected percentage: {{ sliderValue }}%</p>
         <input type="range" id="volume" min="0" max="100" value="50" [(ngModel)]="sliderValue">
+    </div>
+    <div id="buttons">
+        <button id="cancel" (click)="cancelFilters()">Cancel</button>
+        <button id="confirm" (click)="confirmFilters()">Confirm</button>
     </div>
 </div>
