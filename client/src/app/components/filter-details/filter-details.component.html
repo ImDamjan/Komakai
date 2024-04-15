@@ -1,3 +1,12 @@
 <div id="prozor">
-    
+    <div id="state">
+        <select name="" id="choose-state">
+            <option *ngFor="let state of states" [value]="state.name">{{state.name}}</option>
+        </select>
+    </div>
+    <div id="priority">
+        <select name="" id="choose-priority">
+            <option *ngFor="let priority of priorities" [value]="priority.description">{{priority.description}}</option>
+        </select>
+    </div>
 </div>
