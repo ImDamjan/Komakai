@@ -41,6 +41,8 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { MemberComponent } from './components/member/member.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
+import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
+import { MatSliderModule } from '@angular/material/slider';
 
 
 import { ThyLayoutModule } from 'ngx-tethys/layout';
@@ -96,6 +98,7 @@ import { RouterModule } from '@angular/router';
     TaskDetailsComponent,
     AdminComponent,
     MemberComponent,
+    EditProjectOverlayComponent,
   ],
   imports: [
     FormsModule,
@@ -106,6 +109,7 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     FontAwesomeModule,
     DragDropModule,
+    MatSliderModule,
 
     NgxGanttModule,
     RouterModule.forRoot([]),

@@ -204,6 +204,10 @@
   font-family: 'Poppins', sans-serif;
 }
 
+.cursor {
+  cursor: pointer;
+}
+
 /* paginacija */
 .pagination-container {
   position: absolute;

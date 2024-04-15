@@ -67,7 +67,7 @@ export class ProjectService implements OnInit{
         start : project.start,
         end : project.end,
         budget : project.budget,
-        desciption : project.desciption,
+        description : project.description,
         type : project.type
       }
       return this.http.post<Project>(url,body);
@@ -76,5 +76,22 @@ export class ProjectService implements OnInit{
   getProjectById(projectId: number): Observable<Project> {
     const url = `${this.baseUrl}/Project/getProject/${projectId}`; 
     return this.http.get<Project>(url);
+  }
+
+  updateProject(projectId: number, project: Project): Observable<Project> {
+    const url = this.baseUrl + `/Project/update/${projectId}`;
+    const body = {
+      id: projectId,
+      members: project.users.map(user => user.id),
+      title: project.title,
+      stateId: project.state.id,
+      priorityId: project.priority.id,
+      description: project.description,
+      start: project.start,
+      end: project.end,
+      spent: project.spent,
+      percentage: project.percentage
+    };
+      return this.http.put<Project>(url,body);
   }
 }

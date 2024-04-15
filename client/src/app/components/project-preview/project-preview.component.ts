@@ -4,6 +4,8 @@ import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
 import { AssignmentService } from '../../services/assignment.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { EditProjectOverlayComponent } from '../edit-project-overlay/edit-project-overlay.component';
 import { Project } from '../../models/project/project';
 
 @Component({
@@ -29,7 +31,11 @@ export class ProjectPreviewComponent implements OnInit {
   currentPage: number = 1;
   cardsPerPage: number = 8;
 
-  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService) {
+  showProjectPreview: boolean = true;
+
+  assignmentCounts: { [projectId: number]: number } = {};
+
+  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService, private dialog: MatDialog) {
     // Initialize component
     this.calculateCharacterLimit();
   }
@@ -53,29 +59,20 @@ export class ProjectPreviewComponent implements OnInit {
     this.projectService.getProjectsData().subscribe(
       (projects: Project[]) => {
         this.projectsData = projects;
+        console.log(this.projectsData);
         this.isLoading = false;
         projects.forEach(project => {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
 
-          // Fetch state name based on stateId using StateService
-          // this.stateService.fetchStateName(project.stateId).subscribe(
-          //   (stateName: string) => {
-          //     project.stateName = stateName;
-          //   },
-          //   (error) => {
-          //     console.error('An error occurred while fetching state name:', error);
-          //   }
-          // );
-
-          // this.assignmentService.getAllProjectAssignments(project.id).subscribe(
-          //   (assignments: any[]) => {
-          //     project.assignmentCount = assignments.length;
-          //   },
-          //   (error) => {
-          //     console.error('An error occurred while fetching assignments for project:', project.id, error);
-          //   }
-          // );
+          this.assignmentService.getAllProjectAssignments(project.id).subscribe(
+            (assignments: any[]) => {
+              this.assignmentCounts[project.id] = assignments.length;
+            },
+            (error) => {
+              console.error('An error occurred while fetching assignments for project:', project.id, error);
+            }
+          );
 
         });
         if (projects.length === 0) {
@@ -87,6 +84,10 @@ export class ProjectPreviewComponent implements OnInit {
         this.errorMessage = 'An error occurred while fetching projects.';
       }
     );
+  }
+
+  getAssignmentCount(projectId: number): number {
+    return this.assignmentCounts[projectId] || 0; // Return assignment count for the project, or 0 if not found
   }
 
   navigateToProjectDetails(projectId: number) {
@@ -103,7 +104,7 @@ export class ProjectPreviewComponent implements OnInit {
       this.titleCharacterLimit = 10;
       this.descriptionCharacterLimit = 100;
     } else {
-      this.titleCharacterLimit = 15;
+      this.titleCharacterLimit = 12;
       this.descriptionCharacterLimit = 190;
     }
   }
@@ -187,7 +188,6 @@ export class ProjectPreviewComponent implements OnInit {
     this.currentPage = page;
   }
 
-
   // Method to see if the pagination needs to move
   shouldShowBottomPagination(): boolean {
     return this.projectsData && this.projectsData.length > 0 && this.projectsData.length > this.cardsPerPage;
@@ -210,5 +210,23 @@ export class ProjectPreviewComponent implements OnInit {
     }
     else
       this.cardsPerPage = 8;
+  }
+
+  openEditOverlay(project: Project, event: Event): void {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.data = {
+      project: project
+    };
+
+    const dialogRef = this.dialog.open(EditProjectOverlayComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      // When overlay is closed
+      this.showProjectPreview = true;
+    });
+    
+    this.showProjectPreview = false;
   }
 }
