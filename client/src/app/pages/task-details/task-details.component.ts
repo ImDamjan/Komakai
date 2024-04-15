@@ -12,6 +12,8 @@ import { Task } from '../../models/task/task';
 import { CommentService } from '../../services/comment.service';
 import { Comment } from '../../models/comment/comment';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { UpdateTask } from '../../models/task/update-task';
+import { error } from 'console';
 
 @Component({
   selector: 'app-task-details',
@@ -28,30 +30,63 @@ export class TaskDetailsComponent implements OnInit{
   private dialogRef = inject(MatDialogRef<TaskDetailsComponent>);
   private data : any =  inject(MAT_DIALOG_DATA)
 
+
+
+
   public comments : Comment[] = []
 
   public commentText : string = "";
-
-
-  public priority :string = "";
-  public state: string = "";
   public assignment! : Task;
   public dependentTasks : Task[] = [];
   public hasDependent : boolean = true;
+
+
+
+//update props
+  private selectedAssignees : number[] = [];
+  private selectedDependentOn : number[] = []
+  public showUpdate : boolean = false;
+  public showDropdown :boolean = false;
+  public showDropdownTask : boolean = false;
+
+  public currentDueDate = "";
+  public priorities : Priority[] = [];
+  public states : State[] = [];
+  public projectAssignments:Task[] = []
+  public projectUsers : User[] = [];  
+  public percentageChange : number = 0;
+
+  public updateObj: UpdateTask = {
+    taskGroupId: 0,
+    userIds: [],
+    start: new Date(),
+    end: new Date(),
+    dependentOn: [],
+    stateId: 0,
+    percentage: 0,
+    title: '',
+    type: '',
+    description: '',
+    priorityId: 0
+  }
+  
+
+
   constructor() {
 
   }
-  //zbog ovoga mozda treba izmena dto-a na backu ?
-  //vracati cele stateove, prioritete?
-  // vracati cele usere?
   ngOnInit(): void {
     this.assignment = this.data[0];
     console.log(this.assignment);
+
+
+
     this.assignment_service.getDependentAssignmentsFor(this.assignment.id).subscribe({
       next : (tasks : Task[]) => {
         if(tasks.length > 0)
             this.hasDependent = false;
         this.dependentTasks = tasks;
+        console.log(tasks);
       }
     })
     this.comment_service.getAllComentsByTask(this.assignment.id).subscribe({
@@ -63,6 +98,85 @@ export class TaskDetailsComponent implements OnInit{
         });
       }
     });
+  }
+  updateTask()
+  {
+    this.updateObj.percentage = this.assignment.percentage;
+    this.updateObj.type = this.assignment.type;
+    this.updateObj.description = this.assignment.description;
+    this.updateObj.priorityId = this.assignment.priority.id;
+    this.updateObj.stateId = this.assignment.state.id;
+    this.updateObj.start = this.assignment.start;
+    this.updateObj.end = this.assignment.end;
+    this.updateObj.title = this.assignment.title;
+    this.updateObj.taskGroupId = this.assignment.taskGroup.id;
+    this.showUpdate = true;
+    this.percentageChange = this.assignment.percentage;
+    //godina mesec dan
+    this.currentDueDate = this.transformDate(this.assignment.end);
+
+    //priorteti
+    this.priority_service.getPriorities().subscribe({
+      next : (prios : Priority[]) =>
+        {
+          this.priorities = prios;
+        }
+    });
+    //project_users
+    this.user_service.getProjectUsers(this.assignment.taskGroup.projectId).subscribe({
+      next : (users : User[])=>
+        {
+          this.projectUsers = users;
+          users.forEach(user => {
+            if(this.assignment.assignees.find((a)=>a.id==user.id)!==undefined)
+              {
+                this.selectedAssignees.push(user.id);
+              }
+          });
+        }
+    });
+    //projectAssignments
+    this.assignment_service.getAllProjectAssignments(this.assignment.taskGroup.projectId).subscribe({
+      next : (tasks : Task[]) =>
+        {
+          this.projectAssignments = tasks.filter((task)=>task.id!=this.assignment.id);
+
+          this.dependentTasks.forEach(task => {
+            if(this.projectAssignments.find((a)=>a.id==task.id) !==undefined)
+              {
+                this.selectedDependentOn.push(task.id);
+              }
+          });
+        }
+    })
+    //states
+    this.state_service.fetchAllStates().subscribe({
+      next : (states : State[]) => 
+      {
+          this.states = states;
+      }
+    })
+  }
+
+  createUpdateRequest()
+  {
+    this.updateObj.end = new Date(this.currentDueDate);
+    this.updateObj.dependentOn = this.selectedDependentOn;
+    this.updateObj.userIds = this.selectedAssignees;
+
+    this.assignment_service.updateAssignmentById(this.updateObj,this.assignment.id).subscribe({
+      next : (updatedTask :Task) =>
+        {
+          this.assignment = updatedTask;
+          confirm("Task successfully created!");
+          this.showUpdate = false;
+        },
+        error :(error)=>
+        {
+            alert("Task update failed!");
+            console.log(error);
+        }
+    })
   }
 
   createComment()
@@ -92,5 +206,56 @@ export class TaskDetailsComponent implements OnInit{
   closeOverlay()
   {
     this.dialogRef.close();
+  }
+
+  private transformDate(date : Date) : string
+  {
+    let splited =date.toLocaleDateString().split('/');
+    for (let i = 0; i < splited.length; i++) {
+      if(splited[i].length == 1)
+        {
+          splited[i] = "0"+splited[i];
+        }
+      
+    }
+    return splited[2] + "-" + splited[0] + "-" + splited[1];
+  }
+
+  toggleUserSelection(user_id: number,event: Event) {
+    event.stopPropagation();
+    if(this.isSelected(user_id))
+      this.selectedAssignees = this.selectedAssignees.filter(id=>id!==user_id);
+    else
+      this.selectedAssignees.push(user_id);
+    console.log(this.selectedAssignees);
+  }
+
+  isSelected(userid: number) {
+    return this.selectedAssignees.includes(userid);
+  }
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  toggleDropdownTask()
+  {
+    this.showDropdownTask = !this.showDropdownTask;
+  }
+  isSelectedTask(task_id:number)
+  {
+    return this.selectedDependentOn.includes(task_id);
+  }
+
+  toggleTaskSelection(task_id:number, event: Event)
+  {
+    event.stopPropagation();
+    if(this.isSelectedTask(task_id))
+      this.selectedDependentOn = this.selectedDependentOn.filter(id=>id !== task_id);
+    else
+      this.selectedDependentOn.push(task_id);
+  }
+  cancelUpdateRequest()
+  {
+    this.showUpdate=false;
   }
 }
