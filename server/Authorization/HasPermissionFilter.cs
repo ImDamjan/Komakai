@@ -15,5 +15,10 @@ namespace server.Authorization
             _authorizationService = authorizationService;
             _httpContextAccessor = httpContextAccessor;
         }
+
+        public Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

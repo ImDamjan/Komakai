@@ -20,6 +20,12 @@ namespace server.Repositories
         {
             return await _context.Roles.ToListAsync();
         }
+
+        public Task GetRoleByIdAsync(int roleId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

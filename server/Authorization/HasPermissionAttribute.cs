@@ -6,7 +6,7 @@ namespace server.Authorization
     public class HasPermissionAttribute : TypeFilterAttribute
     {
         public HasPermissionAttribute(Permisija permission) 
-            :base(typeof(HasPermissionFilter)
+            :base(typeof(HasPermissionFilter))
         {
             Arguments = new object[] { permission };
         }
