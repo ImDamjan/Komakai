@@ -3,3 +3,47 @@
     width: 900px;
     height: 600px;
 }
+
+h1{
+    text-align: center;
+}
+
+#state-priority {
+    margin-top: 50px;
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-bottom: 150px;
+    display: flex-end;
+}
+
+#state{
+    float: left;
+}
+
+#priority{
+    float: right;
+}
+
+#dates{
+    margin-top: 50px;
+    margin-left: 200px;
+    margin-right: 214px;
+    margin-bottom: 150px;
+    display: flex-end;
+}
+
+#start{
+    float: left;
+}
+
+#end{
+    float: right;
+}
+
+#less{
+    margin-right: 50px;
+}
+
+#slider{
+    text-align: center;
+}

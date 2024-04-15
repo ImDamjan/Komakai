@@ -31,4 +31,6 @@ export class FilterDetailsComponent {
 
   }
 
+  sliderValue: number = 50;
+
 }
