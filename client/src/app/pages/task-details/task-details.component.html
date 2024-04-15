@@ -5,20 +5,20 @@
     <div class = 'details'>
         <div class = "row">
             <p>Priority</p>
-            <span>{{priority}}</span>
+            <span>{{assignment.priority.description}}</span>
         </div>
         <div class = "row">
             <p>Status</p>
-            <span>{{state}}</span>
+            <span>{{assignment.state.name}}</span>
         </div>
         <div class = "row">
             <p>Owner</p>
-            <span>{{Owner.name + " "+ Owner.lastname}}</span>
+            <span>{{assignment.owner.name + " "+ assignment.owner.lastname}}</span>
         </div>
         <div class = "row">
             <p>Assignees</p>
             <div style = "padding: 0 20px; width: 100%;">                
-                <div *ngFor="let u of assignees">
+                <div *ngFor="let u of assignment.assignees">
                     {{u.name + " "+u.lastname}},
                 </div>
             </div>

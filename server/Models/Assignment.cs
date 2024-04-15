@@ -24,6 +24,8 @@ namespace server.Models
 
         [Column("start", TypeName ="datetime")]
         public DateTime Start { get; set; }
+        [Column("lastTimeChanged", TypeName ="datetime")]
+        public DateTime LastTimeChanged { get; set; }
 
         [Column("end", TypeName ="datetime")]
         public DateTime End { get; set; }
@@ -47,7 +49,7 @@ namespace server.Models
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         [InverseProperty("Assignments")]
-        public virtual TaskGroup? TaskGroup { get; set; } = null!;
+        public virtual TaskGroup TaskGroup { get; set; } = null!;
         [ForeignKey("PriorityId")]
         [InverseProperty("Assignments")]
         public virtual Priority Priority { get; set; } = null!;

@@ -30,7 +30,7 @@ namespace server.Controllers
             var teamDtos = new List<TeamDto>();
             foreach (var team in teams)
             {
-                var members = await _team_repo.GetTeamUsersByIdAsync(team.Id);
+                var members = team.Users.Select(u=>u.toUserDto()).ToList();
                 teamDtos.Add(team.ToTeamDto(members));
             }
 
@@ -46,7 +46,7 @@ namespace server.Controllers
             if(team==null)
                 return NotFound("Team not found!");
 
-            var members = await _team_repo.GetTeamUsersByIdAsync(teamId);
+            var members = team.Users.Select(u=>u.toUserDto()).ToList();
 
             return Ok(team.ToTeamDto(members));
         }
@@ -58,10 +58,10 @@ namespace server.Controllers
             var teams = await _team_repo.GetAllUserTeams(userId);
             
             var timovi = new List<TeamDto>();
-            foreach (var item in teams)
+            foreach (var team in teams)
             {
-                var members = await _team_repo.GetTeamUsersByIdAsync(item.Id);
-                timovi.Add(item.ToTeamDto(members));
+                var members = team.Users.Select(u=>u.toUserDto()).ToList();
+                timovi.Add(team.ToTeamDto(members));
             }
 
             return Ok(timovi);
@@ -82,12 +82,32 @@ namespace server.Controllers
             }
             team.Users = users;
             team = await _team_repo.CreateTeamAsync(team);
+
+            var members = users.Select(u=>u.toUserDto()).ToList();
             
-            return Ok(team.ToTeamDto(dto.Members));
+            return Ok(team.ToTeamDto(members));
             
         }
 
-        //TO-DO treba da se uradi jos update timova moguce
+        [HttpPut("update/{team_id}")]
+        public async Task<IActionResult> UpdateTeam([FromBody] CreateTeamDto dto, [FromRoute] int team_id)
+        {
+            var users =  new List<User>();
+            foreach (var userId in dto.Members)
+            {
+                var user = await _user_repo.GetUserByIdAsync(userId);
+                if(user==null)
+                    return NotFound("User not found.ID:" + userId);
+                users.Add(user);
+            }
+
+            var response = await _team_repo.UpdateTeamAsync(dto, team_id,users);
+            if(response==null)
+                return NotFound("team update failed");
+
+            var user_dtos = users.Select(u=>u.toUserDto()).ToList();
+            return Ok(response.ToTeamDto(user_dtos));
+        }
 
     }
 }

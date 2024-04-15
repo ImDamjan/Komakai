@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../enviroments/environment';
-import { User } from '../models/user';
+import { environment } from '../environments/environment';
+import { User } from '../models/user/user';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class UserService {
     return this.http.get<User[]>(`${this.baseUrl}/User`);
   }
 
-  getProjectUsers(project_id : Number) : Observable<User[]>
+  getProjectUsers(project_id : number) : Observable<User[]>
   {
     const url = this.baseUrl + "/User/getProjectUsers/" + project_id;
     return this.http.get<User[]>(url);

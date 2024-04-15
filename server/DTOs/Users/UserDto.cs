@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.DTOs.Role;
 
 namespace server.DTOs.Users
 {
@@ -16,6 +17,5 @@ namespace server.DTOs.Users
         public string JobTitle { get; set; } =string.Empty;
         public string Organisation { get; set; } = string.Empty;
         public string Department { get; set; } = string.Empty;
-        public int RoleId { get; set; }
     }
 }

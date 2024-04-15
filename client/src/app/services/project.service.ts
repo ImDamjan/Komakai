@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { environment } from '../enviroments/environment';
+import { environment } from '../environments/environment';
 import { jwtDecode } from 'jwt-decode';
-import { Project } from '../models/project';
+import { Project } from '../models/project/project';
 import { JwtDecoderService } from './jwt-decoder.service';
+import { ProjectFilter } from '../models/project/project-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -53,11 +54,11 @@ export class ProjectService implements OnInit{
     }
 
     const apiUrl = `${this.baseUrl}/Project/userProjects/${id}`;
-    return this.http.get<any[]>(apiUrl);
+    return this.http.get<Project[]>(apiUrl);
     }
 
     //pravljenje projekta
-    createProject(project: any): Observable<any> {
+    createProject(project: any): Observable<Project> {
       const url = this.baseUrl + "/Project/create";
       const body = {
         userIds : project.userIds,
@@ -66,7 +67,7 @@ export class ProjectService implements OnInit{
         start : project.start,
         end : project.end,
         budget : project.budget,
-        desciption : project.desciption,
+        description : project.description,
         type : project.type
       }
       return this.http.post<Project>(url,body);
@@ -75,5 +76,22 @@ export class ProjectService implements OnInit{
   getProjectById(projectId: number): Observable<Project> {
     const url = `${this.baseUrl}/Project/getProject/${projectId}`; 
     return this.http.get<Project>(url);
+  }
+
+  updateProject(projectId: number, project: Project): Observable<Project> {
+    const url = this.baseUrl + `/Project/update/${projectId}`;
+    const body = {
+      id: projectId,
+      members: project.users.map(user => user.id),
+      title: project.title,
+      stateId: project.state.id,
+      priorityId: project.priority.id,
+      description: project.description,
+      start: project.start,
+      end: project.end,
+      spent: project.spent,
+      percentage: project.percentage
+    };
+      return this.http.put<Project>(url,body);
   }
 }

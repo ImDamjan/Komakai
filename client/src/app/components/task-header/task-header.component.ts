@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
-import { Project } from '../../models/project';
+import { Project } from '../../models/project/project';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { FilterDetailsComponent } from '../filter-details/filter-details.component';
 

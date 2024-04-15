@@ -1,5 +1,10 @@
 <div class="projectlist" >
     <h1 class="title">{{projectText}}</h1>
+    <!-- <label for="PageSize">Number of projects per page</label>
+    <select id="PageSize" class = "pageSize">
+        <option value="5">5 Projects</option>
+        <option value="10">10 Projects</option>
+    </select> -->
     <button class="create" *ngIf="showCreateButton" (click)="openCreateOverlay()">Create</button>
 </div>
 <app-project-preview *ngIf="showProjectPreview"></app-project-preview>

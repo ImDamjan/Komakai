@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
-import { Project } from '../../models/project';
+import { Project } from '../../models/project/project';
 import { PriorityService } from '../../services/priority.service';
 import { TeamService } from '../../services/team.service';
-import { User } from '../../models/user';
+import { User } from '../../models/user/user';
+import { CreateProject } from '../../models/project/create-project';
+import { Team } from '../../models/team';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -15,13 +17,13 @@ import { User } from '../../models/user';
 export class CreateProjectOverlayComponent implements OnInit {
   users: User[] = [];
   priorities: any[] | undefined;
-  teams: any[] = [];
+  teams: Team[] = [];
   showDropdown: boolean = false;
   hoveredTeam: any;
   submitted = false;
   submissionError: string | null = null;
 
-  projectObj!: Project;
+  projectObj!: CreateProject;
 
   selectedUserIds: number[] = [];
   selectedPriorityId!: number;
@@ -38,18 +40,16 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.teams = teams;
     });
     this.projectObj = {
-      id: 0,
-      stateId: 0,
-      spent: 0,
-      percentage: 0,
-      userIds: [],
-      priorityId: this.selectedPriorityId,
-      title: "", 
-      start: new Date(), 
-      end: new Date(),
-      budget: 0, 
-      description: "", 
-      type: "",
+      userIds : [],
+      priorityId : this.selectedPriorityId,
+      title : "",
+      start : new Date(),
+      end : new Date(),
+      budget : 0,
+      description : "",
+      type : ""
+
+
     };
   }
 
@@ -122,7 +122,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.projectObj.type = '';
   }
 
-  showTeamMembers(team: any): void {
+  showTeamMembers(team: Team): void {
     console.log(team.members);
     this.hoveredTeam = team; // Set the hovered team
   }
@@ -145,21 +145,25 @@ export class CreateProjectOverlayComponent implements OnInit {
     }
   }
 
-  onTeamSelected(team: any): void {
+  onTeamSelected(team: Team): void {
+    let team_member_ids : number[] = [];
+    team.members.forEach(member => {
+      team_member_ids.push(member.id);
+    });
     if (this.isSelectedTeam(team.id)) {
         // If team is already selected, deselect it and its members
-        this.selectedUserIds = this.selectedUserIds.filter((id: number) => !team.members.includes(id));
+        this.selectedUserIds = this.selectedUserIds.filter((id: number) => !team_member_ids.includes(id));
     } else {
         // If team is not selected, select it and its members
-        this.selectedUserIds = [...this.selectedUserIds, ...team.members];
+        this.selectedUserIds = [...this.selectedUserIds, ...team_member_ids];
     }
   }
 
   isSelectedTeam(teamId: number): boolean {
       // Check if all members of the team are selected
-      const team = this.teams.find((team: any) => team.id === teamId);
+      const team = this.teams.find((team: Team) => team.id === teamId);
       if (team) {
-          return team.members.every((memberId: number) => this.isSelected(memberId));
+          return team.members.every((member: User) => this.isSelected(member.id));
       }
       return false;
   }

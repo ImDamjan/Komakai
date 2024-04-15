@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using server.DTOs.Team;
+using server.DTOs.Users;
 using server.Models;
 
 namespace server.Mappers
 {
     public static class TeamMapper
     {
-        public static TeamDto ToTeamDto(this Team t, List<int> members)
+        public static TeamDto ToTeamDto(this Team t, List<UserDto> members)
         {
             return new TeamDto{
                 Id = t.Id,

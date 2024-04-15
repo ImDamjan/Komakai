@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MimeKit.Encodings;
 using server.Data;
 using server.DTOs.Projects;
 using server.Interfaces;
@@ -26,7 +27,7 @@ namespace server.Repositories
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Include(u=>u.Role).ToListAsync();
         }
 
         public async Task<User?> GetUserByIdAsync(int id)
@@ -101,7 +102,7 @@ namespace server.Repositories
 
         public async Task<List<User>> GetUserByProjectId(int project_id)
         {
-            var users = await _context.Users.Include(u=>u.ProjectUsers).ToListAsync();
+            var users = await _context.Users.Include(u=>u.ProjectUsers).ThenInclude(u=>u.Role).ToListAsync();
             List<User> chosenUsers = new List<User>();
             foreach (var user in users)
             {
@@ -114,7 +115,7 @@ namespace server.Repositories
 
         public async Task<List<User>> GetAssignmentUsersAsync(int task_id)
         {
-            var asign = await _context.Assignments.Include(a=>a.Users).FirstOrDefaultAsync(a=>a.Id==task_id);
+            var asign = await _context.Assignments.Include(a=>a.Users).ThenInclude(u=>u.Role).FirstOrDefaultAsync(a=>a.Id==task_id);
             if (asign == null)
                 return new List<User>();
             

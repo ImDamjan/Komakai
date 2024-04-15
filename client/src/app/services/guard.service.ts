@@ -10,7 +10,7 @@ import { PreviousUrlService } from './url.service';
 })
 export class AuthGuard{
 
-  constructor(private authService: AuthenticationService, private router: Router, private location: Location, private previousUrlService: PreviousUrlService) {}
+  constructor(private authService: AuthenticationService, private router: Router, private location: Location) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
