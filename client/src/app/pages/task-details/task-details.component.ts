@@ -52,6 +52,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   public showDropdownTask : boolean = false;
 
   public currentDueDate = "";
+  public currentStartDate="";
   public priorities : Priority[] = [];
   public states : State[] = [];
   public projectAssignments:Task[] = []
@@ -119,6 +120,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.percentageChange = this.assignment.percentage;
     //godina mesec dan
     this.currentDueDate = this.transformDate(this.assignment.end);
+    this.currentStartDate = this.transformDate(this.assignment.start);
 
     //priorteti
     this.priority_service.getPriorities().subscribe({
@@ -166,8 +168,34 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   createUpdateRequest()
   {
     this.updateObj.end = new Date(this.currentDueDate);
+    this.updateObj.start = new Date(this.currentStartDate);
     this.updateObj.dependentOn = this.selectedDependentOn;
     this.updateObj.userIds = this.selectedAssignees;
+    
+    
+    let todayTime = new Date();
+    this.updateObj.end = new Date(this.updateObj.end);
+    this.updateObj.start = new Date(this.updateObj.start);
+    //provera da li je end pre starta
+    console.log(this.updateObj.end);
+    console.log(this.updateObj.start);
+    if(this.updateObj.end <= this.updateObj.start)
+    {
+      alert("End date comes before start date.");
+      return;
+    }
+    todayTime.setHours(12, 12, 12, 12);
+    this.updateObj.end.setHours(12,12,12,12);
+
+    //prvera da li je start date pre danasnjeg
+    if(this.updateObj.end < todayTime)
+    {
+      alert("End date comes before today.");
+      return;
+
+    }
+    console.log(todayTime);
+    console.log(this.updateObj.end);
     if(this.selectedAssignees.length > 0)
     {
       this.assignment_service.updateAssignmentById(this.updateObj,this.assignment.id).subscribe
@@ -178,6 +206,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
             this.date_task_service.setDateParametersForTask(this.assignment);
             confirm("Task successfully updated!");
             this.showUpdate = false;
+            this.closeOverlay();
           },
           error :(error)=>
           {
