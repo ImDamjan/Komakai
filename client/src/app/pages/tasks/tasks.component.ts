@@ -134,7 +134,7 @@ export class TasksComponent {
   
     // Apply project ID filter (if provided)
     if (projectId) {
-      filteredTasks = filteredTasks.filter(task => task.projectId == projectId);
+      filteredTasks = filteredTasks.filter(task => task.taskGroup.projectId == projectId);
     }
 
     console.log(filteredTasks)
