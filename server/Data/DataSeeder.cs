@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.Authorization;
+using server.Migrations;
 using server.Models;
 
 namespace server.Data
@@ -14,7 +16,7 @@ namespace server.Data
         {
             _context =context;
         }
-
+        List<Permission> permissions = new List<Permission>();
         public void Seed()
         {
 
@@ -78,20 +80,39 @@ namespace server.Data
                 _context.States.AddRange(states);
                 _context.SaveChanges();
             }
-            if(!_context.Roles.Any())
+            if (!_context.Permissions.Any())
+            {
+                permissions = new List<Permission>
+                {
+                    new Permission { Id = (int)Permisija.ViewProjectDetails, Name = "View Project Details", Description = "Allows users to view project details" },
+                    new Permission { Id = (int)Permisija.EditProjectDetails, Name = "Edit Project Details", Description = "Allows users to edit project details" },
+                    new Permission { Id = (int)Permisija.AddTask, Name = "Add Task", Description = "Allows users to add tasks to the project" },
+                    new Permission { Id = (int)Permisija.DeleteTask, Name = "Delete Task", Description = "Allows users to delete tasks from the project" },
+                    new Permission { Id = (int)Permisija.EditTask, Name = "Edit Task", Description = "Allows users to edit tasks in the project" },
+                    new Permission { Id = (int)Permisija.AssignTask, Name = "Assign Task", Description = "Allows users to assign tasks to team members" },
+                    new Permission { Id = (int)Permisija.AddComment, Name = "Add Comment", Description = "Allows users to add comments to tasks" },
+                    new Permission { Id = (int)Permisija.DeleteComment, Name = "Delete Comment", Description = "Allows users to delete their comments from tasks" },
+                    new Permission { Id = (int)Permisija.ViewTeamMembers, Name = "View Team Members", Description = "Allows users to view members of the project team" },
+                    new Permission { Id = (int)Permisija.EditTeamMembers, Name = "Edit Team Members", Description = "Allows users to edit members of the project team" },
+                    new Permission { Id = (int)Permisija.ChangeProjectState, Name = "Change Project State", Description = "Allows users to change the state of the project" }
+                };
+                _context.Permissions.AddRange(permissions);
+                _context.SaveChanges();
+            }
+            if (!_context.Roles.Any())
             {
                 var platformRoles = new List<Role>{
                     new Role{
                         Id = 1,
-                        Name = "Project Manager"
+                        Name = "Project Manager",
                     },
                     new Role{
                         Id = 2,
-                        Name = "Developer"
+                        Name = "Developer",
                     },
                     new Role{
                         Id = 3,
-                        Name = "User"
+                        Name = "User",
                     },
                     new Role{
                         Id = 4,
@@ -106,6 +127,33 @@ namespace server.Data
                 _context.Roles.AddRange(platformRoles);
                 _context.SaveChanges();
             }
+            if (!_context.RolePermissions.Any())
+            {
+                // Define role-permission associations here
+                var rolePermissions = new List<RolePermission>
+                {
+                    // Project Manager with ID 1 has all permissions
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.ViewProjectDetails },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.EditProjectDetails },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.AddTask },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.DeleteTask },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.EditTask },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.AssignTask },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.AddComment },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.DeleteComment },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.ViewTeamMembers },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.EditTeamMembers },
+                    new RolePermission { RoleId = 1, PermissionId = (int)Permisija.ChangeProjectState },
+                    // Developer with ID 2 has permissions for adding and deleting comments
+                    new RolePermission { RoleId = 2, PermissionId = (int)Permisija.AddComment },
+                    new RolePermission { RoleId = 2, PermissionId = (int)Permisija.DeleteComment },
+                    // Add more role-permission associations as needed
+                };
+
+                _context.RolePermissions.AddRange(rolePermissions);
+                _context.SaveChanges();
+            }
+        
             if(!_context.Users.Any())
             {
                 var users = new List<User>

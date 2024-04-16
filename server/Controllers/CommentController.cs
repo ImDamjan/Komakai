@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using server.Authorization;
 using server.DTOs.Comment;
 using server.Mappers;
 
@@ -24,6 +26,7 @@ namespace server.Controllers
         }
 
         [HttpPost("createComment")]
+        //[HasPermission("AddComment")]
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentDto dto)
         {
             var comment = dto.fromCreateToComment();
