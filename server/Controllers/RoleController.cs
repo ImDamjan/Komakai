@@ -30,5 +30,11 @@ namespace server.Controllers
 
             return Ok(dtos);
         }
+        [HttpGet("{roleId}/permissions")]
+        public async Task<IActionResult> GetPermissionsByRoleId(int roleId)
+        {
+            var permissions = await _role_repo.GetPermissionsByRoleIdAsync(roleId);
+            return Ok(permissions);
+        }
     }
 }
