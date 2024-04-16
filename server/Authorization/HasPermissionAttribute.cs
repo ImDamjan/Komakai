@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using server.Models;
 
 namespace server.Authorization
 {
-    public class HasPermissionAttribute : TypeFilterAttribute
+    public class HasPermissionAttribute : AuthorizeAttribute
     {
-        public HasPermissionAttribute(Permisija permission) 
-            :base(typeof(HasPermissionFilter))
+        public HasPermissionAttribute(string permission) : base()
         {
-            Arguments = new object[] { permission };
+            Permission = permission;
         }
 
+        public string Permission { get; }
     }
 }
