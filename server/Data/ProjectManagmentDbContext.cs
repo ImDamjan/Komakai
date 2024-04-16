@@ -29,5 +29,6 @@ namespace server.Data
         public DbSet<UserProjectRoles> UserProjectRoles { get; set; }
         public DbSet<UserProjectPermission> UserProjectPermission { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
     }
 }
