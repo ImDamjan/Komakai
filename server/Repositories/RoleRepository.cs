@@ -25,6 +25,16 @@ namespace server.Repositories
         {
             return await _context.Roles.FirstOrDefaultAsync(r => r.Id == role_id);
         }
+        public async Task<List<Permission>> GetPermissionsByRoleIdAsync(int roleId)
+        {
+            var role = await _context.Roles
+                .Include(r => r.RolePermissions)  // Include RolePermissions navigation property
+                    .ThenInclude(rp => rp.Permission)  // Include Permission navigation property within RolePermissions
+                .FirstOrDefaultAsync(r => r.Id == roleId);
+
+            return role?.RolePermissions.Select(rp => rp.Permission).ToList() ?? new List<Permission>();
+        }
+
 
         public async Task SaveChangesAsync()
         {
