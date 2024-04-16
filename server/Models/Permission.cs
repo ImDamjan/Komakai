@@ -14,6 +14,7 @@ namespace server.Models
         [Column("description")]
         public string Description { get; set; } // Description of the permission
 
-       
+        public virtual ICollection<RolePermission> RolePermissions { get; set; }
+
     }
 }
