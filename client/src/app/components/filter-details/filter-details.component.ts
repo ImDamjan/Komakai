@@ -5,6 +5,7 @@ import { StateService } from '../../services/state.service';
 import { PriorityService } from '../../services/priority.service';
 import { MAT_DIALOG_DATA,MatDialogRef } from '@angular/material/dialog';
 import moment from 'moment';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-filter-details',
@@ -23,13 +24,22 @@ export class FilterDetailsComponent {
 
   selectedPriority: number=0;
 
-  startDate: Date | null = null;
+  // startDate: Date | null = null;
 
-  endDate: Date | null = null;
+  // endDate: Date | null = null;
+
+  formGroup: FormGroup;
 
   private filterDialog = inject(MatDialogRef<FilterDetailsComponent>);
 
-  constructor(private state: StateService,private priority: PriorityService){}
+  constructor(private fb: FormBuilder,private state: StateService,private priority: PriorityService){
+    this.formGroup = this.fb.group({
+      startDateSelection: [null],
+      endDateSelection: [null],
+      startDate: [null],
+      endDate: [null],
+    });
+  }
 
   ngOnInit(){
 
@@ -74,6 +84,13 @@ export class FilterDetailsComponent {
     // else{
     //   this.endDate = null;
     // }    
+
+    const storedStartDateSelection = localStorage.getItem('startDateSelection');
+    const storedEndDateSelection = localStorage.getItem('endDateSelection');
+
+    this.formGroup.controls['startDateSelection'].setValue(storedStartDateSelection || null);
+    this.formGroup.controls['endDateSelection'].setValue(storedEndDateSelection || null);
+
   }
 
   cancelFilters(){
@@ -89,6 +106,19 @@ export class FilterDetailsComponent {
     localStorage.setItem('selectedPriority', this.selectedPriority.toString());
     // localStorage.setItem('startDate', (this.startDate?.toString()) as string);
     // localStorage.setItem('endDate', (this.endDate?.toString()) as string);
+    const startRadioLess = document.getElementById('less-start') as HTMLInputElement;
+    const startRadioMore = document.getElementById('more-start') as HTMLInputElement;
+    const endRadioLess = document.getElementById('less-end') as HTMLInputElement;
+    const endRadioMore = document.getElementById('more-end') as HTMLInputElement;
+
+    const startDateSelection = this.formGroup.get('startDateSelection')?.value;
+    const endDateSelection = this.formGroup.get('endDateSelection')?.value;
+
+    console.log(startDateSelection,endDateSelection)
+
+    localStorage.setItem('startDateSelection', startDateSelection?.toString());
+    localStorage.setItem('endDateSelection', endDateSelection?.toString());
+
     this.filterDialog.close();
   }
 

@@ -17,20 +17,23 @@
             </select>
         </div>
     </div>
-    <div id="dates">
-        <div id="start">
-            Choose a start date: <br>
-            <input type="date" [(ngModel)]="startDate"><br><br>
-            <span id="less"><input type="radio" name="less-more-start" checked="true"> &lt;</span>
-            <span id="more"><input type="radio" name="less-more-start"> &#8805;</span>
+    <form [formGroup]="formGroup">
+        <div id="dates">
+            <div id="start">
+                Choose a start date: <br>
+                <input type="date" formControlName="startDate"><br><br>
+                <span id="less"><input type="radio" checked="true" id="less-start" formControlName="startDateSelection" value="-1"> &lt;</span>
+                <span id="more"><input type="radio" id="more-start" formControlName="startDateSelection" value="1"> &#8805;</span>
+            </div>
+            <div id="end">
+                Choose an end date: <br>
+                <input type="date" formControlName="endDate"><br><br>
+                <span id="less"><input type="radio" checked="true" id="less-end" formControlName="endDateSelection" value="-1"> &lt;</span>
+                <span id="more"><input type="radio" id="more-end" formControlName="endDateSelection" value="1"> &#8805;</span>
+            </div>
         </div>
-        <div id="end">
-            Choose an end date: <br>
-            <input type="date" [(ngModel)]="endDate"><br><br>
-            <span id="less"><input type="radio" name="less-more-end" checked="true"> &lt;</span>
-            <span id="more"><input type="radio" name="less-more-end"> &#8805;</span>
-        </div>
-    </div> <br><br><br><br><br><br><br>
+    </form>
+    <br><br><br><br><br><br><br>
     <div id="slider">
         <p>Selected percentage: {{ sliderValue }}%</p>
         <input type="range" id="volume" min="0" max="100" value="50" [(ngModel)]="sliderValue">
