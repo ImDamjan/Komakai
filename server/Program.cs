@@ -52,15 +52,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             };
 
         });
-builder.Services.AddAuthorization(options =>
+
+
+/*builder.Services.AddAuthorization(options =>
 {
     foreach (Permisija permission in Enum.GetValues(typeof(Permisija)))
     {
         options.AddPolicy(permission.ToString(), policy =>
-            policy.RequireClaim("permission", permission.ToString()));
+        {
+            policy.RequireClaim("permission", permission.ToString());
+        });
     }
 });
-
+*/
 builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
 builder.Services.AddScoped<ITeamRepository,TeamRepository>();
 builder.Services.AddScoped<IPriorityRepository,PriorityRepository>();
@@ -77,6 +81,7 @@ builder.Services.AddScoped<IUserProjectPermissionRepository, UserProjectPermissi
 builder.Services.AddDbContext<ProjectManagmentDbContext>(
     options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
  );
+
 
 var app = builder.Build();
 
