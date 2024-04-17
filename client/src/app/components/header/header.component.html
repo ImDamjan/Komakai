@@ -7,6 +7,7 @@
         
     </div>
     <div class="picture">
-        <img src="../../../assets/sidenavigation/dashboard.svg" />
+        <img class="pfp" *ngIf="user && user.profilePicturePath" [src]="profilePicture" />
+        <img class="pfp" *ngIf="!user || !user.profilePicturePath" src="../../../assets/pictures/defaultpfp.svg" />
     </div>
 </div>

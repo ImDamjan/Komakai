@@ -9,5 +9,6 @@ export interface User {
     jobTitle : string,
     organisation : string,
     department : string,
-    role : Role
+    role : Role,
+    profilePicturePath: string,
 }

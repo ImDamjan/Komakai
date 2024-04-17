@@ -15,7 +15,8 @@ export class HeaderComponent implements OnInit {
   public role : string = "";
   userid!: number;
   private jwtService = inject(JwtDecoderService);
-  users: User[] = [];
+  user!: User;
+  profilePicture !: string;
 
   constructor(private header_info: HeaderInfoService, private userService: UserService){}
 
@@ -32,8 +33,10 @@ export class HeaderComponent implements OnInit {
     console.log(token);
 
     this.userService.getUserById(this.userid).subscribe((userData: any) => {
-      this.users = userData;
-      console.log(this.users);
+      this.user = userData;
+      if (this.user && this.user.profilePicturePath) {
+        this.profilePicture = `http://localhost:5295/${this.user.profilePicturePath}`;
+      }
   });
   }
 }
