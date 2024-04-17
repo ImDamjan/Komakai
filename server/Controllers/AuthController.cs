@@ -50,6 +50,7 @@ namespace server.Controllers
                 Name = request.Name,
                 Lastname = request.Lastname,
                 RoleId = request.RoleId,
+                IsActivated = true
             };
 
 
