@@ -43,7 +43,6 @@ export class EditProjectOverlayComponent {
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
-    console.log(this.project);
     this.selectedUserIds = this.project.users;
   }
 

@@ -59,7 +59,6 @@ export class ProjectPreviewComponent implements OnInit {
     this.projectService.getProjectsData().subscribe(
       (projects: Project[]) => {
         this.projectsData = projects;
-        console.log(this.projectsData);
         this.isLoading = false;
         projects.forEach(project => {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);

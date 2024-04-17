@@ -20,7 +20,8 @@ namespace server.Mappers
                 Organisation = u.Organisation,
                 Department = u.Department,
                 Name = u.Name,
-                Lastname = u.Lastname
+                Lastname = u.Lastname,
+                ProfilePicturePath = u.ProfilePicturePath
             };
         }
         public static AssignmentUserDto toAssignmentUserDto(this User u)

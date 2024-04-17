@@ -17,5 +17,6 @@ namespace server.DTOs.Users
         public string JobTitle { get; set; } =string.Empty;
         public string Organisation { get; set; } = string.Empty;
         public string Department { get; set; } = string.Empty;
+        public string ProfilePicturePath {get; set;} = string.Empty;
     }
 }
