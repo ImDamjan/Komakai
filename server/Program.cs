@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using server.Authorization;
 using server.Data;
 using server.Repositories;
 using server.Services;
@@ -50,8 +51,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 ValidateAudience=false,
             };
 
-        });    
+        });
 
+
+/*builder.Services.AddAuthorization(options =>
+{
+    foreach (Permisija permission in Enum.GetValues(typeof(Permisija)))
+    {
+        options.AddPolicy(permission.ToString(), policy =>
+        {
+            policy.RequireClaim("permission", permission.ToString());
+        });
+    }
+});
+*/
 builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
 builder.Services.AddScoped<ITeamRepository,TeamRepository>();
 builder.Services.AddScoped<IPriorityRepository,PriorityRepository>();
@@ -61,10 +74,14 @@ builder.Services.AddScoped<ITaskGroupRepository, TaskGroupRepository>();
 builder.Services.AddScoped<ICommentRepository,CommentRepositroy>();
 builder.Services.AddScoped<IStateRepository,StateRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
+builder.Services.AddScoped<IUserProjectRolesRepository, UserProjectRolesRepository>();
+builder.Services.AddScoped<IUserProjectPermissionRepository, UserProjectPermissionRepository>();
 
 builder.Services.AddDbContext<ProjectManagmentDbContext>(
     options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
  );
+
 
 var app = builder.Build();
 
