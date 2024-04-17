@@ -4,6 +4,5 @@ export interface Register {
     lastname: string,
     password: string,
     email: string,
-    confirmPassword: string,
     roleId: number
 }

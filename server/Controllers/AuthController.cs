@@ -37,10 +37,6 @@ namespace server.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserRegistrationDto request)
         {
-            if(request.Password!=request.ConfirmPassword)
-            {
-                return BadRequest("Passwords do not match!!!");
-            }
             //hash
             string passwordHash
                 = BCrypt.Net.BCrypt.HashPassword(request.Password);
