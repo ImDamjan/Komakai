@@ -38,6 +38,8 @@ namespace server.Models
         [Column("department", TypeName = "varchar(45)")]
         public string Department { get; set; } = string.Empty;
 
+        public bool IsActivated { get; set; }
+
         [Column("password_reset_token", TypeName = "varchar(100)")]
         public string? PasswordResetToken { get; set; }
 

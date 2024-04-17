@@ -25,7 +25,10 @@
     <div><input formControlName="ConfirmPassword" type="password"  name="confirm-password" placeholder="Confirm password" required></div>
     <small *ngIf="registerForm.controls['ConfirmPassword'].dirty && registerForm.hasError('required', 'ConfirmPassword')" style="color:red;">*Confirm password is required</small>
     <small *ngIf="registerForm.hasError('passwordMismatch') && registerForm.controls['ConfirmPassword'].dirty" style="color:red;">*Passwords do not match</small><br>
-    
-    <button (click)="onSubmit()" type="submit">Sign up</button><br>
+    <p>Role</p>
+    <select formControlName="Role" type="role"  name="role">
+      <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+    </select>
+    <button (click)="onSubmit()" type="submit">Register user</button><br>
   </form>
 </div>
