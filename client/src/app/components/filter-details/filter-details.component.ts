@@ -29,9 +29,9 @@ export class FilterDetailsComponent {
 
   selectedPriority: number=0;
 
-  // startDate: Date | null = null;
+  startDate: Date | undefined;
 
-  // endDate: Date | null = null;
+  endDate: Date | undefined;
 
   formGroup: FormGroup;
 
@@ -131,6 +131,8 @@ export class FilterDetailsComponent {
     this.filter.percentageFilter = this.sliderValue;
     this.filter.dateStartFlag = this.formGroup.get('startDateSelection')?.value;
     this.filter.dateEndFlag = this.formGroup.get('endDateSelection')?.value;
+    this.filter.start = this.formGroup.get('startDate')?.value;
+    this.filter.end = this.formGroup.get('endDate')?.value;
 
     this.filterDialog.close(this.filter);
   }

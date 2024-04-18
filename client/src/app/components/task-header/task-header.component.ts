@@ -27,7 +27,7 @@ export class TaskHeaderComponent implements OnInit {
 
   searchValueChanged = new EventEmitter< { searchText: string }>();
 
-  searchProjectChanged = new EventEmitter<{searchText: string}>();
+  searchFilterChanged = new EventEmitter<{filter: TaskFilter}>();
 
   ngOnInit(): void {
     this.fetchProjects();
@@ -83,6 +83,7 @@ export class TaskHeaderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.filter = result;
+      this.searchFilterChanged.emit({filter: this.filter})
     });
   }
 }

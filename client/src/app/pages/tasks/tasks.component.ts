@@ -16,7 +16,7 @@ import { DateConverterService } from '../../services/date-converter.service';
 export class TasksComponent {
   
   @Output() searchValueChanged = new EventEmitter<string>();
-  @Output() searchProjectChanged = new EventEmitter<string>();
+  @Output() searchFilterChanged = new EventEmitter<TaskFilter>();
 
   @ViewChild('taskHeader', { static: false }) taskHeaderComponent: TaskHeaderComponent | undefined;
   filteredTasks: Task[] = [];
@@ -58,42 +58,20 @@ export class TasksComponent {
 
   ngAfterViewInit() {
     this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
-      this.filterTasks(searchValue.searchText);
+      this.searchTasks(searchValue.searchText);
     });
     // console.log("A")
     // console.log(this.taskHeaderComponent)
-    // this.taskHeaderComponent?.searchProjectChanged.subscribe(projectValue => {
-    //   this.filteredTasks = this.filterTasks1(projectValue.searchText,projectValue.projectId)
-    // });
+    this.taskHeaderComponent?.searchFilterChanged.subscribe(filter => {
+      this.filterTasks(filter.filter);
+    });
   }
 
-  // filterTasks1(searchText: string, projectId?: number): Task[] {
-  //   console.log(searchText)
-  //   console.log(projectId)
-  //   let filteredTasks = this.taskObj;
-  
-  //   // Apply project ID filter (if provided)
-  //   if (projectId) {
-  //     filteredTasks = filteredTasks.filter(task => task.taskGroup.projectId == projectId);
-  //   }
+  filterTasks(filter: TaskFilter){
+    
+  }
 
-  //   console.log(filteredTasks)
-  
-  //   // Apply search text filter (if provided and after project ID filter)
-  //   if (searchText) {
-  //     searchText = searchText.toLowerCase();
-  //     filteredTasks = filteredTasks.filter(task => {
-  //       const title = task.title.toLowerCase();
-  //       return title.includes(searchText);
-  //     });
-  //   }
-
-  //   console.log(filteredTasks)
-  
-  //   return filteredTasks;
-  // }
-
-  filterTasks(searchText: string) {
+  searchTasks(searchText: string) {
     // console.log(searchText)
 
     let filteredTasks: Task[] = [];
