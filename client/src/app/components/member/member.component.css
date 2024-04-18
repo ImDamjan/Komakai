@@ -76,3 +76,18 @@
 .drop{
   text-align: center;  
 }
+
+.update button {
+  width: 100%;
+  height: 40px;
+  margin-top: 20px;
+  font-family: 'Inter';
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  line-height: 40px;
+  color: #EBEBEC;
+  background: #001B47;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
