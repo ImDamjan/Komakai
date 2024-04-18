@@ -9,7 +9,7 @@
         <button id="create-button">Create</button>
     </div>
     <div class="choose">
-        <select #projectSelect id="choose-project" (change)="onProjectChange($event)" [(ngModel)]="selectedProjectId">
+        <select #projectSelect id="choose-project" [(ngModel)]="selectedProjectId">
             <option value="0">All</option>
             <option *ngFor="let project of projects" [value]="project.id">{{ project.title }}</option>
         </select>

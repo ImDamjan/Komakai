@@ -1,10 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { environment } from '../environments/environment';
 import { Task } from '../models/task/task';
 import { jwtDecode } from 'jwt-decode';
 import { UpdateTask } from '../models/task/update-task';
+import { TaskFilter } from '../models/task/task-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +37,53 @@ export class AssignmentService {
     return this.http.get<Task>(this.baseUrl + "/Assignment/getById/" + asign_id);
   }
 
-  getAllUserAssignments(user_id: number): Observable<Task[]> {
-    return this.http.get<Task[]>(this.baseUrl+`/Assignment/getByUser/` + user_id);
+  getAllUserAssignments(user_id: number,params: TaskFilter = {}): Observable<Task[]> {
+    const url = this.baseUrl + `/Assignment/getByUser/${user_id}`;
+
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('user_id', user_id.toString());
+
+    if (params.propertyName) {
+      httpParams = httpParams.set('PropertyName', params.propertyName);
+    }
+    if (params.sortFlag) {
+      httpParams = httpParams.set('SortFlag', params.sortFlag.toString());
+    }
+    if (params.pageNumber) {
+      httpParams = httpParams.set('PageNumber', params.pageNumber.toString());
+    }
+    if (params.pageSize) {
+      httpParams = httpParams.set('PageSize', params.pageSize.toString());
+    }
+    if (params.searchTitle) {
+      httpParams = httpParams.set('SearchTitle', params.searchTitle);
+    }
+    if (params.dateStartFlag) {
+      httpParams = httpParams.set('DateStartFlag', params.dateStartFlag.toString());
+    }
+    if (params.start) {
+      httpParams = httpParams.set('Start', params.start.toDateString());
+    }
+    if (params.dateEndFlag) {
+      httpParams = httpParams.set('DateEndFlag', params.dateEndFlag.toString());
+    }
+    if (params.end) {
+      httpParams = httpParams.set('End', params.end.toDateString());
+    }
+    if (params.stateFilter) {
+      httpParams = httpParams.set('StateFilter', params.stateFilter.toString());
+    }
+    if (params.percentageFlag) {
+      httpParams = httpParams.set('PercentageFlag', params.percentageFlag.toString());
+    }
+    if (params.percentageFilter) {
+      httpParams = httpParams.set('PercentageFilter', params.percentageFilter.toString());
+    }
+    if (params.priorityFilter) {
+      httpParams = httpParams.set('PriorityFilter', params.priorityFilter.toString());
+    }
+
+    return this.http.get<Task[]>(url, { params: httpParams });
   }
 
   createAssignment(createAssignmentData : any) : Observable<Task>

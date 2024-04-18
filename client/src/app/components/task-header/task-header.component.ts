@@ -24,7 +24,7 @@ export class TaskHeaderComponent implements OnInit {
 
   searchValueChanged = new EventEmitter< { searchText: string }>();
 
-  searchProjectChanged = new EventEmitter<{searchText: string; projectId: number}>;
+  searchProjectChanged = new EventEmitter<{searchText: string;}>;
 
   ngOnInit(): void {
     this.fetchProjects();
@@ -45,45 +45,24 @@ export class TaskHeaderComponent implements OnInit {
     return target instanceof HTMLElement;
   }
 
-  async onSearch(event: KeyboardEvent) {
-
-    // let searchText: string = '';
-    // let selectedProjectId;
-
-    // await this.fetchProjects(); 
-
-    // if ('type' in event && event.type === 'keyup') {
-    //   const searchValue = (event.target as HTMLInputElement).value;
-    //   if(this.projects.length>0){
-    //     console.log(this.projects)
-    //     selectedProjectId = this.selectElement?.value;
-    //     console.log(selectedProjectId);
-    //   }
-    //   this.searchValueChanged.emit({ searchText: searchValue });
-    // } else if (event instanceof MouseEvent && event.type === 'click') {
-    //   this.openFilterDialog();
-    // }
-
-    // if (searchText) {
-    //   this.searchValueChanged.emit({ searchText, projectId: Number(selectedProjectId) });
-    // }
+  onSearch(event: KeyboardEvent) {
 
     const searchText = (event.target as HTMLInputElement).value;
     // console.log((document.getElementById('search-field') as HTMLInputElement).value)
     const selectedProjectId = Number(this.selectElement?.value) || 0;
     // console.log(this.selectedProjectId)
     // console.log(searchText)
-    this.searchProjectChanged.emit({ searchText,projectId: this.selectedProjectId});
+    this.searchProjectChanged.emit({ searchText});
 
   }
 
-  onProjectChange(event: Event) {
-    if (event instanceof Event && event.target instanceof HTMLSelectElement) {
-      const selectedProjectId = Number((event.target as HTMLSelectElement).value);
-      this.searchProjectChanged.emit({ searchText: this.searchInputValue, projectId: selectedProjectId });
-    }
+  // onProjectChange(event: Event) {
+  //   if (event instanceof Event && event.target instanceof HTMLSelectElement) {
+  //     const selectedProjectId = Number((event.target as HTMLSelectElement).value);
+  //     this.searchProjectChanged.emit({ searchText: this.searchInputValue, projectId: selectedProjectId });
+  //   }
 
-  }
+  // }
 
   get searchInputValue(): string {
     return (document.getElementById('search-field') as HTMLInputElement).value;

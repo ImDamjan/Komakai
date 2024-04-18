@@ -114,7 +114,7 @@ export class FilterDetailsComponent {
     const startDateSelection = this.formGroup.get('startDateSelection')?.value;
     const endDateSelection = this.formGroup.get('endDateSelection')?.value;
 
-    console.log(startDateSelection,endDateSelection)
+    // console.log(startDateSelection,endDateSelection)
 
     localStorage.setItem('startDateSelection', startDateSelection?.toString());
     localStorage.setItem('endDateSelection', endDateSelection?.toString());
