@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://softeng.kg.ac.rs:10189/api'
+    apiUrl: 'http://softeng.pmf.kg.ac.rs:10189/api'
   };
 
   

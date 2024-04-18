@@ -38,6 +38,8 @@ namespace server.Models
         [Column("department", TypeName = "varchar(45)")]
         public string Department { get; set; } = string.Empty;
 
+        public bool IsActivated { get; set; }
+
         [Column("password_reset_token", TypeName = "varchar(100)")]
         public string? PasswordResetToken { get; set; }
 
@@ -73,7 +75,11 @@ namespace server.Models
 
         [InverseProperty("User")]
         public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
-    
-       
+
+        public virtual ICollection<UserProjectRoles> UserProjectRoles { get; set; } = new List<UserProjectRoles>();
+
+        public virtual ICollection<UserProjectPermission> ProjectPermissions { get; set; } = new List<UserProjectPermission>();
+
+
     }
 }

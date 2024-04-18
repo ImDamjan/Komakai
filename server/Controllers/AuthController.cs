@@ -49,14 +49,10 @@ namespace server.Controllers
                 Email = request.Email,
                 Name = request.Name,
                 Lastname = request.Lastname,
+                RoleId = request.RoleId,
+                IsActivated = true
             };
 
-            var role=await _repos.GetRoleByNameAsync(request.Role); 
-            if (role == null)
-            {
-                return BadRequest("Invalid role");
-            }
-            newUser.RoleId= role.Id;
 
 
             //Dodavanje korsnika u DBContext
@@ -116,6 +112,8 @@ namespace server.Controllers
 
             //kreiraj i verifikuj json token
             var tokenValue = _configuration.GetValue<string>("Jwt:Token");
+            if(tokenValue==null)
+                return null;
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenValue));
 
             //kredencijali

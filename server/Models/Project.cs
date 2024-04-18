@@ -69,5 +69,7 @@ namespace server.Models
         public virtual ICollection<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
 
         
+        [InverseProperty("Project")]
+        public virtual ICollection<UserProjectPermission> ProjectPermissions { get; set; } = new List<UserProjectPermission>();
     }
 }
