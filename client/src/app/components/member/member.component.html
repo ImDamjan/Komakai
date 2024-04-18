@@ -8,18 +8,19 @@
             <td id="dropdown" class = "drop">
                 <div class="dropbtn">{{user.role.name}}</div>
                     <div class="dropdown-content">
-                    <p *ngFor="let role of roles">{{role.name}}</p>
+                    <p *ngFor="let role of roles" (click)="updateUserRole(role, user)">{{role.name}}</p>
                 </div>
             </td>
             <td class="drop">
-                <div class="dropbtn">Activated</div>
+                <div *ngIf="user.isActivated" class="dropbtn">Activated</div>
+                <div *ngIf="!user.isActivated" class="dropbtn">Deactivated</div>
                 <div class="dropdown-content">
-                    <p>Active</p>
-                    <p>Deactive</p>
+                    <p (click)="changeActivationStatus(1,user)">Active</p>
+                    <p (click)="changeActivationStatus(0, user)">Deactive</p>
                 </div>
             </td>
             <td class="update">
-                <button>Update</button>
+                <button (click)="sendUpdateRequest(user)">Update</button>
             </td>
         </tr>
     </thead>

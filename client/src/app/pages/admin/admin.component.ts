@@ -26,7 +26,7 @@ export class AdminComponent implements OnInit {
 
     this.user_service.getUsers().subscribe({
       next : (users: User[]) => this.users = users
-    })
+    });
   }
 
 }

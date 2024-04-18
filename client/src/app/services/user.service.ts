@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { User } from '../models/user/user';
+import { UpdateUser } from '../models/user/update-user';
 
 @Injectable({
   providedIn: 'root'
@@ -30,5 +31,12 @@ export class UserService {
   {
     const url = this.baseUrl + "/User/getAssignmentUsers/"+asign_id;
     return  this.http.get<User[]>(url);
+  }
+
+  updateUser(body: UpdateUser) : Observable<User>
+  {
+    const url = this.baseUrl + "/User/updateUserInfo/"+body.id;
+
+    return this.http.put<User>(url,body);
   }
 }
