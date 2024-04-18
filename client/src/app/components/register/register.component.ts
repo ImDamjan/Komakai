@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
       Username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_.-]*')]],
       Password: ['', [Validators.required, Validators.minLength(8)]],
       ConfirmPassword: ['', Validators.required],
-      Role : [1]
+      Role : [0,[Validators.min(1)], Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
 
