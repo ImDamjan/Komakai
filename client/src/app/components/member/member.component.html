@@ -1,21 +1,23 @@
 <table id="wrapper">
     <thead>
-        <tr>
+        <tr *ngFor="let user of users">
             <td id="profile-picture">
                 <!-- <img src=""  class="slika"> -->
             </td>
-            <td id="username">Aleksandra Stanic</td>
-            <td id="location">Kragujevac, Srbija</td>
-            <td id="dropdown">
-                <button id="dropbtn">Role</button>
+            <td id="username">{{user.name + " " + user.lastname}}</td>
+            <td id="dropdown" class = "drop">
+                <div class="dropbtn">{{user.role.name}}</div>
                     <div class="dropdown-content">
-                    <a href="#">Project manager</a>
-                    <a href="#">Developer</a>
-                    <a href="#">User</a>
-                    <a href="#">Guest</a>
+                    <p *ngFor="let role of roles">{{role.name}}</p>
                 </div>
             </td>
-            
+            <td class="drop">
+                <div class="dropbtn">Activated</div>
+                <div class="dropdown-content">
+                    <p>Active</p>
+                    <p>Deactive</p>
+                </div>
+            </td>
             <td class="remove">
                 <button class="delete">Update</button>
             </td>
