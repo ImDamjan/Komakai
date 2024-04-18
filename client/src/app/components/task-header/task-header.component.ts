@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { FilterDetailsComponent } from '../filter-details/filter-details.component';
+import { TaskFilter } from '../../models/task/task-filter';
 
 @Component({
   selector: 'app-task-header',
@@ -11,6 +12,8 @@ import { FilterDetailsComponent } from '../filter-details/filter-details.compone
 })
 
 export class TaskHeaderComponent implements OnInit {
+
+  @Input() filter!: TaskFilter;
 
   @ViewChild('Select') selectElement: HTMLSelectElement | undefined;
 
@@ -49,10 +52,10 @@ export class TaskHeaderComponent implements OnInit {
 
     const searchText = (event.target as HTMLInputElement).value;
     // console.log((document.getElementById('search-field') as HTMLInputElement).value)
-    const selectedProjectId = Number(this.selectElement?.value) || 0;
+    //const selectedProjectId = Number(this.selectElement?.value) || 0;
     // console.log(this.selectedProjectId)
     // console.log(searchText)
-    this.searchProjectChanged.emit({ searchText});
+    this.searchValueChanged.emit({ searchText });
 
   }
 
@@ -64,9 +67,9 @@ export class TaskHeaderComponent implements OnInit {
 
   // }
 
-  get searchInputValue(): string {
-    return (document.getElementById('search-field') as HTMLInputElement).value;
-  }
+  // get searchInputValue(): string {
+  //   return (document.getElementById('search-field') as HTMLInputElement).value;
+  // }
 
   openFilterDialog() {
     const dialogConfig = new MatDialogConfig();
@@ -74,6 +77,12 @@ export class TaskHeaderComponent implements OnInit {
     // dialogConfig.width = '400px';
     // dialogConfig.height = '400px';
 
-    this.overlay.open(FilterDetailsComponent, dialogConfig);
+    const dialogRef = this.overlay.open(FilterDetailsComponent, {
+      data:[this.filter]
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.filter = result;
+    });
   }
 }

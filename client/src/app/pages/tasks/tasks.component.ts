@@ -24,7 +24,9 @@ export class TasksComponent {
   tasks: Task[] = [];
   private task_date_service = inject(DateConverterService);
 
-  filter: TaskFilter[] = [];
+  public filter: TaskFilter = {
+
+  };
 
   private jwtDecoder = inject(JwtDecoderService);
   remainingTimeSubscriptions: Subscription[] = [];
@@ -55,7 +57,7 @@ export class TasksComponent {
   }
 
   ngAfterViewInit() {
-    this.taskHeaderComponent?.searchProjectChanged.subscribe(searchValue => {
+    this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
       this.filterTasks(searchValue.searchText);
     });
     // console.log("A")
@@ -98,9 +100,7 @@ export class TasksComponent {
 
     let collectedTasks: Task[] = [];
 
-    const myFilter: TaskFilter = {
-      searchTitle: searchText
-    }
+    this.filter.searchTitle = searchText;
 
     if(searchText=''){
       
@@ -113,7 +113,7 @@ export class TasksComponent {
         let decode = this.jwtDecoder.decodeToken(token);
         id = decode.user_id;
       }
-      this.taskService.getAllUserAssignments(id,myFilter).subscribe(tasks => {
+      this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
         collectedTasks = tasks;
 
         collectedTasks.forEach(task => {

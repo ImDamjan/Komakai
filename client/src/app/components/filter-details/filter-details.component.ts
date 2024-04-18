@@ -6,6 +6,7 @@ import { PriorityService } from '../../services/priority.service';
 import { MAT_DIALOG_DATA,MatDialogRef } from '@angular/material/dialog';
 import moment from 'moment';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { TaskFilter } from '../../models/task/task-filter';
 
 @Component({
   selector: 'app-filter-details',
@@ -13,6 +14,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrl: './filter-details.component.css'
 })
 export class FilterDetailsComponent {
+
+  private data : any =  inject(MAT_DIALOG_DATA)
+
+  filter: TaskFilter = {};
 
   states: State[] = [];
 
@@ -43,6 +48,8 @@ export class FilterDetailsComponent {
 
   ngOnInit(){
 
+    this.filter = this.data[0];
+
     this.state.fetchAllStates().subscribe(states =>{
       this.states = states;
       // console.log(this.states);
@@ -53,16 +60,16 @@ export class FilterDetailsComponent {
       // console.log(this.priorities);
     })
 
-    const storedState = localStorage.getItem('selectedState');
-    const storedPriority = localStorage.getItem('selectedPriority');
+    // const storedState = localStorage.getItem('selectedState');
+    // const storedPriority = localStorage.getItem('selectedPriority');
 
-    if (storedState) {
-      this.selectedState = parseInt(storedState);
-    }
+    // if (storedState) {
+    //   this.selectedState = parseInt(storedState);
+    // }
 
-    if (storedPriority) {
-      this.selectedPriority = parseInt(storedPriority);
-    }
+    // if (storedPriority) {
+    //   this.selectedPriority = parseInt(storedPriority);
+    // }
 
     // const storedStartDate = localStorage.getItem('startDate');
     // const storedEndDate = localStorage.getItem('endDate');
@@ -85,11 +92,11 @@ export class FilterDetailsComponent {
     //   this.endDate = null;
     // }    
 
-    const storedStartDateSelection = localStorage.getItem('startDateSelection');
-    const storedEndDateSelection = localStorage.getItem('endDateSelection');
+    // const storedStartDateSelection = localStorage.getItem('startDateSelection');
+    // const storedEndDateSelection = localStorage.getItem('endDateSelection');
 
-    this.formGroup.controls['startDateSelection'].setValue(storedStartDateSelection || null);
-    this.formGroup.controls['endDateSelection'].setValue(storedEndDateSelection || null);
+    // this.formGroup.controls['startDateSelection'].setValue(storedStartDateSelection || null);
+    // this.formGroup.controls['endDateSelection'].setValue(storedEndDateSelection || null);
 
   }
 
@@ -102,24 +109,30 @@ export class FilterDetailsComponent {
     // console.log(this.selectedPriority)
     // console.log(this.startDate)
     // console.log(this.endDate)
-    localStorage.setItem('selectedState', this.selectedState.toString());
-    localStorage.setItem('selectedPriority', this.selectedPriority.toString());
+    // localStorage.setItem('selectedState', this.selectedState.toString());
+    // localStorage.setItem('selectedPriority', this.selectedPriority.toString());
     // localStorage.setItem('startDate', (this.startDate?.toString()) as string);
     // localStorage.setItem('endDate', (this.endDate?.toString()) as string);
-    const startRadioLess = document.getElementById('less-start') as HTMLInputElement;
-    const startRadioMore = document.getElementById('more-start') as HTMLInputElement;
-    const endRadioLess = document.getElementById('less-end') as HTMLInputElement;
-    const endRadioMore = document.getElementById('more-end') as HTMLInputElement;
+    // const startRadioLess = document.getElementById('less-start') as HTMLInputElement;
+    // const startRadioMore = document.getElementById('more-start') as HTMLInputElement;
+    // const endRadioLess = document.getElementById('less-end') as HTMLInputElement;
+    // const endRadioMore = document.getElementById('more-end') as HTMLInputElement;
 
-    const startDateSelection = this.formGroup.get('startDateSelection')?.value;
-    const endDateSelection = this.formGroup.get('endDateSelection')?.value;
+    // const startDateSelection = this.formGroup.get('startDateSelection')?.value;
+    // const endDateSelection = this.formGroup.get('endDateSelection')?.value;
 
     // console.log(startDateSelection,endDateSelection)
 
-    localStorage.setItem('startDateSelection', startDateSelection?.toString());
-    localStorage.setItem('endDateSelection', endDateSelection?.toString());
+    // localStorage.setItem('startDateSelection', startDateSelection?.toString());
+    // localStorage.setItem('endDateSelection', endDateSelection?.toString());
 
-    this.filterDialog.close();
+    this.filter.stateFilter = this.selectedState;
+    this.filter.priorityFilter = this.selectedPriority;
+    this.filter.percentageFilter = this.sliderValue;
+    this.filter.dateStartFlag = this.formGroup.get('startDateSelection')?.value;
+    this.filter.dateEndFlag = this.formGroup.get('endDateSelection')?.value;
+
+    this.filterDialog.close(this.filter);
   }
 
 }
