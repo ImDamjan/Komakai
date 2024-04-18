@@ -24,7 +24,7 @@ export class TaskHeaderComponent implements OnInit {
 
   searchValueChanged = new EventEmitter< { searchText: string }>();
 
-  searchProjectChanged = new EventEmitter<{searchText: string;}>;
+  searchProjectChanged = new EventEmitter<{searchText: string}>();
 
   ngOnInit(): void {
     this.fetchProjects();
