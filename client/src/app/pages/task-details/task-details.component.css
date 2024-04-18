@@ -19,11 +19,13 @@ h2 {
     color: #222222;
 }
 
-p{
+p {
+    font-weight: bold;
     font-size: 14px;
     font-family: 'Poppins', sans-serif;
     color: #222222;
     width: 50px;
+    color: #001B47;
 }
 
 .row{

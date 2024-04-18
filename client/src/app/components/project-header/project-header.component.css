@@ -31,6 +31,7 @@ input#search-field {
     margin-right: 2%;
     border: 1px solid #9A93B3;
     border-radius: 5px;
+    z-index: 100;
 }
 
 #list-button, #kanban-button, #gantt-button {
