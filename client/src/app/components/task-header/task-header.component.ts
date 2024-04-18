@@ -82,8 +82,10 @@ export class TaskHeaderComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.filter = result;
-      this.searchFilterChanged.emit({filter: this.filter})
+      if(result){
+        this.filter = result;
+        this.searchFilterChanged.emit({filter: this.filter})
+      }
     });
   }
 }

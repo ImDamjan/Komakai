@@ -60,44 +60,6 @@ export class FilterDetailsComponent {
       // console.log(this.priorities);
     })
 
-    // const storedState = localStorage.getItem('selectedState');
-    // const storedPriority = localStorage.getItem('selectedPriority');
-
-    // if (storedState) {
-    //   this.selectedState = parseInt(storedState);
-    // }
-
-    // if (storedPriority) {
-    //   this.selectedPriority = parseInt(storedPriority);
-    // }
-
-    // const storedStartDate = localStorage.getItem('startDate');
-    // const storedEndDate = localStorage.getItem('endDate');
-
-    // if (storedStartDate) {
-    //   // console.log(storedStartDate)
-    //   this.startDate = moment(storedStartDate, "YYYY-MM-DD").toDate();
-    //   console.log(this.startDate)
-    // }
-    // else{
-    //   this.startDate = null;
-    // }
-
-    // if (storedEndDate) {
-    //   // console.log(storedEndDate)
-    //   this.endDate = new Date(storedEndDate);
-    //   // console.log(this.endDate)
-    // }
-    // else{
-    //   this.endDate = null;
-    // }    
-
-    // const storedStartDateSelection = localStorage.getItem('startDateSelection');
-    // const storedEndDateSelection = localStorage.getItem('endDateSelection');
-
-    // this.formGroup.controls['startDateSelection'].setValue(storedStartDateSelection || null);
-    // this.formGroup.controls['endDateSelection'].setValue(storedEndDateSelection || null);
-
   }
 
   cancelFilters(){
@@ -105,27 +67,7 @@ export class FilterDetailsComponent {
   }
 
   confirmFilters(){
-    // console.log(this.selectedState)
-    // console.log(this.selectedPriority)
-    // console.log(this.startDate)
-    // console.log(this.endDate)
-    // localStorage.setItem('selectedState', this.selectedState.toString());
-    // localStorage.setItem('selectedPriority', this.selectedPriority.toString());
-    // localStorage.setItem('startDate', (this.startDate?.toString()) as string);
-    // localStorage.setItem('endDate', (this.endDate?.toString()) as string);
-    // const startRadioLess = document.getElementById('less-start') as HTMLInputElement;
-    // const startRadioMore = document.getElementById('more-start') as HTMLInputElement;
-    // const endRadioLess = document.getElementById('less-end') as HTMLInputElement;
-    // const endRadioMore = document.getElementById('more-end') as HTMLInputElement;
-
-    // const startDateSelection = this.formGroup.get('startDateSelection')?.value;
-    // const endDateSelection = this.formGroup.get('endDateSelection')?.value;
-
-    // console.log(startDateSelection,endDateSelection)
-
-    // localStorage.setItem('startDateSelection', startDateSelection?.toString());
-    // localStorage.setItem('endDateSelection', endDateSelection?.toString());
-
+    
     this.filter.stateFilter = this.selectedState;
     this.filter.priorityFilter = this.selectedPriority;
     this.filter.percentageFilter = this.sliderValue;

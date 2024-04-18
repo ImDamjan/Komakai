@@ -62,13 +62,13 @@ export class AssignmentService {
       httpParams = httpParams.set('DateStartFlag', params.dateStartFlag.toString());
     }
     if (params.start) {
-      httpParams = httpParams.set('Start', params.start.toDateString());
+      httpParams = httpParams.set('Start', params.start.toString());
     }
     if (params.dateEndFlag) {
       httpParams = httpParams.set('DateEndFlag', params.dateEndFlag.toString());
     }
     if (params.end) {
-      httpParams = httpParams.set('End', params.end.toDateString());
+      httpParams = httpParams.set('End', params.end.toString());
     }
     if (params.stateFilter) {
       httpParams = httpParams.set('StateFilter', params.stateFilter.toString());
