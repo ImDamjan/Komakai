@@ -68,7 +68,27 @@ export class TasksComponent {
   }
 
   filterTasks(filter: TaskFilter){
-    
+    let filteredTasks: Task[] = [];
+
+    let collectedTasks: Task[] = [];
+
+    this.filter=filter;
+
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+    }
+    this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
+      collectedTasks = tasks;
+
+      collectedTasks.forEach(task => {
+        this.task_date_service.setDateParametersForTask(task);
+      });
+      this.filteredTasks = collectedTasks;
+    });
   }
 
   searchTasks(searchText: string) {

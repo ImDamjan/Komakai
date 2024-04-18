@@ -1,6 +1,6 @@
 <table id="task-content">
   <thead>
-    <tr id="row" (click)="openShowTaskOverlay()">
+    <tr id="row" (mousedown)="check($event)" (click)="openShowTaskOverlay($event)">
       <td id="bulb">
         <img src="assets\project-task\bulb.svg" alt="Company Logo" width="20" height="20" />
       </td>
@@ -10,7 +10,7 @@
           </div><br>
           <div id="bottom">
             <div id="more">#402236 Opened 10 days ago by <b>Yash Ghori</b></div>
-            <div id="status">Confirmed</div>
+            <div id="status"><b>{{ task.state.name }}</b></div>
             <div [ngClass]="getPriorityClass(task.priority.description)" id="priority"><b>{{ task.priority.description }}</b></div>
           </div>
       </td>
