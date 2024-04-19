@@ -1,23 +1,26 @@
 <table id="wrapper">
     <thead>
-        <tr>
+        <tr *ngFor="let user of users">
             <td id="profile-picture">
                 <!-- <img src=""  class="slika"> -->
             </td>
-            <td id="username">Aleksandra Stanic</td>
-            <td id="location">Kragujevac, Srbija</td>
-            <td id="dropdown">
-                <button id="dropbtn">Role</button>
+            <td id="username">{{user.name + " " + user.lastname}}</td>
+            <td id="dropdown" class = "drop">
+                <div class="dropbtn">{{user.role.name}}</div>
                     <div class="dropdown-content">
-                    <a href="#">Project manager</a>
-                    <a href="#">Developer</a>
-                    <a href="#">User</a>
-                    <a href="#">Guest</a>
+                    <p *ngFor="let role of roles" (click)="updateUserRole(role, user)">{{role.name}}</p>
                 </div>
             </td>
-            
-            <td class="remove">
-                <button class="delete">Update</button>
+            <td class="drop">
+                <div *ngIf="user.isActivated" class="dropbtn">Activated</div>
+                <div *ngIf="!user.isActivated" class="dropbtn">Deactivated</div>
+                <div class="dropdown-content">
+                    <p (click)="changeActivationStatus(1,user)">Active</p>
+                    <p (click)="changeActivationStatus(0, user)">Deactive</p>
+                </div>
+            </td>
+            <td class="update">
+                <button (click)="sendUpdateRequest(user)">Update</button>
             </td>
         </tr>
     </thead>
