@@ -10,6 +10,7 @@ import { TaskFilter } from '../../models/task/task-filter';
 import { FilterDataService } from '../../services/filterdata.service';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
+import { SortDataService } from '../../services/sortdata.service';
 
 @Component({
   selector: 'app-sort-details',
@@ -26,7 +27,7 @@ export class SortDetailsComponent {
 
   private sortDialog = inject(MatDialogRef<SortDetailsComponent>);
 
-  constructor(private fb: FormBuilder){
+  constructor(private fb: FormBuilder, private sortDataService: SortDataService){
     this.sortGroup = this.fb.group({
       property: [''],
       flag: [null]
@@ -35,6 +36,34 @@ export class SortDetailsComponent {
 
   ngOnInit(){
     this.filter = this.data[0];
+
+    const storedFilter = this.sortDataService.getFilter();
+    if(storedFilter){
+
+      this.sortGroup.patchValue({
+        property: storedFilter.propertyName,
+        flag: storedFilter.sortFlag
+      });
+
+    }
+
+  }
+
+  resetSort(){
+    this.sortGroup.get('property')?.setValue('');
+    this.sortGroup.get('flag')?.setValue(null);
+  }
+
+  cancelSort(){
+    this.sortDialog.close();
+  }
+
+  confirmSort(){
+    this.filter.propertyName = this.sortGroup.get('property')?.value;
+    this.filter.sortFlag = this.sortGroup.get('flag')?.value;
+
+    this.sortDataService.setFilter(this.filter);
+    this.sortDialog.close(this.filter);
   }
 
 }

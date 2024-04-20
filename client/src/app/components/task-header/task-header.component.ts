@@ -72,7 +72,34 @@ export class TaskHeaderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        this.filter = result;
+        // this.filter = result;
+        if(result.project_id){
+          this.filter.project_id=result.project_id;
+        }
+        if(result.stateFilter){
+          this.filter.stateFilter=result.stateFilter;
+        }
+        if(result.priorityFilter){
+          this.filter.priorityFilter=result.priorityFilter;
+        }
+        if(result.dateStartFlag){
+          this.filter.dateStartFlag=result.dateStartFlag;
+        }
+        if(result.dateEndFlag){
+          this.filter.dateEndFlag=result.dateEndFlag;
+        }
+        if(result.start){
+          this.filter.start=result.start;
+        }
+        if(result.end){
+          this.filter.end=result.end;
+        }
+        if(result.percentageFlag){
+          this.filter.percentageFlag=result.percentageFlag;
+        }
+        if(result.percentageFilter){
+          this.filter.percentageFilter=result.percentageFilter;
+        }
         this.searchFilterChanged.emit({filter: this.filter})
       }
     });
@@ -85,7 +112,12 @@ export class TaskHeaderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        this.filter = result;
+        if(result.propertyName){
+          this.filter.propertyName=result.propertyName;
+        }
+        if(result.sortFlag){
+          this.filter.sortFlag=result.sortFlag;
+        }
         this.searchSortChanged.emit({filter: this.filter})
       }
     });

@@ -12,3 +12,25 @@ h1{
 #descending{
     margin-right: 50px;
 }
+
+#buttons {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+}
+
+#buttons button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#cancel{
+    background-color: #fa5a5a;
+}
+
+#confirm{
+    background-color: #5afa6a;
+}

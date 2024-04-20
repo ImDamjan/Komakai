@@ -15,8 +15,13 @@
             </select>
         </div><br><br><br><br><br>
         <div id="flag">
-            <span id="descending"><input type="radio" id="desc" formControlName="flag"> Desc.</span>
-            <span id="ascending"><input type="radio" id="asc" formControlName="flag"> Asc.</span>
+            <span id="descending"><input type="radio" id="desc" formControlName="flag" value="1"> Desc.</span>
+            <span id="ascending"><input type="radio" id="asc" formControlName="flag" value="-1"> Asc.</span>
         </div>
     </form>
+    <div id="buttons">
+        <button id="reset" (click)="resetSort()">Reset</button>
+        <button id="cancel" (click)="cancelSort()">Cancel</button>
+        <button id="confirm" (click)="confirmSort()">Confirm</button>
+    </div>
 </div>
