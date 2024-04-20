@@ -10,7 +10,7 @@
           </div><br>
           <div id="bottom">
             <div id="more">#402236 Opened 10 days ago by <b>Yash Ghori</b></div>
-            <div id="status"><b>{{ task.state.name }}</b></div>
+            <div [ngClass]="getStateClass(task.state.name)" id="status"><b>{{ task.state.name }}</b></div>
             <div [ngClass]="getPriorityClass(task.priority.description)" id="priority"><b>{{ task.priority.description }}</b></div>
           </div>
       </td>

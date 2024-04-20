@@ -52,9 +52,9 @@ export class FilterDetailsComponent {
       sliderSelection: [null],
     });
     this.projectStatePriority = fb.group({
-      selectedProject: [null],
-      selectedState: [null],
-      selectedPriority: [null],
+      selectedProject: [0],
+      selectedState: [0],
+      selectedPriority: [0],
     });
   }
 
@@ -98,6 +98,16 @@ export class FilterDetailsComponent {
     // Update form group values based on stored filter data (startDateSelection, endDateSelection, startDate, endDate)
     }
 
+  }
+
+  resetFilters() {
+    this.projectStatePriority.get('selectedProject')?.setValue(0);
+    this.projectStatePriority.get('selectedState')?.setValue(0);
+    this.projectStatePriority.get('selectedPriority')?.setValue(0);
+  
+    this.formGroup.reset();
+    this.formGroup2.get('sliderValue')?.setValue(50);
+    this.formGroup2.get('sliderSelection')?.setValue(null);
   }
 
   cancelFilters(){

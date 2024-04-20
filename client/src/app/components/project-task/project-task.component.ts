@@ -33,6 +33,25 @@ export class ProjectTaskComponent {
             return '';
     }
   }
+
+  getStateClass(state: string): string{
+    switch(state){
+        case 'Not started':
+            return 'not-started';
+        case 'Ready':
+            return 'ready';
+        case 'In Progress':
+            return 'in-progress';
+        case 'Blocked':
+            return 'blocked';
+        case 'Done':
+            return 'done';
+        case 'Cancelled':
+            return 'cancelled';
+        default:
+            return '';
+    }
+  }
   
   extractNumber(text: string): number | null {
     const regex = /\d+/;
