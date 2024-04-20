@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MimeKit.Encodings;
 using server.Data;
 using server.DTOs.Projects;
+using server.DTOs.Users;
 using server.Interfaces;
 using server.Models;
 
@@ -81,10 +82,23 @@ namespace server.Repositories
             return true; // User deleted successfully
         }
 
-        public async Task UpdateUserAsync(User user)
+        public async Task<User?> UpdateUserAsync(UpdateUserDto dto, int userId)
         {
-            _context.Entry(user).State = EntityState.Modified;
+            var user = await GetUserByIdAsync(userId);
+            if(user == null)
+                return null;
+            user.Email = dto.Email;
+            user.JobTitle = dto.JobTitle;
+            user.Organisation =dto.Organisation;
+            user.Department = dto.Department;
+            user.IsActivated = dto.IsActivated;
+            user.Username = dto.Username;
+            user.Name = dto.Name;
+            user.Lastname = dto.Lastname;
+            user.RoleId = dto.RoleId;
             await _context.SaveChangesAsync();
+
+            return user;
         }
 
         public async Task DeleteProfilePictureAsync(int userId)

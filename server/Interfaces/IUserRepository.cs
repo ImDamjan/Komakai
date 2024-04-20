@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using server.DTOs.Projects;
+using server.DTOs.Users;
 using server.Models;
 
 namespace server.Interfaces
@@ -33,7 +34,7 @@ namespace server.Interfaces
 
         Task<bool> DeleteUserByIdAsync(int userId);
 
-        Task UpdateUserAsync(User user);
+        Task<User?> UpdateUserAsync(UpdateUserDto dto,int user_id);
 
         Task DeleteProfilePictureAsync(int userId);
 

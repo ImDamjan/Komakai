@@ -1,8 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RegisterService } from '../../services/register.service';
-import { RoleService } from '../../services/role.service';
 import { Role } from '../../models/role';
 import { Register } from '../../models/register';
 
@@ -14,17 +13,10 @@ import { Register } from '../../models/register';
 export class RegisterComponent implements OnInit {
 
   registerForm!: FormGroup;
-  private role_service = inject(RoleService);
-  public roles : Role[] = [];
+  @Input() public roles : Role[] = [];
   constructor(private fb: FormBuilder, private reg: RegisterService, private router: Router) {}
 
   ngOnInit(): void {
-    this.role_service.getAllRoles().subscribe({
-      next : (roles: Role[])=> 
-      {
-        this.roles = roles.filter(r=>r.id!=5);
-      }
-    });
     this.registerForm = this.fb.group({
       Name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
       Lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
@@ -32,7 +24,7 @@ export class RegisterComponent implements OnInit {
       Username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_.-]*')]],
       Password: ['', [Validators.required, Validators.minLength(8)]],
       ConfirmPassword: ['', Validators.required],
-      Role : [1]
+      Role : [0,[Validators.min(1)], Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
 
