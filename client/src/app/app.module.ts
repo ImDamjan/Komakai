@@ -60,6 +60,8 @@ import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
 import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
 import { SortDetailsComponent } from './components/sort-details/sort-details.component';
+import { FilterProjectComponent } from './components/filter-project/filter-project.component';
+import { SortProjectComponent } from './components/sort-project/sort-project.component';
 
 
 
@@ -103,6 +105,8 @@ import { SortDetailsComponent } from './components/sort-details/sort-details.com
     EditProjectOverlayComponent,
     FilterDetailsComponent,
     SortDetailsComponent,
+    FilterProjectComponent,
+    SortProjectComponent,
   ],
   imports: [
     FormsModule,

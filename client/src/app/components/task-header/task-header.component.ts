@@ -41,7 +41,6 @@ export class TaskHeaderComponent implements OnInit {
   fetchProjects(): void {
     this.projectService.getProjectsData().subscribe(projects => {
       this.projects = projects;
-      // console.log(this.projects)
     });
   }
   
@@ -52,19 +51,12 @@ export class TaskHeaderComponent implements OnInit {
   onSearch(event: KeyboardEvent) {
 
     const searchText = (event.target as HTMLInputElement).value;
-    // console.log((document.getElementById('search-field') as HTMLInputElement).value)
-    //const selectedProjectId = Number(this.selectElement?.value) || 0;
-    // console.log(this.selectedProjectId)
-    // console.log(searchText)
     this.searchValueChanged.emit({ searchText });
 
   }
 
   openFilterDialog() {
     const dialogConfig = new MatDialogConfig();
-
-    // dialogConfig.width = '400px';
-    // dialogConfig.height = '400px';
 
     const dialogRef = this.overlay.open(FilterDetailsComponent, {
       data:[this.filter]

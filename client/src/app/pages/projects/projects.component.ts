@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateProjectOverlayComponent } from '../../components/create-project-overlay/create-project-overlay.component';
+import { ProjectFilter } from '../../models/project/project-filter';
 
 
 @Component({
@@ -15,12 +16,17 @@ export class ProjectsComponent {
 
   constructor(private dialog: MatDialog) { }
 
+  searchValueChanged = new EventEmitter< { searchText: string }>();
+
+  searchFilterChanged = new EventEmitter<{filter: ProjectFilter}>();
+
+  searchSortChanged = new EventEmitter<{filter: ProjectFilter}>();
+
   openCreateOverlay(): void {
     const dialogRef = this.dialog.open(CreateProjectOverlayComponent, {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // When overlay is closed
       this.showProjectPreview = true;
       this.showCreateButton = true;
       this.projectText = 'Project list';
@@ -30,4 +36,18 @@ export class ProjectsComponent {
     this.showCreateButton = false;
     this.projectText = 'Project list/Create project';
   }
+
+  onSearch(event: KeyboardEvent){
+    const searchText = (event.target as HTMLInputElement).value;
+    this.searchValueChanged.emit({ searchText });
+  }
+
+  openFilterDialog(){
+
+  }
+
+  openSortDialog(){
+
+  }
+
 }
