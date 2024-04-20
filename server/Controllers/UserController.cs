@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using server.DTOs.Users;
 using server.Interfaces;
 using server.Mappers;
 using server.Models;
@@ -25,10 +26,11 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
             var users = await _repos.GetAllUsersAsync();
-            return Ok(users);
+            var dtos = users.Select(u=>u.toUserRoleDto(u.Role.toRoleDto()));
+            return Ok(dtos);
         }
 
         [HttpGet("getAssignmentUsers/{asign_id}")]
@@ -100,6 +102,16 @@ namespace server.Controllers
             }
 
             return NoContent(); // User deleted successfully
+        }
+
+        [HttpPut("updateUserInfo/{user_id}")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto,int user_id)
+        {
+            var user =  await _repos.UpdateUserAsync(dto,user_id);
+            if(user==null)
+                return NotFound("user not found");
+
+            return Ok(user.toUserDto());
         }
 
 

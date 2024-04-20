@@ -1,13 +1,39 @@
 #task-details{
-    padding: 40px;
+    padding: 30px;
     display: flexbox;
     justify-content: center;
+    box-shadow: 10px 20px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background-color: white;
 }
+
+h1 {
+    font-size: 18px;
+    font-family: 'Poppins', sans-serif;
+    color: #222222;
+}
+
+h2 {
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    color: #222222;
+}
+
+p {
+    font-weight: bold;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    color: #222222;
+    width: 50px;
+    color: #001B47;
+}
+
 .row{
     display: flex;
     align-items: center;
     
 }
+
 .row span{
     padding: 0px 100px;
     justify-content: center;
@@ -15,19 +41,20 @@
 .details{
     display: flex;
     flex-direction: column;
-    width: 40%; /* Increased width to 400px */
-    padding: 15px; /* Increased padding for better spacing */
+    /* width: 40%;  */
+    /* padding: 15px;  */
 }
   
   
-p {
+/* p {
     margin-right: 10px;
     font-weight: bold;
-  }
+  } */
   
 span {
     flex: 1;  /* Added flex: 1 to the span class */
     text-align: right;
+    width: 50px;
 }
 .overlay-container {
     position: fixed;

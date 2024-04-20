@@ -6,7 +6,7 @@
     <br>
     <div class = 'details'>
         <div class = "row">
-            <p>Priority</p>
+            <p class="title">Priority</p>
             <span *ngIf="!showUpdate">{{assignment.priority.description}}</span><span *ngIf="showUpdate"><select id="priority" [(ngModel)] = "updateObj.priorityId"><option *ngFor="let prio of priorities" [value]="prio.id">{{prio.description}}</option></select></span>
         </div>
         <div class = "row">
@@ -125,7 +125,7 @@
                     <p>ikona</p>
                     <p>ikona2</p>
                 </div> -->
-                <textarea name="" id="" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText">
+                <textarea class="textarea" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText">
 
                 </textarea><br>
                 <button id = 'comment-button' (click)="createComment()">Comment</button>

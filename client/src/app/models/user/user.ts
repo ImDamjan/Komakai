@@ -9,6 +9,7 @@ export interface User {
     jobTitle : string,
     organisation : string,
     department : string,
-    role : Role,
     profilePicturePath: string,
+    isActivated: boolean,
+    role : Role
 }

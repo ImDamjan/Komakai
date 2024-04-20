@@ -6,7 +6,7 @@ using server.DTOs.Role;
 
 namespace server.DTOs.Users
 {
-    public class UserDto
+    public class UserRoleDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -16,7 +16,7 @@ namespace server.DTOs.Users
         public string JobTitle { get; set; } =string.Empty;
         public string Organisation { get; set; } = string.Empty;
         public string Department { get; set; } = string.Empty;
-        public string ProfilePicturePath {get; set;} = string.Empty;
+        public RoleDto Role { get; set; } = null!;
         public bool IsActivated { get; set; }
     }
 }
