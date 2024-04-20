@@ -1,22 +1,31 @@
 <div id="prozor">
     <br><br>
     <h1>Filters</h1>
-    <div id="state-priority">
-        <div id="state">
-            Choose a task state: <br>
-            <select name="choose-state" id="choose-state" [(ngModel)]="selectedState">
+    <form [formGroup]="projectStatePriority">
+        <div id="project">
+            Choose a project: <br>
+            <select name="choose-project" id="choose-project" formControlName="selectedProject">
                 <option value="0">Any</option>
-                <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                <option *ngFor="let project of projects" [value]="project.id">{{project.title}}</option>
             </select>
         </div>
-        <div id="priority">
-            Choose a task priority: <br>
-            <select name="choose-priority" id="choose-priority" [(ngModel)]="selectedPriority">
-                <option value="0">Any</option>
-                <option *ngFor="let priority of priorities" [value]="priority.id">{{priority.description}}</option>
-            </select>
+        <div id="state-priority">
+            <div id="state">
+                Choose a task state: <br>
+                <select name="choose-state" id="choose-state" formControlName="selectedState">
+                    <option value="0">Any</option>
+                    <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                </select>
+            </div>
+            <div id="priority">
+                Choose a task priority: <br>
+                <select name="choose-priority" id="choose-priority" formControlName="selectedPriority">
+                    <option value="0">Any</option>
+                    <option *ngFor="let priority of priorities" [value]="priority.id">{{priority.description}}</option>
+                </select>
+            </div>
         </div>
-    </div>
+    </form>
     <form [formGroup]="formGroup">
         <div id="dates">
             <div id="start">

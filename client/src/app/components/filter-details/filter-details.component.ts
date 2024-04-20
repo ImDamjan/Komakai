@@ -8,6 +8,8 @@ import moment from 'moment';
 import { Form, FormBuilder, FormGroup } from '@angular/forms';
 import { TaskFilter } from '../../models/task/task-filter';
 import { FilterDataService } from '../../services/filterdata.service';
+import { ProjectService } from '../../services/project.service';
+import { Project } from '../../models/project/project';
 
 @Component({
   selector: 'app-filter-details',
@@ -24,9 +26,7 @@ export class FilterDetailsComponent {
 
   priorities: Priority[] = [];
 
-  selectedState: number|undefined;
-
-  selectedPriority: number|undefined;
+  projects: Project[] = [];
 
   startDate: Date | undefined;
 
@@ -36,9 +36,11 @@ export class FilterDetailsComponent {
 
   formGroup2: FormGroup;
 
+  projectStatePriority: FormGroup;
+
   private filterDialog = inject(MatDialogRef<FilterDetailsComponent>);
 
-  constructor(private fb: FormBuilder,private state: StateService,private priority: PriorityService,private filterDataService: FilterDataService){
+  constructor(private fb: FormBuilder,private state: StateService,private priority: PriorityService,private filterDataService: FilterDataService, private project: ProjectService){
     this.formGroup = this.fb.group({
       startDateSelection: [null],
       endDateSelection: [null],
@@ -48,6 +50,11 @@ export class FilterDetailsComponent {
     this.formGroup2 = this.fb.group({
       sliderValue: [50],
       sliderSelection: [null],
+    });
+    this.projectStatePriority = fb.group({
+      selectedProject: [null],
+      selectedState: [null],
+      selectedPriority: [null],
     });
   }
 
@@ -65,11 +72,13 @@ export class FilterDetailsComponent {
       // console.log(this.priorities);
     })
 
+    this.project.getProjectsData().subscribe(projects =>{
+      this.projects = projects;
+      // console.log(this.projects)
+    });
+
     const storedFilter = this.filterDataService.getFilter();
     if (storedFilter) {
-
-      this.selectedState = storedFilter.stateFilter;
-      this.selectedPriority = storedFilter.priorityFilter;
 
       this.formGroup.patchValue({
         startDateSelection: storedFilter.dateStartFlag,
@@ -77,6 +86,12 @@ export class FilterDetailsComponent {
         startDate: storedFilter.start,
         endDate: storedFilter.end
       });
+
+      this.projectStatePriority.patchValue({
+        selectedProject: storedFilter.project_id,
+        selectedState: storedFilter.stateFilter,
+        selectedPriority: storedFilter.priorityFilter
+      })
 
       this.formGroup2.get('sliderSelection')?.setValue(storedFilter.percentageFlag);
       this.formGroup2.get('sliderValue')?.setValue(storedFilter.percentageFilter);
@@ -91,8 +106,9 @@ export class FilterDetailsComponent {
 
   confirmFilters(){
     
-    this.filter.stateFilter = this.selectedState;
-    this.filter.priorityFilter = this.selectedPriority;
+    this.filter.project_id = this.projectStatePriority.get('selectedProject')?.value;
+    this.filter.stateFilter = this.projectStatePriority.get('selectedState')?.value;
+    this.filter.priorityFilter = this.projectStatePriority.get('selectedPriority')?.value;
     this.filter.dateStartFlag = this.formGroup.get('startDateSelection')?.value;
     this.filter.dateEndFlag = this.formGroup.get('endDateSelection')?.value;
     this.filter.start = this.formGroup.get('startDate')?.value;

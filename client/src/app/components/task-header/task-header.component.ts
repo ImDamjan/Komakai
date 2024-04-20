@@ -39,11 +39,7 @@ export class TaskHeaderComponent implements OnInit {
       // console.log(this.projects)
     });
   }
-
-  // ngAfterViewInit(){
-  //   this.fetchProjects();
-  // }
-
+  
   isButtonElement(target: EventTarget): target is HTMLElement {
     return target instanceof HTMLElement;
   }
@@ -58,18 +54,6 @@ export class TaskHeaderComponent implements OnInit {
     this.searchValueChanged.emit({ searchText });
 
   }
-
-  // onProjectChange(event: Event) {
-  //   if (event instanceof Event && event.target instanceof HTMLSelectElement) {
-  //     const selectedProjectId = Number((event.target as HTMLSelectElement).value);
-  //     this.searchProjectChanged.emit({ searchText: this.searchInputValue, projectId: selectedProjectId });
-  //   }
-
-  // }
-
-  // get searchInputValue(): string {
-  //   return (document.getElementById('search-field') as HTMLInputElement).value;
-  // }
 
   openFilterDialog() {
     const dialogConfig = new MatDialogConfig();
