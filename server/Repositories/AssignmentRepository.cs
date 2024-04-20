@@ -44,7 +44,7 @@ namespace server.Repositories
                 assingments_query = assingments_query.Where(a => a.Users.Any(b => b.Id == user_id));
             }
 
-            return await FilterAssignments(assingments_query,filter);
+            return await FilterAssignments(assingments_query,filter,sort);
         }
 
         public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null, int project_id = 0)
@@ -62,7 +62,7 @@ namespace server.Repositories
             }
             var query = pom.Where(t=>t.Users.Any(u=>u.Id==userId));
 
-            return await FilterAssignments(query,filter);
+            return await FilterAssignments(query,filter,sort);
         }
 
         public async Task<Assignment?> GetAssignmentByidAsync(int id)
