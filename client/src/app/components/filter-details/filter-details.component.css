@@ -69,3 +69,7 @@ h1{
 #confirm{
     background-color: #5afa6a;
 }
+
+#slider{
+    align-items: center;
+}

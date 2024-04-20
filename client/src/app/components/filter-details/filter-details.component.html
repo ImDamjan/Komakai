@@ -34,10 +34,14 @@
         </div>
     </form>
     <br><br><br><br><br><br><br>
-    <div id="slider">
-        <p>Selected percentage: {{ sliderValue }}%</p>
-        <input type="range" id="volume" min="0" max="100" value="50" [(ngModel)]="sliderValue">
-    </div>
+    <form [formGroup]="formGroup2">
+        <div id="slider">
+            <p>Selected percentage: {{ formGroup2.get('sliderValue')?.value }}%</p>
+            <input type="range" id="volume" min="0" max="100" value="50" formControlName="sliderValue"><br>
+            <span id="less"><input type="radio" id="less-slider" formControlName="sliderSelection" value="-1"> &lt;</span>
+            <span id="less"><input type="radio" id="more-slider" formControlName="sliderSelection" value="1"> &#8805;</span>
+        </div>
+    </form>
     <div id="buttons">
         <button id="cancel" (click)="cancelFilters()">Cancel</button>
         <button id="confirm" (click)="confirmFilters()">Confirm</button>
