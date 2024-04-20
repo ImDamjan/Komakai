@@ -58,6 +58,7 @@ import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
 
 import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
+import { ProfileDetailsComponent } from './components/profile-details/profile-details.component';
 
 
 
@@ -99,6 +100,7 @@ import { RouterModule } from '@angular/router';
     AdminComponent,
     MemberComponent,
     EditProjectOverlayComponent,
+    ProfileDetailsComponent,
   ],
   imports: [
     FormsModule,
