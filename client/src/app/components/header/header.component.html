@@ -10,7 +10,7 @@
         <img class="pfp" *ngIf="user && user.profilePicturePath" [src]="profilePicture" />
         <img class="pfp" *ngIf="!user || !user.profilePicturePath" src="../../../assets/pictures/defaultpfp.svg" />
         <div class="menu" *ngIf="isMenuVisible">
-            <p id="pfdetails"><img class="icon" src="../../../assets/profile-settings/pfsettings.svg"> Profile Details</p>
+            <p id="pfdetails"  (click)="openProfileOverlay(user.id,$event)"><img class="icon" src="../../../assets/profile-settings/pfsettings.svg"  (click)="openProfileOverlay(user.id,$event)"> Profile Details</p>
             <app-logout></app-logout>
         </div>
     </div>

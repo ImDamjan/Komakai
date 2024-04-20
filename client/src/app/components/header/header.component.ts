@@ -3,6 +3,8 @@ import { HeaderInfoService } from '../../services/header-info.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user/user';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
 
 @Component({
   selector: 'app-header',
@@ -20,7 +22,7 @@ export class HeaderComponent implements OnInit {
 
   isMenuVisible: boolean = false;
 
-  constructor(private header_info: HeaderInfoService, private userService: UserService){}
+  constructor(private header_info: HeaderInfoService, private userService: UserService, private dialog: MatDialog){}
 
   ngOnInit(): void {
     let token = this.jwtService.getToken();
@@ -44,5 +46,16 @@ export class HeaderComponent implements OnInit {
 
   toggleMenu() {
     this.isMenuVisible = !this.isMenuVisible;
+  }
+
+  openProfileOverlay(id: number, event: Event) {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.data = {
+      userId: id
+    };
+
+    this.dialog.open(ProfileDetailsComponent, dialogConfig);
   }
 }
