@@ -114,6 +114,8 @@ namespace server.Controllers
             return Ok(user.toUserDto());
         }
 
+        /*
+
 
         [HttpPost("{userId}/uploadProfilePicture")]
         public async Task<IActionResult> UploadProfilePicture(int userId, IFormFile file)
@@ -173,7 +175,7 @@ namespace server.Controllers
                     System.IO.File.Delete(oldFilePath);
                 }
             }
-            */
+            
 
             var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -188,7 +190,8 @@ namespace server.Controllers
 
             return Ok(new { filePath });
         }
-
+        
+        */
         [HttpDelete("{userId}/profilePicture")]
         public async Task<IActionResult> DeleteProfilePicture(int userId)
         {
