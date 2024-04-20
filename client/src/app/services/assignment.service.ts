@@ -47,6 +47,10 @@ export class AssignmentService {
       httpParams = httpParams.set('project_id', params.project_id.toString());
     }
 
+    if(params.user_id){
+      httpParams = httpParams.set('user_id', params.user_id.toString());
+    }
+
     if (params.propertyName) {
       httpParams = httpParams.set('PropertyName', params.propertyName);
     }

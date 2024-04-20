@@ -4,6 +4,7 @@ import { Project } from '../../models/project/project';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { FilterDetailsComponent } from '../filter-details/filter-details.component';
 import { TaskFilter } from '../../models/task/task-filter';
+import { SortDetailsComponent } from '../sort-details/sort-details.component';
 
 @Component({
   selector: 'app-task-header',
@@ -19,6 +20,8 @@ export class TaskHeaderComponent implements OnInit {
 
   private overlay = inject(MatDialog);
 
+  private overlay2 = inject(MatDialog);
+
   projects : Project[] = [];
 
   selectedProjectId: number = 0;
@@ -28,6 +31,8 @@ export class TaskHeaderComponent implements OnInit {
   searchValueChanged = new EventEmitter< { searchText: string }>();
 
   searchFilterChanged = new EventEmitter<{filter: TaskFilter}>();
+
+  searchSortChanged = new EventEmitter<{filter: TaskFilter}>();
 
   ngOnInit(): void {
     this.fetchProjects();
@@ -72,4 +77,18 @@ export class TaskHeaderComponent implements OnInit {
       }
     });
   }
+
+  openSortDialog(){
+    const dialogRef = this.overlay2.open(SortDetailsComponent,{
+      data:[this.filter]
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.filter = result;
+        this.searchSortChanged.emit({filter: this.filter})
+      }
+    });
+  }
+
 }
