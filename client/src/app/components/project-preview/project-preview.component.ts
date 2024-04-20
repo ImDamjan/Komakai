@@ -15,6 +15,11 @@ import { Project } from '../../models/project/project';
 })
 
 export class ProjectPreviewComponent implements OnInit {
+
+  isClick = false;
+  initialX: number | undefined;
+  initialY: number | undefined;
+  threshold = 1;
   
   isLoading: boolean = false;
   errorMessage: string = '';
@@ -90,8 +95,27 @@ export class ProjectPreviewComponent implements OnInit {
     return this.assignmentCounts[projectId] || 0; // Return assignment count for the project, or 0 if not found
   }
 
-  navigateToProjectDetails(projectId: number) {
-    this.router.navigate(['projects','project-details',projectId]);
+  check(event: MouseEvent){
+    this.isClick = true;
+    this.initialX = event.clientX;
+    this.initialY = event.clientY;
+  }
+
+  navigateToProjectDetails(event: MouseEvent,projectId: number) {
+
+    let deltaX = event.clientX;
+    let deltaY = event.clientY;
+
+    if(this.initialX && this.initialY){
+      deltaX = Math.abs(event.clientX - this.initialX);
+      deltaY = Math.abs(event.clientY - this.initialY);
+    }
+    if (this.isClick && deltaX < this.threshold && deltaY < this.threshold){
+      this.router.navigate(['projects','project-details',projectId]);
+    }
+    else{
+      this.isClick = false;
+    }
   }
 
   // Calculate character limits based on screen width
