@@ -18,6 +18,8 @@ export class HeaderComponent implements OnInit {
   user!: User;
   profilePicture !: string;
 
+  isMenuVisible: boolean = false;
+
   constructor(private header_info: HeaderInfoService, private userService: UserService){}
 
   ngOnInit(): void {
@@ -38,5 +40,9 @@ export class HeaderComponent implements OnInit {
         this.profilePicture = `http://localhost:5295/${this.user.profilePicturePath}`;
       }
   });
+  }
+
+  toggleMenu() {
+    this.isMenuVisible = !this.isMenuVisible;
   }
 }
