@@ -46,6 +46,8 @@ namespace server.Models
         [Column("password_reset_token_expiry", TypeName ="datetime")]
         public DateTime? PasswordResetTokenExpiry { get; set; }
 
+        [Column("profile_picture", TypeName = "varbinary(max)")]
+        public byte[]? ProfilePicture { get; set; }
 
         [Column("role_id")]
         public int RoleId { get; set; }
