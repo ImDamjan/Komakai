@@ -68,7 +68,6 @@ export class TasksComponent {
   }
 
   filterTasks(filter: TaskFilter){
-    let filteredTasks: Task[] = [];
 
     let collectedTasks: Task[] = [];
 

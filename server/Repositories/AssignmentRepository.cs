@@ -28,7 +28,7 @@ namespace server.Repositories
             return a;
 
         }
-        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null)
+        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null, int user_id = 0)
         {
             var assingments_query = _context.Assignments.Where(a=>a.TaskGroupId==group_id)
             .Include(a=>a.Users).ThenInclude(u=>u.Role)
@@ -39,10 +39,15 @@ namespace server.Repositories
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged)
             .AsQueryable();
 
+            if (user_id != 0)
+            {
+                assingments_query = assingments_query.Where(a => a.Users.Any(b => b.Id == user_id));
+            }
+
             return await FilterAssignments(assingments_query,filter);
         }
 
-        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null)
+        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null, int project_id = 0)
         {
             var pom = _context.Assignments.Include
             (a=>a.Users)
@@ -51,6 +56,10 @@ namespace server.Repositories
             .Include(a=>a.Priority)
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged).AsQueryable();
 
+            if (project_id != 0)
+            {
+                pom = pom.Where(a => a.TaskGroup.ProjectId == project_id);
+            }
             var query = pom.Where(t=>t.Users.Any(u=>u.Id==userId));
 
             return await FilterAssignments(query,filter);
