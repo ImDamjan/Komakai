@@ -1,7 +1,7 @@
-<div class="overlay-container">
+<div class="overlay-container" *ngIf="!editMode">
     <div class="overlay-content">
         <div class="editdetails">
-            <button id="editprofile"><img src="../../../assets/profile-settings/editprofile.svg"><span class="tooltip">Edit Profile</span></button>
+            <button id="editprofile" (click)="toggleEditMode()"><img src="../../../assets/profile-settings/editprofile.svg"><span class="tooltip">Edit Profile</span></button>
         </div>
         <div class="centered-content">
             <div class="profile-info">
@@ -23,4 +23,36 @@
             <span id="department">{{user.department}}</span><br>
         </div>
     </div>
+</div>
+
+<div class="overlay-container" *ngIf="editMode">
+    <div class="overlay-content">
+        <div class="editdetails">
+            <button id="editprofile" (click)="toggleEditMode()"><img src="../../../assets/profile-settings/editprofile.svg"><span class="tooltip">Edit Profile</span></button>
+        </div>
+        <div class="centered-content">
+            <div class="profile-info">
+                <img id="pfp" src="../../../assets/pictures/defaultpfp.svg">
+            </div>
+        </div>
+        <div class="contact-info">
+            <div id="description">
+                <span id="nametitle" class="title">First Name</span><br>
+                <input type="text" placeholder="{{user.name}}"><br>
+                <span id="nametitle" class="title">Last Name</span><br>
+                <input type="text" placeholder="{{user.lastname}}"><br>
+                <span id="nametitle" class="title">username</span><br>
+                <input type="text" placeholder="{{user.Username}}"><br>
+                <span id="roletitle" class="title">Role Name</span><br>
+                <span id="rolename">{{user.jobTitle}}</span><br>
+                <span id="emailtitle" class="title"><img src="../../../assets/profile-settings/email.svg"> Email</span><br>
+                <input type="text" placeholder="{{user.email}}"><br>
+                <span id="organisationtitle" class="title"><img src="../../../assets/profile-settings/organisation.svg"> Organisation</span><br>
+                <input type="text" placeholder="{{user.organisation}}"><br>
+                <span id="departmenttitle" class="title"><img src="../../../assets/profile-settings/department.svg"> Department</span><br>
+                <input type="text" placeholder="{{user.department}}"><br>
+            </div>
+        </div>
+    </div>
+    <button id="cancel" (click)="toggleEditMode()">Cancel</button>
 </div>
