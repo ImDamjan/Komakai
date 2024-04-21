@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   
   public fullname : string = "";
   public role : string = "";
+  public roleId !: number;
   userid!: number;
   private jwtService = inject(JwtDecoderService);
   user!: User;
@@ -29,12 +30,11 @@ export class HeaderComponent implements OnInit {
     if(token!=null)
     {
       let decode = this.jwtService.decodeToken(token);
-      console.log(decode);
       this.fullname = decode.fullname;
       this.role = decode.role
       this.userid = decode.user_id;
+      this.roleId = decode.role_id;
     }
-    console.log(token);
 
     this.userService.getUserById(this.userid).subscribe((userData: any) => {
       this.user = userData;
@@ -54,7 +54,7 @@ export class HeaderComponent implements OnInit {
     this.userService.getUserById(this.userid).subscribe((userData: any) => {
       const dialogRef = this.dialog.open(ProfileDetailsComponent, {
         ...dialogConfig,
-        data: { user: userData }
+        data: { user: userData, role: this.roleId }
       });
     });
   }
