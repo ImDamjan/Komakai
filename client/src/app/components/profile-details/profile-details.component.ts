@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-profile-details',
@@ -7,10 +7,10 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrl: './profile-details.component.css'
 })
 export class ProfileDetailsComponent {
-  
-  constructor(public dialogRef: MatDialogRef<ProfileDetailsComponent>) {}
+  user: any;
 
-  onClose(): void {
-    this.dialogRef.close();
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    this.user = data.user;
+    console.log(this.user);
   }
 }

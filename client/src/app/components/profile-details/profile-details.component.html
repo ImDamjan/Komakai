@@ -1,13 +1,19 @@
 <div class="overlay-container">
     <div class="overlay-content">
-        <img id="pfp" src="../../../assets/project-task/person.svg">
-        <span id="name">First Name</span>
-        <span id="lastname">Last Name</span>
-        <span id="role">Role Name</span>
-
-        <span id="username">Username</span>
-        <span id="email">Email</span>
-        <span id="organization">Organization</span>
-        <span id="department">department</span>
+        <div>
+            <img id="pfp" src="../../../assets/pictures/defaultpfp.svg">
+            <div id="description">
+                <span id="nametitle" class="title">Name (username)</span>
+                <span id="fullname">{{user.name}} {{user.lastname}} ( <span id="username">{{user.username}}</span> )</span>
+                <span id="roletitle" class="title">Role Name</span>
+                <span id="rolename">{{user.jobTitle}}</span>
+            </div>
+        </div>
+        <span id="emailtitle">Email</span>
+        <span id="email">{{user.email}}</span>
+        <span id="organisationtitle">Organisation</span>
+        <span id="organisation">{{user.organisation}}</span>
+        <span id="departmenttitle">department</span>
+        <span id="department">{{user.department}}</span>
     </div>
 </div>

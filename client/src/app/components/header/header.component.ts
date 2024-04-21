@@ -49,13 +49,13 @@ export class HeaderComponent implements OnInit {
   }
 
   openProfileOverlay(id: number, event: Event) {
-    event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.data = {
-      userId: id
-    };
-
-    this.dialog.open(ProfileDetailsComponent, dialogConfig);
+    this.userService.getUserById(this.userid).subscribe((userData: any) => {
+      const dialogRef = this.dialog.open(ProfileDetailsComponent, {
+        ...dialogConfig,
+        data: { user: userData }
+      });
+    });
   }
 }
