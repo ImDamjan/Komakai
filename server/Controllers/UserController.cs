@@ -191,12 +191,41 @@ namespace server.Controllers
             return Ok(new { filePath });
         }
         
-        */
+        
         [HttpDelete("{userId}/profilePicture")]
         public async Task<IActionResult> DeleteProfilePicture(int userId)
         {
             await _repos.DeleteProfilePictureAsync(userId);
             return NoContent();
+        }
+        */
+
+
+        //BLOBS
+
+        [HttpPost("{userId}/uploadProfilePicture")]
+        public async Task<IActionResult> UploadProfilePicture(int userId, [FromBody] byte[] pictureBytes)
+        {
+            try
+            {
+                var user = await _repos.GetUserByIdAsync(userId);
+
+                if (user == null)
+                    return NotFound("user not found");
+
+                if (pictureBytes == null || pictureBytes.Length == 0)
+                    return BadRequest("Invalid picture data");
+
+                user.ProfilePicture = pictureBytes;
+
+                await _repos.SaveChangesAsync();
+
+                return Ok("Profile picture uploaded successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
     }
 }
