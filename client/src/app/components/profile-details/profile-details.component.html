@@ -59,7 +59,7 @@
         </div>
     </div>
     <div class="save-cancel">
-        <button id="save">Save Changes</button>
+        <button id="save" (click)="editProfile(user.id)">Save Changes</button>
         <button id="cancel" (click)="toggleEditMode()">Cancel</button>
     </div>
 </div>
