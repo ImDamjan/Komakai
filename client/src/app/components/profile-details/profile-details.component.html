@@ -38,24 +38,28 @@
         <div class="contact-info">
             <div id="description">
                 <span id="nametitle" class="title">First Name</span><br>
-                <input type="text" placeholder="Please enter your first name" [(ngModel)]="user.name"><br>
+                <input class="input-field" type="text" placeholder="Please enter your first name" [(ngModel)]="user.name"><br>
                 <span id="nametitle" class="title">Last Name</span><br>
-                <input type="text" placeholder="Please enter your last name" [(ngModel)]="user.lastname"><br>
+                <input class="input-field" type="text" placeholder="Please enter your last name" [(ngModel)]="user.lastname"><br>
                 <span id="nametitle" class="title">Username</span><br>
-                <input type="text" placeholder="Please enter your username" [(ngModel)]="user.username"><br>
+                <input class="input-field" type="text" placeholder="Please enter your username" [(ngModel)]="user.username"><br>
                 <span id="roletitle" class="title">Role Name</span><br>
-                <select [(ngModel)]="roleId">
-                    <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
-                </select><br>
+                <div class = "custom-dropdown">
+                    <select id="task_group" [(ngModel)] = "roleId">
+                        <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+                    </select>
+                </div>
                 <span id="emailtitle" class="title"><img src="../../../assets/profile-settings/email.svg"> Email</span><br>
-                <input type="text" placeholder="Please enter your email" [(ngModel)]="user.username"><br>
+                <input class="input-field" type="text" placeholder="Please enter your email" [(ngModel)]="user.username"><br>
                 <span id="organisationtitle" class="title"><img src="../../../assets/profile-settings/organisation.svg"> Organisation</span><br>
-                <input type="text" placeholder="Please enter your email organisation" [(ngModel)]="user.organisation"><br>
+                <input class="input-field" type="text" placeholder="Please enter your email organisation" [(ngModel)]="user.organisation"><br>
                 <span id="departmenttitle" class="title"><img src="../../../assets/profile-settings/department.svg"> Department</span><br>
-                <input type="text" placeholder="Please enter your email department" [(ngModel)]="user.department"><br>
+                <input class="input-field" type="text" placeholder="Please enter your email department" [(ngModel)]="user.department"><br>
             </div>
         </div>
     </div>
-    <button id="save">Save Changes</button>
-    <button id="cancel" (click)="toggleEditMode()">Cancel</button>
+    <div class="save-cancel">
+        <button id="save">Save Changes</button>
+        <button id="cancel" (click)="toggleEditMode()">Cancel</button>
+    </div>
 </div>
