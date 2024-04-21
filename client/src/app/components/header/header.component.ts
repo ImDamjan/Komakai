@@ -5,6 +5,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user/user';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
+import { UserProfileService } from '../../services/user-profile.service';
 
 @Component({
   selector: 'app-header',
@@ -21,9 +22,12 @@ export class HeaderComponent implements OnInit {
   user!: User;
   profilePicture !: string;
 
+  firstname: string = "";
+  lastname: string = "";
+  jobTitle: string = "";
   isMenuVisible: boolean = false;
 
-  constructor(private header_info: HeaderInfoService, private userService: UserService, private dialog: MatDialog){}
+  constructor(private header_info: HeaderInfoService, private userService: UserService, private dialog: MatDialog, private userProfileService: UserProfileService){}
 
   ngOnInit(): void {
     let token = this.jwtService.getToken();
@@ -41,7 +45,17 @@ export class HeaderComponent implements OnInit {
       if (this.user && this.user.profilePicturePath) {
         this.profilePicture = `http://localhost:5295/${this.user.profilePicturePath}`;
       }
-  });
+    });
+
+
+    this.userProfileService.userProfileSubject.subscribe(user => {
+      if (user) {
+        console.log(user);
+        this.firstname = user.name;
+        this.lastname = user.lastname;
+        this.jobTitle = user.jobTitle;
+      }
+    });
   }
 
   toggleMenu() {

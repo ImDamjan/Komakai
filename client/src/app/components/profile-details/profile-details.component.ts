@@ -5,6 +5,7 @@ import { Role } from '../../models/role';
 import { UserService } from '../../services/user.service';
 import { UpdateUser } from '../../models/user/update-user';
 import { Router } from '@angular/router';
+import { UserProfileService } from '../../services/user-profile.service';
 
 @Component({
   selector: 'app-profile-details',
@@ -17,7 +18,7 @@ export class ProfileDetailsComponent {
   roles!: Role[];
   editMode = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router, private userProfileService: UserProfileService) {
     this.user = data.user;
     this.roleId = data.role;
     this.user.roleId = this.roleId;
@@ -36,7 +37,8 @@ export class ProfileDetailsComponent {
 
   editProfile(userid: Number): void {
     this.userService.updateUser(this.user).subscribe(response => {
-      alert('Project edited successfully!');
-    });  
+      this.userProfileService.setUserProfile(this.user);
+      alert('Profile edited successfully!');
+    });
   }
 }
