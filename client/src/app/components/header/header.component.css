@@ -20,8 +20,8 @@
     margin-bottom: 5px;
 }
 #name_logout p {
-    padding: 0 20px 0 0px;
-    margin: 0px;
+    padding: 0px;
+    margin: 0px 0px 0px auto;
 }
 #name_logout{
     display: flex;
