@@ -36,7 +36,7 @@ namespace server.Interfaces
 
         Task<User?> UpdateUserAsync(UpdateUserDto dto,int user_id);
 
-        Task DeleteProfilePictureAsync(int userId);
+        //Task DeleteProfilePictureAsync(int userId);
 
     }
 }
