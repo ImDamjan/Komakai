@@ -15,6 +15,7 @@ import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UpdateTask } from '../../models/task/update-task';
 import { error } from 'console';
 import { DateConverterService } from '../../services/date-converter.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-task-details',
@@ -30,7 +31,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   private comment_service = inject(CommentService);
   private dialogRef = inject(MatDialogRef<TaskDetailsComponent>);
   private date_task_service = inject(DateConverterService);
-  private data : any =  inject(MAT_DIALOG_DATA)
+  private data : any =  inject(MAT_DIALOG_DATA);
+  private spinner = inject(NgxSpinnerService);
 
 
 
@@ -82,6 +84,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.closeOverlay();
   }
   ngOnInit(): void {
+    this.spinner.show();
     this.assignment = this.data[0];
     console.log(this.assignment);
 
@@ -92,6 +95,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         if(tasks.length > 0)
             this.hasDependent = false;
         this.dependentTasks = tasks;
+
+        this.spinner.hide();
         console.log(tasks);
       }
     })

@@ -27,10 +27,11 @@ export class AuthenticationService {
 
   logout() : void
   {
-    this.spinner.show();
+    // this.spinner.show();
     localStorage.removeItem("token");
+    // this.spinner.hide();
     this.router.navigate(["auth"]);
-    this.spinner.hide();
+    
   }
 
   // Services
