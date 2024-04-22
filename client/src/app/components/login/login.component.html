@@ -11,6 +11,7 @@
       <img id="eye" [src]="showPassword ? 'assets/login/crossedeye.svg' : 'assets/login/eye.svg'" alt="" width="25" height="25" (click)="togglePasswordVisibility()">
     </span>
   </div>
+  <p style="color: crimson;">{{errMessage}}</p>
   <br>
   <button (click)="onLogin()">Login</button>
   <br>

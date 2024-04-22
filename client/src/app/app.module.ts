@@ -43,7 +43,7 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
 import { MatSliderModule } from '@angular/material/slider';
-
+import {NgxSpinnerModule} from 'ngx-spinner'
 
 import { ThyLayoutModule } from 'ngx-tethys/layout';
 import { setPrintErrorWhenIconNotFound } from 'ngx-tethys/icon';
@@ -110,7 +110,7 @@ import { RouterModule } from '@angular/router';
     FontAwesomeModule,
     DragDropModule,
     MatSliderModule,
-
+    NgxSpinnerModule,
     NgxGanttModule,
     RouterModule.forRoot([]),
     ThyButtonModule,

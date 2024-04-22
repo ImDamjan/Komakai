@@ -4,6 +4,7 @@ import { Login } from '../models/login';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class AuthenticationService {
 
   baseUrl:string = environment.apiUrl
   private router = inject(Router);
+  private spinner = inject(NgxSpinnerService);
 
   constructor(private httpClient: HttpClient) { }
 
@@ -25,8 +27,10 @@ export class AuthenticationService {
 
   logout() : void
   {
+    this.spinner.show();
     localStorage.removeItem("token");
     this.router.navigate(["auth"]);
+    this.spinner.hide();
   }
 
   // Services
