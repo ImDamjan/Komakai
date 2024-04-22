@@ -15,12 +15,14 @@ import { NgForm } from '@angular/forms';
 })
 export class ProfileDetailsComponent {
   user: UpdateUser;
+  originalUser: UpdateUser;
   roleId!: number;
   roles!: Role[];
   editMode = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router, private userProfileService: UserProfileService) {
     this.user = data.user;
+    this.originalUser = { ...this.user };
     this.roleId = data.role;
     this.user.roleId = this.roleId;
     console.log(this.user);
@@ -33,6 +35,11 @@ export class ProfileDetailsComponent {
   }
 
   toggleEditMode() {
+    if (!this.editMode) {
+      this.originalUser = { ...this.user };
+    } else {
+      this.user = { ...this.originalUser };
+    }
     this.editMode = !this.editMode;
   }
 
@@ -43,6 +50,7 @@ export class ProfileDetailsComponent {
     this.userService.updateUser(this.user).subscribe(response => {
       this.userProfileService.setUserProfile(this.user);
       alert('Profile edited successfully!');
+      this.originalUser = { ...this.user };
     });
   }
 }

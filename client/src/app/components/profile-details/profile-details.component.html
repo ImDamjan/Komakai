@@ -50,13 +50,13 @@
                     <p *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="error-message" style="color:red;"> *Last name is required and must contain only letters </p>
                     <br>
                     <span id="nametitle" class="title">Username</span><br>
-                    <input class="input-field" type="text" placeholder="Please enter your username" [(ngModel)]="user.username" name="username" required pattern="[a-zA-Z0-9_-.]{3,16}" #username="ngModel">
+                    <input class="input-field" type="text" placeholder="Please enter your username" [(ngModel)]="user.username" name="username" required pattern="[a-zA-Z0-9_\-\.]{3,16}" #username="ngModel">
                     <p *ngIf="username.invalid && (username.dirty || username.touched)" class="error-message" style="color:red;"> *Username is required and it can contain only letters, numbers, underscores, and hyphens. </p>
                     <br>
                     <span id="emailtitle" class="title">
                         <img src="../../../assets/profile-settings/email.svg"> Email
                     </span><br>
-                    <input class="input-field" type="email" placeholder="Please enter your email" [(ngModel)]="user.email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" #email="ngModel">
+                    <input class="input-field" type="email" placeholder="Please enter your email" [(ngModel)]="user.email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" #email="ngModel">
                     <p *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message" style="color:red;"> *Please enter a valid email address </p><br>
                     <span id="organisationtitle" class="title">
                         <img src="../../../assets/profile-settings/organisation.svg"> Organisation
