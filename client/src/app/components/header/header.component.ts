@@ -2,10 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { HeaderInfoService } from '../../services/header-info.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/user/user';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
 import { UserProfileService } from '../../services/user-profile.service';
+import { UpdateUser } from '../../models/user/update-user';
 
 @Component({
   selector: 'app-header',
@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
   public roleId !: number;
   userid!: number;
   private jwtService = inject(JwtDecoderService);
-  user!: User;
+  user!: UpdateUser;
   profilePicture !: string;
 
   firstname: string = "";
@@ -42,9 +42,7 @@ export class HeaderComponent implements OnInit {
 
     this.userService.getUserById(this.userid).subscribe((userData: any) => {
       this.user = userData;
-      if (this.user && this.user.profilePicturePath) {
-        this.profilePicture = `http://localhost:5295/${this.user.profilePicturePath}`;
-      }
+      this.userProfileService.setUserProfile(this.user);
     });
 
 
