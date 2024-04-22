@@ -43,12 +43,6 @@
                 <input class="input-field" type="text" placeholder="Please enter your last name" [(ngModel)]="user.lastname"><br>
                 <span id="nametitle" class="title">Username</span><br>
                 <input class="input-field" type="text" placeholder="Please enter your username" [(ngModel)]="user.username"><br>
-                <span id="roletitle" class="title">Role Name</span><br>
-                <div class = "custom-dropdown">
-                    <select id="task_group" [(ngModel)] = "roleId">
-                        <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
-                    </select>
-                </div>
                 <span id="emailtitle" class="title"><img src="../../../assets/profile-settings/email.svg"> Email</span><br>
                 <input class="input-field" type="text" placeholder="Please enter your email" [(ngModel)]="user.username"><br>
                 <span id="organisationtitle" class="title"><img src="../../../assets/profile-settings/organisation.svg"> Organisation</span><br>
