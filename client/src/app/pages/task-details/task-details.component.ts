@@ -172,6 +172,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
 
   createUpdateRequest()
   {
+    this.spinner.show();
     this.updateObj.end = new Date(this.currentDueDate);
     this.updateObj.start = new Date(this.currentStartDate);
     this.updateObj.dependentOn = this.selectedDependentOn;
@@ -186,6 +187,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     console.log(this.updateObj.start);
     if(this.updateObj.end <= this.updateObj.start)
     {
+      this.spinner.hide();
       alert("End date comes before start date.");
       return;
     }
@@ -196,6 +198,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     if(this.updateObj.end < todayTime)
     {
       alert("End date comes before today.");
+      this.spinner.hide();
       return;
 
     }
@@ -212,6 +215,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
             confirm("Task successfully updated!");
             this.showUpdate = false;
             this.closeOverlay();
+            this.spinner.hide();
           },
           error :(error)=>
           {
