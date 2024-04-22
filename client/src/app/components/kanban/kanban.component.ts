@@ -13,6 +13,7 @@ import { AssignmentService } from '../../services/assignment.service';
 import { stat } from 'fs';
 import { Task } from '../../models/task/task';
 import { UpdateTask } from '../../models/task/update-task';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-kanban',
@@ -27,6 +28,7 @@ export class KanbanComponent implements OnInit{
    private assignment_service = inject (AssignmentService);
    private route = inject(ActivatedRoute);
    private assignments : Task[] = [];
+   private spinner = inject(NgxSpinnerService);
    
   constructor(private dialog: MatDialog)
   {
@@ -65,6 +67,7 @@ export class KanbanComponent implements OnInit{
 
   private getBoard():void
   {
+    this.spinner.show();
     this.state_service.fetchAllStates().subscribe({
       next : (states : State[])=>
     {
@@ -100,10 +103,11 @@ export class KanbanComponent implements OnInit{
           columns.push(new Column(state.name,state.id + "",stateProjects,ids));
         });
         this.board.columns = columns;
+
       },
-      error : (error:any)=> console.log(error)
+      error : (error:any)=> {console.log(error);}
       });
-      
+      this.spinner.hide();
     },
     error :(error)=> console.log(error)});
   }
