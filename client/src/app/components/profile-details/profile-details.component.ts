@@ -6,6 +6,7 @@ import { UserService } from '../../services/user.service';
 import { UpdateUser } from '../../models/user/update-user';
 import { Router } from '@angular/router';
 import { UserProfileService } from '../../services/user-profile.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-details',
@@ -35,7 +36,10 @@ export class ProfileDetailsComponent {
     this.editMode = !this.editMode;
   }
 
-  editProfile(userid: Number): void {
+  editProfile(userid: Number,form: NgForm): void {
+    if (form.invalid) {
+      return;
+    }
     this.userService.updateUser(this.user).subscribe(response => {
       this.userProfileService.setUserProfile(this.user);
       alert('Profile edited successfully!');
