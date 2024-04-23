@@ -42,17 +42,22 @@ export class CreateProjectOverlayComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
   ngOnInit(): void {
+    this.roleService.getAllRoles().subscribe(roles => {
+      this.roles = roles;
+    });
     this.userService.getUsers().subscribe(users => {
       this.users = users;
+
+      this.users.forEach(user => {
+          this.selectedUserRolesMap.set(user.id, user.role.id);
+          console.log(this.selectedUserRolesMap);
+      });
     });
     this.priorityService.getPriorities().subscribe(priorities => {
       this.priorities = priorities;
     });
     this.teamService.getTeams().subscribe(teams => {
       this.teams = teams;
-    });
-    this.roleService.getAllRoles().subscribe(roles => {
-      this.roles = roles;
     });
     this.projectObj = {
       userIds : [],
