@@ -2,23 +2,38 @@
   <thy-layout>
     <thy-header class="header-with-baseline">
       <ng-template #headerContent>
-        <thy-button-group thySize="sm" thyType="outline-default">
-          <button  *ngFor="let view of views" [class.active]="view.value === selectedViewType" (click)="selectView(view.value)">
+        <mat-button-toggle-group #group="matButtonToggleGroup"> 
+          <mat-button-toggle  *ngFor="let view of views" [class.active]="view.value === selectedViewType" (click)="selectView(view.value)">
             {{ view.name }}
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        &nbsp; &nbsp; &nbsp;
+        
+        
+        <!-- <thy-button thyType="primary" thySize="sm" >Refresh</thy-button> -->
+        &nbsp; &nbsp; &nbsp;
+        <button mat-mini-fab color="primary " (click)="scrollToToday()" aria-label="Example icon button with a delete icon">
+          <mat-icon>refresh</mat-icon>
+        </button>
+        &nbsp; &nbsp; &nbsp;
+        <div class="example-button-container">
+          <button mat-mini-fab (click)="refresh()" aria-label="Example icon button with a home icon">
+            <mat-icon>refresh</mat-icon>
           </button>
-        </thy-button-group>
+          &nbsp; &nbsp; &nbsp;
+          <button mat-raised-button (click)="scrollToToday()" >
+            <span>Scroll to today</span>
+            <mat-icon>calendar_month</mat-icon>
+          </button>
+        </div>
+        
+        <!-- <thy-button thyType="primary" thySize="sm" (click)="print('gantt-example')"> gantt-example </thy-button> -->
         &nbsp; &nbsp; &nbsp;
-        <thy-button thyType="primary" thySize="sm" (click)="refresh()">Refresh</thy-button>
+        <!-- <span>toolbar</span> -->
+        <!-- <thy-switch class="baseline-switch" [(ngModel)]="isShowToolbarChecked"> </thy-switch> -->
         &nbsp; &nbsp; &nbsp;
-        <thy-button thyType="primary" thySize="sm" (click)="scrollToToday()">scrollToToday</thy-button>
-        &nbsp; &nbsp; &nbsp;
-        <thy-button thyType="primary" thySize="sm" (click)="print('gantt-example')"> gantt-example </thy-button>
-        &nbsp; &nbsp; &nbsp;
-        <span>toolbar</span>
-        <thy-switch class="baseline-switch" [(ngModel)]="isShowToolbarChecked"> </thy-switch>
-        &nbsp; &nbsp; &nbsp;
-        <span>Baseline comparison:        </span>
-        <thy-switch class="baseline-switch" [(ngModel)]="isBaselineChecked" (ngModelChange)="switchChange()">switchChange </thy-switch>
+        <!-- <span>Baseline comparison:        </span> -->
+        <!-- <thy-switch class="baseline-switch" [(ngModel)]="isBaselineChecked" (ngModelChange)="switchChange()">switchChange </thy-switch> -->
       </ng-template>
       
     </thy-header>

@@ -5,11 +5,16 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {MatIconModule} from '@angular/material/icon';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatButtonModule} from '@angular/material/button';
+
 
 @Component({
   selector: 'app-project-details',
   templateUrl: './project-details.component.html',
-  styleUrl: './project-details.component.css'
+  styleUrl: './project-details.component.css',
+  
 })
 export class ProjectDetailsComponent implements OnInit{
   showProjectDetails: boolean = true;

@@ -1,4 +1,7 @@
 import { AfterViewInit, Component, HostBinding, OnInit, ViewChild, inject } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import {
   GanttBarClickEvent,
   GanttBaselineItem,
@@ -37,29 +40,18 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   
   views = [
+      
       {
-          name: 'h',
-          value: GanttViewType.hour
-      },
-      {
-          name: 'd',
+          name: 'Day',
           value: GanttViewType.day
       },
       {
-          name: 'w',
-          value: GanttViewType.week
-      },
-      {
-          name: 'M',
+          name: 'Month',
           value: GanttViewType.month
       },
       {
-          name: 'Q',
+          name: 'Quarter',
           value: GanttViewType.quarter
-      },
-      {
-          name: 'Y',
-          value: GanttViewType.year
       }
   ];
 
@@ -69,7 +61,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   isBaselineChecked = false;
 
-  isShowToolbarChecked = true;
+  isShowToolbarChecked = false;
 
   loading = false;
 
@@ -109,6 +101,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   toolbarOptions: GanttToolbarOptions = {
       viewTypes: [GanttViewType.day, GanttViewType.month, GanttViewType.year]
+      
   };
 
   baselineItems: GanttBaselineItem[] = [];
@@ -129,8 +122,8 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   };
 
   @HostBinding('class.gantt-example-component') class = true;
-
   @ViewChild('gantogram') ganttComponent!: NgxGanttComponent;
+
 
   dropEnterPredicate = (event: GanttTableDragEnterPredicateContext) => {
       return true;
@@ -148,11 +141,14 @@ export class GantogramComponent implements OnInit, AfterViewInit{
           }
       });
       this.spinner.hide();
+
+      
       console.log(this.items);
   }
 
   ngAfterViewInit() {
-      setTimeout(() => this.ganttComponent.scrollToDate(1627729997), 200);
+      setTimeout(() => this.ganttComponent.scrollToDate(1713904900), 200);
+    //   setTimeout(() => this.ganttComponent.scrollToDate(), 200);
   }
 
   barClick(event: GanttBarClickEvent) {
@@ -196,8 +192,10 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   }
 
   scrollToToday() {
-      this.ganttComponent.scrollToToday();
-  }
+    this.ganttComponent.scrollToToday();
+    }
+
+
 
   switchChange() {
       if (this.isBaselineChecked) {

@@ -58,9 +58,12 @@ import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
 
 import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
 
 
-
+import { MatTooltipModule } from '@angular/material/tooltip';  
+import { MatButtonModule } from '@angular/material/button';
 
 
 
@@ -119,7 +122,11 @@ import { RouterModule } from '@angular/router';
     ThyCheckboxModule,
     ThyNotifyModule,
     ThySwitchModule,
-    ThyDatePickerModule
+    ThyDatePickerModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatButtonModule,
   ],
   providers: [
     provideClientHydration(),
