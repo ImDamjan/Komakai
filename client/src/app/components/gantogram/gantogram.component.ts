@@ -2,6 +2,7 @@ import { AfterViewInit, Component, HostBinding, OnInit, ViewChild, inject } from
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import {srLatn} from 'date-fns/locale'
 import {
   GanttBarClickEvent,
   GanttBaselineItem,
@@ -109,20 +110,32 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   options = {
       viewType: GanttViewType.day
   };
+  
 
   viewOptions = {
       dateFormat: {
-    week: "w", // 第w周
-    month: "M", // M月
-    quarter: "QQQ", // QQQ
-    year: "yyyy", // yyyy年
-    yearMonth: "yyyy-MM", // yyyy年MM月
-    yearQuarter: "yyyy-QQQ" // yyyy年QQQ
-  }
+        week: "w", // 第w周
+        month: "M", // M月
+        quarter: "QQQ", // QQQ
+        year: "yyyy", // yyyy年
+        yearMonth: "yyyy-MM", // yyyy年MM月
+        yearQuarter: "yyyy-QQQ" // yyyy年QQQ
+    },
+    styleOptions: {
+        headerHeight: 150,
+        lineHeight: 120,
+        barHeight: 150
+    },
+    dateOptions: {
+        locale: srLatn, // 时区  import { fr } from 'date-fns/locale';
+        weekStartsOn: 0 | 1 | 2 | 3 | 4 | 5 | 6 // 设置 week 起始值，默认为 1
+      }
   };
 
+  
+
   @HostBinding('class.gantt-example-component') class = true;
-  @ViewChild('gantogram') ganttComponent!: NgxGanttComponent;
+  @ViewChild('gantt') ganttComponent!: NgxGanttComponent;
 
 
   dropEnterPredicate = (event: GanttTableDragEnterPredicateContext) => {
