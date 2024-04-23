@@ -13,6 +13,7 @@ namespace server.Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
+        public int Authority { get; set; }
 
         [Column("name", TypeName = "varchar(45)")]
         public string Name { get; set; } = null!;
@@ -23,6 +24,6 @@ namespace server.Models
         [InverseProperty("Role")]
         public virtual ICollection<ProjectUser> ProjectUsers {get; set;} = new List<ProjectUser>();
         public virtual ICollection<UserProjectRoles> UserProjectRoles { get; set; } = new List<UserProjectRoles>();
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
+        public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using server.Authorization;
 using server.DTOs;
 using server.DTOs.Projects;
+using server.DTOs.Users;
 using server.Interfaces;
 using server.Mappers;
 using server.Models;
@@ -22,10 +23,12 @@ namespace server.Controllers
         private readonly IPriorityRepository _prio_repo;
         private readonly ITaskGroupRepository _group_repo;
         private readonly IStateRepository _state_repo;
-        public ProjectController(IPriorityRepository prio_repo,IProjectRepository repos,IUserRepository user_repo,ITaskGroupRepository group_repo, IStateRepository stateRepository)
+        private readonly IRoleRepository _role_repo;
+        public ProjectController(IRoleRepository role_repo,IPriorityRepository prio_repo,IProjectRepository repos,IUserRepository user_repo,ITaskGroupRepository group_repo, IStateRepository stateRepository)
         {
             _repos = repos;
             _prio_repo = prio_repo;
+            _role_repo = role_repo;
             _user_repo = user_repo;
             _group_repo = group_repo;
             _state_repo = stateRepository;
@@ -40,8 +43,14 @@ namespace server.Controllers
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
-                var users =  await _user_repo.GetUserByProjectId(project.Id);
-                var userDtos = users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+                var users =  project.ProjectUsers.Select(u=>u.User).ToList();
+                var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+                var userDtos = new List<ProjectUserDto>();
+                for(int i =0;i<users.Count;i++)
+                {
+                    userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+                }
                 dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
             }
             return Ok(dtos);
@@ -82,26 +91,35 @@ namespace server.Controllers
         {
             
             List<User> teamMembers = new List<User>();
+            List<Role> projectRoles = new List<Role>();
             //da li su datumi dobri
             if(projectDto.Start >= projectDto.End)
-                return BadRequest("End date comes before start date");
+                return BadRequest("End date comes before start date.");
             
-            
+            if(projectDto.UserProjectRoleIds.Count!=projectDto.UserIds.Count)
+                return BadRequest("Roles and user do not match.");
             //da li je prioritet validan
             var prio = await _prio_repo.GetPriority(projectDto.PriorityId);
             if(prio==null)
                 return NotFound("Priority not found.ID:" + projectDto.PriorityId);
             
             //da li su korinsici validni
-            foreach (var userId in projectDto.UserIds)
+            for (int i = 0;i<projectDto.UserIds.Count;i++)
             {
+                var userId = projectDto.UserIds[i];
+                var roleId = projectDto.UserProjectRoleIds[i];
+
+                var role =  await _role_repo.GetRoleByIdAsync(roleId);
                 var user = await _user_repo.GetUserByIdAsync(userId);
+                if(role==null)
+                    return NotFound("Role not found.ID:" + roleId);
                 if(user==null)
                     return NotFound("User not found.ID:" + userId);
                 teamMembers.Add(user);
+                projectRoles.Add(role);
             }
             var projectModel = projectDto.toProjectFromCreateDto();
-            var response = await _repos.CreateProjectAsync(projectModel,teamMembers);
+            var response = await _repos.CreateProjectAsync(projectModel,teamMembers,projectRoles);
             
             
             //kreiranje initial grupe - zove se isto kao i projekat

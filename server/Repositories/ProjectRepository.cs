@@ -20,7 +20,7 @@ namespace server.Repositories
         }
 
         
-        public async Task<Project> CreateProjectAsync(Project projectModel, List<User> teamMembers)
+        public async Task<Project> CreateProjectAsync(Project projectModel, List<User> teamMembers, List<Role> projectRoles)
         {
             
             var relationship = new List<ProjectUser>();
@@ -30,13 +30,15 @@ namespace server.Repositories
             projectModel.LastStateChangedTime = DateTime.Now;
 
             await _context.Projects.AddAsync(projectModel);
-            foreach (var user in teamMembers)
+            for(int i = 0; i < teamMembers.Count;i++)
             {
+                var user = teamMembers[i];
+                var role = projectRoles[i];
                 relationship.Add(
                     new ProjectUser{
                         User = user,
                         Project = projectModel,
-                        Role = user.Role
+                        Role = role
                     }
                 );
             }
@@ -54,6 +56,8 @@ namespace server.Repositories
         public async Task<List<Project>> GetAllProjectsAsync(ProjectFilterDto? filter=null,SortDto? sort = null)
         {
             var projects_query = _context.Projects
+            .Include(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
+            .Include(p=>p.ProjectUsers).ThenInclude(u=>u.User)
             .Include(p=>p.TaskGroups)
             .Include(p=>p.State)
             .Include(p=>p.Priority).AsQueryable();
@@ -69,13 +73,14 @@ namespace server.Repositories
             .Include(p=>p.TaskGroups)
             .Include(p=>p.State)
             .Include(p=>p.Priority)
-            .Include(p=>p.ProjectUsers)
+            .Include(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
             .FirstOrDefaultAsync(p=>p.Id==id);
         }
         public async Task<List<Project>> GetAllUserProjectsAsync(int id,ProjectFilterDto? filter=null,SortDto? sort = null)
         {
             var projects_query = _context.ProjectUsers
             .Where(u=> u.UserId==id)
+            .Include(u=>u.Role)
             .Include(u=>u.Project)
             .ThenInclude(p=>p.State)
             .Include(p=>p.Project)

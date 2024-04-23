@@ -19,7 +19,7 @@ namespace server.Interfaces
         //uzimanje projekta po idju
         Task<Project?> GetProjectByIdAsync(int id);
         //kreiranje
-        Task<Project> CreateProjectAsync(Project projectModel,List<User> teamMembers);
+        Task<Project> CreateProjectAsync(Project projectModel,List<User> teamMembers, List<Role> projectRoles);
         //update
         Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users);
         // koirniskove projekte
