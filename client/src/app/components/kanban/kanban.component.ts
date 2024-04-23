@@ -120,7 +120,8 @@ export class KanbanComponent implements OnInit{
   public drop(event: CdkDragDrop<Task[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
+    } else 
+    {
       let user_ids :number[] = [];
 
       for (let i = 0; i < event.item.data.assignees.length; i++) {
