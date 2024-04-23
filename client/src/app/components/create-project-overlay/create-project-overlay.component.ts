@@ -8,6 +8,8 @@ import { TeamService } from '../../services/team.service';
 import { User } from '../../models/user/user';
 import { CreateProject } from '../../models/project/create-project';
 import { Team } from '../../models/team';
+import { Role } from '../../models/role';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -22,6 +24,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   users: User[] = [];
   priorities: any[] | undefined;
   teams: Team[] = [];
+  roles: Role[] = [];
   showDropdown: boolean = false;
   hoveredTeam: any;
   submitted = false;
@@ -36,7 +39,7 @@ export class CreateProjectOverlayComponent implements OnInit {
 
 
   selectedPriorityId!: number;
-  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService) { }
+  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe(users => {
@@ -48,6 +51,9 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.teamService.getTeams().subscribe(teams => {
       this.teams = teams;
     });
+    this.roleService.getAllRoles().subscribe(roles => {
+      this.roles = roles;
+    });
     this.projectObj = {
       userIds : [],
       userProjectRoleIds : [],
@@ -58,8 +64,6 @@ export class CreateProjectOverlayComponent implements OnInit {
       budget : 0,
       description : "",
       type : ""
-
-
     };
   }
 
