@@ -100,7 +100,7 @@ namespace server.Repositories
 
             return user;
         }
-
+        /*
         public async Task DeleteProfilePictureAsync(int userId)
         {
             var user = await _context.Users.FindAsync(userId);
@@ -113,7 +113,7 @@ namespace server.Repositories
             user.ProfilePicturePath = string.Empty; // Set the profile picture path to empty string to remove it
             await _context.SaveChangesAsync();
         }
-
+        */
         public async Task<List<User>> GetUserByProjectId(int project_id)
         {
             var users = await _context.Users.Include(u=>u.ProjectUsers).ThenInclude(u=>u.Role).ToListAsync();
