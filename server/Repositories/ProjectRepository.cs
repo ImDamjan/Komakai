@@ -94,7 +94,7 @@ namespace server.Repositories
 
             return await GetAllFilteredProjectsAsync(projects_query,filter,sort);
         }
-        public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users)
+        public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users, List<Role> project_roles)
         {
             var project = await GetProjectByIdAsync(project_id);
             if(project==null)
@@ -108,12 +108,14 @@ namespace server.Repositories
                 project.LastStateChangedTime = DateTime.Now;
             }
             List<ProjectUser> users = new List<ProjectUser>();
-            foreach(var user in project_users)
+            for(int i = 0; i< project_users.Count;i++)
             {
+                var user = project_users[i];
+                var role = project_roles[i];
                 users.Add(new ProjectUser{
                     Project = project,
                     User = user,
-                    ProjectRoleId = user.RoleId
+                    Role = role
                 });
             }
             project.Percentage = projectDto.Percentage;

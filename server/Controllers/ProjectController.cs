@@ -128,7 +128,7 @@ namespace server.Controllers
                 if(user==null)
                     return NotFound("User not found.ID:" + userId);
 
-                if(user.Role.Authority < role.Authority)
+                if(user.Role.Authority > role.Authority)
                     return BadRequest("Project role higher then the role on a platform.");
                 teamMembers.Add(user);
                 projectRoles.Add(role);
@@ -165,13 +165,27 @@ namespace server.Controllers
             //da li su datumi dobri
             if(projectDto.Start >= projectDto.End)
                 return BadRequest("End date comes before start date");
+            
+            if(projectDto.ProjectRoles.Count!=projectDto.Members.Count)
+                return BadRequest("Roles and user do not match.");
 
             var users =  new List<User>();
-            foreach (var userId in projectDto.Members)
+            var roles = new List<Role>();
+            for (int i =0;i< projectDto.Members.Count;i++)
             {
+                var userId = projectDto.Members[i];
+                var roleId = projectDto.ProjectRoles[i];
+                var role = await _role_repo.GetRoleByIdAsync(roleId);
                 var user = await _user_repo.GetUserByIdAsync(userId);
                 if(user==null)
-                    return Ok("user not found");
+                    return NotFound("user not found");
+                if(role == null)
+                    return NotFound("Role not found");
+                
+                if(role.Authority < user.Role.Authority)
+                    return BadRequest("Project role higher then the role on a platform.");
+                
+                roles.Add(role);
                 users.Add(user);
             }
             var prio = await _prio_repo.GetPriority(projectDto.PriorityId);
@@ -181,15 +195,21 @@ namespace server.Controllers
             if(state==null)
                 return NotFound("State with "+ projectDto.StateId+ " does not exist");
 
-            var project = await _repos.UpdateProjectAsync(projectDto, project_id, users);
+            var project = await _repos.UpdateProjectAsync(projectDto, project_id, users,roles);
 
             if(project==null)
                 return NotFound("Project with Id:"+project_id + " was not found !!!");
             var dto = new ProjectDto();
-
             
-            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
-            dto = project.ToProjectDto(ids, state.toStateDto(),prio.toPrioDto());
+            users =  project.ProjectUsers.Select(u=>u.User).ToList();
+            var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+            var userDtos = new List<ProjectUserDto>();
+            for(int i =0;i<users.Count;i++)
+            {
+                userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+            }
+            dto = project.ToProjectDto(userDtos, state.toStateDto(),prio.toPrioDto());
     
             return Ok(dto);
         }

@@ -21,7 +21,7 @@ namespace server.Interfaces
         //kreiranje
         Task<Project> CreateProjectAsync(Project projectModel,List<User> teamMembers, List<Role> projectRoles);
         //update
-        Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users);
+        Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users, List<Role> project_roles);
         // koirniskove projekte
         Task<List<Project>> GetAllUserProjectsAsync(int id,ProjectFilterDto? filter=null,SortDto? sort = null);
         //brisanje
