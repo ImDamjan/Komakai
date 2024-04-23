@@ -38,7 +38,6 @@ export class CreateProjectOverlayComponent implements OnInit {
   selectedUserRolesMap : Map<number,number> = new Map<number,number>();
   userRoles: Map<number, number> = new Map<number, number>();
 
-
   selectedPriorityId!: number;
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
@@ -77,31 +76,45 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.showDropdown = !this.showDropdown;
   }
 
-  onUserSelected(user: User): void {
-    // Handle user selection
-    if (this.isSelected(user)) {
-        this.selectedUserRolesMap.delete(user.id);
-        // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
-    } else {
-        // this.selectedUserIds.push(user.id);
-        this.selectedUserRolesMap.set(user.id,user.role.id);
+  onUserSelected(user: User, event: any): void {
+    event.stopPropagation();
+    const target = event.target;
+    if (target && target.value !== undefined) {
+      const selectedRoleId = event.target?.value;
+      console.log('User selected:', user);
+      console.log('Role selected:', selectedRoleId);
+      // Handle user selection
+      if (this.isSelected(user)) {
+          this.selectedUserRolesMap.delete(user.id);
+          // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
+      } else {
+          // this.selectedUserIds.push(user.id);
+          this.selectedUserRolesMap.set(user.id,selectedRoleId);
+      }
     }
 }
 
   isSelected(user: User): boolean {
     // Check if user is selected
     // return this.selectedUserIds.includes(user.id);
-    // console.log(this.selectedUserRolesMap);
     return this.selectedUserRolesMap.has(user.id);
   }
 
-  toggleUserSelection(user: User, event: Event): void {
+  toggleUserSelection(user: User, event: any): void {
     event.stopPropagation();
-    if (this.isSelected(user)) {
-        this.selectedUserRolesMap.delete(user.id);
-    } else {
-        // this.selectedUserIds.push(user.id);
-        this.selectedUserRolesMap.set(user.id,user.role.id);
+    const target = event.target;
+    if (target && target.value !== undefined) {
+      const selectedRoleId = event.target?.value;
+      console.log('User selected:', user);
+      console.log('Role selected:', selectedRoleId);
+      // Handle user selection
+      if (this.isSelected(user)) {
+          this.selectedUserRolesMap.delete(user.id);
+          // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
+      } else {
+          // this.selectedUserIds.push(user.id);
+          this.selectedUserRolesMap.set(user.id,selectedRoleId);
+      }
     }
   }
 
