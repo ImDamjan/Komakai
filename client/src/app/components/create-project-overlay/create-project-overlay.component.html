@@ -69,6 +69,9 @@
                         <div class="options" *ngIf="showDropdown">
                             <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user, $event)">
                                 <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user, $event)">
+                                <select>
+                                    <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+                                </select>
                                 {{ user.name }} {{ user.lastname }}
                             </div>
 
@@ -79,6 +82,9 @@
                                     <div *ngFor="let member of team.members">
                                         <input type="checkbox" [checked]="isSelected(member)" (change)="onUserSelected(member)">
                                         {{ getUserName(member.id) }}
+                                        <select>
+                                            <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
