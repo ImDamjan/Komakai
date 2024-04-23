@@ -37,6 +37,7 @@ export class CreateProjectOverlayComponent implements OnInit {
 
   selectedUserRolesMap : Map<number,number> = new Map<number,number>();
   userRoles: Map<number, number> = new Map<number, number>();
+  defaultRoles: Map<number, number> = new Map<number, number>();
 
   selectedPriorityId!: number;
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
@@ -50,7 +51,7 @@ export class CreateProjectOverlayComponent implements OnInit {
 
       this.users.forEach(user => {
           this.userRoles.set(user.id, user.role.id);
-          console.log(this.userRoles);
+          this.defaultRoles = this.userRoles;
       });
     });
     this.priorityService.getPriorities().subscribe(priorities => {
@@ -81,8 +82,6 @@ export class CreateProjectOverlayComponent implements OnInit {
     const target = event.target;
     if (target && target.value !== undefined) {
       const selectedRoleId = event.target?.value;
-      console.log('User selected:', user);
-      console.log('Role selected:', selectedRoleId);
       // Handle user selection
       if (this.isSelected(user)) {
           this.selectedUserRolesMap.delete(user.id);
@@ -100,23 +99,26 @@ export class CreateProjectOverlayComponent implements OnInit {
     return this.selectedUserRolesMap.has(user.id);
   }
 
-  toggleUserSelection(user: User, event: any): void {
-    event.stopPropagation();
-    const target = event.target;
-    if (target && target.value !== undefined) {
-      const selectedRoleId = event.target?.value;
-      console.log('User selected:', user);
-      console.log('Role selected:', selectedRoleId);
+  toggleUserSelection(user: User): void {
+      const selectedRoleId = this.userRoles.get(user.id);
       // Handle user selection
       if (this.isSelected(user)) {
           this.selectedUserRolesMap.delete(user.id);
           // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
       } else {
           // this.selectedUserIds.push(user.id);
-          this.selectedUserRolesMap.set(user.id,selectedRoleId);
-      }
+          this.selectedUserRolesMap.set(user.id,selectedRoleId!);
     }
   }
+
+  onRoleChanged(user: User, event: any) {
+    const selectedRoleId = event.target.value;
+    this.userRoles.set(user.id,selectedRoleId);
+
+    if(this.isSelected(user))
+      this.selectedUserRolesMap.set(user.id,selectedRoleId);
+  }
+  
 
 
   closeOverlay(): void {
@@ -130,14 +132,12 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.selectedUserRolesMap.forEach((value,key) => {
       selected_roles.push(value);
       selected_users.push(key);
-      console.log(key,value);
     });
     this.projectObj.userProjectRoleIds = selected_roles;
     this.projectObj.userIds = selected_users;
     this.projectObj.priorityId = this.selectedPriorityId;
     this.submitted = true;
     this.submissionError = null;
-    console.log(this.selectedUserRolesMap);
 
     if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end) {
       this.submissionError = 'Please fill in all necessary fields.';
@@ -169,10 +169,10 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.projectObj.budget = 0;
     this.projectObj.description = '';
     this.projectObj.type = '';
+    this.userRoles = this.defaultRoles;
   }
 
   showTeamMembers(team: Team): void {
-    console.log(team.members);
     this.hoveredTeam = team; // Set the hovered team
   }
 
@@ -209,8 +209,9 @@ export class CreateProjectOverlayComponent implements OnInit {
         // If team is not selected, select it and its members
         // this.selectedUserIds = [...this.selectedUserIds, ...team_member_ids];
         team_member_ids.forEach(member => {
+          const selectedRoleId = this.userRoles.get(member.id);
           if(!this.isSelected(member))
-            this.selectedUserRolesMap.set(member.id,member.role.id);
+            this.selectedUserRolesMap.set(member.id,selectedRoleId!);
         });
     }
   }
