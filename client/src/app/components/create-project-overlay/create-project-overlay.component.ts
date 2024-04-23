@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
@@ -8,6 +8,7 @@ import { TeamService } from '../../services/team.service';
 import { User } from '../../models/user/user';
 import { CreateProject } from '../../models/project/create-project';
 import { Team } from '../../models/team';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -27,11 +28,14 @@ export class CreateProjectOverlayComponent implements OnInit {
 
   selectedUserIds: number[] = [];
   selectedPriorityId!: number;
+  private spinner = inject(NgxSpinnerService);
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService) { }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.userService.getUsers().subscribe(users => {
       this.users = users;
+      this.spinner.hide();
     });
     this.priorityService.getPriorities().subscribe(priorities => {
       this.priorities = priorities;
@@ -87,6 +91,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   createProject(): void {
+    this.spinner.show();
     this.projectObj.userIds = this.selectedUserIds;
     this.projectObj.priorityId = this.selectedPriorityId;
     this.submitted = true;
@@ -94,16 +99,19 @@ export class CreateProjectOverlayComponent implements OnInit {
 
     if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end) {
       this.submissionError = 'Please fill in all necessary fields.';
+      this.spinner.hide();
       return;
     }
 
     this.projectService.createProject(this.projectObj).subscribe(response => {
       console.log('Project created successfully:', response);
       alert('Project created successfully!');
+      this.spinner.hide();
       this.resetForm();
       this.submitted = false;
     }, error => {
       console.error('Error creating project:', error);
+      this.spinner.hide();
       this.submissionError = 'Error creating project. Please try again.';
     });
   }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnInit, ViewChild, inject } from '@angular/core';
 import {
   GanttBarClickEvent,
   GanttBaselineItem,
@@ -22,6 +22,7 @@ import { ThyNotifyService } from 'ngx-tethys/notify';
 import { finalize, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../../helper';
+import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 
 
 
@@ -134,17 +135,19 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   dropEnterPredicate = (event: GanttTableDragEnterPredicateContext) => {
       return true;
   };
+  private spinner = inject(NgxSpinnerService);
 
   constructor(private printService: GanttPrintService, private thyNotify: ThyNotifyService) {}
 
   ngOnInit(): void {
       // init items children
+      this.spinner.show();
       this.items.forEach((item, index) => {
           if (index % 5 === 0) {
               item.children = randomItems(random(1, 5), item);
           }
       });
-
+      this.spinner.hide();
       console.log(this.items);
   }
 
