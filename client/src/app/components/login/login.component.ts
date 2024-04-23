@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component} from '@angular/core';
+import { Component, inject} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { environment } from '../../environments/environment';
 import { Login } from '../../models/login';
 import { AuthenticationService } from '../../services/atentication.service';
+import { NgxSpinner, NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -23,21 +24,31 @@ export class LoginComponent{
   idUser='';
 
   showPassword: boolean = false;
+  errMessage : string = "";
 
   decodedToken: any;
   apiUrl = environment.apiUrl;
+  spinner = inject(NgxSpinnerService)
   constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService, private authService: AuthenticationService) {
   }
 
   onLogin(): void {
+    this.spinner.show();
     this.authService.login(this.loginObj).subscribe({
       next:(response)=>{
+        this.spinner.hide();
         this.authService.setToken(response);
-        console.log("logovan sam " + this.authService.isAuthenticated());
         this.router.navigate(['/dashboard']);
       },
       error:(error)=>{
+        this.spinner.hide();
         console.log(error)
+        if(this.loginObj.username ===undefined || this.loginObj.password === undefined)
+        {
+          this.errMessage = "Please enter your credentials.";
+        }
+        else
+          this.errMessage = "Wrong credentials.";
       }
     })
   }
