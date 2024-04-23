@@ -63,8 +63,14 @@ namespace server.Controllers
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
-                var users =  await _user_repo.GetUserByProjectId(project.Id);
-                var userDtos = users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+                var users =  project.ProjectUsers.Select(u=>u.User).ToList();
+                var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+                var userDtos = new List<ProjectUserDto>();
+                for(int i =0;i<users.Count;i++)
+                {
+                    userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+                }
                 dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
             }
             return Ok(dtos);
@@ -79,9 +85,15 @@ namespace server.Controllers
             
             var dto = new ProjectDto();
 
-            var users =  await _user_repo.GetUserByProjectId(project.Id);
-            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
-            dto = project.ToProjectDto(ids,project.State.toStateDto(),project.Priority.toPrioDto());
+            var users =  project.ProjectUsers.Select(u=>u.User).ToList();
+            var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+            var userDtos = new List<ProjectUserDto>();
+            for(int i =0;i<users.Count;i++)
+            {
+                userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+            }
+            dto = project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto());
     
             return Ok(dto);
         }
@@ -115,6 +127,9 @@ namespace server.Controllers
                     return NotFound("Role not found.ID:" + roleId);
                 if(user==null)
                     return NotFound("User not found.ID:" + userId);
+
+                if(user.Role.Authority < role.Authority)
+                    return BadRequest("Project role higher then the role on a platform.");
                 teamMembers.Add(user);
                 projectRoles.Add(role);
             }
@@ -125,15 +140,22 @@ namespace server.Controllers
             //kreiranje initial grupe - zove se isto kao i projekat
             var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
 
-            var users =  await _user_repo.GetUserByProjectId(projectModel.Id);
-            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+
+            var users =  projectModel.ProjectUsers.Select(u=>u.User).ToList();
+            var project_roles = projectModel.ProjectUsers.Select(u=>u.Role).ToList();
+
+            var userDtos = new List<ProjectUserDto>();
+            for(int i =0;i<users.Count;i++)
+            {
+                userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+            }
             var state = await _state_repo.GetStateByIdAsync(response.StateId);
             if(state==null)
                 return NotFound("error");
             
             await _group_repo.CreateAsync(group);
 
-            return Ok(response.ToProjectDto(ids,state.toStateDto(),prio.toPrioDto()));
+            return Ok(response.ToProjectDto(userDtos,state.toStateDto(),prio.toPrioDto()));
         }
 
         [HttpPut]
