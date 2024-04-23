@@ -227,5 +227,31 @@ namespace server.Controllers
                 return StatusCode(500, $"Internal server error: {ex}");
             }
         }
+
+        [HttpGet("{userId}/profilePicture")]
+        public async Task<IActionResult> GetProfilePicture(int userId)
+        {
+            try
+            {
+                var user = await _repos.GetUserByIdAsync(userId);
+
+                if (user == null)
+                    return NotFound("User not found");
+
+                if (user.ProfilePicture == null || user.ProfilePicture.Length == 0)
+                    return NotFound("Profile picture not found for the user");
+
+                // Convert the byte array profile picture to a base64-encoded string
+                var base64ProfilePicture = Convert.ToBase64String(user.ProfilePicture);
+
+                // Return the base64-encoded profile picture string to the client
+                return Ok(new { ProfilePicture = base64ProfilePicture });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
+
     }
 }
