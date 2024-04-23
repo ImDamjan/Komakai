@@ -10,7 +10,7 @@ namespace server.Mappers
 {
     public static class TeamMapper
     {
-        public static TeamDto ToTeamDto(this Team t, List<UserDto> members)
+        public static TeamDto ToTeamDto(this Team t, List<UserRoleDto> members)
         {
             return new TeamDto{
                 Id = t.Id,

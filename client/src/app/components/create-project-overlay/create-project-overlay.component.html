@@ -67,8 +67,8 @@
                     <div class="custom-dropdown">
                         <span class="selected-option" (click)="toggleDropdown()">Select Members</span>
                         <div class="options" *ngIf="showDropdown">
-                            <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id, $event)">
-                                <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                            <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user, $event)">
+                                <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user, $event)">
                                 {{ user.name }} {{ user.lastname }}
                             </div>
 
@@ -77,7 +77,7 @@
                                 {{ team.name }}
                                 <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
                                     <div *ngFor="let member of team.members">
-                                        <input type="checkbox" [checked]="isSelected(member.id)" (change)="onUserSelected(member.id)">
+                                        <input type="checkbox" [checked]="isSelected(member)" (change)="onUserSelected(member)">
                                         {{ getUserName(member.id) }}
                                     </div>
                                 </div>

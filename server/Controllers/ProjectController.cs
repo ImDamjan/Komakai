@@ -105,6 +105,8 @@ namespace server.Controllers
             List<User> teamMembers = new List<User>();
             List<Role> projectRoles = new List<Role>();
             //da li su datumi dobri
+            System.Console.WriteLine(projectDto.UserProjectRoleIds.Count);
+            System.Console.WriteLine(projectDto.UserIds.Count);
             if(projectDto.Start >= projectDto.End)
                 return BadRequest("End date comes before start date.");
             

@@ -15,6 +15,10 @@ import { Team } from '../../models/team';
   styleUrl: './create-project-overlay.component.css'
 })
 export class CreateProjectOverlayComponent implements OnInit {
+  //Anastasija, ja sam ovde ubacio prepravio sta sam mislio da treba. U CreateProject, 
+  //dodato ti je UserProjectRoleIds tu ubacujes id-ove rolova za usere na projektu. Napravicu tako da bude
+  // za sada uvek salje defaultne role koje imaju na platformi. Morace da se korisit mapa(recnik) na frontu, a posle
+  // da se razbije na posebno key, a posebno value, key mape ti je userid, a value ti je roleId
   users: User[] = [];
   priorities: any[] | undefined;
   teams: Team[] = [];
@@ -26,6 +30,11 @@ export class CreateProjectOverlayComponent implements OnInit {
   projectObj!: CreateProject;
 
   selectedUserIds: number[] = [];
+
+
+  selectedUserRolesMap : Map<number,number> = new Map<number,number>();
+
+
   selectedPriorityId!: number;
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService) { }
 
@@ -41,6 +50,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     });
     this.projectObj = {
       userIds : [],
+      userProjectRoleIds : [],
       priorityId : this.selectedPriorityId,
       title : "",
       start : new Date(),
@@ -57,26 +67,31 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.showDropdown = !this.showDropdown;
   }
 
-  onUserSelected(userId: number): void {
+  onUserSelected(user: User): void {
     // Handle user selection
-    if (this.isSelected(userId)) {
-        this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
+    if (this.isSelected(user)) {
+        this.selectedUserRolesMap.delete(user.id);
+        // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
     } else {
-        this.selectedUserIds.push(userId);
+        // this.selectedUserIds.push(user.id);
+        this.selectedUserRolesMap.set(user.id,user.role.id);
     }
 }
 
-  isSelected(userId: number): boolean {
+  isSelected(user: User): boolean {
     // Check if user is selected
-    return this.selectedUserIds.includes(userId);
+    // return this.selectedUserIds.includes(user.id);
+    // console.log(this.selectedUserRolesMap);
+    return this.selectedUserRolesMap.has(user.id);
   }
 
-  toggleUserSelection(userId: number, event: Event): void {
+  toggleUserSelection(user: User, event: Event): void {
     event.stopPropagation();
-    if (this.isSelected(userId)) {
-        this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
+    if (this.isSelected(user)) {
+        this.selectedUserRolesMap.delete(user.id);
     } else {
-        this.selectedUserIds.push(userId);
+        // this.selectedUserIds.push(user.id);
+        this.selectedUserRolesMap.set(user.id,user.role.id);
     }
   }
 
@@ -87,10 +102,19 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   createProject(): void {
-    this.projectObj.userIds = this.selectedUserIds;
+    let selected_users : number[] = [];
+    let selected_roles : number[] = [];
+    this.selectedUserRolesMap.forEach((value,key) => {
+      selected_roles.push(value);
+      selected_users.push(key);
+      console.log(key,value);
+    });
+    this.projectObj.userProjectRoleIds = selected_roles;
+    this.projectObj.userIds = selected_users;
     this.projectObj.priorityId = this.selectedPriorityId;
     this.submitted = true;
     this.submissionError = null;
+    console.log(this.selectedUserRolesMap);
 
     if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end) {
       this.submissionError = 'Please fill in all necessary fields.';
@@ -115,7 +139,9 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.projectObj.start = new Date();
     this.projectObj.end = new Date();
     this.projectObj.userIds = [];
+    this.projectObj.userProjectRoleIds = [];
     this.selectedUserIds = [];
+    this.selectedUserRolesMap.clear();
     this.selectedPriorityId = 0;
     this.projectObj.budget = 0;
     this.projectObj.description = '';
@@ -146,16 +172,23 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   onTeamSelected(team: Team): void {
-    let team_member_ids : number[] = [];
+    let team_member_ids : User[] = [];
     team.members.forEach(member => {
-      team_member_ids.push(member.id);
+      team_member_ids.push(member);
     });
     if (this.isSelectedTeam(team.id)) {
         // If team is already selected, deselect it and its members
-        this.selectedUserIds = this.selectedUserIds.filter((id: number) => !team_member_ids.includes(id));
-    } else {
+        // this.selectedUserIds = this.selectedUserIds.filter((id: number) => !team_member_ids.includes(id));
+        team_member_ids.forEach(member => {
+          this.selectedUserRolesMap.delete(member.id);
+        });
+      } else {
         // If team is not selected, select it and its members
-        this.selectedUserIds = [...this.selectedUserIds, ...team_member_ids];
+        // this.selectedUserIds = [...this.selectedUserIds, ...team_member_ids];
+        team_member_ids.forEach(member => {
+          if(!this.isSelected(member))
+            this.selectedUserRolesMap.set(member.id,member.role.id);
+        });
     }
   }
 
@@ -163,7 +196,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       // Check if all members of the team are selected
       const team = this.teams.find((team: Team) => team.id === teamId);
       if (team) {
-          return team.members.every((member: User) => this.isSelected(member.id));
+          return team.members.every((member: User) => this.isSelected(member));
       }
       return false;
   }

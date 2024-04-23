@@ -68,7 +68,8 @@ export class ProjectService implements OnInit{
         end : project.end,
         budget : project.budget,
         description : project.description,
-        type : project.type
+        type : project.type,
+        userProjectRoleIds : project.userProjectRoleIds
       }
       return this.http.post<Project>(url,body);
   }
