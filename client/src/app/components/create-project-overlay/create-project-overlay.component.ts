@@ -36,6 +36,7 @@ export class CreateProjectOverlayComponent implements OnInit {
 
 
   selectedUserRolesMap : Map<number,number> = new Map<number,number>();
+  userRoles: Map<number, number> = new Map<number, number>();
 
 
   selectedPriorityId!: number;
@@ -49,8 +50,8 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.users = users;
 
       this.users.forEach(user => {
-          this.selectedUserRolesMap.set(user.id, user.role.id);
-          console.log(this.selectedUserRolesMap);
+          this.userRoles.set(user.id, user.role.id);
+          console.log(this.userRoles);
       });
     });
     this.priorityService.getPriorities().subscribe(priorities => {
