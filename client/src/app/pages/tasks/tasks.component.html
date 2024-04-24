@@ -1,10 +1,10 @@
 <div id="tasks">
     <div id="task-header">
         <h1 id="title">Tasks</h1>
-        <app-task-header></app-task-header>
+        <app-task-header #taskHeader [filter]="filter"></app-task-header>
     </div>
      <br><br>
-    <div *ngFor="let task of tasks">
+    <div *ngFor="let task of filteredTasks">
         <app-project-task [task]="task"></app-project-task>
     </div>
 </div>

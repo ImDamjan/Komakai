@@ -159,22 +159,22 @@ namespace server.Controllers
 
         [HttpGet]
         [Route("getByUser/{user_id}")]
-        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] SortDto sort,[FromQuery] AssignmentFilterDto filter)
+        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] int project_id, [FromQuery] SortDto sort, [FromQuery] AssignmentFilterDto filter)
         {
-            var user =  await _user_repo.GetUserByIdAsync(user_id);
-            if(user==null)
+            var user = await _user_repo.GetUserByIdAsync(user_id);
+            if (user == null)
                 return NotFound("User " + user_id + " does not exist");
-            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter,sort);
+            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter, sort, project_id);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)
             {
                 var ownerDto = tasks[i].User.toAssignmentUserDto();
                 var stateDto = tasks[i].State.toStateDto();
-                var teamDto = tasks[i].Users.Select(u=>u.toAssignmentUserDto()).ToList();
+                var teamDto = tasks[i].Users.Select(u => u.toAssignmentUserDto()).ToList();
                 var groupdto = tasks[i].TaskGroup.toTaskGroupDto();
                 var prioDto = tasks[i].Priority.toPrioDto();
-                res.Add(tasks[i].toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
+                res.Add(tasks[i].toAssignmentDto(teamDto, prioDto, stateDto, ownerDto, groupdto));
             }
 
             return Ok(res);
@@ -258,13 +258,13 @@ namespace server.Controllers
         }
 
         [HttpGet("getAssignmentsByProject/{project_id}")]
-        public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id,[FromQuery] SortDto sort,[FromQuery] AssignmentFilterDto filter)
+        public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id,[FromQuery] int user_id,[FromQuery] SortDto sort,[FromQuery] AssignmentFilterDto filter)
         {
             var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project_id);
             var res = new List<AssignmentDto>();
             foreach (var group in groups)
             {
-                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id, filter,sort);
+                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id, filter,sort, user_id);
                 for (int i = 0; i< tasks.Count;i++)
                 {
                     var dep = new List<int>();
