@@ -9,13 +9,11 @@
     <div class ="time">
       <div class = "start">
         <h2>Start date</h2>
-        <p>(yyyy-mm-dd)</p>
-        <p>{{transformDate(task.start)}}</p>
+        <p [title]="hoverDateFormat()">{{transformDate(task.start)}}</p>
       </div>
       <div class = "end">
         <h2>End date</h2>
-        <p>(yyyy-mm-dd)</p>
-        <p>{{transformDate(task.end)}}</p>
+        <p [title]="hoverDateFormat()">{{transformDate(task.end)}}</p>
       </div>
     </div>
     <div class = "progress">
@@ -24,6 +22,6 @@
       
     </div>
     <div class="task-details">
-      <p>Details...</p>
+      <p (click)="openShowTaskOverlay()">Details...</p>
     </div>
   </div>

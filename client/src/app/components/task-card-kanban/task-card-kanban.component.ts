@@ -1,5 +1,7 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, inject } from '@angular/core';
 import { Task } from '../../models/task/task';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
 
 @Component({
   selector: 'app-task-card-kanban',
@@ -8,12 +10,16 @@ import { Task } from '../../models/task/task';
 })
 export class TaskCardKanbanComponent implements OnInit {
   @Input() public task! : Task;
+  private dialog = inject(MatDialog);
   ngOnInit(): void {
     this.task.end = new Date(this.task.end);
     this.task.start = new Date(this.task.start);
   }
 
-
+  public hoverDateFormat()
+  {
+    return "Date Format: yyyy-mm-dd"
+  }
   public getPriorityClass()
   {
     if(this.task.priority.description.toLowerCase() === "low")
@@ -41,5 +47,15 @@ export class TaskCardKanbanComponent implements OnInit {
       
     }
     return splited[2] + "-" + splited[0] + "-" + splited[1];
+  }
+
+  openShowTaskOverlay(): void {
+    const dialogRef = this.dialog.open(TaskDetailsComponent, {
+      data:[this.task]
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.task = result;
+    });
   }
 }
