@@ -21,7 +21,6 @@ namespace server.Mappers
                 Department = u.Department,
                 Name = u.Name,
                 Lastname = u.Lastname,
-                ProfilePicturePath = u.ProfilePicturePath,
                 IsActivated = u.IsActivated
             };
         }
