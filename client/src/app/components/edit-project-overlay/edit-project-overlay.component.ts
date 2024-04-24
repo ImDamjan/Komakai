@@ -172,23 +172,23 @@ export class EditProjectOverlayComponent {
   }
 
   onTeamSelected(team: Team): void {
-    let team_member_ids : User[] = [];
+    let team_member_ids: User[] = [];
     team.members.forEach(member => {
-      team_member_ids.push(member);
+        team_member_ids.push(member);
     });
     if (this.isSelectedTeam(team.id)) {
-        // If team is already selected, deselect it and its members
-        // this.selectedUserIds = this.selectedUserIds.filter((id: number) => !team_member_ids.includes(id));
         team_member_ids.forEach(member => {
-          this.selectedUserRolesMap.delete(member.id);
+            if (member.id != this.loggedInUserId) {
+                this.selectedUserRolesMap.delete(member.id);
+            }
         });
-      } else {
-        // If team is not selected, select it and its members
-        // this.selectedUserIds = [...this.selectedUserIds, ...team_member_ids];
+    } else {
         team_member_ids.forEach(member => {
-          const selectedRoleId = this.userRoles.get(member.id);
-          if(!this.isSelected(member))
-            this.selectedUserRolesMap.set(member.id,selectedRoleId!);
+            if (member.id != this.loggedInUserId) {
+                const selectedRoleId = this.userRoles.get(member.id);
+                if (!this.isSelected(member))
+                    this.selectedUserRolesMap.set(member.id, selectedRoleId!);
+            }
         });
     }
   }
