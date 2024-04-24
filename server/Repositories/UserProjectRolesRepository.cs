@@ -23,7 +23,7 @@ namespace server.Repositories
             return await _context.UserProjectRoles.ToListAsync();
         }
 
-        public async Task<UserProjectRoles> GetUserProjectRolesById(int id)
+        public async Task<UserProjectRoles?> GetUserProjectRolesById(int id)
         {
             return await _context.UserProjectRoles.FindAsync(id);
         }

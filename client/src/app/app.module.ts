@@ -43,6 +43,7 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
 import { MatSliderModule } from '@angular/material/slider';
+import { FilterDetailsComponent } from './components/filter-details/filter-details.component';
 import {NgxSpinnerModule} from 'ngx-spinner'
 
 import { ThyLayoutModule } from 'ngx-tethys/layout';
@@ -59,6 +60,10 @@ import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
+import { ProfileDetailsComponent } from './components/profile-details/profile-details.component';
+import { SortDetailsComponent } from './components/sort-details/sort-details.component';
+import { FilterProjectComponent } from './components/filter-project/filter-project.component';
+import { SortProjectComponent } from './components/sort-project/sort-project.component';
 
 
 import { MatTooltipModule } from '@angular/material/tooltip';  
@@ -105,6 +110,11 @@ import { MatChipsModule } from '@angular/material/chips';
     AdminComponent,
     MemberComponent,
     EditProjectOverlayComponent,
+    ProfileDetailsComponent,
+    FilterDetailsComponent,
+    SortDetailsComponent,
+    FilterProjectComponent,
+    SortProjectComponent,
   ],
   imports: [
     FormsModule,

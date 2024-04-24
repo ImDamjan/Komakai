@@ -20,7 +20,7 @@ namespace server.Repositories
         }
 
         
-        public async Task<Project> CreateProjectAsync(Project projectModel, List<User> teamMembers)
+        public async Task<Project> CreateProjectAsync(Project projectModel, List<User> teamMembers, List<Role> projectRoles)
         {
             
             var relationship = new List<ProjectUser>();
@@ -30,13 +30,15 @@ namespace server.Repositories
             projectModel.LastStateChangedTime = DateTime.Now;
 
             await _context.Projects.AddAsync(projectModel);
-            foreach (var user in teamMembers)
+            for(int i = 0; i < teamMembers.Count;i++)
             {
+                var user = teamMembers[i];
+                var role = projectRoles[i];
                 relationship.Add(
                     new ProjectUser{
                         User = user,
                         Project = projectModel,
-                        Role = user.Role
+                        Role = role
                     }
                 );
             }
@@ -54,6 +56,8 @@ namespace server.Repositories
         public async Task<List<Project>> GetAllProjectsAsync(ProjectFilterDto? filter=null,SortDto? sort = null)
         {
             var projects_query = _context.Projects
+            .Include(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
+            .Include(p=>p.ProjectUsers).ThenInclude(u=>u.User)
             .Include(p=>p.TaskGroups)
             .Include(p=>p.State)
             .Include(p=>p.Priority).AsQueryable();
@@ -69,7 +73,8 @@ namespace server.Repositories
             .Include(p=>p.TaskGroups)
             .Include(p=>p.State)
             .Include(p=>p.Priority)
-            .Include(p=>p.ProjectUsers)
+            .Include(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
+            .Include(p=>p.ProjectUsers).ThenInclude(u=>u.User)
             .FirstOrDefaultAsync(p=>p.Id==id);
         }
         public async Task<List<Project>> GetAllUserProjectsAsync(int id,ProjectFilterDto? filter=null,SortDto? sort = null)
@@ -82,12 +87,14 @@ namespace server.Repositories
             .ThenInclude(p=>p.TaskGroups)
             .Include(p=>p.Project)
             .ThenInclude(p=>p.Priority)
+            .Include(p=>p.Project).ThenInclude(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
+            .Include(p=>p.Project).ThenInclude(p=>p.ProjectUsers).ThenInclude(u=>u.User)
             .Select(p=>p.Project)
             .OrderByDescending(p=>p.LastStateChangedTime).AsQueryable();
 
             return await GetAllFilteredProjectsAsync(projects_query,filter,sort);
         }
-        public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users)
+        public async Task<Project?> UpdateProjectAsync(UpdateProjectDto projectDto, int project_id, List<User> project_users, List<Role> project_roles)
         {
             var project = await GetProjectByIdAsync(project_id);
             if(project==null)
@@ -101,12 +108,14 @@ namespace server.Repositories
                 project.LastStateChangedTime = DateTime.Now;
             }
             List<ProjectUser> users = new List<ProjectUser>();
-            foreach(var user in project_users)
+            for(int i = 0; i< project_users.Count;i++)
             {
+                var user = project_users[i];
+                var role = project_roles[i];
                 users.Add(new ProjectUser{
                     Project = project,
                     User = user,
-                    ProjectRoleId = user.RoleId
+                    Role = role
                 });
             }
             project.Percentage = projectDto.Percentage;

@@ -1,11 +1,7 @@
-button{
-    color: white;
-    background-color: #001B47;
-    padding: 5px 20px;
-    border: 0px solid white;
+#logout {
+    margin-bottom: 5px;
 }
-button:hover{
-    border: 1px solid white;
-    background-color: #17315D;
-    color: #fff;
+#logout:hover {
+    cursor: pointer;
+    border-radius: 10px;
 }

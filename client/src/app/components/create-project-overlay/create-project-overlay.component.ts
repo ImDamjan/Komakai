@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
@@ -8,6 +8,9 @@ import { TeamService } from '../../services/team.service';
 import { User } from '../../models/user/user';
 import { CreateProject } from '../../models/project/create-project';
 import { Team } from '../../models/team';
+import { Role } from '../../models/role';
+import { RoleService } from '../../services/role.service';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -16,9 +19,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrl: './create-project-overlay.component.css'
 })
 export class CreateProjectOverlayComponent implements OnInit {
+  private jwtService = inject(JwtDecoderService);
+  loggedInUserId: number | null = null;
+  roleid!: number;
+
   users: User[] = [];
   priorities: any[] | undefined;
   teams: Team[] = [];
+  roles: Role[] = [];
+  filteredRoles: Role[] = [];
   showDropdown: boolean = false;
   hoveredTeam: any;
   submitted = false;
@@ -27,14 +36,35 @@ export class CreateProjectOverlayComponent implements OnInit {
   projectObj!: CreateProject;
 
   selectedUserIds: number[] = [];
+
+
+  selectedUserRolesMap : Map<number,number> = new Map<number,number>();
+  userRoles: Map<number, number> = new Map<number, number>();
+  defaultRoles: Map<number, number> = new Map<number, number>();
+
   selectedPriorityId!: number;
   private spinner = inject(NgxSpinnerService);
-  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService) { }
+  constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
   ngOnInit(): void {
+    let token = this.jwtService.getToken();
+        if (token != null) {
+            let decode = this.jwtService.decodeToken(token);
+            this.loggedInUserId = decode.user_id;
+            this.roleid = decode.role_id;
+        }
+    this.roleService.getAllRoles().subscribe(roles => {
+       this.roles = roles;
+    });
     this.spinner.show();
     this.userService.getUsers().subscribe(users => {
       this.users = users;
+
+      this.users.forEach(user => {
+          this.userRoles.set(user.id, user.role.id);
+          this.defaultRoles = this.userRoles;
+          console.log(this.defaultRoles);
+      });
       this.spinner.hide();
     });
     this.priorityService.getPriorities().subscribe(priorities => {
@@ -45,6 +75,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     });
     this.projectObj = {
       userIds : [],
+      userProjectRoleIds : [],
       priorityId : this.selectedPriorityId,
       title : "",
       start : new Date(),
@@ -52,8 +83,6 @@ export class CreateProjectOverlayComponent implements OnInit {
       budget : 0,
       description : "",
       type : ""
-
-
     };
   }
 
@@ -61,28 +90,50 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.showDropdown = !this.showDropdown;
   }
 
-  onUserSelected(userId: number): void {
-    // Handle user selection
-    if (this.isSelected(userId)) {
-        this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
-    } else {
-        this.selectedUserIds.push(userId);
+  onUserSelected(user: User, event: any): void {
+    event.stopPropagation();
+    const target = event.target;
+    if (target && target.value !== undefined) {
+      const selectedRoleId = event.target?.value;
+      // Handle user selection
+      if (this.isSelected(user)) {
+          this.selectedUserRolesMap.delete(user.id);
+          // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
+      } else {
+          // this.selectedUserIds.push(user.id);
+          this.selectedUserRolesMap.set(user.id,selectedRoleId);
+      }
     }
 }
 
-  isSelected(userId: number): boolean {
+  isSelected(user: User): boolean {
     // Check if user is selected
-    return this.selectedUserIds.includes(userId);
+    if(user.id == this.roleid)
+      return true;
+    // return this.selectedUserIds.includes(user.id);
+    return this.selectedUserRolesMap.has(user.id);
   }
 
-  toggleUserSelection(userId: number, event: Event): void {
-    event.stopPropagation();
-    if (this.isSelected(userId)) {
-        this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
-    } else {
-        this.selectedUserIds.push(userId);
+  toggleUserSelection(user: User): void {
+      const selectedRoleId = this.userRoles.get(user.id);
+      // Handle user selection
+      if (this.isSelected(user)) {
+          this.selectedUserRolesMap.delete(user.id);
+          // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
+      } else {
+          // this.selectedUserIds.push(user.id);
+          this.selectedUserRolesMap.set(user.id,selectedRoleId!);
     }
   }
+
+  onRoleChanged(user: User, event: any) {
+    const selectedRoleId = event.target.value;
+    this.userRoles.set(user.id,selectedRoleId);
+
+    if(this.isSelected(user))
+      this.selectedUserRolesMap.set(user.id,selectedRoleId);
+  }
+  
 
 
   closeOverlay(): void {
@@ -91,11 +142,24 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   createProject(): void {
+    let selected_users : number[] = [];
+    let selected_roles : number[] = [];
+    this.selectedUserRolesMap.forEach((value,key) => {
+      selected_roles.push(value);
+      selected_users.push(key);
+    });
+    this.projectObj.userProjectRoleIds = selected_roles;
     this.spinner.show();
-    this.projectObj.userIds = this.selectedUserIds;
+    this.projectObj.userIds = selected_users;
     this.projectObj.priorityId = this.selectedPriorityId;
     this.submitted = true;
     this.submissionError = null;
+
+    if (this.loggedInUserId != null) {
+      this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
+      this.projectObj.userIds.push(this.loggedInUserId);
+      this.projectObj.userProjectRoleIds.push(this.roleid);
+    }
 
     if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end) {
       this.submissionError = 'Please fill in all necessary fields.';
@@ -123,15 +187,17 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.projectObj.start = new Date();
     this.projectObj.end = new Date();
     this.projectObj.userIds = [];
+    this.projectObj.userProjectRoleIds = [];
     this.selectedUserIds = [];
+    this.selectedUserRolesMap.clear();
     this.selectedPriorityId = 0;
     this.projectObj.budget = 0;
     this.projectObj.description = '';
     this.projectObj.type = '';
+    this.userRoles = this.defaultRoles;
   }
 
   showTeamMembers(team: Team): void {
-    console.log(team.members);
     this.hoveredTeam = team; // Set the hovered team
   }
 
@@ -154,16 +220,24 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   onTeamSelected(team: Team): void {
-    let team_member_ids : number[] = [];
+    let team_member_ids: User[] = [];
     team.members.forEach(member => {
-      team_member_ids.push(member.id);
+        team_member_ids.push(member);
     });
     if (this.isSelectedTeam(team.id)) {
-        // If team is already selected, deselect it and its members
-        this.selectedUserIds = this.selectedUserIds.filter((id: number) => !team_member_ids.includes(id));
+        team_member_ids.forEach(member => {
+            if (member.id != this.loggedInUserId) {
+                this.selectedUserRolesMap.delete(member.id);
+            }
+        });
     } else {
-        // If team is not selected, select it and its members
-        this.selectedUserIds = [...this.selectedUserIds, ...team_member_ids];
+        team_member_ids.forEach(member => {
+            if (member.id != this.loggedInUserId) {
+                const selectedRoleId = this.userRoles.get(member.id);
+                if (!this.isSelected(member))
+                    this.selectedUserRolesMap.set(member.id, selectedRoleId!);
+            }
+        });
     }
   }
 
@@ -171,8 +245,13 @@ export class CreateProjectOverlayComponent implements OnInit {
       // Check if all members of the team are selected
       const team = this.teams.find((team: Team) => team.id === teamId);
       if (team) {
-          return team.members.every((member: User) => this.isSelected(member.id));
+          return team.members.every((member: User) => this.isSelected(member));
       }
       return false;
+  }
+
+  getRolesForUser(user: User): Role[] {
+    console.log(this.roles.filter(role => (role.authority >= user.role.authority)));
+    return this.roles.filter(role => role.authority >= user.role.authority);
   }
 }

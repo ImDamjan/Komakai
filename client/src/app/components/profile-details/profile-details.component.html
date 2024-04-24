@@ -1,0 +1,83 @@
+<div class="overlay-container" *ngIf="!editMode">
+    <div class="overlay-content">
+        <div class="editdetails">
+            <button id="editprofile" (click)="toggleEditMode()"><img src="../../../assets/profile-settings/editprofile.svg"><span class="tooltip">Edit Profile</span></button>
+        </div>
+        <div class="centered-content">
+            <div class="profile-info">
+                <img id="pfp" src="../../../assets/pictures/defaultpfp.svg">
+                <div id="description">
+                    <span id="nametitle" class="title">Name (username)</span><br>
+                    <span id="fullname">{{user.name}} {{user.lastname}} ( <span id="username">{{user.username}}</span> )</span><br>
+                    <span id="roletitle" class="title">Role Name</span><br>
+                    <span id="rolename">{{user.jobTitle}}</span><br>
+                </div>
+            </div>
+        </div>
+        <div class="contact-info">
+            <span id="emailtitle" class="title"><img src="../../../assets/profile-settings/email.svg"> Email</span><br>
+            <span id="email">{{user.email}}</span><br>
+            <span id="organisationtitle" class="title"><img src="../../../assets/profile-settings/organisation.svg"> Organisation</span><br>
+            <span id="organisation">{{user.organisation}}</span><br>
+            <span id="departmenttitle" class="title"><img src="../../../assets/profile-settings/department.svg"> Department</span><br>
+            <span id="department">{{user.department}}</span><br>
+        </div>
+    </div>
+</div>
+
+<div class="overlay-container" *ngIf="editMode">
+    <div class="overlay-content">
+        <div class="editdetails">
+            <button id="editprofile" (click)="toggleEditMode()">
+                <img src="../../../assets/profile-settings/editprofile.svg">
+                <span class="tooltip">Edit Profile</span>
+            </button>
+        </div>
+        <div class="centered-content">
+            <div class="profile-info">
+                <img id="pfp" src="../../../assets/pictures/defaultpfp.svg">
+            </div>
+        </div>
+        <div class="contact-info">
+            <form #editForm="ngForm">
+                <div id="description">
+                    <input type="file" (change)="onFileSelected($event)">
+
+                    <span id="nametitle" class="title">First Name</span><br>
+                    <input class="input-field" type="text" placeholder="Please enter your first name" [(ngModel)]="user.name" name="firstName" required pattern="[a-zA-Z ]*" #firstName="ngModel">
+                    <p *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="error-message" style="color:red;">*First name is required and must contain only letters</p>
+                    <br>
+                    <span id="nametitle" class="title">Last Name</span><br>
+                    <input class="input-field" type="text" placeholder="Please enter your last name" [(ngModel)]="user.lastname" name="lastName" required pattern="[a-zA-Z ]*" #lastName="ngModel">
+                    <p *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="error-message" style="color:red;"> *Last name is required and must contain only letters </p>
+                    <br>
+                    <span id="nametitle" class="title">Username</span><br>
+                    <input class="input-field" type="text" placeholder="Please enter your username" [(ngModel)]="user.username" name="username" required pattern="[a-zA-Z0-9_\-\.]{3,16}" #username="ngModel">
+                    <p *ngIf="username.invalid && (username.dirty || username.touched)" class="error-message" style="color:red;"> *Username is required and it can contain only letters, numbers, underscores, and hyphens. </p>
+                    <br>
+                    <span id="emailtitle" class="title">
+                        <img src="../../../assets/profile-settings/email.svg"> Email
+                    </span><br>
+                    <input class="input-field" type="email" placeholder="Please enter your email" [(ngModel)]="user.email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" #email="ngModel">
+                    <p *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message" style="color:red;"> *Please enter a valid email address </p><br>
+                    <span id="organisationtitle" class="title">
+                        <img src="../../../assets/profile-settings/organisation.svg"> Organisation
+                    </span><br>
+                    <input class="input-field" type="text" placeholder="Please enter your email organisation" [(ngModel)]="user.organisation" name="organisation" required #organisation="ngModel">
+                    <p *ngIf="organisation.invalid && (organisation.dirty || organisation.touched)" class="error-message" style="color:red;"> *Organisation is required </p>
+                    <br>
+                    <span id="departmenttitle" class="title">
+                        <img src="../../../assets/profile-settings/department.svg"> Department
+                    </span><br>
+                    <input class="input-field" type="text" placeholder="Please enter your email department" [(ngModel)]="user.department" name="department" required #department="ngModel">
+                    <p *ngIf="department.invalid && (department.dirty || department.touched)" class="error-message" style="color:red;"> *Department is required </p>
+                    <br>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="save-cancel">
+        <button id="save" (click)="editProfile(user.id,editForm)">Save Changes</button>
+        <button id="cancel" (click)="toggleEditMode()">Cancel</button>
+    </div>
+</div>

@@ -14,6 +14,6 @@ namespace server.DTOs.Team
         public string Name { get; set; } = null!;
         public string Type { get; set; } = null!;
 
-        public List<UserDto> Members { get; set; } =  new List<UserDto>();
+        public List<UserRoleDto> Members { get; set; } =  new List<UserRoleDto>();
     }
 }
