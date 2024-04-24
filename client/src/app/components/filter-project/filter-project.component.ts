@@ -98,6 +98,10 @@ export class FilterProjectComponent {
   resetFilters() {
     this.projectStatePriority.get('selectedState')?.setValue(0);
     this.projectStatePriority.get('selectedPriority')?.setValue(0);
+    this.projectStatePriority.get('selectedBudget')?.setValue(0);
+    this.projectStatePriority.get('budgetFlag')?.setValue(null);
+    this.projectStatePriority.get('selectedSpent')?.setValue(0);
+    this.projectStatePriority.get('spentFlag')?.setValue(null);
   
     this.formGroup.reset();
     this.formGroup2.get('sliderValue')?.setValue(50);
