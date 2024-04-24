@@ -13,6 +13,7 @@ export class TaskCardKanbanComponent implements OnInit {
     this.task.start = new Date(this.task.start);
   }
 
+
   public getPriorityClass()
   {
     if(this.task.priority.description.toLowerCase() === "low")

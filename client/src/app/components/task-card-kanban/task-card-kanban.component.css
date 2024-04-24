@@ -20,11 +20,10 @@
     margin: 0;
   }
   .priority{
-    display: flex;
-    justify-content: center;
+    margin-top: 4px;
   }
-  .priority span{
-    margin: 0px 20px;
+  .title{
+    display: flex;
   }
   .time{
     width: 100%;
@@ -41,12 +40,14 @@
   .title h2 {
     font-family: 'Poppins', sans-serif;
     font-style: normal;
+    width: 70px;
     font-weight: 500;
     font-size: 16px;
     line-height: 150%;
     color: #000000;
   }
   .at-risk{
+    margin-left: 70px;
     padding: 10px 20px;
     font-family: 'Poppins', sans-serif;
     font-style: normal;
@@ -58,6 +59,7 @@
     color: white;
   }
   .high{
+    margin-left: 70px;
     padding: 10px 20px;
     font-family: 'Poppins', sans-serif;
     font-style: normal;
@@ -69,6 +71,7 @@
     color: white;
   }
   .medium{
+    margin-left: 60px;
     padding: 10px 20px;
     font-family: 'Poppins', sans-serif;
     font-style: normal;
@@ -80,6 +83,7 @@
     background-color: darkgoldenrod;
   }
   .low{
+    margin-left: 70px;
     color: white;
     font-family: 'Poppins', sans-serif;
     font-style: normal;
