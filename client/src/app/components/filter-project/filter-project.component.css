@@ -1,14 +1,10 @@
 #prozor{
     background-color: white;
     width: 900px;
-    height: 600px;
+    height: 700px;
 }
 
 h1{
-    text-align: center;
-}
-
-#project{
     text-align: center;
 }
 
@@ -16,8 +12,7 @@ h1{
     margin-top: 50px;
     margin-left: 200px;
     margin-right: 200px;
-    margin-bottom: 150px;
-    display: flex-end;
+    margin-bottom: 50px;
 }
 
 #state{
@@ -28,12 +23,37 @@ h1{
     float: right;
 }
 
+#state-priority::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#budget-spent {
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-bottom: 50px;
+}
+
+#budget{
+    float: left;
+}
+
+#spent{
+    float: right;
+}
+
+#budget-spent::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
 #dates{
     margin-top: 50px;
     margin-left: 200px;
     margin-right: 214px;
-    margin-bottom: 150px;
-    display: flex-end;
+    /* margin-bottom: 150px; */
 }
 
 #start{

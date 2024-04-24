@@ -50,6 +50,7 @@ export class SortProjectComponent {
   }
 
   confirmSort(){
+    // console.log(this.sortGroup.get('property')?.value)
     this.filter.propertyName = this.sortGroup.get('property')?.value;
     this.filter.sortFlag = this.sortGroup.get('flag')?.value;
 

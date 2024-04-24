@@ -49,6 +49,10 @@ export class FilterProjectComponent {
     this.projectStatePriority = this.fb.group({
       selectedState: [0],
       selectedPriority: [0],
+      selectedBudget: [0],
+      budgetFlag: [null],
+      selectedSpent: [0],
+      spentFlag: [null]
     });
   }
 
@@ -78,7 +82,11 @@ export class FilterProjectComponent {
 
       this.projectStatePriority.patchValue({
         selectedState: storedFilter.stateFilter,
-        selectedPriority: storedFilter.priorityFilter
+        selectedPriority: storedFilter.priorityFilter,
+        selectedBudget: storedFilter.budgetFilter,
+        budgetFlag: storedFilter.budgetFlag,
+        selectedSpent: storedFilter.spentFilter,
+        spentFlag: storedFilter.spentFlag
       })
 
       this.formGroup2.get('sliderSelection')?.setValue(storedFilter.percentageFlag);
@@ -104,6 +112,10 @@ export class FilterProjectComponent {
     
     this.filter.stateFilter = this.projectStatePriority.get('selectedState')?.value;
     this.filter.priorityFilter = this.projectStatePriority.get('selectedPriority')?.value;
+    this.filter.budgetFilter = this.projectStatePriority.get('selectedBudget')?.value;
+    this.filter.budgetFlag = this.projectStatePriority.get('budgetFlag')?.value;
+    this.filter.spentFilter = this.projectStatePriority.get('selectedSpent')?.value;
+    this.filter.spentFlag = this.projectStatePriority.get('spentFlag')?.value;
     this.filter.dateStartFlag = this.formGroup.get('startDateSelection')?.value;
     this.filter.dateEndFlag = this.formGroup.get('endDateSelection')?.value;
     this.filter.start = this.formGroup.get('startDate')?.value;

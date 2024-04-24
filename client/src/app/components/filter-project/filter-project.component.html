@@ -18,6 +18,20 @@
                 </select>
             </div>
         </div>
+        <div id="budget-spent">
+            <div id="budget">
+                Search a budget: <br>
+                <input type="input" placeholder="0$" formControlName="selectedBudget"><br><br>
+                <span id="less"><input type="radio" checked="true" id="less-budget" formControlName="budgetFlag" value="-1"> &lt;</span>
+                <span id="more"><input type="radio" id="more-budget" formControlName="budgetFlag" value="1"> &#8805;</span>
+            </div>
+            <div id="spent">
+                Search a spent value: <br>
+                <input type="input" placeholder="0$" formControlName="selectedSpent"><br><br>
+                <span id="less"><input type="radio" checked="true" id="less-spent" formControlName="spentFlag" value="-1"> &lt;</span>
+                <span id="more"><input type="radio" id="more-spent" formControlName="spentFlag" value="1"> &#8805;</span>
+            </div>
+        </div>
     </form>
     <form [formGroup]="formGroup">
         <div id="dates">
