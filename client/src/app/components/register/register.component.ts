@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { RegisterService } from '../../services/register.service';
 import { Role } from '../../models/role';
 import { Register } from '../../models/register';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-register',
@@ -13,10 +14,13 @@ import { Register } from '../../models/register';
 export class RegisterComponent implements OnInit {
 
   registerForm!: FormGroup;
+  private spinner = inject(NgxSpinnerService);
+  public validRole : boolean = false;
   @Input() public roles : Role[] = [];
   constructor(private fb: FormBuilder, private reg: RegisterService, private router: Router) {}
 
   ngOnInit(): void {
+    this.spinner.show();
     this.registerForm = this.fb.group({
       Name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
       Lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
@@ -24,11 +28,14 @@ export class RegisterComponent implements OnInit {
       Username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_.-]*')]],
       Password: ['', [Validators.required, Validators.minLength(8)]],
       ConfirmPassword: ['', Validators.required],
-      Role : [0,[Validators.min(1)], Validators.required]
+      Role : [0
+      ]
     }, { validators: this.passwordMatchValidator });
+    this.spinner.hide();
   }
 
   onSubmit() {
+    this.spinner.show();
     if (this.registerForm.valid) {
       // Remove confirmPassword from the form value before sending to the server
       const { ConfirmPassword, ...formData } = this.registerForm.value;
@@ -41,6 +48,13 @@ export class RegisterComponent implements OnInit {
         email: formData.Email,
         roleId: formData.Role
       }
+      if(register.roleId <= 0)
+      {
+        this.validRole = true;
+        this.spinner.hide();
+        return;
+      }
+      this.validRole = false;
       // Send the object to the database
       this.reg.register(register)
         .subscribe({
@@ -48,6 +62,7 @@ export class RegisterComponent implements OnInit {
             alert("User registered successfully");
             // this.router.navigate(['auth/']);
             this.registerForm.reset();
+            this.spinner.hide();
             //add redirection to login
           },
           error: (err) => {
@@ -57,6 +72,7 @@ export class RegisterComponent implements OnInit {
     } else {
       this.validateAllFormFields(this.registerForm);
       alert("Your form is invalid");
+      this.spinner.hide();
     }
   }
 

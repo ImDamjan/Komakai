@@ -30,7 +30,7 @@
       <option value="0">Select role</option>
       <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
     </select>
-    <br><small *ngIf="registerForm.controls['Role'].dirty && registerForm.hasError('min','Role')" style="color:red;">*Role is required</small>
+    <br><small *ngIf="validRole" style="color:red;">*Role is required</small>
     <button (click)="onSubmit()" type="submit">Register user</button><br>
   </form>
 </div>

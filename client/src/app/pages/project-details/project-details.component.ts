@@ -1,9 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from '../../components/add-task/add-task.component';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-project-details',
@@ -12,6 +13,7 @@ import { Project } from '../../models/project/project';
 })
 export class ProjectDetailsComponent implements OnInit{
   showProjectDetails: boolean = true;
+  spinner = inject(NgxSpinnerService);
   showCreateButton: boolean = true;
   projectText: string = 'Project details';
 
@@ -22,12 +24,15 @@ export class ProjectDetailsComponent implements OnInit{
   constructor(private dialog: MatDialog, private projectService: ProjectService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.route.url.subscribe(urlSegments => {
       const projectId = +urlSegments[urlSegments.length - 1].path;
       this.fetchProjectName(projectId);
+      this.spinner.hide();
     });
   }
 
+  //treba da vraca ceo projekat koji ce kasnije da se prosledi overlay-u
   fetchProjectName(projectId: number): void {
     this.projectService.getProjectById(projectId)
     .subscribe((project: Project) => {
