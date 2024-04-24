@@ -95,7 +95,6 @@ export class FilterDetailsComponent {
 
       this.formGroup2.get('sliderSelection')?.setValue(storedFilter.percentageFlag);
       this.formGroup2.get('sliderValue')?.setValue(storedFilter.percentageFilter);
-    // Update form group values based on stored filter data (startDateSelection, endDateSelection, startDate, endDate)
     }
 
   }

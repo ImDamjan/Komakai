@@ -16,7 +16,7 @@ export class TaskHeaderComponent implements OnInit {
 
   @Input() filter!: TaskFilter;
 
-  @ViewChild('Select') selectElement: HTMLSelectElement | undefined;
+  // @ViewChild('Select') selectElement: HTMLSelectElement | undefined;
 
   private overlay = inject(MatDialog);
 
