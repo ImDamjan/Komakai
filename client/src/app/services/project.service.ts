@@ -94,6 +94,18 @@ export class ProjectService implements OnInit{
     if (params.priorityFilter) {
       httpParams = httpParams.set('PriorityFilter', params.priorityFilter.toString());
     }
+    if(params.budgetFilter){
+      httpParams = httpParams.set('BudgetFilter',params.budgetFilter.toString());
+    }
+    if(params.budgetFlag){
+      httpParams = httpParams.set('BudgetFlag',params.budgetFlag.toString());
+    }
+    if(params.spentFilter){
+      httpParams = httpParams.set('SpentFilter',params.spentFilter.toString());
+    }
+    if(params.spentFlag){
+      httpParams = httpParams.set('SpentFlag',params.spentFlag.toString());
+    }
 
     const apiUrl = `${this.baseUrl}/Project/userProjects/${id}`;
     return this.http.get<Project[]>(apiUrl,{ params: httpParams });

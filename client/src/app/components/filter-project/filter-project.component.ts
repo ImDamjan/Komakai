@@ -57,8 +57,6 @@ export class FilterProjectComponent {
 
     this.filter = this.data[0];
 
-    console.log(this.filter)
-
     this.state.fetchAllStates().subscribe(states =>{
       this.states = states;
       // console.log(this.states);
