@@ -4,6 +4,7 @@ import { User } from '../../models/user/user';
 import { UpdateUser } from '../../models/user/update-user';
 import { UserService } from '../../services/user.service';
 import { error } from 'console';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-member',
@@ -15,6 +16,7 @@ export class MemberComponent {
   @Input() roles :Role[] = [];
   @Input() users : User[] = [];
   private user_service = inject(UserService);
+  private spinner = inject(NgxSpinnerService);
 
 
 
@@ -35,6 +37,7 @@ export class MemberComponent {
 
   sendUpdateRequest(user: User){
     console.log(user);
+    this.spinner.show();
     let body : UpdateUser = {
       id: user.id,
       name: user.name,
@@ -50,7 +53,7 @@ export class MemberComponent {
     }
 
     this.user_service.updateUser(body).subscribe({
-      next: (updatedUser: User) => {user = updatedUser; confirm("User updated successfully")},
+      next: (updatedUser: User) => {user = updatedUser; confirm("User updated successfully");this.spinner.hide();},
       error: (err) => console.log(err)
     });
   }

@@ -1,4 +1,4 @@
-import { Component, Inject, inject} from '@angular/core';
+import { Component, Inject, inject, inject} from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
@@ -15,6 +15,7 @@ import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { RoleService } from '../../services/role.service';
 import { Team } from '../../models/team';
 import { UpdateProject } from '../../models/project/update-project';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-edit-project-overlay',
@@ -54,7 +55,7 @@ export class EditProjectOverlayComponent {
   selectedUserRolesMap : Map<number,number> = new Map<number,number>();
   userRoles: Map<number, number> = new Map<number, number>();
   defaultRoles: Map<number, number> = new Map<number, number>();
-
+  private spinner = inject(NgxSpinnerService);
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
@@ -72,7 +73,9 @@ export class EditProjectOverlayComponent {
     this.roleService.getAllRoles().subscribe(roles => {
       this.roles = roles;
     });
+    this.spinner.show();
     this.userService.getUsers().subscribe(users => {
+      this.spinner.hide();
       this.users = users;
 
       this.users.forEach(user => {

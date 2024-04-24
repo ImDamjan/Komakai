@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnInit, inject, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
@@ -11,6 +11,7 @@ import { Team } from '../../models/team';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -42,6 +43,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   defaultRoles: Map<number, number> = new Map<number, number>();
 
   selectedPriorityId!: number;
+  private spinner = inject(NgxSpinnerService);
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
   ngOnInit(): void {
@@ -54,6 +56,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.roleService.getAllRoles().subscribe(roles => {
        this.roles = roles;
     });
+    this.spinner.show();
     this.userService.getUsers().subscribe(users => {
       this.users = users;
 
@@ -62,6 +65,7 @@ export class CreateProjectOverlayComponent implements OnInit {
           this.defaultRoles = this.userRoles;
           console.log(this.defaultRoles);
       });
+      this.spinner.hide();
     });
     this.priorityService.getPriorities().subscribe(priorities => {
       this.priorities = priorities;
@@ -145,6 +149,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       selected_users.push(key);
     });
     this.projectObj.userProjectRoleIds = selected_roles;
+    this.spinner.show();
     this.projectObj.userIds = selected_users;
     this.projectObj.priorityId = this.selectedPriorityId;
     this.submitted = true;
@@ -158,16 +163,19 @@ export class CreateProjectOverlayComponent implements OnInit {
 
     if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end) {
       this.submissionError = 'Please fill in all necessary fields.';
+      this.spinner.hide();
       return;
     }
 
     this.projectService.createProject(this.projectObj).subscribe(response => {
       console.log('Project created successfully:', response);
       alert('Project created successfully!');
+      this.spinner.hide();
       this.resetForm();
       this.submitted = false;
     }, error => {
       console.error('Error creating project:', error);
+      this.spinner.hide();
       this.submissionError = 'Error creating project. Please try again.';
     });
   }

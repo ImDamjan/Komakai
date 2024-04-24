@@ -1,0 +1,59 @@
+<div id="prozor">
+    <br><br>
+    <h1>Filters</h1>
+    <form [formGroup]="projectStatePriority">
+        <div id="project">
+            Choose a project: <br>
+            <select name="choose-project" id="choose-project" formControlName="selectedProject">
+                <option value="0">Any</option>
+                <option *ngFor="let project of projects" [value]="project.id">{{project.title}}</option>
+            </select>
+        </div>
+        <div id="state-priority">
+            <div id="state">
+                Choose a task state: <br>
+                <select name="choose-state" id="choose-state" formControlName="selectedState">
+                    <option value="0">Any</option>
+                    <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                </select>
+            </div>
+            <div id="priority">
+                Choose a task priority: <br>
+                <select name="choose-priority" id="choose-priority" formControlName="selectedPriority">
+                    <option value="0">Any</option>
+                    <option *ngFor="let priority of priorities" [value]="priority.id">{{priority.description}}</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="formGroup">
+        <div id="dates">
+            <div id="start">
+                Choose a start date: <br>
+                <input type="date" formControlName="startDate"><br><br>
+                <span id="less"><input type="radio" checked="true" id="less-start" formControlName="startDateSelection" value="-1"> &lt;</span>
+                <span id="more"><input type="radio" id="more-start" formControlName="startDateSelection" value="1"> &#8805;</span>
+            </div>
+            <div id="end">
+                Choose an end date: <br>
+                <input type="date" formControlName="endDate"><br><br>
+                <span id="less"><input type="radio" checked="true" id="less-end" formControlName="endDateSelection" value="-1"> &lt;</span>
+                <span id="more"><input type="radio" id="more-end" formControlName="endDateSelection" value="1"> &#8805;</span>
+            </div>
+        </div>
+    </form>
+    <br><br><br><br><br><br><br>
+    <form [formGroup]="formGroup2">
+        <div id="slider">
+            <p>Selected percentage: {{ formGroup2.get('sliderValue')?.value }}%</p>
+            <input type="range" id="volume" min="0" max="100" value="50" formControlName="sliderValue"><br>
+            <span id="less"><input type="radio" id="less-slider" formControlName="sliderSelection" value="-1"> &lt;</span>
+            <span id="less"><input type="radio" id="more-slider" formControlName="sliderSelection" value="1"> &#8805;</span>
+        </div>
+    </form>
+    <div id="buttons">
+        <button id="reset" (click)="resetFilters()">Reset</button>
+        <button id="cancel" (click)="cancelFilters()">Cancel</button>
+        <button id="confirm" (click)="confirmFilters()">Confirm</button>
+    </div>
+</div>

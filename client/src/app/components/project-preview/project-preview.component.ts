@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
@@ -7,6 +7,9 @@ import { AssignmentService } from '../../services/assignment.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EditProjectOverlayComponent } from '../edit-project-overlay/edit-project-overlay.component';
 import { Project } from '../../models/project/project';
+import { ProjectFilter } from '../../models/project/project-filter';
+import { ProjectsComponent } from '../../pages/projects/projects.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-project-preview',
@@ -15,9 +18,24 @@ import { Project } from '../../models/project/project';
 })
 
 export class ProjectPreviewComponent implements OnInit {
+
+  @Output() searchFilterChanged = new EventEmitter<ProjectFilter>();
+  @Output() searchSortChanged = new EventEmitter<ProjectFilter>();
+
+  @ViewChild('projectHeader', { static: false }) projectHeaderComponent: ProjectsComponent | undefined;
+
+  public filter: ProjectFilter = {
+
+  };
+
+  isClick = false;
+  initialX: number | undefined;
+  initialY: number | undefined;
+  threshold = 1;
   
   isLoading: boolean = false;
   errorMessage: string = '';
+  private spinner = inject(NgxSpinnerService);
   
   data: any;
   projectsData: Project[] = [];
@@ -42,6 +60,7 @@ export class ProjectPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     // Detect changes in screen size for character limits
+    this.spinner.show();
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     mediaQuery.addEventListener('change', () => {
       this.calculateCharacterLimit();
@@ -54,13 +73,71 @@ export class ProjectPreviewComponent implements OnInit {
     this.loadProjects();
   }
 
+  ngAfterViewInit() {
+    this.projectHeaderComponent?.searchValueProjectChanged.subscribe(searchValue => {
+      this.searchProjects(searchValue.searchText);
+    });
+    this.projectHeaderComponent?.searchFilterProjectChanged.subscribe(filter => {
+      this.filterProjects(filter.filter);
+    });
+    this.projectHeaderComponent?.searchSortProjectChanged.subscribe(filter => {
+      this.sortProjects(filter.filter);
+    });
+  }
+
+  searchProjects(searchText: string){
+    this.filter.searchTitle=searchText;
+    this.loadProjects();
+  }
+
+  filterProjects(filter: ProjectFilter){
+    if(filter.stateFilter){
+      this.filter.stateFilter=filter.stateFilter;
+    }
+    if(filter.priorityFilter){
+      this.filter.priorityFilter=filter.priorityFilter;
+    }
+    if(filter.dateStartFlag){
+      this.filter.dateStartFlag=filter.dateStartFlag;
+    }
+    if(filter.dateEndFlag){
+      this.filter.dateEndFlag=filter.dateEndFlag;
+    }
+    if(filter.start){
+      this.filter.start=filter.start;
+    }
+    if(filter.end){
+      this.filter.end=filter.end;
+    }
+    if(filter.percentageFlag){
+      this.filter.percentageFlag=filter.percentageFlag;
+    }
+    if(filter.percentageFilter){
+      this.filter.percentageFilter=filter.percentageFilter;
+    }
+
+    this.loadProjects();
+  }
+
+  sortProjects(filter: ProjectFilter){
+    if(filter.propertyName){
+      this.filter.propertyName=filter.propertyName;
+    }
+    if(filter.sortFlag){
+      this.filter.sortFlag=filter.sortFlag;
+    }
+
+    this.loadProjects();
+  }
+
   loadProjects() {
     this.isLoading = true;
-    this.projectService.getProjectsData().subscribe(
+    this.projectService.getProjectsData(this.filter).subscribe(
       (projects: Project[]) => {
         this.projectsData = projects;
         console.log(this.projectsData);
         this.isLoading = false;
+        this.spinner.hide();
         projects.forEach(project => {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
@@ -68,6 +145,7 @@ export class ProjectPreviewComponent implements OnInit {
           this.assignmentService.getAllProjectAssignments(project.id).subscribe(
             (assignments: any[]) => {
               this.assignmentCounts[project.id] = assignments.length;
+              
             },
             (error) => {
               console.error('An error occurred while fetching assignments for project:', project.id, error);
@@ -76,11 +154,13 @@ export class ProjectPreviewComponent implements OnInit {
 
         });
         if (projects.length === 0) {
+          this.spinner.hide();
           this.errorMessage = 'You don\'t have any projects yet.';
         }
       },
       (error) => {
         this.isLoading = false;
+        this.spinner.hide();
         this.errorMessage = 'An error occurred while fetching projects.';
       }
     );
@@ -90,8 +170,27 @@ export class ProjectPreviewComponent implements OnInit {
     return this.assignmentCounts[projectId] || 0; // Return assignment count for the project, or 0 if not found
   }
 
-  navigateToProjectDetails(projectId: number) {
-    this.router.navigate(['projects','project-details',projectId]);
+  check(event: MouseEvent){
+    this.isClick = true;
+    this.initialX = event.clientX;
+    this.initialY = event.clientY;
+  }
+
+  navigateToProjectDetails(event: MouseEvent,projectId: number) {
+
+    let deltaX = event.clientX;
+    let deltaY = event.clientY;
+
+    if(this.initialX && this.initialY){
+      deltaX = Math.abs(event.clientX - this.initialX);
+      deltaY = Math.abs(event.clientY - this.initialY);
+    }
+    if (this.isClick && deltaX < this.threshold && deltaY < this.threshold){
+      this.router.navigate(['projects','project-details',projectId]);
+    }
+    else{
+      this.isClick = false;
+    }
   }
 
   // Calculate character limits based on screen width

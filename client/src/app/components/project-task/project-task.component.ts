@@ -14,6 +14,11 @@ export class ProjectTaskComponent {
   private router = inject(Router);
   private dialog = inject(MatDialog);
 
+  isClick = false;
+  initialX: number | undefined;
+  initialY: number | undefined;
+  threshold = 1;
+
   getPriorityClass(priority: string): string {
     switch (priority) {
         case 'Low':
@@ -24,6 +29,25 @@ export class ProjectTaskComponent {
             return 'high-priority';
         case 'At risk':
             return 'at-risk';
+        default:
+            return '';
+    }
+  }
+
+  getStateClass(state: string): string{
+    switch(state){
+        case 'Not started':
+            return 'not-started';
+        case 'Ready':
+            return 'ready';
+        case 'In Progress':
+            return 'in-progress';
+        case 'Blocked':
+            return 'blocked';
+        case 'Done':
+            return 'done';
+        case 'Cancelled':
+            return 'cancelled';
         default:
             return '';
     }
@@ -127,15 +151,32 @@ export class ProjectTaskComponent {
     }
   }
 
+  check(event: MouseEvent){
+    this.isClick = true;
+    this.initialX = event.clientX;
+    this.initialY = event.clientY;
+  }
 
-  openShowTaskOverlay(): void {
-    const dialogRef = this.dialog.open(TaskDetailsComponent, {
-      data:[this.task]
-    });
+  openShowTaskOverlay(event: MouseEvent): void {
+    let deltaX = event.clientX;
+    let deltaY = event.clientY;
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.task = result;
-    });
+    if(this.initialX && this.initialY){
+      deltaX = Math.abs(event.clientX - this.initialX);
+      deltaY = Math.abs(event.clientY - this.initialY);
+    }
+
+    if (this.isClick && deltaX < this.threshold && deltaY < this.threshold){
+      const dialogRef = this.dialog.open(TaskDetailsComponent, {
+        data:[this.task]
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.task = result;
+      });
+    }else {
+    this.isClick = false;
+    }
     
   }
 

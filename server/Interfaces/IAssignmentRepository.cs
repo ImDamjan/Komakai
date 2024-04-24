@@ -15,9 +15,9 @@ namespace server.Interfaces
         // Uzima task po id-ju
         Task<Assignment?> GetAssignmentByidAsync(int id);
         // uzima sve taskove za nekog usera
-        Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null);
+        Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null, int project_id = 0);
         // uzima sve taskove jedne grupe taskova
-        Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null);
+        Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null, int user_id = 0);
         // update taska
         Task<Assignment?> UpdateAssignmentAsync(UpdateAssignmentDto a,int id, List<User> users,List<Assignment> dependentOn);
         // filtiranje taskova

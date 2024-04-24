@@ -12,6 +12,7 @@ import { PriorityService } from '../../services/priority.service';
 import { Priority } from '../../models/priority/priority';
 import { Task } from '../../models/task/task';
 import { CreateTask } from '../../models/task/create-task';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-task',
@@ -68,6 +69,7 @@ export class AddTaskComponent implements OnInit {
   private assignmentService = inject(AssignmentService);
   private decoder = inject(JwtDecoderService);
   private priority_service = inject(PriorityService);
+  private spinner = inject(NgxSpinnerService);
   public assignments : Task[] = [];
   public priorities : Priority[] = [];
 
@@ -80,6 +82,7 @@ export class AddTaskComponent implements OnInit {
     }
   }
   ngOnInit(): void {
+    this.spinner.show();
     let token = this.decoder.getToken();
     if(token!=null)
     {
@@ -106,7 +109,7 @@ export class AddTaskComponent implements OnInit {
     });
 
     this.taskGroupService.getAllProjectTaskGroups(this.data[1]).subscribe({
-      next : (groups: TaskGroup[])=> {this.taskGroups = groups},
+      next : (groups: TaskGroup[])=> {this.taskGroups = groups; this.spinner.hide();},
       error:(error: any)=> console.log(error)
     });
 
@@ -114,6 +117,7 @@ export class AddTaskComponent implements OnInit {
   }
 
   createTask() : void{
+    this.spinner.show();
     this.message = "";
     this.createTaskObj.assignees = this.selectedAssignees;
     this.createTaskObj.dependentOn = this.selectedDependentOn;
@@ -122,6 +126,7 @@ export class AddTaskComponent implements OnInit {
     if(this.createTaskObj.assignees.length == 0 || this.createTaskObj.description =="" || this.createTaskObj.end== 0 || this.createTaskObj.start==0 || this.createTaskObj.taskGroupId==0)
     {
       this.message = "Form is not filled properly, check if you entered everything correctly.";
+      this.spinner.hide();
       return;
     }
     let todayTime = new Date();
@@ -131,24 +136,26 @@ export class AddTaskComponent implements OnInit {
     if(this.createTaskObj.end < this.createTaskObj.start)
     {
       this.message = "End date comes before start date.";
+      this.spinner.hide();
       return;
     }
-    todayTime.setHours(0, 0, 0, 0);
-    this.createTaskObj.start.setHours(0,0,0,0);
-    // console.log(todayTime);
-    // console.log(this.createTaskObj.start);
-    //prvera da li je start date pre danasnjeg
-    if(this.createTaskObj.start < todayTime)
-    {
-      this.message = "Start date comes before today.";
-      return;
+    // todayTime.setHours(0, 0, 0, 0);
+    // this.createTaskObj.start.setHours(0,0,0,0);
+    // // console.log(todayTime);
+    // // console.log(this.createTaskObj.start);
+    // //prvera da li je start date pre danasnjeg
+    // if(this.createTaskObj.start < todayTime)
+    // {
+    //   this.message = "Start date comes before today.";
+    //   return;
 
-    }
+    // }
     console.log(this.createTaskObj);
     this.assignmentService.createAssignment(this.createTaskObj).subscribe({
       next : (asign : Task) => {
         console.log("Creation succesful");
         confirm("Task created successfully!");
+        this.spinner.hide();
         this.closeOverlay();
       },
       error: (error)=> console.log(error)
