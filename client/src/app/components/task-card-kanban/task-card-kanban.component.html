@@ -6,15 +6,18 @@
     </div>
     <div class ="time">
       <div class = "start">
-        <h2>Start date (yyyy-mm-dd)</h2>
+        <h2>Start date</h2>
+        <p>(yyyy-mm-dd)</p>
         <p>{{transformDate(task.start)}}</p>
       </div>
       <div class = "end">
-        <h2>End date (yyyy-mm-dd)</h2>
+        <h2>End date</h2>
+        <p>(yyyy-mm-dd)</p>
         <p>{{transformDate(task.end)}}</p>
       </div>
     </div>
     <div class = "progress">
+      <h2>Progress</h2>
       <input type="range" min="0" max="100" [value]="task.percentage">
       <p>{{task.percentage}}%</p>
     </div>
