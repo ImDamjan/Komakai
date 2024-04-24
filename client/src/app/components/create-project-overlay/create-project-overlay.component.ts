@@ -26,6 +26,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   priorities: any[] | undefined;
   teams: Team[] = [];
   roles: Role[] = [];
+  filteredRoles: Role[] = [];
   showDropdown: boolean = false;
   hoveredTeam: any;
   submitted = false;
@@ -51,7 +52,7 @@ export class CreateProjectOverlayComponent implements OnInit {
             this.roleid = decode.role_id;
         }
     this.roleService.getAllRoles().subscribe(roles => {
-      this.roles = roles;
+       this.roles = roles;
     });
     this.userService.getUsers().subscribe(users => {
       this.users = users;
@@ -59,6 +60,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.users.forEach(user => {
           this.userRoles.set(user.id, user.role.id);
           this.defaultRoles = this.userRoles;
+          console.log(this.defaultRoles);
       });
     });
     this.priorityService.getPriorities().subscribe(priorities => {
@@ -238,5 +240,10 @@ export class CreateProjectOverlayComponent implements OnInit {
           return team.members.every((member: User) => this.isSelected(member));
       }
       return false;
+  }
+
+  getRolesForUser(user: User): Role[] {
+    console.log(this.roles.filter(role => (role.authority >= user.role.authority)));
+    return this.roles.filter(role => role.authority >= user.role.authority);
   }
 }
