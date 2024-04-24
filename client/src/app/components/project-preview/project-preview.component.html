@@ -1,3 +1,5 @@
+<div id="strana">
+<app-projects *ngIf="showProjectPreview"></app-projects>
 <div *ngIf="projectsData && projectsData.length === 0 && !isLoading">
   <h3>{{ errorMessage }}</h3>
 </div>
@@ -55,4 +57,5 @@
     </ng-container>
     <span class="pagination-text" (click)="nextPage()" [class.disabled]="currentPage === totalPages()" [style.visibility]="shouldShowBottomPagination() ? 'visible' : 'hidden'">Next</span>
   </div>
+</div>
 </div>
