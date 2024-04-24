@@ -1,4 +1,4 @@
-
+@import url(../../../assets/icons/css/font-awesome.min.css); 
 
 .wrapper{
     height: calc(100vh - 200px);
@@ -8,7 +8,7 @@
     z-index: 1000;
 }
 
-mat-button-toggle-group{
+/* mat-button-toggle-group{
     background: rgb(54, 69, 79);
     border: 1px solid #9A93B3;
     color: white;
@@ -19,5 +19,12 @@ mat-button-toggle-group{
 mat-button-toggle{
     background: rgb(54, 69, 79);
     color: white;
+} */
+
+#scrollToToday_btn, #refresh_btn{
+   background-color: rgb(46, 139, 87);
+   ;
+ 
 }
+
 

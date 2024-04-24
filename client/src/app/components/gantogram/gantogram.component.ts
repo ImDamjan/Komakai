@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, HostBinding, OnInit, ViewChild, inject } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import {srLatn} from 'date-fns/locale'
+import { NgToastService } from 'ng-angular-popup';
+import {MatChipsModule} from '@angular/material/chips';
 import {
   GanttBarClickEvent,
   GanttBaselineItem,
@@ -22,11 +21,14 @@ import {
   NgxGanttComponent 
 } from '@worktile/gantt';
 
-import { ThyNotifyService } from 'ngx-tethys/notify';
+// import { GanttPrintService } from '../../services/gantt-print.service';
+
+// import { ThyNotifyService } from 'ngx-tethys/notify';
 import { finalize, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../../helper';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { log } from 'console';
 
 
 
@@ -35,11 +37,10 @@ import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './gantogram.component.html',
   styleUrl: './gantogram.component.css',
   template: ``,
-  providers: [GanttPrintService]
+  providers: [GanttPrintService],
 })
 export class GantogramComponent implements OnInit, AfterViewInit{
 
-  
   views = [
       
       {
@@ -55,6 +56,12 @@ export class GantogramComponent implements OnInit, AfterViewInit{
           value: GanttViewType.quarter
       }
   ];
+
+
+//   selectView(viewType: GanttViewType) {
+//     this.selectedViewType = viewType;
+//     // Dodajte ovde logiku koja se izvršava kada se promeni izabrani pogled
+//   }
 
   viewType: GanttViewType = GanttViewType.month;
 
@@ -143,7 +150,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   };
   private spinner = inject(NgxSpinnerService);
 
-  constructor(private printService: GanttPrintService, private thyNotify: ThyNotifyService) {}
+  constructor(private printService: GanttPrintService,private toast : NgToastService) {}
 
   ngOnInit(): void {
       // init items children
@@ -159,24 +166,62 @@ export class GantogramComponent implements OnInit, AfterViewInit{
       console.log(this.items);
   }
 
+  //show Toast on top center position
+  showSuccess(topic:string,message:string) {
+    this.toast.success({detail:topic, summary:message, duration:5000, sticky:false, position:'bottomRight'});
+  }
+
+  //show Toast on bottom center position
+  showError(topic:string,message:string) {
+    this.toast.error({detail:topic, summary:message, duration:5000, sticky:false, position:'bottomRight'});
+  }
+
+  //show Toast on top left position
+  showInfo(topic:string,message:string) {
+    this.toast.info({detail:topic,summary:message, duration:5000, sticky:false, position: 'bottomRight'});
+}
+
+//show Toast on bottom left position
+showWarn(topic:string,message:string) {
+      this.toast.warning({detail:topic,summary:message, duration:5000, sticky:false, position: 'bottomRight'});
+}
+
+ 
+
+
   ngAfterViewInit() {
       setTimeout(() => this.ganttComponent.scrollToDate(1713904900), 200);
     //   setTimeout(() => this.ganttComponent.scrollToDate(), 200);
   }
 
   barClick(event: GanttBarClickEvent) {
-      this.thyNotify.info('Event: barClick', `barClick log [${event.item.title}]`);
+    this.toast.success({detail:'Success',summary:'This is Success', sticky:true,position:'topRight'});
+    this.showSuccess("BarClick", `Ovo je poruka za success obavestenje kada se klikne na bar gantograma [id = ${event.item.id}] [Task Name = ${event.item.title}`);
+    //   this.thyNotify.info('Event: barClick', `barClick log [${event.item.title}]`);
   }
-
+//   kada kliknemo na vezxu tj liniju izmedju dva taska (bara)
   lineClick(event: GanttLineClickEvent) {
-      this.thyNotify.info('Event: lineClick', `lineClick log ${event.source.title} 到 ${event.target.title} 的关联线`);
+    // this.toast.success({detail:'Success',summary:'This is Success', sticky:true,position:'topRight'})
+    console.log("Line clickk !!!! ");
+    
+    this.showError("LineClick",`Error poruka za line click gantograma  id = ${event.source.id} task_name = ${event.source.title}`)
+    // this.showWarn();
+    //   this.thyNotify.info('Event: barClick', `barClick log [${event.item.title}]`);
+    //   this.thyNotify.info('Event: lineClick', `lineClick log ${event.source.title} 到 ${event.target.title} 的关联线`);
   }
 
-  dragMoved(event: GanttDragEvent) {}
-
+//    kada se uhvati bar da se pomera
+  dragMoved(event: GanttDragEvent) {
+    this.showInfo("DragMoved",`INFO poruka za DragMoved gantograma  id = ${event.item.id} task_name = ${event.item.title}`);
+  }
+//   Kada se pusti bar nakon pomeranja
   dragEnded(event: GanttDragEvent) {
-      this.thyNotify.info('Event: dragEnded', `dragEnded log [${event.item.title}] 的时间`);
-      this.items = [...this.items];
+    // this.toast.success({detail:'Success',summary:'This is Success', sticky:true,position:'topRight'})
+    // this.toast.success({detail:'TOP RIGHT',summary:'Top RIght',position:'topRight',sticky:true})
+    this.showWarn("DragEnded",`Warning poruka za DragEnded gantograma  id = ${event.item.id} task_name = ${event.item.title} time_start = ${event.item.start} time_end = ${event.item.end}`);
+    //   this.thyNotify.info('Event: barClick', `barClick log [${event.item.title}]`);
+    //   this.thyNotify.info('Event: dragEnded', `dragEnded log [${event.item.title}] 的时间`);
+    //   this.items = [...this.items];
   }
 
   selectedChange(event: GanttSelectedEvent) {
@@ -186,19 +231,31 @@ export class GantogramComponent implements OnInit, AfterViewInit{
               this.ganttComponent.scrollToDate(startDate);
           }
       }
+      this.showInfo("SelectedChange",`Selektovao sam task ${event.current?.title}`)
       // Ovim iznad je zamenjeno ovo ispod jer ovo ispod ima neki problem
       // event.current && this.ganttComponent.scrollToDate(event.current?.start);
 
-      this.thyNotify.info(
-          'Event: selectedChange',
-          `Neki tekst item opet  id opet ${(event.selectedValue as GanttItem[]).map((item) => item.id).join('、')}`
-      );
+    //   this.thyNotify.info(
+    //       'Event: selectedChange',
+    //       `Neki tekst item opet  id opet ${(event.selectedValue as GanttItem[]).map((item) => item.id).join('、')}`
+    //   );
   }
 
   linkDragEnded(event: GanttLinkDragEvent) {
-      this.items = [...this.items];
-      this.thyNotify.info('Event: linkDragEnded', `opet ide neki tekst`);
+    this.showInfo("Link Drag", `Kada povezemno dva itema Source_id = ${event.source.id} target_id = ${event.target?.id}`)
+    //   this.items = [...this.items];
+    //   this.thyNotify.info('Event: linkDragEnded', `opet ide neki tekst`);
   }
+
+// Ovo je kada se leva strana pomera na primer listu taskova menjam jedan da dodje iznad drtugog i tako dalje Ovo je kada kliknem
+onDragStarted(event: GanttTableDragStartedEvent) {
+    console.log('onDragStarted log', event);
+}
+
+// Ovo je kada se leva strana pomera na primer listu taskova menjam jedan da dodje iznad drtugog i tako dalje  ovo je kada pustim klik
+onDragEnded(event: GanttTableDragEndedEvent) {
+    console.log('onDragEnded log', event);
+}
 
   print(name: string) {
       this.printService.print(name);
@@ -263,12 +320,5 @@ export class GantogramComponent implements OnInit, AfterViewInit{
       }
       this.items = [...this.items];
   }
-
-  onDragStarted(event: GanttTableDragStartedEvent) {
-      console.log('onDragStarted log', event);
-  }
-
-  onDragEnded(event: GanttTableDragEndedEvent) {
-      console.log('onDragEnded log', event);
-  }
+  
 }
