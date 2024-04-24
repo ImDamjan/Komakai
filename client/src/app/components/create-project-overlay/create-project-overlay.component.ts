@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
@@ -10,6 +10,7 @@ import { CreateProject } from '../../models/project/create-project';
 import { Team } from '../../models/team';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -17,10 +18,10 @@ import { RoleService } from '../../services/role.service';
   styleUrl: './create-project-overlay.component.css'
 })
 export class CreateProjectOverlayComponent implements OnInit {
-  //Anastasija, ja sam ovde ubacio prepravio sta sam mislio da treba. U CreateProject, 
-  //dodato ti je UserProjectRoleIds tu ubacujes id-ove rolova za usere na projektu. Napravicu tako da bude
-  // za sada uvek salje defaultne role koje imaju na platformi. Morace da se korisit mapa(recnik) na frontu, a posle
-  // da se razbije na posebno key, a posebno value, key mape ti je userid, a value ti je roleId
+  private jwtService = inject(JwtDecoderService);
+  loggedInUserId: number | null = null;
+  roleid!: number;
+
   users: User[] = [];
   priorities: any[] | undefined;
   teams: Team[] = [];
@@ -43,6 +44,12 @@ export class CreateProjectOverlayComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
   ngOnInit(): void {
+    let token = this.jwtService.getToken();
+        if (token != null) {
+            let decode = this.jwtService.decodeToken(token);
+            this.loggedInUserId = decode.user_id;
+            this.roleid = decode.role_id;
+        }
     this.roleService.getAllRoles().subscribe(roles => {
       this.roles = roles;
     });
@@ -95,6 +102,8 @@ export class CreateProjectOverlayComponent implements OnInit {
 
   isSelected(user: User): boolean {
     // Check if user is selected
+    if(user.id == this.roleid)
+      return true;
     // return this.selectedUserIds.includes(user.id);
     return this.selectedUserRolesMap.has(user.id);
   }
@@ -138,6 +147,12 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.projectObj.priorityId = this.selectedPriorityId;
     this.submitted = true;
     this.submissionError = null;
+
+    if (this.loggedInUserId != null) {
+      this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
+      this.projectObj.userIds.push(this.loggedInUserId);
+      this.projectObj.userProjectRoleIds.push(this.roleid);
+    }
 
     if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end) {
       this.submissionError = 'Please fill in all necessary fields.';

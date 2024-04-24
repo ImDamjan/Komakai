@@ -68,9 +68,9 @@
                         <span class="selected-option" (click)="toggleDropdown()">Select Members</span>
                         <div class="options" *ngIf="showDropdown">
                             <div class="member-option" *ngFor="let user of users">
-                                <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user)">
+                                <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user)" [disabled]="user.id == loggedInUserId">
 
-                                <select [ngModel]="userRoles.get(user.id)" (change)="onRoleChanged(user, $event)">
+                                <select [ngModel]="userRoles.get(user.id)" (change)="onRoleChanged(user, $event)" [disabled]="user.id == loggedInUserId">
                                     <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
                                 </select>
 
