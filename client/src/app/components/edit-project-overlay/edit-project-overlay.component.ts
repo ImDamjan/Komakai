@@ -1,4 +1,4 @@
-import { Component, Inject} from '@angular/core';
+import { Component, Inject, inject} from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
@@ -10,6 +10,9 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { State } from '../../models/state/state';
 import { StateService } from '../../services/state.service';
+import { Role } from '../../models/role';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-edit-project-overlay',
@@ -17,6 +20,11 @@ import { StateService } from '../../services/state.service';
   styleUrl: './edit-project-overlay.component.css'
 })
 export class EditProjectOverlayComponent {
+  private jwtService = inject(JwtDecoderService);
+  private roleService = inject(RoleService);
+  loggedInUserId: number | null = null;
+  roleid!: number;
+  
   users: User[] = [];
   priorities: any[] | undefined;
   teams: any[] = [];
@@ -40,6 +48,8 @@ export class EditProjectOverlayComponent {
   thumbLabel = false;
   value = 0;
 
+  roles: Role[] = [];
+
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
@@ -48,6 +58,15 @@ export class EditProjectOverlayComponent {
   }
 
   ngOnInit(): void {
+    let token = this.jwtService.getToken();
+        if (token != null) {
+            let decode = this.jwtService.decodeToken(token);
+            this.loggedInUserId = decode.user_id;
+            this.roleid = decode.role_id;
+        }
+    this.roleService.getAllRoles().subscribe(roles => {
+      this.roles = roles;
+    });
     this.userService.getUsers().subscribe(users => {
       this.users = users;
     });
@@ -176,5 +195,10 @@ export class EditProjectOverlayComponent {
     }, error => {
       this.submissionError = 'Error editing project. Please try again.';
     });
+  }
+
+  getRolesForUser(user: User): Role[] {
+    console.log(this.roles.filter(role => (role.authority >= user.role.authority)));
+    return this.roles.filter(role => role.authority >= user.role.authority);
   }
 }

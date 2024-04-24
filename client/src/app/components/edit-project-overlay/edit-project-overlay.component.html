@@ -33,7 +33,7 @@
                 </div>
                 <div class="error-message" *ngIf="!project.start && submitted">*Start Date is required</div>
                 <div class="error-message" *ngIf="!project.end && submitted">*End Date is required</div>
-                <div class="error-message" *ngIf="project.start && project.end && project.start > project.end">*End Date must be after Start Date</div>
+                <div class="error-message" *ngIf="project.start && project.end && (project.start > project.end) && (project.start == project.end)">*End Date must be after Start Date</div>
             </div>
             <div class="role">
                 <div class="labels">
@@ -76,6 +76,11 @@
                         <div class="options" *ngIf="showDropdown">
                             <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id, $event)">
                                 <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                                
+                                <select>
+                                    <option *ngFor="let role of getRolesForUser(user)" [value]="role.id">{{role.name}}</option>
+                                </select>
+                                
                                 {{ user.name }} {{ user.lastname }}
                             </div>
 
@@ -84,8 +89,12 @@
                                 {{ team.name }}
                                 <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
                                     <div *ngFor="let memberId of team.members">
-                                        <input type="checkbox" [checked]="isSelected(memberId)" (change)="onUserSelected(memberId)">
-                                        {{ getUserName(memberId) }}
+                                        <input type="checkbox" [checked]="isSelected(memberId.id)" (change)="onUserSelected(memberId)">
+                                        {{ getUserName(memberId.id) }}
+
+                                        <select>
+                                            <option *ngFor="let role of getRolesForUser(memberId)" [value]="role.id">{{role.name}}</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

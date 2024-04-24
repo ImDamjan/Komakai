@@ -34,7 +34,7 @@
                 </div>
                 <div class="error-message" *ngIf="!projectObj.start && submitted">*Start Date is required</div>
                 <div class="error-message" *ngIf="!projectObj.end && submitted">*End Date is required</div>
-                <div class="error-message" *ngIf="projectObj.start && projectObj.end && projectObj.start > projectObj.end && projectObj.start == projectObj.end">*End Date must be after Start Date</div>
+                <div class="error-message" *ngIf="projectObj.start && projectObj.end && (projectObj.start > projectObj.end) && (projectObj.start == projectObj.end)">*End Date must be after Start Date</div>
             </div>
             <div class="role">
                 <!-- 
