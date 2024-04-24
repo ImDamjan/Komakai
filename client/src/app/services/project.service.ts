@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Project } from '../models/project/project';
 import { JwtDecoderService } from './jwt-decoder.service';
 import { ProjectFilter } from '../models/project/project-filter';
+import { UpdateProject } from '../models/project/update-project';
 
 @Injectable({
   providedIn: 'root'
@@ -79,20 +80,8 @@ export class ProjectService implements OnInit{
     return this.http.get<Project>(url);
   }
 
-  updateProject(projectId: number, project: Project): Observable<Project> {
-    const url = this.baseUrl + `/Project/update/${projectId}`;
-    const body = {
-      id: projectId,
-      members: project.users.map(user => user.id),
-      title: project.title,
-      stateId: project.state.id,
-      priorityId: project.priority.id,
-      description: project.description,
-      start: project.start,
-      end: project.end,
-      spent: project.spent,
-      percentage: project.percentage
-    };
-      return this.http.put<Project>(url,body);
-  }
+  updateProject(projectId: number, updateProjectData: UpdateProject): Observable<Project> {
+    const url = `${this.baseUrl}/Project/update/${projectId}`;
+    return this.http.put<Project>(url, updateProjectData);
+}
 }

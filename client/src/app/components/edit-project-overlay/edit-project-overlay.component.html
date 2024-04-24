@@ -74,10 +74,11 @@
                     <div class="custom-dropdown">
                         <span class="selected-option" (click)="toggleDropdown()">Select Members</span>
                         <div class="options" *ngIf="showDropdown">
-                            <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id, $event)">
-                                <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                            <div class="member-option" *ngFor="let user of users">
+
+                                <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user)" [disabled]="user.id == loggedInUserId">
                                 
-                                <select>
+                                <select [disabled]="user.id == loggedInUserId">
                                     <option *ngFor="let role of getRolesForUser(user)" [value]="role.id">{{role.name}}</option>
                                 </select>
                                 
@@ -88,12 +89,13 @@
                                 <input type="checkbox" [checked]="isSelectedTeam(team.id)" (change)="onTeamSelected(team)">
                                 {{ team.name }}
                                 <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
-                                    <div *ngFor="let memberId of team.members">
-                                        <input type="checkbox" [checked]="isSelected(memberId.id)" (change)="onUserSelected(memberId)">
-                                        {{ getUserName(memberId.id) }}
+                                    <div *ngFor="let member of team.members">
 
-                                        <select>
-                                            <option *ngFor="let role of getRolesForUser(memberId)" [value]="role.id">{{role.name}}</option>
+                                        <input type="checkbox" [checked]="isSelected(member)" (change)="onUserSelected(member,$event)" [disabled]="member.id == loggedInUserId">
+                                        {{ getUserName(member.id) }}
+
+                                        <select [disabled]="member.id == loggedInUserId" [ngModel]="userRoles.get(member.id)" (change)="onRoleChanged(member, $event)">
+                                            <option *ngFor="let role of getRolesForUser(member)" [value]="role.id">{{role.name}}</option>
                                         </select>
                                     </div>
                                 </div>

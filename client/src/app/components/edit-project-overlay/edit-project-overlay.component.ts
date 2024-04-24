@@ -13,6 +13,8 @@ import { StateService } from '../../services/state.service';
 import { Role } from '../../models/role';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { RoleService } from '../../services/role.service';
+import { Team } from '../../models/team';
+import { UpdateProject } from '../../models/project/update-project';
 
 @Component({
   selector: 'app-edit-project-overlay',
@@ -49,6 +51,9 @@ export class EditProjectOverlayComponent {
   value = 0;
 
   roles: Role[] = [];
+  selectedUserRolesMap : Map<number,number> = new Map<number,number>();
+  userRoles: Map<number, number> = new Map<number, number>();
+  defaultRoles: Map<number, number> = new Map<number, number>();
 
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
@@ -69,6 +74,16 @@ export class EditProjectOverlayComponent {
     });
     this.userService.getUsers().subscribe(users => {
       this.users = users;
+
+      this.users.forEach(user => {
+        this.userRoles.set(user.id, user.role.id);
+        this.defaultRoles = this.userRoles;
+      });
+
+      this.project.users.forEach(user => {
+        const roleId = user.role.id;
+        this.selectedUserRolesMap.set(user.id, roleId);
+      });
     });
     this.priorityService.getPriorities().subscribe(priorities => {
       this.priorities = priorities;
@@ -85,37 +100,48 @@ export class EditProjectOverlayComponent {
     this.showDropdown = !this.showDropdown;
   }
 
-  onUserSelected(userId: number): void {
-    // Handle user selection
-    const user = this.users.find(user => user.id === userId);
-    if (user) {
-        if (this.isSelected(userId)) {
-            this.selectedUserIds = this.selectedUserIds.filter(selectedUser => selectedUser.id !== userId);
-        } else {
-            this.selectedUserIds.push(user);
-        }
+  onUserSelected(user: User, event: any): void {
+    event.stopPropagation();
+    const target = event.target;
+    if (target && target.value !== undefined) {
+      const selectedRoleId = event.target?.value;
+      // Handle user selection
+      if (this.isSelected(user)) {
+          this.selectedUserRolesMap.delete(user.id);
+          // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
+      } else {
+          // this.selectedUserIds.push(user.id);
+          this.selectedUserRolesMap.set(user.id,selectedRoleId);
+      }
     }
-}
-
-  isSelected(userId: number): boolean {
-    // Check if user is selected
-    return this.selectedUserIds.some(user => user.id === userId);
   }
 
-  toggleUserSelection(userId: number, event: Event): void {
-    event.stopPropagation();
-    const userIndex = this.selectedUserIds.findIndex(user => user.id === userId);
+  isSelected(user: User): boolean {
+    // Check if user is selected
+    if(user.id == this.roleid)
+      return true;
+    // return this.selectedUserIds.includes(user.id);
+    return this.selectedUserRolesMap.has(user.id);
+  }
 
-    if (userIndex !== -1) {
-        // User is already selected, remove them
-        this.selectedUserIds.splice(userIndex, 1);
+  toggleUserSelection(user: User): void {
+    const selectedRoleId = this.userRoles.get(user.id);
+    // Handle user selection
+    if (this.isSelected(user)) {
+        this.selectedUserRolesMap.delete(user.id);
+        // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
     } else {
-        // User is not selected, add them
-        const user = this.users.find(user => user.id === userId);
-        if (user) {
-            this.selectedUserIds.push(user);
-        }
+        // this.selectedUserIds.push(user.id);
+        this.selectedUserRolesMap.set(user.id,selectedRoleId!);
     }
+  }
+
+  onRoleChanged(user: User, event: any) {
+    const selectedRoleId = event.target.value;
+    this.userRoles.set(user.id,selectedRoleId);
+
+    if(this.isSelected(user))
+      this.selectedUserRolesMap.set(user.id,selectedRoleId);
   }
 
   closeOverlay(): void {
@@ -145,21 +171,33 @@ export class EditProjectOverlayComponent {
     }
   }
 
-  onTeamSelected(team: any): void {
+  onTeamSelected(team: Team): void {
+    let team_member_ids : User[] = [];
+    team.members.forEach(member => {
+      team_member_ids.push(member);
+    });
     if (this.isSelectedTeam(team.id)) {
-      // If team is already selected, deselect it and its members
-      this.selectedUserIds = this.selectedUserIds.filter(user => !team.members.find((member: User) => member.id === user.id));
-    } else {
+        // If team is already selected, deselect it and its members
+        // this.selectedUserIds = this.selectedUserIds.filter((id: number) => !team_member_ids.includes(id));
+        team_member_ids.forEach(member => {
+          this.selectedUserRolesMap.delete(member.id);
+        });
+      } else {
         // If team is not selected, select it and its members
-        this.selectedUserIds = [...this.selectedUserIds, ...team.members];
+        // this.selectedUserIds = [...this.selectedUserIds, ...team_member_ids];
+        team_member_ids.forEach(member => {
+          const selectedRoleId = this.userRoles.get(member.id);
+          if(!this.isSelected(member))
+            this.selectedUserRolesMap.set(member.id,selectedRoleId!);
+        });
     }
   }
 
   isSelectedTeam(teamId: number): boolean {
       // Check if all members of the team are selected
-      const team = this.teams.find((team: any) => team.id === teamId);
+      const team = this.teams.find((team: Team) => team.id === teamId);
       if (team) {
-          return team.members.every((memberId: number) => this.isSelected(memberId));
+          return team.members.every((member: User) => this.isSelected(member));
       }
       return false;
   }
@@ -175,8 +213,27 @@ export class EditProjectOverlayComponent {
     return `${year}-${month}-${day}`;
   }
   
-  editProject(projectId: Number): void {
-    this.project.users = this.selectedUserIds;
+  editProject(projectId: number): void {
+    let selected_users : number[] = [];
+    let selected_roles : number[] = [];
+    this.selectedUserRolesMap.forEach((value,key) => {
+      selected_roles.push(value);
+      selected_users.push(key);
+    });
+
+    const updateProjectData: UpdateProject = {
+      members: selected_users,
+      projectRoles: selected_roles,
+      title: this.project.title,
+      stateId: this.project.state.id,
+      priorityId: this.project.priority.id,
+      description: this.project.description,
+      start: this.project.start,
+      end: this.project.end,
+      spent: this.project.spent,
+      percentage: this.project.percentage
+    };
+    
     this.submitted = true;
     this.submissionError = null;
 
@@ -185,7 +242,12 @@ export class EditProjectOverlayComponent {
       return;
     }
 
-    this.projectService.updateProject(this.project.id, this.project).subscribe(response => {
+    if (!updateProjectData.title.trim() || !updateProjectData.priorityId || !updateProjectData.start || !updateProjectData.end) {
+      this.submissionError = 'Please fill in all necessary fields.';
+      return;
+    }
+
+    this.projectService.updateProject(projectId, updateProjectData).subscribe(response => {
       alert('Project edited successfully!');
       this.submitted = false;
 
@@ -198,7 +260,6 @@ export class EditProjectOverlayComponent {
   }
 
   getRolesForUser(user: User): Role[] {
-    console.log(this.roles.filter(role => (role.authority >= user.role.authority)));
     return this.roles.filter(role => role.authority >= user.role.authority);
   }
 }
