@@ -3,99 +3,132 @@
     flex-direction: column;
     align-items: flex-start;
     padding: 15px;
-    gap: 25px;
+    font-size: 12px;
     position: relative;
-    width: 182px;
+    width: 100%;
     height: fit-content;
-    background: #FFFFFF;
+    background: #FFECD6;
     border-radius: .5rem;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   }
-  
-  
-  .title {
+  h2{
+    padding-top: 5px;
+    margin: 0;
+    font-size: 14px;
+  }
+  p{
+    margin: 0;
+  }
+  .priority{
+    margin-top: 4px;
+  }
+  .title{
+    display: flex;
+  }
+  .time{
+    width: 100%;
+    display: flex;
+  }
+  .time .end{
+    padding: 0 20px;
+  }
+  .progress span{
+    position: relative;
+    left: 20px;
+    bottom: 2px;
+  }
+  .title h2 {
     font-family: 'Poppins', sans-serif;
     font-style: normal;
+    width: 70px;
     font-weight: 500;
     font-size: 16px;
     line-height: 150%;
     color: #000000;
+  }
+  .at-risk{
+    margin-left: 70px;
+    padding: 10px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    background-color: red;
+    border: 1px solid #FFECD6;
+    border-radius: 40px;
+    color: white;
+  }
+  .high{
+    margin-left: 70px;
+    padding: 10px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    background-color: orangered;
+    border: 1px solid #FFECD6;
+    border-radius: 40px;
+    color: white;
+  }
+  .medium{
+    margin-left: 60px;
+    padding: 10px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    border: 1px solid #FFECD6;
+    border-radius: 40px;
+    color: white;
+    background-color: darkgoldenrod;
+  }
+  .low{
+    margin-left: 70px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    border: 1px solid #FFECD6;
+    border-radius: 40px;
+    padding: 10px 20px;
+    background-color: green;
+  }
+  .percentage-bar{
+    pointer-events: none;
   }
 
-  .button{
-    font-family: 'Poppins', sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 150%;
-    color: #000000;
-    justify-content: flex-end;
+  .task-details{
+    cursor: pointer;
   }
-  
-  .description {
-    width: 166px;
-    height: fit-content;
-    font-family: 'Poppins', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    color: #6C6C6C;
+
+
+  .task-details p{
+    padding: 5px 10px;
+    background-color:  #001B47;
+    color: white;
+    border: 1px solid #001B47;
+    border-radius: 25px;
   }
-  
-  .assignee-tile {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px 12px 0px 0px;
-    width: 144px;
-    height: 24px;
-    border-radius: .5rem;
+  .task-details p:hover{
+    background-color:   #17315D;
+    color: white;
   }
-  
-  .assignee-tile img {
-    width: 24px;
-    height: 24px;
+
+
+  .percentage-bar::-webkit-slider-thumb {
+    pointer-events: none;
   }
-  
-  .frame-1 {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 4px 8px;
-    gap: 4px;
-    width: fit-content;
-    height: fit-content;
+  .percentage-bar::-webkit-slider-runnable-track {
+    cursor: default;
+    /* background-color: blue; */
   }
-  
-  .assignee-name {
-    width: 92px;
-    height: 15px;
-    font-family: 'Poppins', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    color: #6C6C6C;
+  .percentage-bar::-moz-range-thumb {
+    pointer-events:none;
   }
-  
-  .status {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 2px 4px;
-    gap: 4px;
-    width: 85px;
-    height: fit-content;
-    background: #E8EDF3;
-    border-radius: .5rem;
+  .percentage-bar::-moz-range-track {
+    cursor: default;
   }
-  
-  .status span {
-    width: 65px;
-    height: 15px;
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    color: #000000;
+  .percentage-bar::-ms-thumb {
+    pointer-events: none;
   }
-  

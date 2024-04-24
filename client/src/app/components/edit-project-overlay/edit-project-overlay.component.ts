@@ -1,4 +1,4 @@
-import { Component, Inject} from '@angular/core';
+import { Component, Inject, inject} from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
@@ -10,6 +10,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { State } from '../../models/state/state';
 import { StateService } from '../../services/state.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-edit-project-overlay',
@@ -39,7 +40,7 @@ export class EditProjectOverlayComponent {
   step = 1;
   thumbLabel = false;
   value = 0;
-
+  private spinner = inject(NgxSpinnerService);
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
@@ -48,7 +49,9 @@ export class EditProjectOverlayComponent {
   }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.userService.getUsers().subscribe(users => {
+      this.spinner.hide();
       this.users = users;
     });
     this.priorityService.getPriorities().subscribe(priorities => {

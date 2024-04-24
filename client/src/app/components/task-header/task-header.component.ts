@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild, inject, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { FilterDetailsComponent } from '../filter-details/filter-details.component';
 import { TaskFilter } from '../../models/task/task-filter';
 import { SortDetailsComponent } from '../sort-details/sort-details.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-task-header',
@@ -25,7 +26,7 @@ export class TaskHeaderComponent implements OnInit {
   projects : Project[] = [];
 
   selectedProjectId: number = 0;
-
+  private spinner = inject(NgxSpinnerService);
   constructor(private projectService: ProjectService) { }
 
   searchValueChanged = new EventEmitter< { searchText: string }>();
@@ -35,12 +36,14 @@ export class TaskHeaderComponent implements OnInit {
   searchSortChanged = new EventEmitter<{filter: TaskFilter}>();
 
   ngOnInit(): void {
+    this.spinner.show();
     this.fetchProjects();
   }
 
   fetchProjects(): void {
     this.projectService.getProjectsData().subscribe(projects => {
       this.projects = projects;
+      this.spinner.hide();
     });
   }
 

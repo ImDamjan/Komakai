@@ -1,15 +1,27 @@
 <div class="frame-4">
-    <div class="title">Make a nice background</div>
-    <div class="add"><button class="add-project">+</button></div>
-    <div class="description">Hope this simple kanban helps in running the UX processes without leaving figma</div>
-    <div class="assignee-tile">
-      <img src="slika.png">
-  
-      <div class="frame-1">
-        <div class="assignee-name">Aleksandra Stanic</div>
-        <div class="status">
-          <div class="status-dot"></div> <span>Design</span>
-        </div>
+    <div class="title">
+      <h2>{{task.title}}</h2>
+      <div class = "priority">
+        <span [ngClass]="getPriorityClass()">{{task.priority.description}}</span>
       </div>
+    </div>
+
+    <div class ="time">
+      <div class = "start">
+        <h2>Start date</h2>
+        <p [title]="hoverDateFormat()">{{transformDate(task.start)}}</p>
+      </div>
+      <div class = "end">
+        <h2>End date</h2>
+        <p [title]="hoverDateFormat()">{{transformDate(task.end)}}</p>
+      </div>
+    </div>
+    <div class = "progress">
+      <h2>Progress</h2>
+      <input class = "percentage-bar" type="range" min="0" max="100" [value]="task.percentage"><span>{{task.percentage}}%</span>
+      
+    </div>
+    <div class="task-details">
+      <p (click)="openShowTaskOverlay()">Details...</p>
     </div>
   </div>

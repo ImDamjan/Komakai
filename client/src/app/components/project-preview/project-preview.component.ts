@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
@@ -9,6 +9,7 @@ import { EditProjectOverlayComponent } from '../edit-project-overlay/edit-projec
 import { Project } from '../../models/project/project';
 import { ProjectFilter } from '../../models/project/project-filter';
 import { ProjectsComponent } from '../../pages/projects/projects.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-project-preview',
@@ -34,6 +35,7 @@ export class ProjectPreviewComponent implements OnInit {
   
   isLoading: boolean = false;
   errorMessage: string = '';
+  private spinner = inject(NgxSpinnerService);
   
   data: any;
   projectsData: Project[] = [];
@@ -58,6 +60,7 @@ export class ProjectPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     // Detect changes in screen size for character limits
+    this.spinner.show();
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     mediaQuery.addEventListener('change', () => {
       this.calculateCharacterLimit();
@@ -134,6 +137,7 @@ export class ProjectPreviewComponent implements OnInit {
         this.projectsData = projects;
         console.log(this.projectsData);
         this.isLoading = false;
+        this.spinner.hide();
         projects.forEach(project => {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
@@ -141,6 +145,7 @@ export class ProjectPreviewComponent implements OnInit {
           this.assignmentService.getAllProjectAssignments(project.id).subscribe(
             (assignments: any[]) => {
               this.assignmentCounts[project.id] = assignments.length;
+              
             },
             (error) => {
               console.error('An error occurred while fetching assignments for project:', project.id, error);
@@ -149,11 +154,13 @@ export class ProjectPreviewComponent implements OnInit {
 
         });
         if (projects.length === 0) {
+          this.spinner.hide();
           this.errorMessage = 'You don\'t have any projects yet.';
         }
       },
       (error) => {
         this.isLoading = false;
+        this.spinner.hide();
         this.errorMessage = 'An error occurred while fetching projects.';
       }
     );

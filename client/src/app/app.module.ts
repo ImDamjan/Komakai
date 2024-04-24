@@ -44,7 +44,7 @@ import { TaskDetailsComponent } from './pages/task-details/task-details.componen
 import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { FilterDetailsComponent } from './components/filter-details/filter-details.component';
-
+import {NgxSpinnerModule} from 'ngx-spinner'
 
 import { ThyLayoutModule } from 'ngx-tethys/layout';
 import { setPrintErrorWhenIconNotFound } from 'ngx-tethys/icon';
@@ -118,7 +118,7 @@ import { SortProjectComponent } from './components/sort-project/sort-project.com
     FontAwesomeModule,
     DragDropModule,
     MatSliderModule,
-
+    NgxSpinnerModule,
     NgxGanttModule,
     RouterModule.forRoot([]),
     ThyButtonModule,

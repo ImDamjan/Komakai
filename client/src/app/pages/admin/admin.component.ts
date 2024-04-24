@@ -3,6 +3,7 @@ import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user/user';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-admin',
@@ -14,9 +15,11 @@ export class AdminComponent implements OnInit {
   public roles : Role[] = [];
   public users : User[] = [];
   private role_service = inject(RoleService);
+  private spinner = inject(NgxSpinnerService);
   private user_service = inject(UserService);
   
   ngOnInit(): void {
+    this.spinner.show();
     this.role_service.getAllRoles().subscribe({
       next : (roles: Role[])=> 
       {
@@ -25,7 +28,7 @@ export class AdminComponent implements OnInit {
     });
 
     this.user_service.getUsers().subscribe({
-      next : (users: User[]) => this.users = users
+      next : (users: User[]) => {this.users = users; this.spinner.hide();}
     });
   }
 
