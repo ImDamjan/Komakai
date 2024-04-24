@@ -1,5 +1,5 @@
 <div id="strana">
-<app-projects *ngIf="showProjectPreview"></app-projects>
+<app-projects #projectHeader *ngIf="showProjectPreview"></app-projects>
 <div *ngIf="projectsData && projectsData.length === 0 && !isLoading">
   <h3>{{ errorMessage }}</h3>
 </div>

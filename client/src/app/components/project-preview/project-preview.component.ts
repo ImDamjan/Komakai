@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import { StateService } from '../../services/state.service';
@@ -7,6 +7,8 @@ import { AssignmentService } from '../../services/assignment.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EditProjectOverlayComponent } from '../edit-project-overlay/edit-project-overlay.component';
 import { Project } from '../../models/project/project';
+import { ProjectFilter } from '../../models/project/project-filter';
+import { ProjectsComponent } from '../../pages/projects/projects.component';
 
 @Component({
   selector: 'app-project-preview',
@@ -15,6 +17,15 @@ import { Project } from '../../models/project/project';
 })
 
 export class ProjectPreviewComponent implements OnInit {
+
+  @Output() searchFilterChanged = new EventEmitter<ProjectFilter>();
+  @Output() searchSortChanged = new EventEmitter<ProjectFilter>();
+
+  @ViewChild('projectHeader', { static: false }) projectHeaderComponent: ProjectsComponent | undefined;
+
+  public filter: ProjectFilter = {
+
+  };
 
   isClick = false;
   initialX: number | undefined;
@@ -59,9 +70,34 @@ export class ProjectPreviewComponent implements OnInit {
     this.loadProjects();
   }
 
+  ngAfterViewInit() {
+    this.projectHeaderComponent?.searchValueProjectChanged.subscribe(searchValue => {
+      this.searchProjects(searchValue.searchText);
+    });
+    this.projectHeaderComponent?.searchFilterProjectChanged.subscribe(filter => {
+      this.filterProjects(filter.filter);
+    });
+    this.projectHeaderComponent?.searchSortProjectChanged.subscribe(filter => {
+      this.sortProjects(filter.filter);
+    });
+  }
+
+  searchProjects(searchText: string){
+    this.filter.searchTitle=searchText;
+    this.loadProjects();
+  }
+
+  filterProjects(filter: ProjectFilter){
+
+  }
+
+  sortProjects(filter: ProjectFilter){
+
+  }
+
   loadProjects() {
     this.isLoading = true;
-    this.projectService.getProjectsData().subscribe(
+    this.projectService.getProjectsData(this.filter).subscribe(
       (projects: Project[]) => {
         this.projectsData = projects;
         console.log(this.projectsData);

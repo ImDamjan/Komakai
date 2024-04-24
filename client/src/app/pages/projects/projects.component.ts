@@ -20,7 +20,7 @@ export class ProjectsComponent {
 
   constructor(private dialog: MatDialog) { }
 
-  searchValueChanged = new EventEmitter< { searchText: string }>();
+  searchValueProjectChanged = new EventEmitter< { searchText: string }>();
 
   searchFilterProjectChanged = new EventEmitter<{filter: ProjectFilter}>();
 
@@ -47,7 +47,7 @@ export class ProjectsComponent {
 
   onSearch(event: KeyboardEvent){
     const searchText = (event.target as HTMLInputElement).value;
-    this.searchValueChanged.emit({ searchText });
+    this.searchValueProjectChanged.emit({ searchText });
   }
 
   openFilterDialog(){
