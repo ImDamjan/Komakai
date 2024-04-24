@@ -60,7 +60,8 @@ namespace server.Mappers
         {
             return new RoleDto{
                 Id = role.Id,
-                Name = role.Name
+                Name = role.Name,
+                Authority = role.Authority
             };
         }
 

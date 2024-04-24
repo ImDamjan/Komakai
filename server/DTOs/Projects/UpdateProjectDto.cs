@@ -8,6 +8,7 @@ namespace server.DTOs.Projects
     public class UpdateProjectDto
     {
         public List<int> Members { get; set; } = new List<int>();
+        public List<int> ProjectRoles { get; set; } = new List<int>();
         public string Title { get; set; } = null!;
         public int StateId { get; set; }
         public int PriorityId { get; set; }

@@ -8,6 +8,7 @@ namespace server.DTOs.Projects
     public class CreateProjectDto
     {
         public List<int> UserIds { get; set; } = new List<int>();
+        public List<int> UserProjectRoleIds { get; set; } = new List<int>();
         public int PriorityId { get; set; }
         public string Title { get; set; } = null!;
         public DateTime Start { get; set; }

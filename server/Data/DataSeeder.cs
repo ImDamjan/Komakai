@@ -104,22 +104,27 @@ namespace server.Data
                     new Role{
                         Id = 1,
                         Name = "Project Manager",
+                        Authority = 2
                     },
                     new Role{
                         Id = 2,
-                        Name = "Developer",
+                        Name = "Project Worker",
+                        Authority = 3
                     },
                     new Role{
                         Id = 3,
-                        Name = "User",
+                        Name = "Member",
+                        Authority = 4
                     },
                     new Role{
                         Id = 4,
-                        Name = "Guest"
+                        Name = "Guest",
+                        Authority = 5
                     },
                     new Role{
                         Id = 5,
-                        Name = "Admin"
+                        Name = "Admin",
+                        Authority = 1
                     }
 
                 };

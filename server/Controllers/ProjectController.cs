@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using server.Authorization;
 using server.DTOs;
 using server.DTOs.Projects;
+using server.DTOs.Users;
 using server.Interfaces;
 using server.Mappers;
 using server.Models;
@@ -22,10 +23,12 @@ namespace server.Controllers
         private readonly IPriorityRepository _prio_repo;
         private readonly ITaskGroupRepository _group_repo;
         private readonly IStateRepository _state_repo;
-        public ProjectController(IPriorityRepository prio_repo,IProjectRepository repos,IUserRepository user_repo,ITaskGroupRepository group_repo, IStateRepository stateRepository)
+        private readonly IRoleRepository _role_repo;
+        public ProjectController(IRoleRepository role_repo,IPriorityRepository prio_repo,IProjectRepository repos,IUserRepository user_repo,ITaskGroupRepository group_repo, IStateRepository stateRepository)
         {
             _repos = repos;
             _prio_repo = prio_repo;
+            _role_repo = role_repo;
             _user_repo = user_repo;
             _group_repo = group_repo;
             _state_repo = stateRepository;
@@ -40,8 +43,14 @@ namespace server.Controllers
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
-                var users =  await _user_repo.GetUserByProjectId(project.Id);
-                var userDtos = users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+                var users =  project.ProjectUsers.Select(u=>u.User).ToList();
+                var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+                var userDtos = new List<ProjectUserDto>();
+                for(int i =0;i<users.Count;i++)
+                {
+                    userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+                }
                 dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
             }
             return Ok(dtos);
@@ -54,8 +63,14 @@ namespace server.Controllers
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
-                var users =  await _user_repo.GetUserByProjectId(project.Id);
-                var userDtos = users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+                var users =  project.ProjectUsers.Select(u=>u.User).ToList();
+                var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+                var userDtos = new List<ProjectUserDto>();
+                for(int i =0;i<users.Count;i++)
+                {
+                    userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+                }
                 dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
             }
             return Ok(dtos);
@@ -70,9 +85,15 @@ namespace server.Controllers
             
             var dto = new ProjectDto();
 
-            var users =  await _user_repo.GetUserByProjectId(project.Id);
-            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
-            dto = project.ToProjectDto(ids,project.State.toStateDto(),project.Priority.toPrioDto());
+            var users =  project.ProjectUsers.Select(u=>u.User).ToList();
+            var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+            var userDtos = new List<ProjectUserDto>();
+            for(int i =0;i<users.Count;i++)
+            {
+                userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+            }
+            dto = project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto());
     
             return Ok(dto);
         }
@@ -82,40 +103,61 @@ namespace server.Controllers
         {
             
             List<User> teamMembers = new List<User>();
+            List<Role> projectRoles = new List<Role>();
             //da li su datumi dobri
+            System.Console.WriteLine(projectDto.UserProjectRoleIds.Count);
+            System.Console.WriteLine(projectDto.UserIds.Count);
             if(projectDto.Start >= projectDto.End)
-                return BadRequest("End date comes before start date");
+                return BadRequest("End date comes before start date.");
             
-            
+            if(projectDto.UserProjectRoleIds.Count!=projectDto.UserIds.Count)
+                return BadRequest("Roles and user do not match.");
             //da li je prioritet validan
             var prio = await _prio_repo.GetPriority(projectDto.PriorityId);
             if(prio==null)
                 return NotFound("Priority not found.ID:" + projectDto.PriorityId);
             
             //da li su korinsici validni
-            foreach (var userId in projectDto.UserIds)
+            for (int i = 0;i<projectDto.UserIds.Count;i++)
             {
+                var userId = projectDto.UserIds[i];
+                var roleId = projectDto.UserProjectRoleIds[i];
+
+                var role =  await _role_repo.GetRoleByIdAsync(roleId);
                 var user = await _user_repo.GetUserByIdAsync(userId);
+                if(role==null)
+                    return NotFound("Role not found.ID:" + roleId);
                 if(user==null)
                     return NotFound("User not found.ID:" + userId);
+
+                if(user.Role.Authority > role.Authority)
+                    return BadRequest("Project role higher then the role on a platform.");
                 teamMembers.Add(user);
+                projectRoles.Add(role);
             }
             var projectModel = projectDto.toProjectFromCreateDto();
-            var response = await _repos.CreateProjectAsync(projectModel,teamMembers);
+            var response = await _repos.CreateProjectAsync(projectModel,teamMembers,projectRoles);
             
             
             //kreiranje initial grupe - zove se isto kao i projekat
             var group = new TaskGroup{ Title = projectDto.Title, ParentTaskGroupId = null, ProjectId = response.Id};
 
-            var users =  await _user_repo.GetUserByProjectId(projectModel.Id);
-            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
+
+            var users =  projectModel.ProjectUsers.Select(u=>u.User).ToList();
+            var project_roles = projectModel.ProjectUsers.Select(u=>u.Role).ToList();
+
+            var userDtos = new List<ProjectUserDto>();
+            for(int i =0;i<users.Count;i++)
+            {
+                userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+            }
             var state = await _state_repo.GetStateByIdAsync(response.StateId);
             if(state==null)
                 return NotFound("error");
             
             await _group_repo.CreateAsync(group);
 
-            return Ok(response.ToProjectDto(ids,state.toStateDto(),prio.toPrioDto()));
+            return Ok(response.ToProjectDto(userDtos,state.toStateDto(),prio.toPrioDto()));
         }
 
         [HttpPut]
@@ -125,13 +167,27 @@ namespace server.Controllers
             //da li su datumi dobri
             if(projectDto.Start >= projectDto.End)
                 return BadRequest("End date comes before start date");
+            
+            if(projectDto.ProjectRoles.Count!=projectDto.Members.Count)
+                return BadRequest("Roles and user do not match.");
 
             var users =  new List<User>();
-            foreach (var userId in projectDto.Members)
+            var roles = new List<Role>();
+            for (int i =0;i< projectDto.Members.Count;i++)
             {
+                var userId = projectDto.Members[i];
+                var roleId = projectDto.ProjectRoles[i];
+                var role = await _role_repo.GetRoleByIdAsync(roleId);
                 var user = await _user_repo.GetUserByIdAsync(userId);
                 if(user==null)
-                    return Ok("user not found");
+                    return NotFound("user not found");
+                if(role == null)
+                    return NotFound("Role not found");
+                
+                if(role.Authority < user.Role.Authority)
+                    return BadRequest("Project role higher then the role on a platform.");
+                
+                roles.Add(role);
                 users.Add(user);
             }
             var prio = await _prio_repo.GetPriority(projectDto.PriorityId);
@@ -141,15 +197,21 @@ namespace server.Controllers
             if(state==null)
                 return NotFound("State with "+ projectDto.StateId+ " does not exist");
 
-            var project = await _repos.UpdateProjectAsync(projectDto, project_id, users);
+            var project = await _repos.UpdateProjectAsync(projectDto, project_id, users,roles);
 
             if(project==null)
                 return NotFound("Project with Id:"+project_id + " was not found !!!");
             var dto = new ProjectDto();
-
             
-            var ids =  users.Select(u=>u.toProjectUserDto(u.Role.toRoleDto())).ToList();
-            dto = project.ToProjectDto(ids, state.toStateDto(),prio.toPrioDto());
+            users =  project.ProjectUsers.Select(u=>u.User).ToList();
+            var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+            var userDtos = new List<ProjectUserDto>();
+            for(int i =0;i<users.Count;i++)
+            {
+                userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+            }
+            dto = project.ToProjectDto(userDtos, state.toStateDto(),prio.toPrioDto());
     
             return Ok(dto);
         }
