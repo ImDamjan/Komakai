@@ -34,7 +34,7 @@
                 </div>
                 <div class="error-message" *ngIf="!projectObj.start && submitted">*Start Date is required</div>
                 <div class="error-message" *ngIf="!projectObj.end && submitted">*End Date is required</div>
-                <div class="error-message" *ngIf="projectObj.start && projectObj.end && projectObj.start > projectObj.end">*End Date must be after Start Date</div>
+                <div class="error-message" *ngIf="projectObj.start && projectObj.end && (projectObj.start > projectObj.end) && (projectObj.start == projectObj.end)">*End Date must be after Start Date</div>
             </div>
             <div class="role">
                 <!-- 
@@ -67,8 +67,14 @@
                     <div class="custom-dropdown">
                         <span class="selected-option" (click)="toggleDropdown()">Select Members</span>
                         <div class="options" *ngIf="showDropdown">
-                            <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id, $event)">
-                                <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                            <div class="member-option" *ngFor="let user of users">
+                                
+                                <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user)" [disabled]="user.id == loggedInUserId">
+
+                                <select [ngModel]="userRoles.get(user.id)" (change)="onRoleChanged(user, $event)" [disabled]="user.id == loggedInUserId">
+                                    <option *ngFor="let role of getRolesForUser(user)" [value]="role.id">{{role.name}}</option>
+                                </select>
+
                                 {{ user.name }} {{ user.lastname }}
                             </div>
 
@@ -77,8 +83,13 @@
                                 {{ team.name }}
                                 <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
                                     <div *ngFor="let member of team.members">
-                                        <input type="checkbox" [checked]="isSelected(member.id)" (change)="onUserSelected(member.id)">
+                                        <input type="checkbox" [checked]="isSelected(member)" (change)="toggleUserSelection(member)" [disabled]="member.id == loggedInUserId">
                                         {{ getUserName(member.id) }}
+
+                                        <select [ngModel]="userRoles.get(member.id)" (change)="onRoleChanged(member, $event)" [disabled]="member.id == loggedInUserId">
+                                            <option *ngFor="let role of getRolesForUser(member)" [value]="role.id">{{role.name}}</option>
+                                        </select>
+                                        
                                     </div>
                                 </div>
                             </div>

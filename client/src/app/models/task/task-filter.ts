@@ -2,7 +2,9 @@
 // ako je 1 daje sve sto je vece ili jednako vrednosti na koju se odnosi flag, ako je -1 vraca, manje,
 // searchTitle property  je case insensitive.
 export interface TaskFilter {
-    propertyName : string,// title,start,end,..(za detalje vidi Repostories/AssignmentRepository.cs 94 linija funkcija)
+    user_id? : number,
+    project_id? : number,
+    propertyName? : string,// title,start,end,..(za detalje vidi Repostories/AssignmentRepository.cs 94 linija funkcija)
     sortFlag? : number,// 1 = asc , -1 = desc
     pageNumber? : number,
     pageSize? : number,
