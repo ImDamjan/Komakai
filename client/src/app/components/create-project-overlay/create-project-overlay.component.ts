@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject, inject } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user.service';
 import { ProjectService } from '../../services/project.service';
