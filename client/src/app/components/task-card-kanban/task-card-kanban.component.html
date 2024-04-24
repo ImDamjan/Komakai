@@ -18,8 +18,8 @@
     </div>
     <div class = "progress">
       <h2>Progress</h2>
-      <input type="range" min="0" max="100" [value]="task.percentage">
-      <p>{{task.percentage}}%</p>
+      <input class = "percentage-bar" type="range" min="0" max="100" [value]="task.percentage"><span>{{task.percentage}}%</span>
+      
     </div>
     <div class="task-details">
       <p>Details...</p>
