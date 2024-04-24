@@ -40,10 +40,11 @@ export class UserService {
     return this.http.put<User>(url,body);
   }
 
-  uploadProfilePicture(userId: number, formData: FormData): Observable<any> {
+  uploadProfilePicture(userId: number, picture: any): Observable<string> {
+    console.log(picture);
     const url = `${this.baseUrl}/User/${userId}/uploadProfilePicture`;
-  
-    return this.http.post<any>(url, formData);
+    //const headers = new HttpHeaders().set('Content-Type','application/json');
+    return this.http.post<string>(url, picture);
   }
   
   

@@ -204,7 +204,7 @@ namespace server.Controllers
         //BLOBS
 
         [HttpPost("{userId}/uploadProfilePicture")]
-        public async Task<IActionResult> UploadProfilePicture(int userId, [FromBody] byte[] pictureBytes)
+        public async Task<IActionResult> UploadProfilePicture(int userId, [FromBody] UploadProfilePictureDTO picture)
         {
             try
             {
@@ -213,10 +213,11 @@ namespace server.Controllers
                 if (user == null)
                     return NotFound("user not found");
 
-                if (pictureBytes == null || pictureBytes.Length == 0)
+                if (picture.Data == null || picture.Data.Length == 0)
                     return BadRequest("Invalid picture data");
 
-                user.ProfilePicture = pictureBytes;
+                var bytes = Convert.FromBase64String(picture.Data);
+                user.ProfilePicture = bytes;
 
                 await _repos.SaveChangesAsync();
 

@@ -56,25 +56,33 @@ export class ProfileDetailsComponent {
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
-
+    console.log(file);
+    let picture = {
+        data: '',
+        filename: '', 
+        type: ''
+    }
+    picture.type = file.type;
+    picture.filename = file.name;
     if (file) {
-      this.uploadProfilePicture(this.user.id, file);
+      const reader = new FileReader();
+  
+      reader.onload = () => {
+        const base64String = (reader.result as string).split(',')[1];
+        picture.data = base64String;
+        this.uploadProfilePicture(this.user.id, picture);
+      };
+  
+      reader.readAsDataURL(file);
     }
   }
 
-  uploadProfilePicture(userId: number, file: File) {
-    const formData = new FormData();
-    formData.append('pictureBytes', file);
+  uploadProfilePicture(userId: number, base64String: any) {
 
-    this.userService.uploadProfilePicture(userId, formData)
-      .subscribe(
-        () => {
-          console.log('Profile picture uploaded successfully');
-        },
-        (error) => {
-          console.error('Error uploading profile picture:', error);
-        }
-      );
-    }
+  
+    this.userService.uploadProfilePicture(userId, base64String).subscribe({
+      next: (message: string) => {console.log(message)}, error: (err) => {console.log(err)}
+    });
+  }
   
 }
