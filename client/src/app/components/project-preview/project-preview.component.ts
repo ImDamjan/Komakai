@@ -135,7 +135,6 @@ export class ProjectPreviewComponent implements OnInit {
     this.projectService.getProjectsData(this.filter).subscribe(
       (projects: Project[]) => {
         this.projectsData = projects;
-        console.log(this.projectsData);
         this.isLoading = false;
         this.spinner.hide();
         projects.forEach(project => {

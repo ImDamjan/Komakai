@@ -22,7 +22,6 @@ namespace server.Mappers
                 Name = u.Name,
                 Lastname = u.Lastname,
                 IsActivated = u.IsActivated
-                
             };
         }
         public static AssignmentUserDto toAssignmentUserDto(this User u)

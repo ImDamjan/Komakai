@@ -49,7 +49,8 @@ export class MemberComponent {
       department: user.department,
       roleId: user.role.id,
       roleName: '',
-      isActivated: user.isActivated
+      isActivated: user.isActivated,
+      profile_picture: user.profile_picture
     }
 
     this.user_service.updateUser(body).subscribe({

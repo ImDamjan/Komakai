@@ -59,6 +59,7 @@ import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
 
 import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
+import { ProfileDetailsComponent } from './components/profile-details/profile-details.component';
 import { SortDetailsComponent } from './components/sort-details/sort-details.component';
 import { FilterProjectComponent } from './components/filter-project/filter-project.component';
 import { SortProjectComponent } from './components/sort-project/sort-project.component';
@@ -103,6 +104,7 @@ import { SortProjectComponent } from './components/sort-project/sort-project.com
     AdminComponent,
     MemberComponent,
     EditProjectOverlayComponent,
+    ProfileDetailsComponent,
     FilterDetailsComponent,
     SortDetailsComponent,
     FilterProjectComponent,
