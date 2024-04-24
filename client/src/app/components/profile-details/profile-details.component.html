@@ -41,6 +41,8 @@
         <div class="contact-info">
             <form #editForm="ngForm">
                 <div id="description">
+                    <input type="file" (change)="onFileSelected($event)">
+
                     <span id="nametitle" class="title">First Name</span><br>
                     <input class="input-field" type="text" placeholder="Please enter your first name" [(ngModel)]="user.name" name="firstName" required pattern="[a-zA-Z ]*" #firstName="ngModel">
                     <p *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="error-message" style="color:red;">*First name is required and must contain only letters</p>

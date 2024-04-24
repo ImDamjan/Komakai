@@ -53,4 +53,28 @@ export class ProfileDetailsComponent {
       this.originalUser = { ...this.user };
     });
   }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      this.uploadProfilePicture(this.user.id, file);
+    }
+  }
+
+  uploadProfilePicture(userId: number, file: File) {
+    const formData = new FormData();
+    formData.append('pictureBytes', file);
+
+    this.userService.uploadProfilePicture(userId, formData)
+      .subscribe(
+        () => {
+          console.log('Profile picture uploaded successfully');
+        },
+        (error) => {
+          console.error('Error uploading profile picture:', error);
+        }
+      );
+    }
+  
 }

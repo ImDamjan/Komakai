@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { User } from '../models/user/user';
 import { UpdateUser } from '../models/user/update-user';
@@ -39,4 +39,12 @@ export class UserService {
 
     return this.http.put<User>(url,body);
   }
+
+  uploadProfilePicture(userId: number, formData: FormData): Observable<any> {
+    const url = `${this.baseUrl}/User/${userId}/uploadProfilePicture`;
+  
+    return this.http.post<any>(url, formData);
+  }
+  
+  
 }
