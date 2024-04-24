@@ -13,12 +13,13 @@ import { ProjectDetailsComponent } from './pages/project-details/project-details
 import path from 'path';
 import { AdminComponent } from './pages/admin/admin.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
+import { ProjectPreviewComponent } from './components/project-preview/project-preview.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full'},
   {path: 'auth' ,component: AuthComponent,canActivate: [AuthGuard]},
   {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard]},
-  {path: 'projects',component: ProjectsComponent,canActivate: [AuthGuard]},
+  {path: 'projects',component: ProjectPreviewComponent,canActivate: [AuthGuard]},
   {path: 'activity', component: ActivityComponent,canActivate: [AuthGuard]},
   {path: 'tasks', component: TasksComponent,canActivate: [AuthGuard]},
   // {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
