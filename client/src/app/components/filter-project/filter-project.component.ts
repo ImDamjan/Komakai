@@ -6,9 +6,6 @@ import { PriorityService } from '../../services/priority.service';
 import { MAT_DIALOG_DATA,MatDialogRef } from '@angular/material/dialog';
 import moment from 'moment';
 import { Form, FormBuilder, FormGroup } from '@angular/forms';
-import { FilterDataService } from '../../services/filterdata.service';
-import { ProjectService } from '../../services/project.service';
-import { Project } from '../../models/project/project';
 import { ProjectFilter } from '../../models/project/project-filter';
 import { FilterprojectdataService } from '../../services/filterprojectdata.service';
 
@@ -60,6 +57,8 @@ export class FilterProjectComponent {
 
     this.filter = this.data[0];
 
+    console.log(this.filter)
+
     this.state.fetchAllStates().subscribe(states =>{
       this.states = states;
       // console.log(this.states);
@@ -70,6 +69,7 @@ export class FilterProjectComponent {
       // console.log(this.priorities);
     })
 
+    
     const storedFilter = this.filterDataService.getFilter();
     if (storedFilter) {
 
@@ -91,6 +91,7 @@ export class FilterProjectComponent {
 
       this.formGroup2.get('sliderSelection')?.setValue(storedFilter.percentageFlag);
       this.formGroup2.get('sliderValue')?.setValue(storedFilter.percentageFilter);
+
     }
 
   }

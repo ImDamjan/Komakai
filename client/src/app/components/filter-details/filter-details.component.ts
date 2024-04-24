@@ -28,10 +28,6 @@ export class FilterDetailsComponent {
 
   projects: Project[] = [];
 
-  startDate: Date | undefined;
-
-  endDate: Date | undefined;
-
   formGroup: FormGroup;
 
   formGroup2: FormGroup;

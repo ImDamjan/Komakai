@@ -43,10 +43,6 @@ export class TaskHeaderComponent implements OnInit {
       this.projects = projects;
     });
   }
-  
-  isButtonElement(target: EventTarget): target is HTMLElement {
-    return target instanceof HTMLElement;
-  }
 
   onSearch(event: KeyboardEvent) {
 

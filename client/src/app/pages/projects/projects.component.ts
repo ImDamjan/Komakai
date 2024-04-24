@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, inject } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateProjectOverlayComponent } from '../../components/create-project-overlay/create-project-overlay.component';
 import { ProjectFilter } from '../../models/project/project-filter';
@@ -11,14 +11,16 @@ import { SortProjectComponent } from '../../components/sort-project/sort-project
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })
-export class ProjectsComponent {
+export class ProjectsComponent implements OnInit{
 
   @Input() filter!: ProjectFilter;
   showProjectPreview: boolean = true;
   showCreateButton: boolean = true;
   projectText: string = 'Project list';
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) { 
+
+  }
 
   searchValueProjectChanged = new EventEmitter< { searchText: string }>();
 
@@ -29,6 +31,10 @@ export class ProjectsComponent {
   private overlay = inject(MatDialog);
 
   private overlay2 = inject(MatDialog);
+
+  ngOnInit(){
+
+  }
 
   openCreateOverlay(): void {
     const dialogRef = this.dialog.open(CreateProjectOverlayComponent, {
@@ -50,7 +56,8 @@ export class ProjectsComponent {
     this.searchValueProjectChanged.emit({ searchText });
   }
 
-  openFilterDialog(){
+  openFilterProjectDialog(){
+
     const dialogConfig = new MatDialogConfig();
 
     const dialogRef = this.overlay.open(FilterProjectComponent, {
@@ -89,7 +96,7 @@ export class ProjectsComponent {
     });
   }
 
-  openSortDialog(){
+  openSortProjectDialog(){
     const dialogRef = this.overlay2.open(SortProjectComponent,{
       data:[this.filter]
     });
