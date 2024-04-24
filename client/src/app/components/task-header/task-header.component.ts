@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, ViewChild, inject, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
