@@ -13,27 +13,30 @@ namespace server.Repositories
             _context = context;
         }
 
-        public Task<Answer> CreateAnswerAsync(Answer answer)
+        public async Task<Answer> CreateAnswerAsync(Answer answer)
+        {
+            answer.PostTime=DateTime.Now;
+            await _context.Answers.AddAsync(answer);
+            await _context.SaveChangesAsync();
+            return answer;
+        }
+
+        public async Task<Answer?> DeleteAnswerByIdAsync(int answerId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Answer?> DeleteAnswerByIdAsync(int answerId)
+        public async Task<List<Answer>> GetAllAnswersByCommentIdAsync(int commentId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Answer>> GetAllAnswersByCommentIdAsync(int commentId)
+        public async Task<Answer?> GetAnswerByIdAsync(int answerId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Answer?> GetAnswerByIdAsync(int answerId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Answer> UpdateAnswerAsync(UpdateAnswerDto dto)
+        public async Task<Answer> UpdateAnswerAsync(UpdateAnswerDto dto)
         {
             throw new NotImplementedException();
         }
