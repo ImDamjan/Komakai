@@ -1,4 +1,5 @@
-﻿using server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using server.Data;
 using server.DTOs.Answer;
 using server.Models;
 
@@ -36,7 +37,7 @@ namespace server.Repositories
 
         public async Task<List<Answer>> GetAllAnswersByCommentIdAsync(int commentId)
         {
-            throw new NotImplementedException();
+            return await _context.Answers.Where(a => a.CommentId == commentId).ToListAsync();
         }
 
         public async Task<Answer?> GetAnswerByIdAsync(int answerId)
