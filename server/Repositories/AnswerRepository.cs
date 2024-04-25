@@ -23,7 +23,15 @@ namespace server.Repositories
 
         public async Task<Answer?> DeleteAnswerByIdAsync(int answerId)
         {
-            throw new NotImplementedException();
+            var answer = await GetAnswerByIdAsync(answerId);
+            if(answer == null)
+            {
+                return null;
+            }
+
+            _context.Answers.Remove(answer);
+            await _context.SaveChangesAsync();
+            return answer;
         }
 
         public async Task<List<Answer>> GetAllAnswersByCommentIdAsync(int commentId)
