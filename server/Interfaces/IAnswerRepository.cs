@@ -11,6 +11,6 @@ namespace server.Interfaces
         Task<Answer?> DeleteAnswerByIdAsync(int answerId);
         Task<List<Answer>> GetAllAnswersByCommentIdAsync(int commentId);
         Task<Answer?> GetAnswerByIdAsync(int answerId);
-        Task<Answer> UpdateAnswerAsync(UpdateAnswerDto dto);
+        Task<Answer?> UpdateAnswerAsync(UpdateAnswerDto dto);
     }
 }
