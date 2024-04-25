@@ -42,7 +42,7 @@ namespace server.Repositories
 
         public async Task<Answer?> GetAnswerByIdAsync(int answerId)
         {
-            throw new NotImplementedException();
+            return await _context.Answers.FirstOrDefaultAsync(a=>a.Id== answerId);
         }
 
         public async Task<Answer> UpdateAnswerAsync(UpdateAnswerDto dto)
