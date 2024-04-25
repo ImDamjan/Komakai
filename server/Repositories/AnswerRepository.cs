@@ -45,9 +45,17 @@ namespace server.Repositories
             return await _context.Answers.FirstOrDefaultAsync(a=>a.Id== answerId);
         }
 
-        public async Task<Answer> UpdateAnswerAsync(UpdateAnswerDto dto)
+        public async Task<Answer?> UpdateAnswerAsync(UpdateAnswerDto dto)
         {
-            throw new NotImplementedException();
+            var answer = await GetAnswerByIdAsync(dto.Id);
+            if(answer == null)
+            {
+                return null;
+            }
+
+            answer.Content = dto.Content;
+            answer.EditedTime=DateTime.Now;
+            return answer;
         }
     }
 }
