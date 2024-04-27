@@ -1,4 +1,5 @@
 .projectlist {
+    max-width: calc(100% - 16.5625rem);
     height: 100%;
     width: 80%;
     display: flex;
