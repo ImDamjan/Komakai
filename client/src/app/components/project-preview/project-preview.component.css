@@ -1,6 +1,7 @@
 #strana{
   width: 100vw;
   margin-left: 50px;
+  max-width: 100%;
 }
 
 .grid-container {
