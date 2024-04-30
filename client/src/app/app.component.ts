@@ -15,10 +15,14 @@ export class AppComponent implements OnInit{
   constructor(private router: Router, public authService: AuthenticationService){
 
   }
+  isLoginPage()
+  {
+    return this.router.url==="/auth";
+  }
 
   ngOnInit(): void {
-    this.userIsLogged = this.authService.isAuthenticated();
-    console.log("logovan sam iz app " + this.authService.isAuthenticated());
+    // this.userIsLogged = this.authService.isAuthenticated();
+    // console.log("logovan sam iz app " + this.authService.isAuthenticated());
   }
 
 
