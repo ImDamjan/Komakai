@@ -81,15 +81,15 @@ export class ProfileDetailsComponent {
 
   uploadProfilePicture(userId: number, base64String: any) {
     this.userService.uploadProfilePicture(userId, base64String).subscribe({
-      next: (message: string) => {this.profilePicture(userId)}, error: (err) => {console.log(err)}
+      next: (message: string) => {this.profilePicture(userId)}, error: (err) => {}
     });
   }
 
   profilePicture(userId: number) {
     this.userService.profilePicture(userId).subscribe({
       next: (message: { profilePicture: string, type: string }) => {
-        console.log(message);
         this.picture = `data:${message.type};base64,${message.profilePicture}`;
+        this.userService.setProfilePicture(this.picture);
       }, error: (err) => {
         if (err.error === 'Profile picture not found for the user') {
           this.picture = "../../../assets/pictures/defaultpfp.svg";

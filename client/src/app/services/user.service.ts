@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { User } from '../models/user/user';
 import { UpdateUser } from '../models/user/update-user';
@@ -9,6 +9,10 @@ import { UpdateUser } from '../models/user/update-user';
   providedIn: 'root'
 })
 export class UserService {
+  private pictureSource = new BehaviorSubject<string>('../../../assets/pictures/defaultpfp.svg');
+
+  picture$ = this.pictureSource.asObservable();
+  
   baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
@@ -50,5 +54,9 @@ export class UserService {
   profilePicture(userId: number): Observable<any> {
     const url = `${this.baseUrl}/User/${userId}/profilePicture`;
     return this.http.get<string>(url);
+  }
+
+  setProfilePicture(picture: string) {
+    this.pictureSource.next(picture);
   }
 }

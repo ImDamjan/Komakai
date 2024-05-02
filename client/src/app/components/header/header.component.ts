@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   userid!: number;
   private jwtService = inject(JwtDecoderService);
   user!: UpdateUser;
-  profilePicture !: string;
+  picture!: string;
 
   firstname: string = "";
   lastname: string = "";
@@ -53,6 +53,9 @@ export class HeaderComponent implements OnInit {
         this.lastname = user.lastname;
         this.jobTitle = user.jobTitle;
       }
+    });
+    this.userService.picture$.subscribe(picture => {
+       this.picture = picture;
     });
   }
 
