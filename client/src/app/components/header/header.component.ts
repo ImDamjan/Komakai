@@ -56,6 +56,8 @@ export class HeaderComponent implements OnInit {
     });
     this.userService.picture$.subscribe(picture => {
        this.picture = picture;
+       if(this.picture == '')
+        this.profilePicture(this.userid);
     });
   }
 
@@ -71,6 +73,19 @@ export class HeaderComponent implements OnInit {
         ...dialogConfig,
         data: { user: userData, role: this.roleId }
       });
+    });
+  }
+
+  profilePicture(userId: number) {
+    this.userService.profilePicture(userId).subscribe({
+      next: (message: { profilePicture: string, type: string }) => {
+        console.log(message);
+        this.picture = `data:${message.type};base64,${message.profilePicture}`;
+      }, error: (err) => {
+        if (err.error === 'Profile picture not found for the user') {
+          this.picture = "../../../assets/pictures/defaultpfp.svg";
+        }
+      }
     });
   }
 }

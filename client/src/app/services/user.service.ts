@@ -9,7 +9,7 @@ import { UpdateUser } from '../models/user/update-user';
   providedIn: 'root'
 })
 export class UserService {
-  private pictureSource = new BehaviorSubject<string>('../../../assets/pictures/defaultpfp.svg');
+  private pictureSource = new BehaviorSubject<string>('');
 
   picture$ = this.pictureSource.asObservable();
   
