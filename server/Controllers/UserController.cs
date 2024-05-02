@@ -222,7 +222,7 @@ namespace server.Controllers
 
                 await _repos.SaveChangesAsync();
 
-                return Ok("Profile picture uploaded successfully");
+                return Ok(picture);
             }
             catch (Exception ex)
             {
@@ -243,10 +243,8 @@ namespace server.Controllers
                 if (user.ProfilePicture == null || user.ProfilePicture.Length == 0)
                     return NotFound("Profile picture not found for the user");
 
-                // Convert the byte array profile picture to a base64-encoded string
                 var base64ProfilePicture = Convert.ToBase64String(user.ProfilePicture);
 
-                // Return the base64-encoded profile picture string to the client
                 return Ok(new { ProfilePicture = base64ProfilePicture, Type = user.PictureType });
             }
             catch (Exception ex)

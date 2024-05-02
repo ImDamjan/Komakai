@@ -47,5 +47,8 @@ export class UserService {
     return this.http.post<string>(url, picture);
   }
   
-  
+  profilePicture(userId: number): Observable<any> {
+    const url = `${this.baseUrl}/User/${userId}/profilePicture`;
+    return this.http.get<string>(url);
+  }
 }

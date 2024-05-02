@@ -5,7 +5,7 @@
         </div>
         <div class="centered-content">
             <div class="profile-info">
-                <img id="pfp" src="../../../assets/pictures/defaultpfp.svg">
+                <img id="pfp" [src]="picture">
                 <div id="description">
                     <span id="nametitle" class="title">Name (username)</span><br>
                     <span id="fullname">{{user.name}} {{user.lastname}} ( <span id="username">{{user.username}}</span> )</span><br>
@@ -35,7 +35,7 @@
         </div>
         <div class="centered-content">
             <div class="profile-info">
-                <img id="pfp" src="../../../assets/pictures/defaultpfp.svg">
+                <img id="pfp" [src]="picture">
             </div>
         </div>
         <div class="contact-info">

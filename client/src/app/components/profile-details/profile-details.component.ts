@@ -19,6 +19,7 @@ export class ProfileDetailsComponent {
   roleId!: number;
   roles!: Role[];
   editMode = false;
+  picture!: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router, private userProfileService: UserProfileService) {
     this.user = data.user;
@@ -26,6 +27,7 @@ export class ProfileDetailsComponent {
     this.roleId = data.role;
     this.user.roleId = this.roleId;
     console.log(this.user);
+    this.profilePicture(this.user.id);
   }
 
   ngOnInit() : void {
@@ -78,10 +80,21 @@ export class ProfileDetailsComponent {
   }
 
   uploadProfilePicture(userId: number, base64String: any) {
-
-  
     this.userService.uploadProfilePicture(userId, base64String).subscribe({
-      next: (message: string) => {console.log(message)}, error: (err) => {console.log(err)}
+      next: (message: string) => {this.profilePicture(userId)}, error: (err) => {console.log(err)}
+    });
+  }
+
+  profilePicture(userId: number) {
+    this.userService.profilePicture(userId).subscribe({
+      next: (message: { profilePicture: string, type: string }) => {
+        console.log(message);
+        this.picture = `data:${message.type};base64,${message.profilePicture}`;
+      }, error: (err) => {
+        if (err.error === 'Profile picture not found for the user') {
+          this.picture = "../../../assets/pictures/defaultpfp.svg";
+        }
+      }
     });
   }
   
