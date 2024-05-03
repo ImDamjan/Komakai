@@ -61,6 +61,9 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   public projectUsers : User[] = [];  
   public percentageChange : number = 0;
 
+  public picture!: string;
+  public pictureLoading: boolean = true;
+
   public updateObj: UpdateTask = {
     taskGroupId: 0,
     userIds: [],
@@ -88,7 +91,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.assignment = this.data[0];
     console.log(this.assignment);
 
-
+    this.profilePicture(this.assignment.owner.id);
 
     this.assignment_service.getDependentAssignmentsFor(this.assignment.id).subscribe({
       next : (tasks : Task[]) => {
@@ -109,6 +112,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         });
       }
     });
+
+    
   }
   updateTask()
   {
@@ -313,4 +318,18 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.showUpdate=false;
   }
 
+  profilePicture(userId: number) {
+    this.user_service.profilePicture(userId).subscribe({
+      next: (message: { profilePicture: string, type: string }) => {
+        this.picture = `data:${message.type};base64,${message.profilePicture}`;
+        this.pictureLoading = false;
+      },
+      error: (err) => {
+        if (err.error == 'Profile picture not found for the user') {
+          this.picture = "../../../assets/pictures/defaultpfp.svg";
+          this.pictureLoading = false;
+        }
+      }
+    });
+  }
 }
