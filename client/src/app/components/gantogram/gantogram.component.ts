@@ -2,6 +2,7 @@ import { AfterViewInit, Component, HostBinding, OnInit, ViewChild, inject } from
 import {srLatn} from 'date-fns/locale'
 import { NgToastService } from 'ng-angular-popup';
 import {MatChipsModule} from '@angular/material/chips';
+import {GantogramService} from '../../services/gantogram.service'
 import {
   GanttBarClickEvent,
   GanttBaselineItem,
