@@ -2,8 +2,8 @@ import { GanttItem, GanttItemType } from "@worktile/gantt";
 import { TaskCardKanbanComponent } from "../../components/task-card-kanban/task-card-kanban.component";
 import { Task } from "../task/task";
 import { Priority } from "../priority/priority";
-import { isTemplateRef } from "ngx-tethys/util";
-
+import { GantogramService } from "../../services/gantogram.service"
+import { log } from "node:console";
 export class GanttMapper {
     // Normalni članovi klase
     static mapTasksToGantItems(tasks:Task[]) : GanttItem[]{
@@ -11,10 +11,24 @@ export class GanttMapper {
 
         const ganttItems: GanttItem[] = []
         // Implementacija statičke metode
+        
         for (let i = 0; i < tasks.length; i++) {
+            // console.log(tasks[i]);
+            console.log("********************");
+            console.log(tasks[i].start);
+            console.log(new Date(tasks[i].start).toDateString());
+            
+            console.log("********************");
+            
+            
+            
             ganttItems.push(this.mapTaskToGanttItem(tasks[i]));
             
         }
+        console.log("====================================================");
+        console.log(ganttItems);
+        
+        console.log("====================================================");
 
         return ganttItems
     }
@@ -23,8 +37,8 @@ export class GanttMapper {
         const ganttItem: GanttItem = {
             id: task.id.toString(),
             title: task.title,
-            start: task.start.getTime(), // ili drugi odgovarajući atribut za početak
-            end: task.end.getTime(), // ili drugi odgovarajući atribut za kraj
+            start: new Date(task.start).getTime()/1000, // ili drugi odgovarajući atribut za početak
+            end: new Date(task.end).getTime()/1000, // ili drugi odgovarajući atribut za kraj
             links: [], // Možete dodati logiku za mapiranje linkova ako je potrebno
             draggable: true, // Postavite na true ako želite omogućiti povlačenje
             itemDraggable: true, // Postavite na true ako želite omogućiti povlačenje samo na ovom elementu
@@ -32,10 +46,10 @@ export class GanttMapper {
             expandable: true, // Postavite na true ako želite omogućiti proširivanje
             expanded: false, // Postavite na true ako želite da je element početno proširen
             color: this.mapPrioprityToColor(task.priority), // Postavite boju po želji
-            barStyle: {}, // Postavite stil trake po želji
+            // barStyle: {color: 'red !important'}, // Postavite stil trake po želji
             origin: task, // Originalni task
             type: GanttItemType.bar, // Tip gant elementa
-            progress: task.percentage, // Napredak elementa ako je dostupno u tasku
+            progress: task.percentage/100, // Napredak elementa ako je dostupno u tasku
         };
         return ganttItem;
     }

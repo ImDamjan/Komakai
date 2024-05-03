@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, HostBinding, OnInit, ViewChild, inject } from '@angular/core';
 import {srLatn} from 'date-fns/locale'
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
 import {MatChipsModule} from '@angular/material/chips';
 import {GantogramService} from '../../services/gantogram.service'
+import { GanttMapper } from '../../models/gantogram/gan_mapper';
 import {
   GanttBarClickEvent,
   GanttBaselineItem,
@@ -30,6 +32,8 @@ import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../../helper';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { log } from 'console';
+import { Task } from '../../models/task/task';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -41,6 +45,13 @@ import { log } from 'console';
   providers: [GanttPrintService],
 })
 export class GantogramComponent implements OnInit, AfterViewInit{
+  
+  private decoder = inject(JwtDecoderService);
+  private userId : number = 0;
+  private projectId : number = 0;
+  private route = inject(ActivatedRoute);
+  private ganttService = inject(GantogramService)
+
 
   views = [
       
@@ -68,45 +79,46 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   selectedViewType: GanttViewType = GanttViewType.month;
 
-  isBaselineChecked = false;
+  isBaselineChecked = true;
 
   isShowToolbarChecked = false;
 
   loading = false;
 
-  items: GanttItem[] = [
-    { id: '000000', title: 'Task 0', start: 1712134088, end: 1712898109 },
-    // { id: '000001', title: 'Task 1', start: 1617361997, end: 1625483597, links: ['000003', '000004', '000000'],  },
-      { id: '000001', title: 'Task 1', start: 1712831699, end: 1713191699, links: ['000003', '000004', '0000029'] },
-      { id: '000002', title: 'Task 2', start: 1712133065, end: 1712798081, progress: 0.5 },
-      { id: '000003', title: 'Task 3 ', start: 1712430893, end: 1712629175, itemDraggable: false },
-      { id: '000004', title: 'Task 4', start: 1712335839 },
-      { id: '000005', title: 'Task 5', start: 1712284603, end: 1712899430, color: '#709dc1' },
-      { id: '000006', title: 'Task 6', start: 1712476430, end: 1712781855 },
-      { id: '000007', title: 'Task 7', start: 1711673322, end: 1712163550 },
-      { id: '000008', title: 'Task 8', end: 1711883971, color: '#709dc1' },
-      { id: '000009', title: 'Task 9', start: 1711396323, end: 1711224442 },
-      { id: '0000010', title: 'Task 10', start: 1710771774, end: 1710812913 },
-      { id: '0000011', title: 'Task 11', start: 1710017856, end: 1710422968 },
-      { id: '0000012', title: 'Task 12', start: 1710107231, end: 1711186236 },
-      { id: '0000013', title: 'Task 13', start: 1711528814, end: 1711742114, links: ['0000012'] },
-      { id: '0000014', title: 'Task 14', start: 1709760013, end: 1710914043 },
-      { id: '0000015', title: 'Task 15', start: 1710605307, end: 1711375313 },
-      { id: '0000016', title: 'Task 16', start: 1711179667, end: 1712642385 },
-      { id: '0000017', title: 'Task 17', start: 1711795007, end: 1711776104 },
-      { id: '0000018', title: 'Task 18', start: 1710991362, end: 1710660144 },
-      { id: '0000019', title: 'Task 19', start: 1710337849, end: 1710527970 },
-      { id: '0000020', title: 'Task 20', start: 1710254554, end: 1711516712 },
-      { id: '0000021', title: 'Task 21', start: 1711145546, end: 1711822734 },
-      { id: '0000022', title: 'Task 22', start: 1711039436, end: 1712490081 },
-      { id: '0000023', title: 'Task 23', start: 1711682284, end: 1711913651 },
-      { id: '0000024', title: 'Task 24', start: 1711568569, end: 1712048480 },
-      { id: '0000025', title: 'Task 25', start: 1711363263, end: 1711907369 },
-      { id: '0000026', title: 'Task 26', start: 1711404939, end: 1711680728 },
-      { id: '0000027', title: 'Task 27', start: 1711490779, end: 1712179160 },
-      { id: '0000028', title: 'Task 28', start: 1711531991, end: 1712561616 },
-      { id: '0000029', title: 'Task 29', start: 1712312000, end: 1712466196 }
-  ];
+  items: GanttItem[] = [];
+  // items: GanttItem[] = [
+  //   { id: '000000', title: 'Task 0', start: 1712134088, end: 1712898109 },
+  //   // { id: '000001', title: 'Task 1', start: 1617361997, end: 1625483597, links: ['000003', '000004', '000000'],  },
+  //     { id: '000001', title: 'Task 1', start: 1712831699, end: 1713191699, links: ['000003', '000004', '0000029'] },
+  //     { id: '000002', title: 'Task 2', start: 1712133065, end: 1712798081, progress: 0.5 },
+  //     { id: '000003', title: 'Task 3 ', start: 1712430893, end: 1712629175, itemDraggable: false },
+  //     { id: '000004', title: 'Task 4', start: 1712335839 },
+  //     { id: '000005', title: 'Task 5', start: 1712284603, end: 1712899430, color: '#709dc1' },
+  //     { id: '000006', title: 'Task 6', start: 1712476430, end: 1712781855 },
+  //     { id: '000007', title: 'Task 7', start: 1711673322, end: 1712163550 },
+  //     { id: '000008', title: 'Task 8', end: 1711883971, color: '#709dc1' },
+  //     { id: '000009', title: 'Task 9', start: 1711396323, end: 1711224442 },
+  //     { id: '0000010', title: 'Task 10', start: 1710771774, end: 1710812913 },
+  //     { id: '0000011', title: 'Task 11', start: 1710017856, end: 1710422968 },
+  //     { id: '0000012', title: 'Task 12', start: 1710107231, end: 1711186236 },
+  //     { id: '0000013', title: 'Task 13', start: 1711528814, end: 1711742114, links: ['0000012'] },
+  //     { id: '0000014', title: 'Task 14', start: 1709760013, end: 1710914043 },
+  //     { id: '0000015', title: 'Task 15', start: 1710605307, end: 1711375313 },
+  //     { id: '0000016', title: 'Task 16', start: 1711179667, end: 1712642385 },
+  //     { id: '0000017', title: 'Task 17', start: 1711795007, end: 1711776104 },
+  //     { id: '0000018', title: 'Task 18', start: 1710991362, end: 1710660144 },
+  //     { id: '0000019', title: 'Task 19', start: 1710337849, end: 1710527970 },
+  //     { id: '0000020', title: 'Task 20', start: 1710254554, end: 1711516712 },
+  //     { id: '0000021', title: 'Task 21', start: 1711145546, end: 1711822734 },
+  //     { id: '0000022', title: 'Task 22', start: 1711039436, end: 1712490081 },
+  //     { id: '0000023', title: 'Task 23', start: 1711682284, end: 1711913651 },
+  //     { id: '0000024', title: 'Task 24', start: 1711568569, end: 1712048480 },
+  //     { id: '0000025', title: 'Task 25', start: 1711363263, end: 1711907369 },
+  //     { id: '0000026', title: 'Task 26', start: 1711404939, end: 1711680728 },
+  //     { id: '0000027', title: 'Task 27', start: 1711490779, end: 1712179160 },
+  //     { id: '0000028', title: 'Task 28', start: 1711531991, end: 1712561616 },
+  //     { id: '0000029', title: 'Task 29', start: 1712312000, end: 1712466196 }
+  // ];
 
   toolbarOptions: GanttToolbarOptions = {
       viewTypes: [GanttViewType.day, GanttViewType.month, GanttViewType.year]
@@ -151,17 +163,45 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   };
   private spinner = inject(NgxSpinnerService);
 
-  constructor(private printService: GanttPrintService,private toast : NgToastService) {}
+  constructor(private printService: GanttPrintService,private toast : NgToastService) {
+    this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+  }
 
   ngOnInit(): void {
       // init items children
-      this.spinner.show();
-      this.items.forEach((item, index) => {
-          if (index % 5 === 0) {
-              item.children = randomItems(random(1, 5), item);
+      let token = this.decoder.getToken();
+      if(token!=null)
+      {
+        let decode = this.decoder.decodeToken(token);
+        this.userId = decode.user_id;
+      }
+      // this.spinner.show();
+      // this.items.forEach((item, index) => {
+      //     if (index % 5 === 0) {
+      //         item.children = randomItems(random(1, 5), item);
+      //     }
+      // });
+      // this.spinner.hide();
+
+      this.ganttService.GetAssignemntsByProjectId(this.projectId).subscribe({
+        next : (tasks: Task[])=> 
+          {
+            if (tasks && tasks.length > 0){
+              var res = GanttMapper.mapTasksToGantItems(tasks)
+              // console.log(res);
+              this.items = res
+              // console.log(tasks[0].id);
+          } else {
+              console.log("No tasks found or tasks[0] is undefined.");
           }
+            // console.log(tasks[0]);
+            // var res2 = GanttMapper.mapTaskToGanttItem(tasks[0])
+            // console.log(tasks[0].id);
+            
+            
+          },
+        error:(error: any)=> console.log(error)
       });
-      this.spinner.hide();
 
       
       console.log(this.items);

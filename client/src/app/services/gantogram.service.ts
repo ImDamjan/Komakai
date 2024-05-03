@@ -25,16 +25,19 @@ export class GantogramService {
   }
 
 
+  GetAssignemntsByProjectId(project_id:number) : Observable<Task[]>
+  {
+    const url = this.baseUrl+"/Assignment/getAssignmentsByProject/"+project_id
+    return this.http.get<Task[]>(url)
+  }
+
+
   GetGroupByProjectId(project_id:number) : Observable<TaskGroup>
   {
     const url = this.baseUrl+"/TaskGroup/getTaskGroupsByProjectId/"+project_id;
     return this.http.get<TaskGroup>(url);
   }
-  createComment(data:any) : Observable<Task>
-  {
-    const url = this.baseUrl + "/Comment/createComment";
-    return this.http.post<Task>(url,data);
-  }
+
 
   updateTaskById(body : UpdateTask, task_id: number) : Observable<Task>
   {
