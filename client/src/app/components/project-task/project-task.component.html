@@ -28,7 +28,7 @@
         <div class="vreme" [ngClass]="getCorrectTime(task.remaining,task.timeDifference)"><div class="vreme2"><img src="assets\project-task\pie.svg" alt="" width="20" height="20"> &nbsp; <span class="tekst"> <b>{{ getFloorRemaining(task.remaining) }}</b> </span></div></div>
       </td>
       <td id="person">  
-        <img src="assets\project-task\person.svg" alt="">
+        <img id="pfp" [src]="picture" alt="">
       </td>
       <td id="com">
         <img src="assets\project-task\comment.svg" alt="">
