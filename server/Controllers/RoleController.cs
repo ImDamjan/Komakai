@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Permissions;
 using server.Interfaces;
 using server.Mappers;
+using server.Migrations;
 using server.Models;
 
 namespace server.Controllers
@@ -34,7 +35,13 @@ namespace server.Controllers
         public async Task<IActionResult> GetPermissionsByRoleId(int roleId)
         {
             var permissions = await _role_repo.GetPermissionsByRoleIdAsync(roleId);
-            return Ok(permissions);
+            var permissionDtos = permissions.Select(p => new PermissionDto
+            {
+                Id = p.Id,
+                Name = p.Name
+            }).ToList();
+
+            return Ok(permissionDtos);
         }
     }
 }
