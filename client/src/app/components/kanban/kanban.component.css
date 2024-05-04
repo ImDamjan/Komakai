@@ -34,7 +34,7 @@
     height: fit-content;
     border-radius: .5rem;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-    background: #0F2167;
+    background: #113a7c;
   }
   
   .board-column:not(:first-child) {
@@ -58,11 +58,13 @@
     display: flex;
     background: #FFECD6;
     border-bottom: solid 1px #31363F;
-    min-width: 200px;
+    min-width: 250px;
+    height: fit-content;
     border-radius: 4px;
     margin-top: 5px;
     margin-bottom: 15px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    overflow-y: hidden;
   }
   
   .cdk-drag-preview {
