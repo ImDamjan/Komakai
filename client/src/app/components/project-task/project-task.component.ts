@@ -29,7 +29,6 @@ export class ProjectTaskComponent implements OnInit{
 
     this.userService.picture$.subscribe(picture => {
        this.picture = picture;
-       console.log(this.picture);
        if(this.picture == '')
         this.profilePicture(this.task.owner.id);
 
@@ -202,12 +201,12 @@ export class ProjectTaskComponent implements OnInit{
   profilePicture(userId: number) {
     this.userService.profilePicture(userId).subscribe({
       next: (message: { profilePicture: string, type: string }) => {
-        console.log(message);
-        this.picture = `data:${message.type};base64,${message.profilePicture}`;
-      }, error: (err) => {
-        if (err.error === 'Profile picture not found for the user') {
+        if(message.profilePicture)
+          this.picture = `data:${message.type};base64,${message.profilePicture}`;
+        else 
           this.picture = "../../../assets/pictures/defaultpfp.svg";
-        }
+      }, error: (err) => {
+        console.error('Error retrieving profile picture:', err);
       }
     });
   }

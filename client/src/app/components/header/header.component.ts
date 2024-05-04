@@ -48,7 +48,6 @@ export class HeaderComponent implements OnInit {
 
     this.userProfileService.userProfileSubject.subscribe(user => {
       if (user) {
-        console.log(user);
         this.firstname = user.name;
         this.lastname = user.lastname;
         this.jobTitle = user.jobTitle;
@@ -79,12 +78,12 @@ export class HeaderComponent implements OnInit {
   profilePicture(userId: number) {
     this.userService.profilePicture(userId).subscribe({
       next: (message: { profilePicture: string, type: string }) => {
-        console.log(message);
-        this.picture = `data:${message.type};base64,${message.profilePicture}`;
-      }, error: (err) => {
-        if (err.error === 'Profile picture not found for the user') {
+        if(message.profilePicture)
+          this.picture = `data:${message.type};base64,${message.profilePicture}`;
+        else
           this.picture = "../../../assets/pictures/defaultpfp.svg";
-        }
+      }, error: (err) => {
+        console.error('Error retrieving profile picture:', err);
       }
     });
   }

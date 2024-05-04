@@ -321,14 +321,17 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   profilePicture(userId: number) {
     this.user_service.profilePicture(userId).subscribe({
       next: (message: { profilePicture: string, type: string }) => {
-        this.picture = `data:${message.type};base64,${message.profilePicture}`;
-        this.pictureLoading = false;
-      },
-      error: (err) => {
-        if (err.error == 'Profile picture not found for the user') {
+        if(message.profilePicture)
+        {
+          this.picture = `data:${message.type};base64,${message.profilePicture}`;
+          this.pictureLoading = false;
+        } else {
           this.picture = "../../../assets/pictures/defaultpfp.svg";
           this.pictureLoading = false;
         }
+      },
+      error: (err) => {
+        console.error('Error retrieving profile picture:', err);
       }
     });
   }

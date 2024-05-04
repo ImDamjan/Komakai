@@ -24,7 +24,6 @@ export class MemberComponent implements OnInit{
   ngOnInit(): void {
     this.user_service.getUsers().subscribe(users => {
       this.allUsers = users;
-      console.log(this.allUsers)
       this.profilePicture(this.allUsers);
     });
   }
@@ -72,14 +71,13 @@ export class MemberComponent implements OnInit{
     this.users.forEach(user => {
       this.user_service.profilePicture(user.id).subscribe({
         next: (message: { profilePicture: string, type: string }) => {
-          user.profile_picture = `data:${message.type};base64,${message.profilePicture}`;
-          console.log(user.profile_picture);
+          if(message.profilePicture)
+            user.profile_picture = `data:${message.type};base64,${message.profilePicture}`;
+          else
+            user.profile_picture = "../../../assets/pictures/defaultpfp.svg";
         }, 
         error: (err) => {
-          if (err.error === 'Profile picture not found for the user') {
-            user.profile_picture = "../../../assets/pictures/defaultpfp.svg";
-            console.log(user.profile_picture);
-          }
+          console.error('Error retrieving profile picture:', err);
         },
         complete: () => {
           this.profilePicturesLoaded = true;

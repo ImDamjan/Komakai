@@ -241,7 +241,7 @@ namespace server.Controllers
                     return NotFound("User not found");
 
                 if (user.ProfilePicture == null || user.ProfilePicture.Length == 0)
-                    return NotFound("Profile picture not found for the user");
+                    return Ok(new { ProfilePicture = "", Type = "" });
 
                 var base64ProfilePicture = Convert.ToBase64String(user.ProfilePicture);
 

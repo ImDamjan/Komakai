@@ -26,7 +26,6 @@ export class ProfileDetailsComponent {
     this.originalUser = { ...this.user };
     this.roleId = data.role;
     this.user.roleId = this.roleId;
-    console.log(this.user);
     this.profilePicture(this.user.id);
   }
 
@@ -58,7 +57,6 @@ export class ProfileDetailsComponent {
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
-    console.log(file);
     let picture = {
         data: '',
         filename: '', 
@@ -90,13 +88,16 @@ export class ProfileDetailsComponent {
   profilePicture(userId: number) {
     this.userService.profilePicture(userId).subscribe({
       next: (message: { profilePicture: string, type: string }) => {
-        console.log(message);
-        this.picture = `data:${message.type};base64,${message.profilePicture}`;
-        this.userService.setProfilePicture(this.picture);
-      }, error: (err) => {
-        if (err.error === 'Profile picture not found for the user') {
+        if(message.profilePicture)
+          {
+            this.picture = `data:${message.type};base64,${message.profilePicture}`;
+            this.userService.setProfilePicture(this.picture);
+          }
+        else {
           this.picture = "../../../assets/pictures/defaultpfp.svg";
         }
+      }, error: (err) => {
+        console.error('Error retrieving profile picture:', err);
       }
     });
   }
