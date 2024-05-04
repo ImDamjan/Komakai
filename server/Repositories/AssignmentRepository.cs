@@ -104,10 +104,6 @@ namespace server.Repositories
         {
             if(dto!=null)
             {
-                if(dto.PageNumber!=0 && dto.PageSize!=0)
-                {
-                    assignments = assignments.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
-                }
                 if(dto.StateFilter > 0 && dto.StateFilter < 7)
                     assignments =assignments.Where(p=>p.StateId==dto.StateFilter);
                 if(dto.PriorityFilter > 0 && dto.PriorityFilter < 5)
@@ -136,6 +132,10 @@ namespace server.Repositories
                         assignments =assignments.Where(p=>p.Percentage < dto.PercentageFilter);
                     else if(dto.PercentageFlag==1)
                         assignments =assignments.Where(p=>p.Percentage >= dto.PercentageFilter);
+                }
+                if (dto.PageNumber != 0 && dto.PageSize != 0)
+                {
+                    assignments = assignments.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
                 }
             }
             if(sort!=null)

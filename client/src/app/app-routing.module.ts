@@ -21,7 +21,8 @@ const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard]},
   {path: 'projects',component: ProjectPreviewComponent,canActivate: [AuthGuard]},
   {path: 'activity', component: ActivityComponent,canActivate: [AuthGuard]},
-  {path: 'tasks', component: TasksComponent,canActivate: [AuthGuard]},
+  {path: 'tasks', redirectTo: '/tasks/1', pathMatch: 'full'},
+  {path: 'tasks/:pageNumber', component: TasksComponent,canActivate: [AuthGuard]},
   // {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
   {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]},
   

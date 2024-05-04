@@ -7,4 +7,7 @@
     <div *ngFor="let task of filteredTasks">
         <app-project-task [task]="task"></app-project-task>
     </div>
+    <button (click)="previousPage()">Previous</button>
+    <span> Page {{ currentPage }} </span>
+    <button (click)="nextPage()">Next</button>
 </div>
