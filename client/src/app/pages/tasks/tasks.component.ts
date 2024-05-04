@@ -47,23 +47,23 @@ export class TasksComponent {
   }
 
   ngOnInit(): void {
-    let token = this.jwtDecoder.getToken();
-    let id = 0;
-    if(token!=null)
-    {
-      let decode = this.jwtDecoder.decodeToken(token);
-      id = decode.user_id;
-    }
-    this.filter.pageNumber = this.currentPage;
-    this.filter.pageSize = 7;
-    this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
-        this.tasks  = tasks;
+    // let token = this.jwtDecoder.getToken();
+    // let id = 0;
+    // if(token!=null)
+    // {
+    //   let decode = this.jwtDecoder.decodeToken(token);
+    //   id = decode.user_id;
+    // }
+    // this.filter.pageNumber = this.currentPage;
+    // this.filter.pageSize = 7;
+    // this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
+    //     this.tasks  = tasks;
 
-        this.tasks.forEach(task => {
-          this.task_date_service.setDateParametersForTask(task);
-        });
-        this.filteredTasks = this.tasks;
-    });
+    //     this.tasks.forEach(task => {
+    //       this.task_date_service.setDateParametersForTask(task);
+    //     });
+    //     this.filteredTasks = this.tasks;
+    // });
     this.activatedRoute.paramMap.subscribe(params => {
       if (params.has('pageNumber')) {
         this.currentPage = parseInt(params.get('pageNumber')!);
@@ -209,42 +209,16 @@ export class TasksComponent {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.filter.pageNumber = this.currentPage;
-      this.filter.pageSize = 7;
-      let token = this.jwtDecoder.getToken();
-      let id = 0;
-      if(token!=null)
-      {
-        let decode = this.jwtDecoder.decodeToken(token);
-        id = decode.user_id;
-      }
-      this.taskService.getAllUserAssignments(id, this.filter).subscribe(tasks => {
-        this.updateTasks(tasks);
-      });
+      this.fetchTasksForCurrentPage(); // Fetch tasks for the previous page
+      this.router.navigate(['/tasks', this.currentPage]); // Update URL
     }
   }
   
   nextPage() {
     this.currentPage++;
     this.filter.pageNumber = this.currentPage;
-    this.filter.pageSize = 7;
-    let token = this.jwtDecoder.getToken();
-    let id = 0;
-    if(token!=null)
-    {
-      let decode = this.jwtDecoder.decodeToken(token);
-      id = decode.user_id;
-    }
-    this.taskService.getAllUserAssignments(id, this.filter).subscribe(tasks => {
-      this.updateTasks(tasks);
-    });
-  }
-  
-  updateTasks(tasks: Task[]) {
-    tasks.forEach(task => {
-      this.task_date_service.setDateParametersForTask(task);
-    });
-    this.router.navigate(['/tasks', this.currentPage]);
-    this.filteredTasks = tasks;
+    this.fetchTasksForCurrentPage(); // Fetch tasks for the next page
+    this.router.navigate(['/tasks', this.currentPage]); // Update URL
   }
 
   fetchTasksForCurrentPage() {
