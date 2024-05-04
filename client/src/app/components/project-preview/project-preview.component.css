@@ -1,6 +1,7 @@
 #strana{
   width: 100vw;
   margin-left: 50px;
+  max-width: 100%;
 }
 
 .grid-container {
@@ -215,15 +216,11 @@
 
 /* paginacija */
 .pagination-container {
-  position: absolute;
-  left: 0;
-  right: 0;
   text-align: center;
   padding-top: 15px;
-}
-
-.pagination-controls {
-  display: inline-block;
+  margin-top: 20px;
+  margin-bottom: 5px;
+  width: 90%;
 }
 
 .pagination-controls {
@@ -259,14 +256,6 @@
   background-color: #001B47;
   color: white;
 }
-
-.pagination-container {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 50px;
-}
-
 
 /* resposiveness */
 @media (max-width: 768px) {

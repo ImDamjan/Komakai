@@ -55,7 +55,7 @@
       <button class="pagination-page" (click)="goToPage(page)" [class.active]="currentPage === page">{{ page }}</button>
       <span class="pagination-space"></span>
     </ng-container>
-    <span class="pagination-text" (click)="nextPage()" [class.disabled]="currentPage === totalPages()" [style.visibility]="shouldShowBottomPagination() ? 'visible' : 'hidden'">Next</span>
+      <span class="pagination-text" (click)="nextPage()" [class.disabled]="currentPage === totalPages()" [style.visibility]="shouldShowBottomPagination() ? 'visible' : 'hidden'">Next</span>
+    </div>
   </div>
-</div>
 </div>
