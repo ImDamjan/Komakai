@@ -10,18 +10,18 @@ namespace server.DTOs.Projects
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public string SearchTitle { get; set; } = string.Empty;
-        public int DateStartFlag { get; set; }
-        public int DateEndFlag { get; set; }
-        public DateTime? Start { get; set; } = null;
-        public DateTime? End { get; set; } = null;
-        public int PriorityFilter { get; set; } // po prioritetu >1 and <5
-        public int StateFilter { get; set; } //po state-u >1 and <7
-        public double? BudgetFilter { get; set; } = null;
-        public int BudgetFlag { get; set; }
-        public double? SpentFilter { get; set; } = null;
-        public int SpentFlag { get; set; }
-        public int? PercentageFilter { get; set; } = null;
-        public int PercentageFlag { get; set; }
+        public DateTime? StartFrom { get; set; } = null;
+        public DateTime? EndFrom { get; set; } = null;
+        public DateTime? StartTo { get; set; } = null;
+        public DateTime? EndTo { get; set; } = null;
+        public List<int> PriorityFilter { get; set; } = new List<int>(); // po prioritetu >1 and <5
+        public List<int> StateFilter { get; set; } = new List<int>(); //po state-u >1 and <7
+        public double BudgetFilterFrom { get; set; }
+        public double BudgetFilterTo { get; set; }
+        public double SpentFilterFrom { get; set; }
+        public double SpentFilterTo { get; set; }
+        public int PercentageFilterFrom { get; set; }
+        public int PercentageFilterTo { get; set; }
 
     }
 }
