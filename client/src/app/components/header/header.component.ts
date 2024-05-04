@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   userid!: number;
   private jwtService = inject(JwtDecoderService);
   user!: UpdateUser;
-  profilePicture !: string;
+  picture!: string;
 
   firstname: string = "";
   lastname: string = "";
@@ -48,11 +48,15 @@ export class HeaderComponent implements OnInit {
 
     this.userProfileService.userProfileSubject.subscribe(user => {
       if (user) {
-        console.log(user);
         this.firstname = user.name;
         this.lastname = user.lastname;
         this.jobTitle = user.jobTitle;
       }
+    });
+    this.userService.picture$.subscribe(picture => {
+       this.picture = picture;
+       if(this.picture == '')
+        this.profilePicture(this.userid);
     });
   }
 
@@ -68,6 +72,19 @@ export class HeaderComponent implements OnInit {
         ...dialogConfig,
         data: { user: userData, role: this.roleId }
       });
+    });
+  }
+
+  profilePicture(userId: number) {
+    this.userService.profilePicture(userId).subscribe({
+      next: (message: { profilePicture: string, type: string }) => {
+        if(message.profilePicture)
+          this.picture = `data:${message.type};base64,${message.profilePicture}`;
+        else
+          this.picture = "../../../assets/pictures/defaultpfp.svg";
+      }, error: (err) => {
+        console.error('Error retrieving profile picture:', err);
+      }
     });
   }
 }

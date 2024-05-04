@@ -10,6 +10,8 @@ import { Project } from '../../models/project/project';
 import { ProjectFilter } from '../../models/project/project-filter';
 import { ProjectsComponent } from '../../pages/projects/projects.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { User } from '../../models/user/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-project-preview',
@@ -39,12 +41,12 @@ export class ProjectPreviewComponent implements OnInit {
   
   data: any;
   projectsData: Project[] = [];
+  users: User[] = [];
+  profilePicturesLoaded = false;
 
-  // Properties for character limits
   titleCharacterLimit: number = 0;
   descriptionCharacterLimit: number = 0;
 
-  // Properties for pagination
   cards: any[] = [];
   currentPage: number = 1;
   cardsPerPage: number = 8;
@@ -53,13 +55,11 @@ export class ProjectPreviewComponent implements OnInit {
 
   assignmentCounts: { [projectId: number]: number } = {};
 
-  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService, private dialog: MatDialog) {
-    // Initialize component
+  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService, private dialog: MatDialog, private userService: UserService) {
     this.calculateCharacterLimit();
   }
 
   ngOnInit(): void {
-    // Detect changes in screen size for character limits
     this.spinner.show();
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     mediaQuery.addEventListener('change', () => {
@@ -68,7 +68,7 @@ export class ProjectPreviewComponent implements OnInit {
     });
     this.adjustCardsPerPage();
     window.addEventListener('resize', () => {
-      this.adjustCardsPerPage(); // Call adjustCardsPerPage whenever the screen size changes
+      this.adjustCardsPerPage();
     });
     this.loadProjects();
   }
@@ -135,6 +135,25 @@ export class ProjectPreviewComponent implements OnInit {
     this.projectService.getProjectsData(this.filter).subscribe(
       (projects: Project[]) => {
         this.projectsData = projects;
+        this.projectsData.forEach(project => {
+          this.users = project.users;
+          this.users.forEach(user => {
+            this.userService.profilePicture(user.id).subscribe({
+              next: (message: { profilePicture: string, type: string }) => {
+                if(message.profilePicture)
+                  user.profile_picture = `data:${message.type};base64,${message.profilePicture}`;
+                else
+                  user.profile_picture = "../../../assets/pictures/defaultpfp.svg";
+              }, 
+              error: (err) => {
+                console.error('Error retrieving profile picture:', err);
+              },
+              complete: () => {
+                this.profilePicturesLoaded = true;
+              }
+            });
+          });
+        });
         this.isLoading = false;
         this.spinner.hide();
         projects.forEach(project => {
@@ -292,8 +311,20 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   getTeamMemberImages(project: any): string[] {
-    const mockImages = ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg'];
-    return project && project.teamMemberImages ? mockImages.concat(project.teamMemberImages) : mockImages;
+    if (!project || !project.users) {
+      return [];
+    }
+
+    const teamMemberImages: string[] = [];
+    for (const user of project.users) {
+      if (user.profile_picture) {
+        teamMemberImages.push(user.profile_picture);
+      } else {
+        teamMemberImages.push("../../../assets/pictures/defaultpfp.svg");
+      }
+    }
+    
+    return teamMemberImages;
   }
 
   adjustCardsPerPage() {

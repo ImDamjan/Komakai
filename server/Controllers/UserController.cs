@@ -213,15 +213,16 @@ namespace server.Controllers
                 if (user == null)
                     return NotFound("user not found");
 
-                if (picture.Data == null || picture.Data.Length == 0)
-                    return BadRequest("Invalid picture data");
+                if (string.IsNullOrEmpty(picture.Data) || string.IsNullOrEmpty(picture.Type))
+                return BadRequest("Invalid picture data");
 
                 var bytes = Convert.FromBase64String(picture.Data);
                 user.ProfilePicture = bytes;
+                user.PictureType = picture.Type;
 
                 await _repos.SaveChangesAsync();
 
-                return Ok("Profile picture uploaded successfully");
+                return Ok(picture);
             }
             catch (Exception ex)
             {
@@ -240,13 +241,11 @@ namespace server.Controllers
                     return NotFound("User not found");
 
                 if (user.ProfilePicture == null || user.ProfilePicture.Length == 0)
-                    return NotFound("Profile picture not found for the user");
+                    return Ok(new { ProfilePicture = "", Type = "" });
 
-                // Convert the byte array profile picture to a base64-encoded string
                 var base64ProfilePicture = Convert.ToBase64String(user.ProfilePicture);
 
-                // Return the base64-encoded profile picture string to the client
-                return Ok(new { ProfilePicture = base64ProfilePicture });
+                return Ok(new { ProfilePicture = base64ProfilePicture, Type = user.PictureType });
             }
             catch (Exception ex)
             {

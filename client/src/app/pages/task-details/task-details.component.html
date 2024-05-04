@@ -97,7 +97,7 @@
     
     <div id = 'comments'>
         <div class="comment" *ngFor="let comment of comments">
-            <img src="" alt="slika_korinsika">
+            <img id="pfp" [src]="picture" alt="slika_korinsika">
             <div class = 'comment-box'>
                 <!-- <div class = comment-meni>
                     <select name="" id=""></select>
@@ -114,7 +114,9 @@
         </div>
         <!-- ovo je komentar koji treba da se doda -->
         <div class="comment" id="add-comment">
-            <img src="" alt="slika_korinsika">
+            <ng-container *ngIf="!pictureLoading">
+                <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture">
+              </ng-container>
             <div class = 'comment-box'>
                 <!-- <div class = comment-meni>
                     <select name="" id=""></select>

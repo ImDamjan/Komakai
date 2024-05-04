@@ -2,6 +2,8 @@
     margin-top: 35px;
     flex-grow: 1;
     padding: 40px;
+    height: 45vw;
+    overflow: auto;
   }
 
 #task-header {
