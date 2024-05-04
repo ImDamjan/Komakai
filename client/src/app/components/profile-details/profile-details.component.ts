@@ -66,7 +66,7 @@ export class ProfileDetailsComponent {
     }
     picture.type = file.type;
     picture.filename = file.name;
-    if (file) {
+    if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
   
       reader.onload = () => {
@@ -76,8 +76,10 @@ export class ProfileDetailsComponent {
       };
   
       reader.readAsDataURL(file);
+    } else {
+      alert('Please select a valid image file.');
     }
-  }
+  } 
 
   uploadProfilePicture(userId: number, base64String: any) {
     this.userService.uploadProfilePicture(userId, base64String).subscribe({
