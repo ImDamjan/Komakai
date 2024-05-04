@@ -16,7 +16,7 @@ export class ProjectsComponent implements OnInit{
   @Input() filter!: ProjectFilter;
   showProjectPreview: boolean = true;
   showCreateButton: boolean = true;
-  projectText: string = 'Project list';
+  projectText: string = 'Projects';
 
   constructor(private dialog: MatDialog) { 
 
