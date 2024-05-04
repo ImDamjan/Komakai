@@ -32,11 +32,7 @@
   .time .end{
     padding: 0 20px;
   }
-  .progress span{
-    position: relative;
-    left: 20px;
-    bottom: 2px;
-  }
+
   .title h2 {
     font-family: 'Poppins', sans-serif;
     font-style: normal;
@@ -94,9 +90,9 @@
     padding: 10px 20px;
     background-color: green;
   }
-  .percentage-bar{
+  /* .percentage-bar{
     pointer-events: none;
-  }
+  } */
 
   .task-details{
     cursor: pointer;
@@ -115,20 +111,12 @@
     color: white;
   }
 
+  ngb-progressbar{
+    width: 100%;
+  }
 
-  .percentage-bar::-webkit-slider-thumb {
-    pointer-events: none;
+  .progress-bar{
+    width: 100%;
   }
-  .percentage-bar::-webkit-slider-runnable-track {
-    cursor: default;
-    /* background-color: blue; */
-  }
-  .percentage-bar::-moz-range-thumb {
-    pointer-events:none;
-  }
-  .percentage-bar::-moz-range-track {
-    cursor: default;
-  }
-  .percentage-bar::-ms-thumb {
-    pointer-events: none;
-  }
+
+

@@ -71,6 +71,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import {NgToastModule} from 'ng-angular-popup'
 import { MatChipsModule } from '@angular/material/chips';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -142,6 +143,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatButtonModule,
     NgToastModule,
     MatChipsModule,
+    NgbModule,
 
   ],
   providers: [
