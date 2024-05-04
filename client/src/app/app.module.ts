@@ -57,6 +57,8 @@ import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
 
 import {SliderModule} from 'primeng/slider'
 import {MultiSelectModule} from 'primeng/multiselect'
+import {CalendarModule} from 'primeng/calendar'
+import { DropdownModule } from 'primeng/dropdown';
 
 import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
@@ -125,7 +127,9 @@ import { ProjectFilterComponent } from './components/project-filter/project-filt
     FormsModule,
     BrowserModule,
     SliderModule,
+    CalendarModule,
     MultiSelectModule,
+    DropdownModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,

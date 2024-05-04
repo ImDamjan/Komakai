@@ -53,7 +53,7 @@ export class ProjectPreviewComponent implements OnInit {
 
   assignmentCounts: { [projectId: number]: number } = {};
 
-  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService, private dialog: MatDialog) {
+  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private assignmentService: AssignmentService, private dialog: MatDialog) {
     // Initialize component
     this.calculateCharacterLimit();
   }
@@ -91,30 +91,30 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   filterProjects(filter: ProjectFilter){
-    if(filter.stateFilter){
-      this.filter.stateFilter=filter.stateFilter;
-    }
-    if(filter.priorityFilter){
-      this.filter.priorityFilter=filter.priorityFilter;
-    }
-    if(filter.dateStartFlag){
-      this.filter.dateStartFlag=filter.dateStartFlag;
-    }
-    if(filter.dateEndFlag){
-      this.filter.dateEndFlag=filter.dateEndFlag;
-    }
-    if(filter.start){
-      this.filter.start=filter.start;
-    }
-    if(filter.end){
-      this.filter.end=filter.end;
-    }
-    if(filter.percentageFlag){
-      this.filter.percentageFlag=filter.percentageFlag;
-    }
-    if(filter.percentageFilter){
-      this.filter.percentageFilter=filter.percentageFilter;
-    }
+    // if(filter.stateFilter){
+    //   this.filter.stateFilter=filter.stateFilter;
+    // }
+    // if(filter.priorityFilter){
+    //   this.filter.priorityFilter=filter.priorityFilter;
+    // }
+    // if(filter.dateStartFlag){
+    //   this.filter.dateStartFlag=filter.dateStartFlag;
+    // }
+    // if(filter.dateEndFlag){
+    //   this.filter.dateEndFlag=filter.dateEndFlag;
+    // }
+    // if(filter.start){
+    //   this.filter.start=filter.start;
+    // }
+    // if(filter.end){
+    //   this.filter.end=filter.end;
+    // }
+    // if(filter.percentageFlag){
+    //   this.filter.percentageFlag=filter.percentageFlag;
+    // }
+    // if(filter.percentageFilter){
+    //   this.filter.percentageFilter=filter.percentageFilter;
+    // }
 
     this.loadProjects();
   }

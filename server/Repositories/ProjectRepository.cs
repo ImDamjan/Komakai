@@ -263,21 +263,21 @@ namespace server.Repositories
                     else
                         projects = projects.OrderByDescending(p=>p.Spent);
                 }
-                else if(sort.PropertyName.ToLower()=="start")
+                else if(sort.PropertyName.ToLower()=="start date")
                 {
                     if(sort.SortFlag==1)
                         projects = projects.OrderBy(p=>p.Start);
                     else
                         projects = projects.OrderByDescending(p=>p.Start);
                 }
-                else if(sort.PropertyName.ToLower()=="end")
+                else if(sort.PropertyName.ToLower()=="end date")
                 {
                     if(sort.SortFlag==1)
                         projects = projects.OrderBy(p=>p.End);
                     else
                         projects = projects.OrderByDescending(p=>p.End);
                 }
-                else if(sort.PropertyName.ToLower()=="percentage")
+                else if(sort.PropertyName.ToLower()=="progress")
                 {
                     if(sort.SortFlag==1)
                         projects = projects.OrderBy(p=>p.Percentage);

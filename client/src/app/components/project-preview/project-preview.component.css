@@ -9,7 +9,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-gap: 80px;
   height: 70%;
-  width: 90%;
+  width: 70%;
   place-items: center;
 }
 

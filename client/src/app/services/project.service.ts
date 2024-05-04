@@ -71,41 +71,41 @@ export class ProjectService implements OnInit{
     if (params.searchTitle) {
       httpParams = httpParams.set('SearchTitle', params.searchTitle);
     }
-    if (params.dateStartFlag) {
-      httpParams = httpParams.set('DateStartFlag', params.dateStartFlag.toString());
+    if (params.startFrom) {
+      httpParams = httpParams.set('StartFrom', params.startFrom.toString());
     }
-    if (params.start) {
-      httpParams = httpParams.set('Start', params.start.toString());
+    if (params.startTo) {
+      httpParams = httpParams.set('StartTo', params.startTo.toString());
     }
-    if (params.dateEndFlag) {
-      httpParams = httpParams.set('DateEndFlag', params.dateEndFlag.toString());
+    if (params.endFrom) {
+      httpParams = httpParams.set('EndFrom', params.endFrom.toString());
     }
-    if (params.end) {
-      httpParams = httpParams.set('End', params.end.toString());
+    if (params.endTo) {
+      httpParams = httpParams.set('EndTo', params.endTo.toString());
     }
     if (params.stateFilter) {
       httpParams = httpParams.set('StateFilter', params.stateFilter.toString());
     }
-    if (params.percentageFlag) {
-      httpParams = httpParams.set('PercentageFlag', params.percentageFlag.toString());
+    if (params.percentageFilterFrom) {
+      httpParams = httpParams.set('PercentageFilterFrom', params.percentageFilterFrom.toString());
     }
-    if (params.percentageFilter) {
-      httpParams = httpParams.set('PercentageFilter', params.percentageFilter.toString());
+    if (params.percentageFilterTo) {
+      httpParams = httpParams.set('PercentageFilterTo', params.percentageFilterTo.toString());
     }
     if (params.priorityFilter) {
       httpParams = httpParams.set('PriorityFilter', params.priorityFilter.toString());
     }
-    if(params.budgetFilter){
-      httpParams = httpParams.set('BudgetFilter',params.budgetFilter.toString());
+    if(params.budgetFilterFrom){
+      httpParams = httpParams.set('BudgetFilterFrom',params.budgetFilterFrom.toString());
     }
-    if(params.budgetFlag){
-      httpParams = httpParams.set('BudgetFlag',params.budgetFlag.toString());
+    if(params.budgetFilterTo){
+      httpParams = httpParams.set('BudgetFilterTo',params.budgetFilterTo.toString());
     }
-    if(params.spentFilter){
-      httpParams = httpParams.set('SpentFilter',params.spentFilter.toString());
+    if(params.spentFilterFrom){
+      httpParams = httpParams.set('SpentFilterFrom',params.spentFilterFrom.toString());
     }
-    if(params.spentFlag){
-      httpParams = httpParams.set('SpentFlag',params.spentFlag.toString());
+    if(params.spentFilterTo){
+      httpParams = httpParams.set('SpentFilterTo',params.spentFilterTo.toString());
     }
 
     const apiUrl = `${this.baseUrl}/Project/userProjects/${id}`;
