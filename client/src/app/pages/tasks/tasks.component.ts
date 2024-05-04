@@ -34,7 +34,7 @@ export class TasksComponent {
   private activatedRoute = inject(ActivatedRoute);
 
   public filter: TaskFilter = {
-
+    
   };
 
   private jwtDecoder = inject(JwtDecoderService);
@@ -237,5 +237,14 @@ export class TasksComponent {
       this.filteredTasks = tasks.slice((this.currentPage - 1) * 7, this.currentPage * 7);
     });
   }
+
+  // getTotalPages(): number {
+  //   if(this.filter.pageSize){
+  //     console.log(this.filter.pageSize)
+  //     return Math.ceil(this.tasks.length / this.filter.pageSize);
+  //   }
+  //   else
+  //     return 0;
+  // }
 
 }
