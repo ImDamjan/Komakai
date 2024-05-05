@@ -29,8 +29,8 @@ export class ProjectFilterComponent implements OnInit {
   private projectService = inject(ProjectService);
   public states : State[] = [];
   public priorities : Priority[] = [];
-  public EndRange : Date[] = []
-  public StartRange : Date[] = [];
+  public EndRange : Date[] | undefined;
+  public StartRange : Date[] | undefined;
   public sortList : string[] = [
     "Last Updated",
     "State",
@@ -85,7 +85,7 @@ export class ProjectFilterComponent implements OnInit {
     this.filter.spentFilterTo = this.spentValues[1];
     this.filter.percentageFilterFrom = this.percentageValues[0];
     this.filter.percentageFilterTo = this.percentageValues[1];
-    if(this.EndRange!==null && this.EndRange.length > 0)
+    if(this.EndRange!==undefined && this.StartRange!==null && this.EndRange.length > 0)
     {
       this.filter.endFrom = this.EndRange[0];
       this.filter.endTo = this.EndRange[1];
@@ -96,7 +96,7 @@ export class ProjectFilterComponent implements OnInit {
       this.filter.endTo = undefined;
 
     }
-    if(this.StartRange!==null && this.StartRange.length > 0)
+    if(this.StartRange!==undefined && this.StartRange!==null && this.StartRange.length > 0)
     {
       this.filter.startFrom = this.StartRange[0];
       this.filter.startTo = this.StartRange[1];
