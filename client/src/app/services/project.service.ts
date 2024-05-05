@@ -96,7 +96,6 @@ export class ProjectService implements OnInit{
         else
           httpParams = httpParams.append("StateFilter",element.toString());
       });
-      // httpParams = httpParams.set('StateFilter', params.stateFilter.toString());
     }
     if (params.percentageFilterFrom) {
       httpParams = httpParams.set('PercentageFilterFrom', params.percentageFilterFrom.toString());
@@ -111,7 +110,6 @@ export class ProjectService implements OnInit{
         else
           httpParams = httpParams.append("PriorityFilter",element.toString());
       });
-      // httpParams = httpParams.set('PriorityFilter', params.priorityFilter.toString());
     }
     if(params.budgetFilterFrom){
       httpParams = httpParams.set('BudgetFilterFrom',params.budgetFilterFrom.toString());

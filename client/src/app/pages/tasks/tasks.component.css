@@ -1,13 +1,17 @@
 #tasks{
     margin-top: 35px;
     flex-grow: 1;
+    width: 100vw;
     padding: 40px;
   }
 
 #task-header {
   display: flex;
 }
-
+#task-list{
+  display: flex;
+  flex-direction: column;
+}
 #title {
   margin-right: 25vw;
 }

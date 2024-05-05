@@ -47,7 +47,7 @@ namespace server.Repositories
             return await FilterAssignments(assingments_query,filter,sort);
         }
 
-        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null, int project_id = 0)
+        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null, List<int>? projects = null)
         {
             var pom = _context.Assignments.Include
             (a=>a.Users)
@@ -56,9 +56,9 @@ namespace server.Repositories
             .Include(a=>a.Priority)
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged).AsQueryable();
 
-            if (project_id != 0)
+            if (projects != null && projects.Count > 0)
             {
-                pom = pom.Where(a => a.TaskGroup.ProjectId == project_id);
+                pom = pom.Where(a => projects.Contains(a.TaskGroup.ProjectId));
             }
             var query = pom.Where(t=>t.Users.Any(u=>u.Id==userId));
 

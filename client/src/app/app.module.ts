@@ -77,6 +77,7 @@ import {NgToastModule} from 'ng-angular-popup'
 import { MatChipsModule } from '@angular/material/chips';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectFilterComponent } from './components/project-filter/project-filter.component';
+import { TaskFilterComponent } from './components/task-filter/task-filter.component';
 
 
 
@@ -122,6 +123,7 @@ import { ProjectFilterComponent } from './components/project-filter/project-filt
     FilterProjectComponent,
     SortProjectComponent,
     ProjectFilterComponent,
+    TaskFilterComponent,
   ],
   imports: [
     FormsModule,
