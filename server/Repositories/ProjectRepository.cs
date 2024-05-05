@@ -284,6 +284,10 @@ namespace server.Repositories
                     else
                         projects = projects.OrderByDescending(p=>p.Percentage);
                 }
+                else if(sort.SortFlag==1)
+                    projects = projects.OrderBy(p=>p.LastStateChangedTime);
+                else
+                    projects = projects.OrderByDescending(p=>p.LastStateChangedTime);
             }
 
             return await projects.ToListAsync();

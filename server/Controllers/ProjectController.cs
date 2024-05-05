@@ -76,6 +76,18 @@ namespace server.Controllers
             return Ok(dtos);
         }
 
+        [HttpGet("getProjectLimits")]
+        public async Task<IActionResult> getProjectLimits()
+        {
+            var projects = await _repos.GetAllProjectsAsync();
+            var limitDto =  new {
+                budgetMax = projects.Max(p=>p.Budget),
+                budgetMin = projects.Min(p=>p.Budget),
+                spentMax = projects.Max(p=>p.Spent),
+                spentMin = projects.Min(p=>p.Spent)
+            };
+            return Ok(limitDto);
+        }
         [HttpGet("getProject/{id}")]
         public async Task<IActionResult> getById([FromRoute] int id)
         {

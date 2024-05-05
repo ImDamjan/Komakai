@@ -7,6 +7,7 @@ import { Project } from '../models/project/project';
 import { JwtDecoderService } from './jwt-decoder.service';
 import { ProjectFilter } from '../models/project/project-filter';
 import { UpdateProject } from '../models/project/update-project';
+import { ProjectFilterLimit } from '../models/project/project-filter-limit';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,11 @@ export class ProjectService implements OnInit{
     } else {
       console.error('JWT token not found in local storage');
     }
+  }
+  getProjectFilterLimits() : Observable<ProjectFilterLimit>
+  {
+    const url = this.baseUrl + "/Project/getProjectLimits";
+    return this.http.get<ProjectFilterLimit>(url);
   }
 
   getProjectsData(params: ProjectFilter = {}): Observable<Project[]> {
@@ -72,19 +78,25 @@ export class ProjectService implements OnInit{
       httpParams = httpParams.set('SearchTitle', params.searchTitle);
     }
     if (params.startFrom) {
-      httpParams = httpParams.set('StartFrom', params.startFrom.toString());
+      httpParams = httpParams.set('StartFrom', params.startFrom.toDateString());
     }
     if (params.startTo) {
-      httpParams = httpParams.set('StartTo', params.startTo.toString());
+      httpParams = httpParams.set('StartTo', params.startTo.toDateString());
     }
     if (params.endFrom) {
-      httpParams = httpParams.set('EndFrom', params.endFrom.toString());
+      httpParams = httpParams.set('EndFrom', params.endFrom.toDateString());
     }
     if (params.endTo) {
-      httpParams = httpParams.set('EndTo', params.endTo.toString());
+      httpParams = httpParams.set('EndTo', params.endTo.toDateString());
     }
     if (params.stateFilter) {
-      httpParams = httpParams.set('StateFilter', params.stateFilter.toString());
+      params.stateFilter.forEach(element => {
+        if(!httpParams.has("StateFilter"))
+          httpParams = httpParams.set('StateFilter',element.toString());
+        else
+          httpParams = httpParams.append("StateFilter",element.toString());
+      });
+      // httpParams = httpParams.set('StateFilter', params.stateFilter.toString());
     }
     if (params.percentageFilterFrom) {
       httpParams = httpParams.set('PercentageFilterFrom', params.percentageFilterFrom.toString());
@@ -93,7 +105,13 @@ export class ProjectService implements OnInit{
       httpParams = httpParams.set('PercentageFilterTo', params.percentageFilterTo.toString());
     }
     if (params.priorityFilter) {
-      httpParams = httpParams.set('PriorityFilter', params.priorityFilter.toString());
+      params.priorityFilter.forEach(element => {
+        if(!httpParams.has("PriorityFilter"))
+          httpParams = httpParams.set('PriorityFilter', element.toString());
+        else
+          httpParams = httpParams.append("PriorityFilter",element.toString());
+      });
+      // httpParams = httpParams.set('PriorityFilter', params.priorityFilter.toString());
     }
     if(params.budgetFilterFrom){
       httpParams = httpParams.set('BudgetFilterFrom',params.budgetFilterFrom.toString());

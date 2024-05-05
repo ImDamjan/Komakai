@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
-import { StateService } from '../../services/state.service';
 import { AssignmentService } from '../../services/assignment.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EditProjectOverlayComponent } from '../edit-project-overlay/edit-project-overlay.component';
@@ -10,6 +9,8 @@ import { Project } from '../../models/project/project';
 import { ProjectFilter } from '../../models/project/project-filter';
 import { ProjectsComponent } from '../../pages/projects/projects.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ProjectFilterLimit } from '../../models/project/project-filter-limit';
+import { ProjectFilterComponent } from '../project-filter/project-filter.component';
 
 @Component({
   selector: 'app-project-preview',
@@ -19,13 +20,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 export class ProjectPreviewComponent implements OnInit {
 
-  @Output() searchFilterChanged = new EventEmitter<ProjectFilter>();
-  @Output() searchSortChanged = new EventEmitter<ProjectFilter>();
+  // @Output() searchFilterChanged = new EventEmitter<ProjectFilter>();
+  // @Output() searchSortChanged = new EventEmitter<ProjectFilter>();
 
   @ViewChild('projectHeader', { static: false }) projectHeaderComponent: ProjectsComponent | undefined;
+  @ViewChild("filter_sort_project") projectFilters : ProjectFilterComponent | undefined;
 
   public filter: ProjectFilter = {
-
+    propertyName : "Last Updated",
+    sortFlag : -1
   };
 
   isClick = false;
@@ -77,12 +80,12 @@ export class ProjectPreviewComponent implements OnInit {
     this.projectHeaderComponent?.searchValueProjectChanged.subscribe(searchValue => {
       this.searchProjects(searchValue.searchText);
     });
-    this.projectHeaderComponent?.searchFilterProjectChanged.subscribe(filter => {
-      this.filterProjects(filter.filter);
+    this.projectFilters?.searchFilterProjectChanged.subscribe(response=>{
+      this.filterProjects(response.filter);
     });
-    this.projectHeaderComponent?.searchSortProjectChanged.subscribe(filter => {
-      this.sortProjects(filter.filter);
-    });
+    // this.projectHeaderComponent?.searchSortProjectChanged.subscribe(filter => {
+    //   this.sortProjects(filter.filter);
+    // });
   }
 
   searchProjects(searchText: string){
@@ -97,25 +100,31 @@ export class ProjectPreviewComponent implements OnInit {
     // if(filter.priorityFilter){
     //   this.filter.priorityFilter=filter.priorityFilter;
     // }
-    // if(filter.dateStartFlag){
-    //   this.filter.dateStartFlag=filter.dateStartFlag;
+    // if(filter.startFrom){
+    //   this.filter.startFrom=filter.startFrom;
     // }
-    // if(filter.dateEndFlag){
-    //   this.filter.dateEndFlag=filter.dateEndFlag;
+    // if(filter.startTo){
+    //   this.filter.startTo=filter.startTo;
     // }
-    // if(filter.start){
-    //   this.filter.start=filter.start;
+    // if(filter.endFrom){
+    //   this.filter.endFrom=filter.endFrom;
     // }
-    // if(filter.end){
-    //   this.filter.end=filter.end;
+    // if(filter.endTo){
+    //   this.filter.endTo=filter.endTo;
     // }
-    // if(filter.percentageFlag){
-    //   this.filter.percentageFlag=filter.percentageFlag;
+    // if(filter.percentageFilterFrom){
+    //   this.filter.percentageFilterFrom=filter.percentageFilterFrom;
     // }
-    // if(filter.percentageFilter){
-    //   this.filter.percentageFilter=filter.percentageFilter;
+    // if(filter.percentageFilterTo){
+    //   this.filter.percentageFilterTo=filter.percentageFilterTo;
     // }
+    let text = "";
+    if(this.filter.searchTitle)
+      text = this.filter.searchTitle;
+    this.filter = filter;
+    this.filter.searchTitle = text;
 
+    // console.log(this.filter);
     this.loadProjects();
   }
 
