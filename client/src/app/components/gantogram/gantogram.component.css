@@ -20,23 +20,17 @@
     color: black !important;
     font-weight: bold;
 }
-/* element.style {
-    width: 20%;
-    background: rgb(255, 99, 71);
-} */
 
-/* mat-button-toggle-group{
-    background: rgb(54, 69, 79);
-    border: 1px solid #9A93B3;
-    color: white;
-    margin-bottom: 10px;
-    border-radius: 5px;
+#download_id{
+    background-color: rgb(255, 215, 0);
+    
+}
+#download_id span {
+    color: black !important;
+    font-weight: 500 !important;
+   
 }
 
-mat-button-toggle{
-    background: rgb(54, 69, 79);
-    color: white;
-} */
 
 #scrollToToday_btn, #refresh_btn{
    background-color: rgb(46, 139, 87);
