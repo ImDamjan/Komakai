@@ -108,34 +108,29 @@ namespace server.Repositories
                 {
                     assignments = assignments.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
                 }
-                if(dto.StateFilter > 0 && dto.StateFilter < 7)
-                    assignments =assignments.Where(p=>p.StateId==dto.StateFilter);
-                if(dto.PriorityFilter > 0 && dto.PriorityFilter < 5)
-                    assignments =assignments.Where(p=>p.PriorityId==dto.PriorityFilter);
+                if(dto.StateFilter.Count > 0)
+                    assignments = assignments.Where(p=>dto.StateFilter.Contains(p.StateId));
+                if(dto.PriorityFilter.Count > 0)
+                    assignments = assignments.Where(p=>dto.PriorityFilter.Contains(p.PriorityId));
+                
+                if(dto.SearchTitle!=string.Empty)
+                    assignments = assignments.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower()));
                 
                 if(dto.SearchTitle!=string.Empty)
                     assignments =assignments.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower()));
                 //datumi
-                if(dto.Start!=null)
+                if(dto.StartFrom!=null && dto.StartTo!=null)
                 {
-                    if(dto.DateStartFlag==-1)
-                        assignments =assignments.Where(p=>p.Start < dto.Start);
-                    else if(dto.DateStartFlag==1)
-                        assignments =assignments.Where(p=>p.Start >= dto.Start);
+                    assignments = assignments.Where(p=>p.Start >=dto.StartFrom && p.Start <=dto.StartTo);
                 }
-                if(dto.End!=null)
+                if(dto.EndFrom!=null && dto.EndTo!=null)
                 {
-                    if(dto.DateEndFlag==-1)
-                        assignments =assignments.Where(p=>p.End < dto.End);
-                    else if(dto.DateEndFlag==1)
-                        assignments =assignments.Where(p=>p.End >= dto.End);
+                    assignments = assignments.Where(p=>p.End >= dto.EndFrom && p.End <=dto.EndTo);
                 }
-                if(dto.PercentageFilter!=null)
+
+                if(dto.PercentageFilterTo >=0 && dto.PercentageFilterFrom <= dto.PercentageFilterTo)
                 {
-                    if(dto.PercentageFlag==-1)
-                        assignments =assignments.Where(p=>p.Percentage < dto.PercentageFilter);
-                    else if(dto.PercentageFlag==1)
-                        assignments =assignments.Where(p=>p.Percentage >= dto.PercentageFilter);
+                    assignments = assignments.Where(p=>p.Percentage <= dto.PercentageFilterTo && p.Percentage >=dto.PercentageFilterFrom);
                 }
             }
             if(sort!=null)
@@ -168,7 +163,7 @@ namespace server.Repositories
                     else
                         assignments = assignments.OrderByDescending(a=>a.Priority.Level);
                 }
-                else if(sort.PropertyName.ToLower()=="start")
+                else if(sort.PropertyName.ToLower()=="start date")
                 {
                     if(sort.SortFlag==1)
                     {
@@ -177,7 +172,7 @@ namespace server.Repositories
                     else
                         assignments = assignments.OrderByDescending(a=>a.Start);
                 }
-                else if(sort.PropertyName.ToLower()=="end")
+                else if(sort.PropertyName.ToLower()=="end date")
                 {
                     if(sort.SortFlag==1)
                     {
@@ -186,7 +181,7 @@ namespace server.Repositories
                     else
                         assignments = assignments.OrderByDescending(a=>a.End);
                 }
-                else if(sort.PropertyName.ToLower()=="percentage")
+                else if(sort.PropertyName.ToLower()=="progress")
                 {
                     if(sort.SortFlag==1)
                     {
@@ -195,6 +190,10 @@ namespace server.Repositories
                     else
                         assignments = assignments.OrderByDescending(a=>a.Percentage);
                 }
+                else if(sort.SortFlag==1)
+                   assignments =assignments.OrderBy(p=>p.LastTimeChanged);
+                else
+                   assignments =assignments.OrderByDescending(p=>p.LastTimeChanged);
             }
             return await assignments.ToListAsync();
         }

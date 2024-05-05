@@ -196,12 +196,12 @@ namespace server.Repositories
                 if(dto.SearchTitle!=string.Empty)
                     projects = projects.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower()));
                 //budzet
-                if(dto.BudgetFilterFrom < dto.BudgetFilterTo)
+                if(dto.BudgetFilterTo >= 0 && dto.BudgetFilterFrom <= dto.BudgetFilterTo)
                 {
                     projects = projects.Where(p=>p.Budget >= dto.BudgetFilterFrom && p.Budget <= dto.BudgetFilterTo);
                 }
                 //spent
-                if(dto.SpentFilterFrom < dto.SpentFilterTo)
+                if(dto.SpentFilterTo >= 0 && dto.SpentFilterFrom <= dto.SpentFilterTo)
                 {
                     projects = projects.Where(p=>p.Spent <= dto.SpentFilterTo && p.Spent >= dto.SpentFilterFrom);
                 }
@@ -221,7 +221,7 @@ namespace server.Repositories
                     projects = projects.Where(p=>p.End >= dto.EndFrom && p.End <=dto.EndTo);
                 }
 
-                if(dto.PercentageFilterFrom < dto.PercentageFilterTo)
+                if(dto.PercentageFilterTo >= 0 && dto.PercentageFilterFrom <= dto.PercentageFilterTo)
                 {
                     projects = projects.Where(p=>p.Percentage <= dto.PercentageFilterTo && p.Percentage >=dto.PercentageFilterFrom);
                 }

@@ -104,7 +104,7 @@ export class ProjectFilterComponent implements OnInit {
     else
     {
       this.filter.startFrom = undefined;
-      this.filter.startFrom = undefined;
+      this.filter.startTo = undefined;
     }
     if(this.selectedPrios.length > 0)
     {

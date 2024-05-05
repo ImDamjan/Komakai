@@ -16,12 +16,12 @@ namespace server.DTOs.Projects
         public DateTime? EndTo { get; set; } = null;
         public List<int> PriorityFilter { get; set; } = new List<int>(); // po prioritetu >1 and <5
         public List<int> StateFilter { get; set; } = new List<int>(); //po state-u >1 and <7
-        public double BudgetFilterFrom { get; set; }
-        public double BudgetFilterTo { get; set; }
-        public double SpentFilterFrom { get; set; }
-        public double SpentFilterTo { get; set; }
-        public int PercentageFilterFrom { get; set; }
-        public int PercentageFilterTo { get; set; }
+        public double BudgetFilterFrom { get; set; } = -1;
+        public double BudgetFilterTo { get; set; } = -1;
+        public double SpentFilterFrom { get; set; } = -1;
+        public double SpentFilterTo { get; set; } = -1;
+        public int PercentageFilterFrom { get; set; } = -1;
+        public int PercentageFilterTo { get; set; } = -1;
 
     }
 }
