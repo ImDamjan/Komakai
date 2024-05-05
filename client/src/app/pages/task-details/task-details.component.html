@@ -1,7 +1,7 @@
-<br><br>
 <div id = "task-details" class = "overlay-container">
-    <h1>Task Title</h1>
-    <h2 *ngIf="!showUpdate">{{assignment.title}}</h2><input type="text" class="task-title" *ngIf="showUpdate" [(ngModel)]="updateObj.title">
+    <h1 class="task-title">Task Title</h1>
+    <h2 *ngIf="!showUpdate">{{assignment.title}}</h2>
+    <input type="text" class="task-title" *ngIf="showUpdate" [(ngModel)]="updateObj.title">
     <button style="float: right;" (click)="updateTask()" *ngIf="!showUpdate">Update</button>
     <br>
     <div class = 'details'>
@@ -50,7 +50,8 @@
             <span *ngIf="!showUpdate">{{assignment.percentage}}%</span> 
             <span *ngIf="showUpdate">
                 <div class="slidecontainer">
-                    <input type="range" min="0" max="100" class="slider" id="myRange" [(ngModel)]="updateObj.percentage">{{updateObj.percentage}}%
+                    <ngb-progressbar class="mb-3" type="info" [value]="updateObj.percentage" [(ngModel)]="updateObj.percentage" [striped]="true" [animated]="true" height="20px"><i>{{updateObj.percentage}}%</i></ngb-progressbar>
+                    <!-- <input type="range" min="0" max="100" class="slider" id="myRange" [(ngModel)]="updateObj.percentage">{{updateObj.percentage}}% -->
                 </div>
             </span>
         </div>
@@ -128,7 +129,6 @@
                     <p>ikona2</p>
                 </div> -->
                 <textarea class="textarea" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText">
-
                 </textarea><br>
                 <button id = 'comment-button' (click)="createComment()">Comment</button>
             </div>
