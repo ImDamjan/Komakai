@@ -23,6 +23,7 @@
 
         <mat-chip-listbox aria-label="Fish selection">
               <mat-chip-option *ngFor="let view of views" 
+                          [selectable]="false"
                           [selected]="view.value === selectedViewType" 
                           (click)="selectView(view.value)">
             {{view.name}}
