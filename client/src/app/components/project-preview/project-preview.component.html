@@ -1,5 +1,6 @@
 <div id="strana">
 <app-projects #projectHeader [filter]="filter" *ngIf="showProjectPreview"></app-projects>
+<app-project-filter #filter_sort_project [filter]="filter"/>
 <div *ngIf="projectsData && projectsData.length === 0 && !isLoading">
   <h3>{{ errorMessage }}</h3>
 </div>

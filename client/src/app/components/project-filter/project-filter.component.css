@@ -1,0 +1,42 @@
+.project-filter{
+    display: flex;
+    float: right;
+    width: 350px;
+    height: 100%;
+    background-color: #001B47;
+    padding: 30px 100px 20px 30px;
+    flex-direction: column;
+    color: white;
+}
+.header-filter{
+    display: flex;
+}
+.filter-button{
+    margin-left: 100px;
+    height: 30px;
+    width: 30px;
+}
+h4{
+    margin-bottom: 5px;
+}
+:host::ng-deep.p-slider-handle{
+    top: -7px;
+}
+.priority p-multiSelect{
+    color: black;
+}
+.state p-multiSelect{
+    color: black;
+}
+.percentage{
+    padding-top: 20px;
+}
+.spent{
+    padding-top: 20px;
+}
+.budget{
+    padding-top: 20px;
+}
+.sort{
+    padding-top: 20px ;
+}
