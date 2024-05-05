@@ -3,7 +3,7 @@
 // searchTitle property  je case insensitive.
 export interface TaskFilter {
     user_id? : number,
-    project_id? : number,
+    projects? : number[],
     pageNumber? : number,
     pageSize? : number,
     //ovaj deo ti je za sortiranje

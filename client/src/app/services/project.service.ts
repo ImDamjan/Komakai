@@ -21,14 +21,11 @@ export class ProjectService implements OnInit{
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('jwtToken');
-    console.log(token);
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-      this.userId = decodedToken['nameidentifier'];
-      console.log(this.userId);
-    } else {
-      console.error('JWT token not found in local storage');
+    let token = this.jwtDecoder.getToken();
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      this.userId = decode.user_id;
     }
   }
   getProjectFilterLimits() : Observable<ProjectFilterLimit>
@@ -36,7 +33,18 @@ export class ProjectService implements OnInit{
     const url = this.baseUrl + "/Project/getProjectLimits";
     return this.http.get<ProjectFilterLimit>(url);
   }
+  getUserFilterProjects(): Observable<Project[]>{
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+    }
+    const url = this.baseUrl + "/Project/getFilterProjectsByUser/"+id;
+    return this.http.get<Project[]>(url);
 
+  }
   getProjectsData(params: ProjectFilter = {}): Observable<Project[]> {
   
   //uzimanje id-a iz tokena

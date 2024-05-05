@@ -88,6 +88,25 @@ namespace server.Controllers
             };
             return Ok(limitDto);
         }
+        [HttpGet("getFilterProjectsByUser/{user_id}")]
+        public async Task<IActionResult> getFilterProjects([FromRoute] int user_id)
+        {
+                var projects = await _repos.getFilterProjectsAsync(user_id);
+            var dtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var users =  project.ProjectUsers.Select(u=>u.User).ToList();
+                var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+                var userDtos = new List<ProjectUserDto>();
+                for(int i =0;i<users.Count;i++)
+                {
+                    userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+                }
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
+            }
+            return Ok(dtos);
+        }
         [HttpGet("getProject/{id}")]
         public async Task<IActionResult> getById([FromRoute] int id)
         {

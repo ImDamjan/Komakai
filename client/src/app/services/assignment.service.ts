@@ -77,6 +77,14 @@ export class AssignmentService {
           httpParams = httpParams.append("StateFilter",element.toString());
       });
     }
+    if (params.projects) {
+      params.projects.forEach(element => {
+        if(!httpParams.has("projects"))
+          httpParams = httpParams.set('projects',element.toString());
+        else
+          httpParams = httpParams.append("projects",element.toString());
+      });
+    }
     if (params.percentageFilterFrom) {
       httpParams = httpParams.set('PercentageFilterFrom', params.percentageFilterFrom.toString());
     }

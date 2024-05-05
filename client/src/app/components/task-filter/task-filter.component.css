@@ -16,6 +16,9 @@
     height: 30px;
     width: 30px;
 }
+.projects p-multiSelect{
+    color: black;
+}
 h4{
     margin-bottom: 5px;
 }

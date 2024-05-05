@@ -6,6 +6,7 @@ import { ProjectService } from '../../services/project.service';
 import { Priority } from '../../models/priority/priority';
 import { TaskFilter } from '../../models/task/task-filter';
 import { State } from '../../models/state/state';
+import { Project } from '../../models/project/project';
 
 @Component({
   selector: 'app-task-filter',
@@ -24,6 +25,8 @@ export class TaskFilterComponent implements OnInit {
   public priorities : Priority[] = [];
   public EndRange : Date[] | undefined;
   public StartRange : Date[] | undefined;
+  public projects : Project[] = [];
+  public selectedProjects : Project[] = [];
   public sortList : string[] = [
     "Last Updated",
     "State",
@@ -39,13 +42,15 @@ export class TaskFilterComponent implements OnInit {
   public percentageValues :number[] = [0, 100];
   ngOnInit(): void {
     this.spinner.show();
-
+    this.projectService.getUserFilterProjects().subscribe({
+      next : (res:Project[])=>{this.projects = res; this.spinner.hide(); console.log(res);}
+    });
     this.state_service.fetchAllStates().subscribe({
       next : (res:State[]) => {this.states = res}
-    })
+    });
     this.priority_service.getPriorities().subscribe({
-      next : (res:Priority[])=>{this.priorities=res; this.spinner.hide();}
-    })
+      next : (res:Priority[])=>{this.priorities=res;}
+    });
   }
   sendSortFilter(mode:number){
     this.filter.sortFlag = mode;
@@ -55,6 +60,7 @@ export class TaskFilterComponent implements OnInit {
   sendFilter(){
     this.filter.priorityFilter = []
     this.filter.stateFilter = [];
+    this.filter.projects = [];
     this.filter.percentageFilterFrom = this.percentageValues[0];
     this.filter.percentageFilterTo = this.percentageValues[1];
     if(this.EndRange!==null && this.EndRange!==undefined && this.EndRange.length > 0)
@@ -85,6 +91,9 @@ export class TaskFilterComponent implements OnInit {
         this.filter.priorityFilter?.push(prio.id);
       });
     }
+    this.selectedProjects.forEach(project => {
+      this.filter.projects?.push(project.id);
+    });
     if(this.selectedStates.length > 0)
     {
       this.filter.stateFilter = [];

@@ -84,7 +84,7 @@ namespace server.Repositories
             .Include(u=>u.Project)
             .ThenInclude(p=>p.State)
             .Include(p=>p.Project)
-            .ThenInclude(p=>p.TaskGroups)
+            .ThenInclude(p=>p.TaskGroups).ThenInclude(tg=>tg.Assignments).ThenInclude(u=>u.Users)
             .Include(p=>p.Project)
             .ThenInclude(p=>p.Priority)
             .Include(p=>p.Project).ThenInclude(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
@@ -303,6 +303,14 @@ namespace server.Repositories
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
             return project;
+        }
+
+        public async Task<List<Project>> getFilterProjectsAsync(int user_id)
+        {
+            var projects = await GetAllUserProjectsAsync(user_id);
+            var res = projects.Where(p=>p.TaskGroups.Any(tg=>tg.Assignments.Any(a=>a.Users.Any(u=>u.Id==user_id)))).ToList();
+            return res;
+            
         }
     }
 }
