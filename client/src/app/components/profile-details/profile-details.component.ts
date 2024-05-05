@@ -19,13 +19,14 @@ export class ProfileDetailsComponent {
   roleId!: number;
   roles!: Role[];
   editMode = false;
+  picture!: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router, private userProfileService: UserProfileService) {
     this.user = data.user;
     this.originalUser = { ...this.user };
     this.roleId = data.role;
     this.user.roleId = this.roleId;
-    console.log(this.user);
+    this.profilePicture(this.user.id);
   }
 
   ngOnInit() : void {
@@ -56,7 +57,6 @@ export class ProfileDetailsComponent {
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
-    console.log(file);
     let picture = {
         data: '',
         filename: '', 
@@ -64,7 +64,7 @@ export class ProfileDetailsComponent {
     }
     picture.type = file.type;
     picture.filename = file.name;
-    if (file) {
+    if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
   
       reader.onload = () => {
@@ -74,14 +74,31 @@ export class ProfileDetailsComponent {
       };
   
       reader.readAsDataURL(file);
+    } else {
+      alert('Please select a valid image file.');
     }
-  }
+  } 
 
   uploadProfilePicture(userId: number, base64String: any) {
-
-  
     this.userService.uploadProfilePicture(userId, base64String).subscribe({
-      next: (message: string) => {console.log(message)}, error: (err) => {console.log(err)}
+      next: (message: string) => {this.profilePicture(userId)}, error: (err) => {console.log(err)}
+    });
+  }
+
+  profilePicture(userId: number) {
+    this.userService.profilePicture(userId).subscribe({
+      next: (message: { profilePicture: string, type: string }) => {
+        if(message.profilePicture)
+          {
+            this.picture = `data:${message.type};base64,${message.profilePicture}`;
+            this.userService.setProfilePicture(this.picture);
+          }
+        else {
+          this.picture = "../../../assets/pictures/defaultpfp.svg";
+        }
+      }, error: (err) => {
+        console.error('Error retrieving profile picture:', err);
+      }
     });
   }
   
