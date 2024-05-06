@@ -109,6 +109,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         comments.forEach(comment => {
           comment.editedTime = new Date(comment.editedTime);
           comment.postTime = new Date(comment.postTime);
+          console.log(comments);
         });
       }
     });
@@ -253,6 +254,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
             comm.editedTime = new Date(comm.editedTime);
             comm.postTime = new Date(comm.postTime);
             this.comments.push(comm);
+            this.commentText = "";
           }
         });
       }
