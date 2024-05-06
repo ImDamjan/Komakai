@@ -44,6 +44,9 @@ export class CreateProjectOverlayComponent implements OnInit {
 
   selectedPriorityId!: number;
   private spinner = inject(NgxSpinnerService);
+
+  searchQuery: string = '';
+
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
   ngOnInit(): void {
@@ -87,7 +90,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   toggleDropdown(): void {
-    this.showDropdown = !this.showDropdown;
+     this.showDropdown = !this.showDropdown;
   }
 
   onUserSelected(user: User, event: any): void {
@@ -253,5 +256,17 @@ export class CreateProjectOverlayComponent implements OnInit {
   getRolesForUser(user: User): Role[] {
     console.log(this.roles.filter(role => (role.authority >= user.role.authority)));
     return this.roles.filter(role => role.authority >= user.role.authority);
+  }
+
+  get filteredUsers(): any[] {
+    return this.users.filter(user =>
+      (user.name + ' ' + user.lastname).toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+  }
+
+  get filteredTeams(): any[] {
+      return this.teams.filter(team =>
+          team.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
   }
 }
