@@ -15,7 +15,7 @@
     /* background-image: url("../../../assets/pictures/background.svg"); */
     overflow-x: auto; 
     white-space: nowrap;
-    width: calc(100wv - 50px);
+    width: calc(100vw - 50px);
     height: 100vh;
 }
 
