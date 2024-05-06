@@ -136,7 +136,6 @@
     <hr style="border: 3px;">
 
     <div class="comment" *ngFor="let comment of comments">
-        <img id="pfp" [src]="picture" alt="slika_korinsika">
         <div class = 'comment-box'>
             <!-- <div class = comment-meni>
                 <select name="" id=""></select>
@@ -147,14 +146,15 @@
                 <p>ikona</p>
                 <p>ikona2</p>
             </div> -->
-            <p>{{comment.content}}</p>
-            <p>{{comment.editedTime.toLocaleString().split(',')[0]}}</p>
+            <p style="color: gray;"> <img id="pfp" [src]="picture" alt="slika_korinsika"> {{comment.user.name}} {{comment.user.lastname}} &commat;{{comment.user.username}}</p>
+            <p style="width: 100%; border: 1px solid; padding: 10px; color: black;">{{comment.content}}</p>
+            <p style="color: gray;">{{ comment.editedTime.toLocaleString().split(',')[0] }}     {{ comment.editedTime.toLocaleString().split(',')[1] }}</p>
         </div>
     </div>
 
     <div class="comment" id="add-comment">
         <ng-container *ngIf="!pictureLoading">
-            <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture">
+            <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture"> Leave your comment
           </ng-container>
         <div class = 'comment-box'>
             <!-- <div class = comment-meni>
