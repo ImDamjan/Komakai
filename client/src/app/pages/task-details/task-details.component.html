@@ -10,18 +10,22 @@
         <table>
             <tr>
                 <th>Priority</th>
-                <th><span *ngIf="!showUpdate">{{assignment.priority.description}}</span>
-                    <span *ngIf="showUpdate"><select id="priority" [(ngModel)] = "updateObj.priorityId">
-                    <option class="options" *ngFor="let prio of priorities" [value]="prio.id">{{prio.description}}</option></select></span></th>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <th><span *ngIf="!showUpdate">{{assignment.state.name}}</span>
-                        <span *ngIf="showUpdate"><select id="state" [(ngModel)] = "updateObj.stateId">
-                        <option class="options" *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
-                        </select>
+                <th>
+                    <span *ngIf="!showUpdate">{{ assignment.priority.description }}</span>
+                    <span *ngIf="showUpdate">
+                        <p-dropdown [options]="priorities" [(ngModel)]="updateObj.priorityId" optionLabel="description" placeholder="Choose priority"></p-dropdown>
                     </span>
                 </th>
+                
+            <tr>
+                <th>Status</th>
+                <th>
+                    <span *ngIf="!showUpdate">{{ assignment.state.name }}</span>
+                    <span *ngIf="showUpdate">
+                        <p-dropdown [options]="states" [(ngModel)]="updateObj.stateId" optionLabel="name" placeholder="Choose status"></p-dropdown>
+                    </span>
+                </th>
+                
             </tr>
             <tr>
                 <th>Owner</th>
@@ -40,7 +44,7 @@
                             <span class="selected-option" (click)="toggleDropdown()">Select Assignees</span>
                             <div class="options" *ngIf="showDropdown">
                                 <div class="member-option" *ngFor="let user of projectUsers" (click)="toggleUserSelection(user.id, $event)">
-                                    <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                                    <input type="checkbox" style="margin-left: 10px;" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
                                     {{ user.name }} {{ user.lastname }}
                                 </div>
                             </div>
@@ -51,22 +55,30 @@
             </tr>
             <tr>
                 <th>Start Date</th>
-                <th><span *ngIf="!showUpdate">{{assignment.start.toLocaleString().split(',')[0]}}</span><span *ngIf="showUpdate"><input type="date" value="{{currentStartDate}}" [(ngModel)] = "currentStartDate"></span></th>
+                <th>
+                    <span *ngIf="!showUpdate">{{assignment.start.toLocaleString().split(',')[0]}}</span>
+                    <span *ngIf="showUpdate"><p-calendar type="date" value="{{currentStartDate}}" [(ngModel)] = "currentStartDate" placeholder="Start date"></p-calendar>
+                    </span>
+                </th>
             </tr>
             <tr>
                 <th>End Date</th>
-                <th><span *ngIf="!showUpdate">{{assignment.end.toLocaleString().split(',')[0]}}</span><span *ngIf="showUpdate"><input type="date" value="{{currentDueDate}}" [(ngModel)] = "currentDueDate"></span></th>
+                <th>
+                    <span *ngIf="!showUpdate">{{assignment.end.toLocaleString().split(',')[0]}}</span>
+                    <span *ngIf="showUpdate">
+                        <p-calendar type="date" value="{{currentDueDate}}" [(ngModel)] = "currentDueDate" placeholder="End date"></p-calendar>
+                    </span></th>
             </tr>
             <tr>
                 <th>Progress</th>
                 <th>
-                    <span *ngIf="!showUpdate">{{assignment.percentage}}%</span> 
+                    <span *ngIf="!showUpdate">{{ assignment.percentage }}%</span>
                     <span *ngIf="showUpdate">
                         <div class="slidecontainer">
-                            <!-- <ngb-progressbar class="mb-3" type="info" [value]="updateObj.percentage" [(ngModel)]="updateObj.percentage" [striped]="true" [animated]="true" height="20px"><i>{{updateObj.percentage}}%</i></ngb-progressbar> -->
-                            <input type="range" min="0" max="100" class="slider" id="myRange" [(ngModel)]="updateObj.percentage">{{updateObj.percentage}}%
+                            <p-slider [(ngModel)]="updateObj.percentage" [min]="0" [max]="100"></p-slider>
+                            {{ updateObj.percentage }}%
                         </div>
-            </span>
+                    </span>
                 </th>
             </tr>
             <tr>
@@ -120,7 +132,6 @@
     <br><br>
     <button *ngIf="showUpdate" (click)="createUpdateRequest()">Update</button>
     <button *ngIf="showUpdate" (click)="cancelUpdateRequest()" style="background-color: crimson; margin-left: 15px;">Cancel</button>
-    <br><br>
 
     <hr style="border: 3px;">
 
