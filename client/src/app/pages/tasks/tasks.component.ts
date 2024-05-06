@@ -7,6 +7,7 @@ import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { TaskHeaderComponent } from '../../components/task-header/task-header.component';
 import { TaskFilter } from '../../models/task/task-filter';
 import { DateConverterService } from '../../services/date-converter.service';
+import { TaskFilterComponent } from '../../components/task-filter/task-filter.component';
 
 @Component({
   selector: 'app-tasks',
@@ -20,13 +21,14 @@ export class TasksComponent {
   @Output() searchSortChanged = new EventEmitter<TaskFilter>();
 
   @ViewChild('taskHeader', { static: false }) taskHeaderComponent: TaskHeaderComponent | undefined;
+  @ViewChild('taskFilter') taskFilterComponent: TaskFilterComponent | undefined;
   filteredTasks: Task[] = [];
 
-  tasks: Task[] = [];
   private task_date_service = inject(DateConverterService);
 
   public filter: TaskFilter = {
-
+    propertyName : "Last Updated",
+    sortFlag : -1
   };
 
   private jwtDecoder = inject(JwtDecoderService);
@@ -47,40 +49,30 @@ export class TasksComponent {
       id = decode.user_id;
     }
     this.taskService.getAllUserAssignments(id).subscribe(tasks => {
-        this.tasks  = tasks;
-
-        this.tasks.forEach(task => {
+        tasks.forEach(task => {
           this.task_date_service.setDateParametersForTask(task);
         });
-        this.filteredTasks = this.tasks;
+        this.filteredTasks = tasks;
     });
-    // this.filteredTasks = this.filterTasks('');
   }
 
   ngAfterViewInit() {
     this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
-      this.searchTasks(searchValue.searchText);
+      this.filter.searchTitle = searchValue.searchText;
+      this.loadTasks();
     });
-    this.taskHeaderComponent?.searchFilterChanged.subscribe(filter => {
-      this.filterTasks(filter.filter);
-    });
-    this.taskHeaderComponent?.searchSortChanged.subscribe(filter => {
-      this.sortTasks(filter.filter);
+    this.taskFilterComponent?.filterEmiter.subscribe(filter=>{
+      let text = "";
+      if(this.filter.searchTitle)
+        text = this.filter.searchTitle
+      this.filter = filter;
+      this.filter.searchTitle = text;
+      this.loadTasks();
     });
   }
 
-  sortTasks(filter: TaskFilter){
-    
-    console.log(filter)
 
-    let collectedTasks: Task[] = [];
-
-    if(filter.propertyName){
-      this.filter.propertyName=filter.propertyName;
-    }
-    if(filter.sortFlag){
-      this.filter.sortFlag=filter.sortFlag;
-    }
+  loadTasks(){
 
     let token = this.jwtDecoder.getToken();
     let id = 0;
@@ -88,96 +80,13 @@ export class TasksComponent {
     {
       let decode = this.jwtDecoder.decodeToken(token);
       id = decode.user_id;
-    }
-    this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
-      collectedTasks = tasks;
-
-      collectedTasks.forEach(task => {
-        this.task_date_service.setDateParametersForTask(task);
-      });
-      this.filteredTasks = collectedTasks;
-    });
-  }
-
-  filterTasks(filter: TaskFilter){
-
-    let collectedTasks: Task[] = [];
-
-    if(filter.project_id){
-      this.filter.project_id=filter.project_id;
-    }
-    if(filter.stateFilter){
-      this.filter.stateFilter=filter.stateFilter;
-    }
-    if(filter.priorityFilter){
-      this.filter.priorityFilter=filter.priorityFilter;
-    }
-    if(filter.dateStartFlag){
-      this.filter.dateStartFlag=filter.dateStartFlag;
-    }
-    if(filter.dateEndFlag){
-      this.filter.dateEndFlag=filter.dateEndFlag;
-    }
-    if(filter.start){
-      this.filter.start=filter.start;
-    }
-    if(filter.end){
-      this.filter.end=filter.end;
-    }
-    if(filter.percentageFlag){
-      this.filter.percentageFlag=filter.percentageFlag;
-    }
-    if(filter.percentageFilter){
-      this.filter.percentageFilter=filter.percentageFilter;
-    }
-
-    let token = this.jwtDecoder.getToken();
-    let id = 0;
-    if(token!=null)
-    {
-      let decode = this.jwtDecoder.decodeToken(token);
-      id = decode.user_id;
-    }
-    this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
-      collectedTasks = tasks;
-
-      collectedTasks.forEach(task => {
-        this.task_date_service.setDateParametersForTask(task);
-      });
-      this.filteredTasks = collectedTasks;
-    });
-  }
-
-  searchTasks(searchText: string) {
-    // console.log(searchText)
-
-    let filteredTasks: Task[] = [];
-
-    let collectedTasks: Task[] = [];
-
-    this.filter.searchTitle = searchText;
-
-    if(searchText=''){
-      
-    }
-    else{
-      let token = this.jwtDecoder.getToken();
-      let id = 0;
-      if(token!=null)
-      {
-        let decode = this.jwtDecoder.decodeToken(token);
-        id = decode.user_id;
-      }
       this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
-        collectedTasks = tasks;
-
-        collectedTasks.forEach(task => {
-          this.task_date_service.setDateParametersForTask(task);
-        });
-        this.filteredTasks = collectedTasks;
+      tasks.forEach(task => {
+        this.task_date_service.setDateParametersForTask(task);
+      });
+      this.filteredTasks = tasks;
       });
     }
-
   }
 
 }

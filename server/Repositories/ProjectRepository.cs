@@ -60,7 +60,7 @@ namespace server.Repositories
             .Include(p=>p.ProjectUsers).ThenInclude(u=>u.User)
             .Include(p=>p.TaskGroups)
             .Include(p=>p.State)
-            .Include(p=>p.Priority).AsQueryable();
+            .Include(p=>p.Priority).OrderByDescending(p=>p.LastStateChangedTime).AsQueryable();
 
             //filter za sve projekte
 
@@ -84,7 +84,7 @@ namespace server.Repositories
             .Include(u=>u.Project)
             .ThenInclude(p=>p.State)
             .Include(p=>p.Project)
-            .ThenInclude(p=>p.TaskGroups)
+            .ThenInclude(p=>p.TaskGroups).ThenInclude(tg=>tg.Assignments).ThenInclude(u=>u.Users)
             .Include(p=>p.Project)
             .ThenInclude(p=>p.Priority)
             .Include(p=>p.Project).ThenInclude(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
@@ -188,54 +188,42 @@ namespace server.Repositories
                     projects = projects.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
                 }
 
-                if(dto.StateFilter > 0 && dto.StateFilter < 7)
-                    projects = projects.Where(p=>p.StateId==dto.StateFilter);
-                if(dto.PriorityFilter > 0 && dto.PriorityFilter < 5)
-                    projects = projects.Where(p=>p.PriorityId==dto.PriorityFilter);
+                if(dto.StateFilter.Count > 0)
+                    projects = projects.Where(p=>dto.StateFilter.Contains(p.StateId));
+                if(dto.PriorityFilter.Count > 0)
+                    projects = projects.Where(p=>dto.PriorityFilter.Contains(p.PriorityId));
                 
                 if(dto.SearchTitle!=string.Empty)
                     projects = projects.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower()));
                 //budzet
-                if(dto.BudgetFilter !=null)
+                if(dto.BudgetFilterTo >= 0 && dto.BudgetFilterFrom <= dto.BudgetFilterTo)
                 {
-                    if(dto.BudgetFlag==-1)
-                        projects = projects.Where(p=>p.Budget < dto.BudgetFilter);
-                    else if(dto.BudgetFlag==1)
-                        projects = projects.Where(p=>p.Budget >= dto.BudgetFilter);
+                    projects = projects.Where(p=>p.Budget >= dto.BudgetFilterFrom && p.Budget <= dto.BudgetFilterTo);
                 }
                 //spent
-                if(dto.SpentFilter != null)
+                if(dto.SpentFilterTo >= 0 && dto.SpentFilterFrom <= dto.SpentFilterTo)
                 {
-                    if(dto.SpentFlag==-1)
-                        projects = projects.Where(p=>p.Spent < dto.SpentFilter);
-                    else if(dto.SpentFlag==1)
-                        projects = projects.Where(p=>p.Spent >= dto.SpentFilter);
+                    projects = projects.Where(p=>p.Spent <= dto.SpentFilterTo && p.Spent >= dto.SpentFilterFrom);
                 }
-
+                // Console.WriteLine("Ovo je danasnji datum" + DateTime.Now.Date);
+                // System.Console.WriteLine("SADA IDU DRUGI DATUMI");
+                // foreach (var item in projects.ToList())
+                // {
+                //     System.Console.WriteLine(item.Start > DateTime.Now.Date);
+                // }
                 //datumi
-                if(dto.Start!=null)
+                if(dto.StartFrom!=null && dto.StartTo!=null)
                 {
-                    if(dto.DateStartFlag==-1)
-                        projects = projects.Where(p=>p.Start < dto.Start);
-                    else if(dto.DateStartFlag==1)
-                        projects = projects.Where(p=>p.Start >= dto.Start);
+                    projects = projects.Where(p=>p.Start >=dto.StartFrom && p.Start <=dto.StartTo);
                 }
-                if(dto.End!=null)
+                if(dto.EndFrom!=null && dto.EndTo!=null)
                 {
-
-                    if(dto.DateEndFlag==-1)
-                        projects = projects.Where(p=>p.End < dto.End);
-                    else if(dto.DateEndFlag==1)
-                        projects = projects.Where(p=>p.End >= dto.End);
+                    projects = projects.Where(p=>p.End >= dto.EndFrom && p.End <=dto.EndTo);
                 }
 
-                if(dto.PercentageFilter!=null)
+                if(dto.PercentageFilterTo >= 0 && dto.PercentageFilterFrom <= dto.PercentageFilterTo)
                 {
-
-                    if(dto.PercentageFlag==-1)
-                        projects = projects.Where(p=>p.Percentage < dto.PercentageFilter);
-                    else if(dto.PercentageFlag==1)
-                        projects = projects.Where(p=>p.Percentage >= dto.PercentageFilter);
+                    projects = projects.Where(p=>p.Percentage <= dto.PercentageFilterTo && p.Percentage >=dto.PercentageFilterFrom);
                 }
             }
             if(sort!=null)
@@ -275,27 +263,31 @@ namespace server.Repositories
                     else
                         projects = projects.OrderByDescending(p=>p.Spent);
                 }
-                else if(sort.PropertyName.ToLower()=="start")
+                else if(sort.PropertyName.ToLower()=="start date")
                 {
                     if(sort.SortFlag==1)
                         projects = projects.OrderBy(p=>p.Start);
                     else
                         projects = projects.OrderByDescending(p=>p.Start);
                 }
-                else if(sort.PropertyName.ToLower()=="end")
+                else if(sort.PropertyName.ToLower()=="end date")
                 {
                     if(sort.SortFlag==1)
                         projects = projects.OrderBy(p=>p.End);
                     else
                         projects = projects.OrderByDescending(p=>p.End);
                 }
-                else if(sort.PropertyName.ToLower()=="percentage")
+                else if(sort.PropertyName.ToLower()=="progress")
                 {
                     if(sort.SortFlag==1)
                         projects = projects.OrderBy(p=>p.Percentage);
                     else
                         projects = projects.OrderByDescending(p=>p.Percentage);
                 }
+                else if(sort.SortFlag==1)
+                    projects = projects.OrderBy(p=>p.LastStateChangedTime);
+                else
+                    projects = projects.OrderByDescending(p=>p.LastStateChangedTime);
             }
 
             return await projects.ToListAsync();
@@ -311,6 +303,14 @@ namespace server.Repositories
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
             return project;
+        }
+
+        public async Task<List<Project>> getFilterProjectsAsync(int user_id)
+        {
+            var projects = await GetAllUserProjectsAsync(user_id);
+            var res = projects.Where(p=>p.TaskGroups.Any(tg=>tg.Assignments.Any(a=>a.Users.Any(u=>u.Id==user_id)))).ToList();
+            return res;
+            
         }
     }
 }

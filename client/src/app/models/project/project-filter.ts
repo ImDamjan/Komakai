@@ -10,16 +10,16 @@ export interface ProjectFilter {
     sortFlag? : number, // 1 = asc , -1 = desc
     //ovo sve drugo su filteri
     searchTitle? : string,
-    dateStartFlag? : number,
-    dateEndFlag? : number,
-    start? : Date,
-    end? : Date,
-    priorityFilter? : number,
-    stateFilter? : number,
-    budgetFilter? : number,
-    budgetFlag? : number,
-    spentFilter? : number,
-    spentFlag? : number,
-    percentageFilter? : number,
-    percentageFlag? : number
+    startFrom? : Date,
+    startTo? : Date,
+    endFrom? : Date,
+    endTo? : Date,
+    priorityFilter? : number[],
+    stateFilter? : number[],
+    budgetFilterFrom? : number,
+    budgetFilterTo? : number,
+    spentFilterFrom? : number,
+    spentFilterTo? : number,
+    percentageFilterFrom? : number,
+    percentageFilterTo? : number
 }

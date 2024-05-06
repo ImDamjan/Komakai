@@ -10,13 +10,13 @@ namespace server.DTOs.Assignment
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public string SearchTitle { get; set; } = string.Empty;
-        public int DateStartFlag { get; set; }
-        public DateTime? Start { get; set; }
-        public int DateEndFlag { get; set; }
-        public DateTime? End { get; set; }
-        public int StateFilter { get; set; }
-        public int PercentageFlag { get; set; }
-        public float? PercentageFilter { get; set; }
-        public int PriorityFilter { get; set; }
+        public DateTime? StartFrom { get; set; } = null;
+        public DateTime? EndFrom { get; set; } = null;
+        public DateTime? StartTo { get; set; } = null;
+        public DateTime? EndTo { get; set; } = null;
+        public List<int> PriorityFilter { get; set; } = new List<int>(); // po prioritetu >1 and <5
+        public List<int> StateFilter { get; set; } = new List<int>(); //po state-u >1 and <7
+        public int PercentageFilterFrom { get; set; } = -1;
+        public int PercentageFilterTo { get; set; }=-1;
     }
 }
