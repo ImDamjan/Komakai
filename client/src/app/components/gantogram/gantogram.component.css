@@ -1,10 +1,11 @@
 @import url(../../../assets/icons/css/font-awesome.min.css); 
 
 .wrapper{
-    height: calc(100vh - 200px);
-    margin-top: 150px;
+    height: calc(100vh - 100px);
+    padding-top: 120px;
     margin-left: 50px;
-    width: calc(100vw - 120px);
+    margin-right: 50px;
+    width: calc(100vw - 180px);
     z-index: 1000;
 }
 .gantt-bar-content-progress > .ng-star-inserted{
