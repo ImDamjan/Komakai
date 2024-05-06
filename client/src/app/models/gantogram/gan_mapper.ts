@@ -7,29 +7,10 @@ import { log } from "node:console";
 export class GanttMapper {
     // Normalni članovi klase
     static mapTasksToGantItems(tasks:Task[]) : GanttItem[]{
-        
-
-        const ganttItems: GanttItem[] = []
-        // Implementacija statičke metode
-        
-        for (let i = 0; i < tasks.length; i++) {
-            // console.log(tasks[i]);
-            console.log("********************");
-            console.log(tasks[i].start);
-            console.log(new Date(tasks[i].start).toDateString());
-            
-            console.log("********************");
-            
-            
-            
+        const ganttItems: GanttItem[] = []        
+        for (let i = 0; i < tasks.length; i++) {         
             ganttItems.push(this.mapTaskToGanttItem(tasks[i]));
-            
         }
-        console.log("====================================================");
-        console.log(ganttItems);
-        
-        console.log("====================================================");
-
         return ganttItems
     }
 
@@ -41,7 +22,7 @@ export class GanttMapper {
             end: new Date(task.end).getTime()/1000, // ili drugi odgovarajući atribut za kraj
             links: [], // Možete dodati logiku za mapiranje linkova ako je potrebno
             draggable: true, // Postavite na true ako želite omogućiti povlačenje
-            itemDraggable: true, // Postavite na true ako želite omogućiti povlačenje samo na ovom elementu
+            itemDraggable:  true, // Postavite na true ako želite omogućiti povlačenje samo na ovom elementu
             linkable: true, // Postavite na true ako želite omogućiti dodavanje linkova
             expandable: true, // Postavite na true ako želite omogućiti proširivanje
             expanded: false, // Postavite na true ako želite da je element početno proširen
@@ -54,6 +35,8 @@ export class GanttMapper {
         return ganttItem;
     }
 
+    // Logika na osnovu role da li je korisniku dozvoljeno da menja vreme start-end draggable: (true/false)
+
 
     static mapPrioprityToColor(priority:Priority):string{
         switch(priority.level){
@@ -61,7 +44,7 @@ export class GanttMapper {
             case  2: return "#FFD700" // Medium;
             case  3: return "#FF6347" // High;
             case  4: return "#8B008B" // AtRisk;
-            default: return "#1E90FF"
+            default: return "#1E90FF" // default
         }
     }
 
