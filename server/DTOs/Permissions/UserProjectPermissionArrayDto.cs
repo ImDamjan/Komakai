@@ -2,6 +2,6 @@
 {
     public class UserProjectPermissionArrayDto
     {
-        public IEnumerable<UserProjectPermissionDto> Permissions { get; set; }
+        public List<UserProjectPermissionDto>? Permissions { get; set; }
     }
 }
