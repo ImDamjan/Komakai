@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.DTOs.Users;
 
 namespace server.DTOs.Comment
 {
@@ -14,5 +15,6 @@ namespace server.DTOs.Comment
         public DateTime PostTime { get; set; }
         public int UserId { get; set; }
         public int AssignmentId { get; set; }
+        public UserDto User { get; set; } = null!;
     }
 }
