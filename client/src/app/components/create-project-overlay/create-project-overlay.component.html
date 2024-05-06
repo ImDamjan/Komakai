@@ -65,7 +65,7 @@
                 <div class="inputs">
                     <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget">
                     <div class="custom-dropdown">
-                        <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery">
+                        <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members">
                         <div class="options" *ngIf="showDropdown">
                             <div class="member-option" *ngFor="let user of filteredUsers">
                                 

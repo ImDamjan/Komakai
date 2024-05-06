@@ -56,6 +56,9 @@ export class EditProjectOverlayComponent {
   userRoles: Map<number, number> = new Map<number, number>();
   defaultRoles: Map<number, number> = new Map<number, number>();
   private spinner = inject(NgxSpinnerService);
+
+  searchQuery: string = '';
+
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
@@ -263,5 +266,17 @@ export class EditProjectOverlayComponent {
 
   getRolesForUser(user: User): Role[] {
     return this.roles.filter(role => role.authority >= user.role.authority);
+  }
+
+  get filteredUsers(): any[] {
+    return this.users.filter(user =>
+      (user.name + ' ' + user.lastname).toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+  }
+
+  get filteredTeams(): any[] {
+      return this.teams.filter(team =>
+          team.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
   }
 }
