@@ -8,6 +8,18 @@
     background-color: white;
 }
 
+input[type=text] {
+    border: 2px solid red;
+    border-radius: 4px;
+    height: 30px;
+    justify-content: center;
+    transition: width 0.4s ease-in-out;
+  }
+  
+input[type=text]:focus {
+    width: 100%;
+}
+
 .header{
     display: flexbox;
     flex-direction: column;
@@ -20,37 +32,7 @@ h1 {
     font-weight: 500;
 }
 
-h2 {
-    font-size: 20px;
-    font-family: 'Poppins', sans-serif;
-    color: #222222;
-    font-weight: 500;
-}
 
-p {
-    font-weight: 200;
-    font-size: 16px;
-    font-family: 'Poppins', sans-serif;
-    color: #222222;
-    width: 50px;
-    font-weight: 200;
-}
-
-.row{
-    margin-top: 15px;
-    display: flex;
-    align-items: center;
-}
-
-.row span{
-    padding: 0px 100px;
-    justify-content: center;
-}
-.details{
-    display: flex;
-    flex-direction: column;
-}
-  
 span {
     flex: 1; 
     text-align: right;
@@ -70,6 +52,7 @@ span {
     border-radius: 10px;
     overflow-y: auto;
 }
+
 button{
     padding: 10px 20px;
     background-color:  #001B47;
@@ -77,10 +60,12 @@ button{
     border: 1px solid #001B47;
     border-radius: 25px;
 }
+
 button:hover{
     background-color:   #17315D;
     color: white;
 }
+
 textarea{
     width: 80%;
 }
@@ -133,9 +118,11 @@ textarea{
 }
 
 .option input[type="checkbox"],.member-option input[type="checkbox"],.team-option input[type="checkbox"] {
-    margin-right: 10px;
+    margin-right: 20px;
+    padding-right: 10px;
     float: right;
 }
+
 .slidecontainer {
     width: 100%;
   }
@@ -149,13 +136,11 @@ textarea{
     background-color: #001B47;
 }
 
-
-
-
 table {
     font-family: 'Poppins', sans-serif;
     border-collapse: collapse;
     width: 100%;
+    margin-top: 10px;
   }
   
   td, th {

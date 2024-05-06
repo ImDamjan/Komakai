@@ -1,7 +1,6 @@
 <div id = "task-details" class = "overlay-container">
-    <h1 class="task-title">Task Title</h1>
     <div class="header">
-        <h2 *ngIf="!showUpdate">{{assignment.title}}</h2>
+        <h1 *ngIf="!showUpdate">{{assignment.title}}</h1>
         <input type="text" class="task-title" *ngIf="showUpdate" [(ngModel)]="updateObj.title">
         <button class="update" (click)="updateTask()" *ngIf="!showUpdate">Update</button>
         <br>
@@ -11,11 +10,18 @@
         <table>
             <tr>
                 <th>Priority</th>
-                <th><span *ngIf="!showUpdate">{{assignment.priority.description}}</span><span *ngIf="showUpdate"><select id="priority" [(ngModel)] = "updateObj.priorityId"><option *ngFor="let prio of priorities" [value]="prio.id">{{prio.description}}</option></select></span></th>
+                <th><span *ngIf="!showUpdate">{{assignment.priority.description}}</span>
+                    <span *ngIf="showUpdate"><select id="priority" [(ngModel)] = "updateObj.priorityId">
+                    <option class="options" *ngFor="let prio of priorities" [value]="prio.id">{{prio.description}}</option></select></span></th>
             </tr>
             <tr>
                 <th>Status</th>
-                <th><span *ngIf="!showUpdate">{{assignment.state.name}}</span><span *ngIf="showUpdate"><select id="state" [(ngModel)] = "updateObj.stateId"><option *ngFor="let state of states" [value]="state.id">{{state.name}}</option></select></span></th>
+                <th><span *ngIf="!showUpdate">{{assignment.state.name}}</span>
+                        <span *ngIf="showUpdate"><select id="state" [(ngModel)] = "updateObj.stateId">
+                        <option class="options" *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                        </select>
+                    </span>
+                </th>
             </tr>
             <tr>
                 <th>Owner</th>
@@ -99,8 +105,7 @@
     <table>
         <tr>
             <th>Description</th>
-            <th>
-                <div *ngIf="!showUpdate" class = "description">
+            <th><div *ngIf="!showUpdate" class = "description">
                     {{assignment.description}}
                 </div>
                 <div *ngIf="showUpdate" class = "description">
