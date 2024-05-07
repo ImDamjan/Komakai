@@ -14,11 +14,13 @@ import path from 'path';
 import { AdminComponent } from './pages/admin/admin.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { ProjectPreviewComponent } from './components/project-preview/project-preview.component';
+import { adminAuthorizationGuard } from './guards/admin-authorization.guard';
+import { pmAuthorizationGuard } from './guards/pm-authorization.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full'},
   {path: 'auth' ,component: AuthComponent,canActivate: [AuthGuard]},
-  {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard]},
+  {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
   {path: 'projects',component: ProjectPreviewComponent,canActivate: [AuthGuard]},
   {path: 'activity', component: ActivityComponent,canActivate: [AuthGuard]},
   {path: 'tasks', component: TasksComponent,canActivate: [AuthGuard]},
@@ -26,7 +28,7 @@ const routes: Routes = [
   {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]},
   
   {path: 'projects/project-details/:projectId', component: ProjectDetailsComponent,canActivate: [AuthGuard]},
-  {path: 'admin', component: AdminComponent,canActivate: [AuthGuard]}
+  {path: 'admin', component: AdminComponent,canActivate: [AuthGuard,adminAuthorizationGuard]}
 ];
 
 @NgModule({
