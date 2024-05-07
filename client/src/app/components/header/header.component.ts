@@ -38,26 +38,26 @@ export class HeaderComponent implements OnInit {
       this.role = decode.role
       this.userid = decode.user_id;
       this.roleId = decode.role_id;
+      
+      this.userService.getUserById(this.userid).subscribe((userData: any) => {
+        this.user = userData;
+        this.userProfileService.setUserProfile(this.user);
+      });
+      
+      
+      this.userProfileService.userProfileSubject.subscribe(user => {
+        if (user) {
+          this.firstname = user.name;
+          this.lastname = user.lastname;
+          this.jobTitle = user.jobTitle;
+        }
+      });
+      this.userService.picture$.subscribe(picture => {
+        this.picture = picture;
+        if(this.picture == '')
+          this.profilePicture(this.userid);
+      });
     }
-
-    this.userService.getUserById(this.userid).subscribe((userData: any) => {
-      this.user = userData;
-      this.userProfileService.setUserProfile(this.user);
-    });
-
-
-    this.userProfileService.userProfileSubject.subscribe(user => {
-      if (user) {
-        this.firstname = user.name;
-        this.lastname = user.lastname;
-        this.jobTitle = user.jobTitle;
-      }
-    });
-    this.userService.picture$.subscribe(picture => {
-       this.picture = picture;
-       if(this.picture == '')
-        this.profilePicture(this.userid);
-    });
   }
 
   toggleMenu() {

@@ -66,19 +66,27 @@ export class SidenavComponent implements OnInit {
   
   ngOnInit(): void {
     // this.screenWidth = window.innerWidth;
+    this.navData = [];
     let user = this.jwt_decode.getLoggedUser();
     if(user!==null)
     {
+      let nav = navbarData;
       if(user.role==="Project Manager")
       {
-        this.navData.splice(0,1);
+        for (let i = 1; i < nav.length; i++) {
+          const element = nav[i];
+          this.navData.push(element);
+          
+        }
       }
       else if(user.role==="Admin")
       {
-        this.navData.splice(1,5);
+        this.navData = [nav[0]];
       }
       else
-        this.navData.splice(0,2);
+        this.navData = [nav[2],nav[3],nav[4],nav[5]];
+
+        console.log(this.navData);
     }
   }
 
