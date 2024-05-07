@@ -21,7 +21,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class CreateProjectOverlayComponent implements OnInit {
   private jwtService = inject(JwtDecoderService);
   loggedInUserId: number | null = null;
+  fullname!: string;
   roleid!: number;
+  userid!: number;
 
   users: User[] = [];
   priorities: any[] | undefined;
@@ -46,6 +48,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   private spinner = inject(NgxSpinnerService);
 
   searchQuery: string = '';
+  selectedUsers: User[] = [];
 
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
@@ -53,8 +56,10 @@ export class CreateProjectOverlayComponent implements OnInit {
     let token = this.jwtService.getToken();
         if (token != null) {
             let decode = this.jwtService.decodeToken(token);
+            this.fullname = decode.fullname;
             this.loggedInUserId = decode.user_id;
             this.roleid = decode.role_id;
+            this.userid = decode.user_id;
         }
     this.roleService.getAllRoles().subscribe(roles => {
        this.roles = roles;
@@ -66,7 +71,6 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.users.forEach(user => {
           this.userRoles.set(user.id, user.role.id);
           this.defaultRoles = this.userRoles;
-          console.log(this.defaultRoles);
       });
       this.spinner.hide();
     });
@@ -87,6 +91,10 @@ export class CreateProjectOverlayComponent implements OnInit {
       description : "",
       type : ""
     };
+
+    this.userService.getUserById(this.userid).subscribe(user =>{
+      this.selectedUsers[0] = user;
+    });
   }
 
   toggleDropdown(): void {
@@ -118,14 +126,13 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   toggleUserSelection(user: User): void {
-      const selectedRoleId = this.userRoles.get(user.id);
-      // Handle user selection
-      if (this.isSelected(user)) {
-          this.selectedUserRolesMap.delete(user.id);
-          // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
-      } else {
-          // this.selectedUserIds.push(user.id);
-          this.selectedUserRolesMap.set(user.id,selectedRoleId!);
+    const selectedRoleId = this.userRoles.get(user.id);
+    if (this.isSelected(user)) {
+        this.selectedUserRolesMap.delete(user.id);
+        this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== user.id);
+    } else {
+        this.selectedUserRolesMap.set(user.id, selectedRoleId!);
+        this.selectedUsers.push(user);
     }
   }
 
@@ -151,6 +158,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       selected_roles.push(value);
       selected_users.push(key);
     });
+    console.log(selected_users);
     this.projectObj.userProjectRoleIds = selected_roles;
     this.spinner.show();
     this.projectObj.userIds = selected_users;
@@ -171,7 +179,6 @@ export class CreateProjectOverlayComponent implements OnInit {
     }
 
     this.projectService.createProject(this.projectObj).subscribe(response => {
-      console.log('Project created successfully:', response);
       alert('Project created successfully!');
       this.spinner.hide();
       this.resetForm();
@@ -231,14 +238,17 @@ export class CreateProjectOverlayComponent implements OnInit {
         team_member_ids.forEach(member => {
             if (member.id != this.loggedInUserId) {
                 this.selectedUserRolesMap.delete(member.id);
+                this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== member.id);
             }
         });
     } else {
         team_member_ids.forEach(member => {
             if (member.id != this.loggedInUserId) {
                 const selectedRoleId = this.userRoles.get(member.id);
-                if (!this.isSelected(member))
+                if (!this.isSelected(member)) {
                     this.selectedUserRolesMap.set(member.id, selectedRoleId!);
+                    this.selectedUsers.push(member);
+                }
             }
         });
     }
@@ -254,7 +264,6 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   getRolesForUser(user: User): Role[] {
-    console.log(this.roles.filter(role => (role.authority >= user.role.authority)));
     return this.roles.filter(role => role.authority >= user.role.authority);
   }
 

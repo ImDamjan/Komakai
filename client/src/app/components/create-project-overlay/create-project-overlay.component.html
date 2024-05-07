@@ -65,6 +65,12 @@
                 <div class="inputs">
                     <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget">
                     <div class="custom-dropdown">
+                        <div class="selected-users">
+                            <div *ngFor="let selectedUser of selectedUsers" class="selected-user">
+                                {{ selectedUser.name }} {{ selectedUser.lastname }}
+                                <button class="remove-user">x</button>
+                            </div>
+                        </div>
                         <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members">
                         <div class="options" *ngIf="showDropdown">
                             <div class="member-option" *ngFor="let user of filteredUsers">
