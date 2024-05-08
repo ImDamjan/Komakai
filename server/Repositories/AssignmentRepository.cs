@@ -118,10 +118,7 @@ namespace server.Repositories
                 }
                 if(dto.EndFrom!=null && dto.EndTo!=null)
                 {
-                    if(dto.DateEndFlag==-1)
-                        assignments =assignments.Where(p=>p.End < dto.End);
-                    else if(dto.DateEndFlag==1)
-                        assignments =assignments.Where(p=>p.End >= dto.End);
+                    assignments = assignments.Where(p => p.End >= dto.EndFrom && p.End <= dto.EndTo);
                 }
 
                 if(dto.PercentageFilterTo >=0 && dto.PercentageFilterFrom <= dto.PercentageFilterTo)
