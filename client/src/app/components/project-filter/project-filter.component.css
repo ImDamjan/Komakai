@@ -52,3 +52,17 @@ h4{
 .sort{
     padding-top: 20px ;
 }
+
+:host::ng-deep.p-multiselect{
+    top: -7px;
+    padding: 5px;
+}
+
+:host::ng-deep.p-calendar{
+    height: 30px;
+}
+
+:host::ng-deep.p-dropdown{
+    top: -7px;
+    padding: 5px;
+}
