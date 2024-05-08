@@ -73,10 +73,10 @@
                     <input class="input-field" id="budget-input" type="number" placeholder="  Spent"  [(ngModel)]="project.spent">
                     <div class="custom-dropdown">
                         <div class="selected-users">
-                            <div *ngFor="let selectedUser of selectedUsers" class="selected-user">
-                                {{ selectedUser.name }} {{ selectedUser.lastname }}
-                                <button *ngIf="selectedUser.id != loggedInUserId" class="remove-user" (click)="removeSelectedUser(selectedUser)">x</button>
-                            </div>
+                            <span *ngFor="let selectedUser of selectedUsers" class="selected-user">
+                                <p>{{ selectedUser.name }} {{ selectedUser.lastname }}</p>
+                                <span *ngIf="selectedUser.id != loggedInUserId" class="remove-user" (click)="removeSelectedUser(selectedUser)">X</span>
+                            </span>
                         </div>
                         <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members">
                         <div class="options" *ngIf="showDropdown">
