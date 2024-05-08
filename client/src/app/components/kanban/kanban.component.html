@@ -20,7 +20,7 @@
           cdkDropList
           [cdkDropListData]="column.tasks"
           (cdkDropListDropped)="drop($event)">
-          <app-task-card-kanban class="task" *ngFor="let item of column.tasks" [task]="item" cdkDrag [cdkDragData]="item"/>
+          <app-task-card-kanban (newItemEvent)="changeState($event)" class="task" *ngFor="let item of column.tasks" [task]="item"  cdkDrag [cdkDragData]="item"/>
           </div>
 
         </div>

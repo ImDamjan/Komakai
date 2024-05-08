@@ -1,4 +1,4 @@
-import { Component, OnInit, VERSION, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, VERSION, inject } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
 import { Board } from '../../models/kanban/board.model';
 import { Column } from '../../models/kanban/column.model';
@@ -111,6 +111,23 @@ export class KanbanComponent implements OnInit{
     },
     error :(error)=> console.log(error)});
   }
+  public changeState(updated:any)
+  {
+    //brisanje iz postojece kolone
+    let prev_column = updated.previous_state-1;
+    let task : Task = updated.task;
+    let position = this.board.columns[prev_column].tasks.findIndex(t=>t.id===task.id);
+    if(prev_column+1!=task.state.id)
+    {
+      this.board.columns[prev_column].tasks.splice(position,1);
+      //dodvanje u listu
+      let next_column_id = task.state.id-1;
+      this.board.columns[next_column_id].tasks = [task].concat(this.board.columns[next_column_id].tasks);
+    }
+    else
+      this.board.columns[prev_column].tasks[position] = task;
+    
+  }
 
   //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)
   public dropGrid(event: CdkDragDrop<Task[]>): void {
@@ -145,15 +162,19 @@ export class KanbanComponent implements OnInit{
       }
       this.assignment_service.updateAssignmentById(body,event.item.data.id).subscribe({
         next : (assignment : Task)=> {
-          event.item.data = assignment
+          event.item.data = assignment;
+          console.log(this.board.columns);
+          console.log(event.container);
+          console.log(event.previousContainer);
+          // this.getBoard();
         }
       });
+      
       transferArrayItem(event.previousContainer.data,
           event.container.data,
           event.previousIndex,
           event.currentIndex);
-
-    }
-    console.log(event.item.data);
+      }
+      console.log(event.item.data);
   }
 }
