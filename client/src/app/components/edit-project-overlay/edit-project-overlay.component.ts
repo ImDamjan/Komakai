@@ -276,7 +276,7 @@ export class EditProjectOverlayComponent {
 
   get filteredUsers(): any[] {
     return this.users.filter(user =>
-      (user.name + ' ' + user.lastname).toLowerCase().includes(this.searchQuery.toLowerCase())
+      (user.name + ' ' + user.lastname).toLowerCase().includes(this.searchQuery.toLowerCase()) && user.role.authority != 1
     );
   }
 
