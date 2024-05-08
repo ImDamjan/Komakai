@@ -1,9 +1,6 @@
 <div class="frame-4">
     <div class="title">
-      <h2>{{task.title}}</h2>
-      <div class = "priority">
-        <span [ngClass]="getPriorityClass()">{{task.priority.description}}</span>
-      </div>
+      <h2 [title]="task.title">{{task.dummyTitle}}</h2>
     </div>
 
     <div class ="time">
@@ -23,5 +20,8 @@
     </div>
     <div class="task-details">
       <p (click)="openShowTaskOverlay()">Details...</p>
+      <div class = "priority">
+        <span [ngClass]="getPriorityClass()">{{task.priority.description}}</span>
+      </div>
     </div>
   </div>

@@ -1,5 +1,10 @@
 export const navbarData = [
     {
+        routeLink: 'admin',
+        icon: '/assets/sidenavigation/admin.svg',
+        label: 'Admin'
+    },
+    {
         routeLink: 'dashboard',
         icon: '/assets/sidenavigation/dashboard.svg',
         label: 'Dashboard'
@@ -18,11 +23,6 @@ export const navbarData = [
         routeLink: 'activity',
         icon: '/assets/sidenavigation/activity.svg',
         label: 'Activity'
-    },
-    {
-        routeLink: 'admin',
-        icon: '/assets/sidenavigation/admin.svg',
-        label: 'Admin'
     },
     {
         routeLink: 'help',
