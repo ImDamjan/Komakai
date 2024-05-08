@@ -78,7 +78,7 @@
                                 <span *ngIf="selectedUser.id != loggedInUserId" class="remove-user" (click)="removeSelectedUser(selectedUser)">X</span>
                             </span>
                         </div>
-                        <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members">
+                        <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members" [readonly]="!showDropdown">
                         <div class="options" *ngIf="showDropdown">
                             <div class="member-option" *ngFor="let user of filteredUsers">
 

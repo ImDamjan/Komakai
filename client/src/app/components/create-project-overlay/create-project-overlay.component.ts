@@ -98,7 +98,10 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   toggleDropdown(): void {
-     this.showDropdown = !this.showDropdown;
+    this.showDropdown = !this.showDropdown;
+    if (!this.showDropdown) {
+      this.searchQuery = '';
+    }
   }
 
   onUserSelected(user: User, event: any): void {

@@ -107,6 +107,9 @@ export class EditProjectOverlayComponent {
 
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
+    if (!this.showDropdown) {
+      this.searchQuery = '';
+    }
   }
 
   onUserSelected(user: User, event: any): void {
