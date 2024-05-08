@@ -92,9 +92,9 @@ export class TasksComponent {
       tasks.forEach(task => {
         this.task_date_service.setDateParametersForTask(task);
       });
-      this.filteredTasks = collectedTasks;
+      this.filteredTasks = tasks;
     });
-  }
+  }}
 
   filterTasks(filter: TaskFilter){
 
@@ -103,8 +103,8 @@ export class TasksComponent {
     this.filter.pageNumber = this.currentPage;
     this.filter.pageSize = 7;
 
-    if(filter.project_id){
-      this.filter.project_id=filter.project_id;
+    if(filter.projects){
+      this.filter.projects=filter.projects;
     }
   }
 
@@ -133,8 +133,8 @@ export class TasksComponent {
     }
 
     this.taskService.getAllUserAssignments(id, this.filter).subscribe(tasks => {
-      this.tasks = tasks;
-      this.tasks.forEach(task => {
+      this.filteredTasks = tasks;
+      this.filteredTasks.forEach(task => {
         this.task_date_service.setDateParametersForTask(task);
       });
       this.filteredTasks = tasks.slice((this.currentPage - 1) * 7, this.currentPage * 7);
