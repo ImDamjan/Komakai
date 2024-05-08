@@ -18,23 +18,23 @@
     </div>
     <div class="startDate">
         <h4>Start Date</h4>
-        <p-calendar [showButtonBar]="true" [selectionMode]="'range'" placeholder="dd/mm/yyyy - dd/mm/yyyy" [(ngModel)]="StartRange" ></p-calendar>
+        <p-calendar [showButtonBar]="true" [selectionMode]="'range'" placeholder=" Start date" [(ngModel)]="StartRange" ></p-calendar>
     </div>
     <div class="endDate">
         <h4>End Date</h4>
-        <p-calendar [showButtonBar]="true" [selectionMode]="'range'" placeholder="dd/mm/yyyy - dd/mm/yyyy" [(ngModel)]="EndRange" ></p-calendar>
+        <p-calendar [showButtonBar]="true" [selectionMode]="'range'" placeholder=" End date" [(ngModel)]="EndRange" ></p-calendar>
     </div>
     <div class = 'percentage'>
         <h4>Percentage({{percentageValues[0]}}% - {{percentageValues[1]}}%)</h4>
         <p-slider [(ngModel)]="percentageValues" [step]="5" [range]="true"></p-slider>
     </div>
     <div class="sort">
-        <h2>Sorted By</h2>
+        <h4>Sorted By</h4>
         <p-dropdown
         [options]="sortList"
         [(ngModel)]="filter.propertyName"
         (ngModelChange)="sendFilter()"
-        /><br>
+        /><br><br>
         Ascending <input type="radio" name="sort-mode" [value]="1" (click)="sendSortFilter(1)">
         Descending <input type="radio" name="sort-mode" [value]="-1" cl (click)="sendSortFilter(-1)" checked>
     </div>
