@@ -144,7 +144,7 @@
 }
 
 .selected-option:hover {
-    background-color: #f0f0f0; /* Adjust hover background color as needed */
+    background-color: #f0f0f0;
 }
 
 .options {
@@ -184,12 +184,12 @@
     border: 1px solid #ccc;
     padding: 5px;
     width: 95%;
-    z-index: 1; /* Ensure the container stays on top */
+    z-index: 1;
 }
 
 .team-option:hover .team-members,
 .team-members:hover {
-    display: block; /* Ensure the container is always visible when hovering over the team name or the team members */
+    display: block;
 }
 
 .error-message {
@@ -199,4 +199,36 @@
     margin-left: 20px;
     margin-top: 10px;
     color: red;
+}
+
+.selected-users {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.selected-user {
+    display: flex;
+    align-items: center;
+    background-color: aliceblue;
+    border: solid 1px black;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 2px;
+}
+
+.selected-user p {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.remove-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
 }
