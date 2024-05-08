@@ -25,7 +25,10 @@
       }">{{project.state.name}}</span>
       <br><br>
       <p class="description" [title]="project.description">{{ project.truncatedDescription }}</p>
-      
+      <div class="project-details">
+        <!-- <p (click)="openShowProjectOverlay()">Details...</p> -->
+        <p>Details...</p>
+      </div>
       
       <div class="issue-section">
         <!-- Team members -->
@@ -47,10 +50,6 @@
         </div>
       </div>
       
-      <div class="project-details">
-        <!-- <p (click)="openShowProjectOverlay()">Details...</p> -->
-        <p>Details...</p>
-      </div>
     </section>
   </article>
 </div>
