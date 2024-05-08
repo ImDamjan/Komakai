@@ -37,7 +37,7 @@ namespace server.Controllers
             if(user==null)
                 return NotFound("User not found");
             comment = await _comment_repo.CreateCommentAsync(comment);
-            return Ok(comment.ToCommentDto());
+            return Ok(comment.ToCommentDto(user.toUserDto()));
         }
 
         [HttpGet("getCommentById/{comment_id}")]
@@ -47,7 +47,7 @@ namespace server.Controllers
             if(comment==null)
                 return NotFound("Comment not found.ID:" + comment_id);
             
-            return Ok(comment.ToCommentDto());
+            return Ok(comment.ToCommentDto(comment.User.toUserDto()));
         }
 
         [HttpPut("updateComment")]
@@ -57,13 +57,13 @@ namespace server.Controllers
             if(comment==null)
                 return NotFound("Comment not found.ID:" + dto.Id);
 
-            return Ok(comment.ToCommentDto());
+            return Ok(comment.ToCommentDto(comment.User.toUserDto()));
         }
         [HttpGet("getAllCommentsByAssignment/{asign_id}")]
         public async Task<IActionResult> GetAllByAssignmet([FromRoute] int asign_id)
         {
             var comments = await _comment_repo.GetAllCommentsByAssignmentIdAsync(asign_id);
-            var dtos = comments.Select(c=>c.ToCommentDto());
+            var dtos = comments.Select(c=>c.ToCommentDto(c.User.toUserDto()));
 
             return Ok(dtos);
         }
@@ -75,7 +75,7 @@ namespace server.Controllers
             if(comment==null)
                 return NotFound("Comment not found.ID:" + comment_id);
             
-            return Ok(comment.ToCommentDto());
+            return Ok("Comment deleted successfully");
         }
         
     }

@@ -21,9 +21,7 @@
   }
   .priority{
     margin-top: 4px;
-  }
-  .title{
-    display: flex;
+    cursor: default;
   }
   .time{
     width: 100%;
@@ -92,6 +90,7 @@
 
   .task-details{
     cursor: pointer;
+    display: flex;
   }
 
 

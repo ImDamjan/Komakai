@@ -73,25 +73,25 @@ export class FilterDetailsComponent {
       // console.log(this.projects)
     });
 
-    const storedFilter = this.filterDataService.getFilter();
-    if (storedFilter) {
+    // const storedFilter = this.filterDataService.getFilter();
+    // if (storedFilter) {
 
-      this.formGroup.patchValue({
-        startDateSelection: storedFilter.dateStartFlag,
-        endDateSelection: storedFilter.dateEndFlag,
-        startDate: storedFilter.start,
-        endDate: storedFilter.end
-      });
+    //   this.formGroup.patchValue({
+    //     startDateSelection: storedFilter.dateStartFlag,
+    //     endDateSelection: storedFilter.dateEndFlag,
+    //     startDate: storedFilter.start,
+    //     endDate: storedFilter.end
+    //   });
 
-      this.projectStatePriority.patchValue({
-        selectedProject: storedFilter.project_id,
-        selectedState: storedFilter.stateFilter,
-        selectedPriority: storedFilter.priorityFilter
-      })
+    //   this.projectStatePriority.patchValue({
+    //     selectedProject: storedFilter.project_id,
+    //     selectedState: storedFilter.stateFilter,
+    //     selectedPriority: storedFilter.priorityFilter
+    //   })
 
-      this.formGroup2.get('sliderSelection')?.setValue(storedFilter.percentageFlag);
-      this.formGroup2.get('sliderValue')?.setValue(storedFilter.percentageFilter);
-    }
+    //   this.formGroup2.get('sliderSelection')?.setValue(storedFilter.percentageFlag);
+    //   this.formGroup2.get('sliderValue')?.setValue(storedFilter.percentageFilter);
+    // }
 
   }
 
@@ -111,15 +111,15 @@ export class FilterDetailsComponent {
 
   confirmFilters(){
     
-    this.filter.project_id = this.projectStatePriority.get('selectedProject')?.value;
-    this.filter.stateFilter = this.projectStatePriority.get('selectedState')?.value;
-    this.filter.priorityFilter = this.projectStatePriority.get('selectedPriority')?.value;
-    this.filter.dateStartFlag = this.formGroup.get('startDateSelection')?.value;
-    this.filter.dateEndFlag = this.formGroup.get('endDateSelection')?.value;
-    this.filter.start = this.formGroup.get('startDate')?.value;
-    this.filter.end = this.formGroup.get('endDate')?.value;
-    this.filter.percentageFlag = this.formGroup2.get('sliderSelection')?.value;
-    this.filter.percentageFilter = this.formGroup2.get('sliderValue')?.value;
+    // this.filter.project_id = this.projectStatePriority.get('selectedProject')?.value;
+    // this.filter.stateFilter = this.projectStatePriority.get('selectedState')?.value;
+    // this.filter.priorityFilter = this.projectStatePriority.get('selectedPriority')?.value;
+    // this.filter.dateStartFlag = this.formGroup.get('startDateSelection')?.value;
+    // this.filter.dateEndFlag = this.formGroup.get('endDateSelection')?.value;
+    // this.filter.start = this.formGroup.get('startDate')?.value;
+    // this.filter.end = this.formGroup.get('endDate')?.value;
+    // this.filter.percentageFlag = this.formGroup2.get('sliderSelection')?.value;
+    // this.filter.percentageFilter = this.formGroup2.get('sliderValue')?.value;
 
     this.filterDataService.setFilter(this.filter);
     this.filterDialog.close(this.filter);

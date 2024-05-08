@@ -44,6 +44,7 @@
     "ng-apexcharts": "^1.10.0",
     "ngx-spinner": "^16.0.2",
     "ngx-tethys": "^17.0.6",
+    "primeng": "^17.16.0",
     "rxjs": "~7.8.0",
     "svelte-gantt": "^4.3.2",
     "tslib": "^2.3.0",

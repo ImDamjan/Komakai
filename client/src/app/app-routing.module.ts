@@ -14,6 +14,8 @@ import path from 'path';
 import { AdminComponent } from './pages/admin/admin.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { ProjectPreviewComponent } from './components/project-preview/project-preview.component';
+import { adminAuthorizationGuard } from './guards/admin-authorization.guard';
+import { pmAuthorizationGuard } from './guards/pm-authorization.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full'},
@@ -24,10 +26,10 @@ const routes: Routes = [
   {path: 'tasks', redirectTo: '/tasks/1', pathMatch: 'full'},
   {path: 'tasks/:pageNumber', component: TasksComponent,canActivate: [AuthGuard]},
   // {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
-  {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]},
+  {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
   
-  {path: 'projects/project-details/:projectId', component: ProjectDetailsComponent,canActivate: [AuthGuard]},
-  {path: 'admin', component: AdminComponent,canActivate: [AuthGuard]}
+  {path: 'projects/project-details/:projectId', component: ProjectDetailsComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
+  {path: 'admin', component: AdminComponent,canActivate: [AuthGuard,adminAuthorizationGuard]}
 ];
 
 @NgModule({

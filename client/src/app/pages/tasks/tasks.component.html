@@ -4,9 +4,13 @@
         <app-task-header #taskHeader [filter]="filter"></app-task-header>
     </div>
      <br><br>
-    <div *ngFor="let task of filteredTasks">
-        <app-project-task [task]="task"></app-project-task>
-    </div>
+     <app-task-filter #taskFilter [filter]="filter"></app-task-filter>
+     <div id="task-list">
+
+         <div *ngFor="let task of filteredTasks">
+             <app-project-task [task]="task"></app-project-task>
+         </div>
+     </div>
     <div id="paginator">
         <button (click)="previousPage()">Previous</button>
         <span> Page {{ currentPage }} </span>

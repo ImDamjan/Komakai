@@ -22,4 +22,13 @@ export class JwtDecoderService {
     const token = localStorage.getItem('token');
     return token ? token : null;
   }
+
+  public getLoggedUser() : any | null{
+    let token = this.getToken();
+    if(token)
+    {
+      return this.decodeToken(token);
+    }
+    return null;
+  }
 }

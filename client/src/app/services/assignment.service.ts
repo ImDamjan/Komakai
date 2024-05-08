@@ -41,11 +41,6 @@ export class AssignmentService {
     const url = this.baseUrl + `/Assignment/getByUser/${user_id}`;
 
     let httpParams = new HttpParams();
-    httpParams = httpParams.set('user_id', user_id.toString());
-
-    if(params.project_id){
-      httpParams = httpParams.set('project_id', params.project_id.toString());
-    }
     
     if (params.propertyName) {
       httpParams = httpParams.set('PropertyName', params.propertyName);
@@ -62,29 +57,47 @@ export class AssignmentService {
     if (params.searchTitle) {
       httpParams = httpParams.set('SearchTitle', params.searchTitle);
     }
-    if (params.dateStartFlag) {
-      httpParams = httpParams.set('DateStartFlag', params.dateStartFlag.toString());
+    if (params.startFrom) {
+      httpParams = httpParams.set('StartFrom', params.startFrom.toDateString());
     }
-    if (params.start) {
-      httpParams = httpParams.set('Start', params.start.toString());
+    if (params.startTo) {
+      httpParams = httpParams.set('StartTo', params.startTo.toDateString());
     }
-    if (params.dateEndFlag) {
-      httpParams = httpParams.set('DateEndFlag', params.dateEndFlag.toString());
+    if (params.endFrom) {
+      httpParams = httpParams.set('EndFrom', params.endFrom.toDateString());
     }
-    if (params.end) {
-      httpParams = httpParams.set('End', params.end.toString());
+    if (params.endTo) {
+      httpParams = httpParams.set('EndTo', params.endTo.toDateString());
     }
     if (params.stateFilter) {
-      httpParams = httpParams.set('StateFilter', params.stateFilter.toString());
+      params.stateFilter.forEach(element => {
+        if(!httpParams.has("StateFilter"))
+          httpParams = httpParams.set('StateFilter',element.toString());
+        else
+          httpParams = httpParams.append("StateFilter",element.toString());
+      });
     }
-    if (params.percentageFlag) {
-      httpParams = httpParams.set('PercentageFlag', params.percentageFlag.toString());
+    if (params.projects) {
+      params.projects.forEach(element => {
+        if(!httpParams.has("projects"))
+          httpParams = httpParams.set('projects',element.toString());
+        else
+          httpParams = httpParams.append("projects",element.toString());
+      });
     }
-    if (params.percentageFilter) {
-      httpParams = httpParams.set('PercentageFilter', params.percentageFilter.toString());
+    if (params.percentageFilterFrom) {
+      httpParams = httpParams.set('PercentageFilterFrom', params.percentageFilterFrom.toString());
+    }
+    if (params.percentageFilterTo) {
+      httpParams = httpParams.set('PercentageFilterTo', params.percentageFilterTo.toString());
     }
     if (params.priorityFilter) {
-      httpParams = httpParams.set('PriorityFilter', params.priorityFilter.toString());
+      params.priorityFilter.forEach(element => {
+        if(!httpParams.has("PriorityFilter"))
+          httpParams = httpParams.set('PriorityFilter', element.toString());
+        else
+          httpParams = httpParams.append("PriorityFilter",element.toString());
+      });
     }
 
     if(params.pageNumber){

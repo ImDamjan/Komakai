@@ -47,7 +47,7 @@ namespace server.Repositories
             return await FilterAssignments(assingments_query,filter,sort);
         }
 
-        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null, int project_id = 0)
+        public async Task<List<Assignment>> GetAllUserAssignmentsAsync(int userId, AssignmentFilterDto? filter = null,SortDto? sort = null, List<int>? projects = null)
         {
             var pom = _context.Assignments.Include
             (a=>a.Users)
@@ -56,9 +56,9 @@ namespace server.Repositories
             .Include(a=>a.Priority)
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged).AsQueryable();
 
-            if (project_id != 0)
+            if (projects != null && projects.Count > 0)
             {
-                pom = pom.Where(a => a.TaskGroup.ProjectId == project_id);
+                pom = pom.Where(a => projects.Contains(a.TaskGroup.ProjectId));
             }
             var query = pom.Where(t=>t.Users.Any(u=>u.Id==userId));
 
@@ -104,38 +104,29 @@ namespace server.Repositories
         {
             if(dto!=null)
             {
-                if(dto.StateFilter > 0 && dto.StateFilter < 7)
-                    assignments =assignments.Where(p=>p.StateId==dto.StateFilter);
-                if(dto.PriorityFilter > 0 && dto.PriorityFilter < 5)
-                    assignments =assignments.Where(p=>p.PriorityId==dto.PriorityFilter);
+                if(dto.StateFilter.Count > 0)
+                    assignments = assignments.Where(p=>dto.StateFilter.Contains(p.StateId));
+                if(dto.PriorityFilter.Count > 0)
+                    assignments = assignments.Where(p=>dto.PriorityFilter.Contains(p.PriorityId));
                 
                 if(dto.SearchTitle!=string.Empty)
-                    assignments =assignments.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower()));
+                    assignments = assignments.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower()));
                 //datumi
-                if(dto.Start!=null)
+                if(dto.StartFrom!=null && dto.StartTo!=null)
                 {
-                    if(dto.DateStartFlag==-1)
-                        assignments =assignments.Where(p=>p.Start < dto.Start);
-                    else if(dto.DateStartFlag==1)
-                        assignments =assignments.Where(p=>p.Start >= dto.Start);
+                    assignments = assignments.Where(p=>p.Start >=dto.StartFrom && p.Start <=dto.StartTo);
                 }
-                if(dto.End!=null)
+                if(dto.EndFrom!=null && dto.EndTo!=null)
                 {
                     if(dto.DateEndFlag==-1)
                         assignments =assignments.Where(p=>p.End < dto.End);
                     else if(dto.DateEndFlag==1)
                         assignments =assignments.Where(p=>p.End >= dto.End);
                 }
-                if(dto.PercentageFilter!=null)
+
+                if(dto.PercentageFilterTo >=0 && dto.PercentageFilterFrom <= dto.PercentageFilterTo)
                 {
-                    if(dto.PercentageFlag==-1)
-                        assignments =assignments.Where(p=>p.Percentage < dto.PercentageFilter);
-                    else if(dto.PercentageFlag==1)
-                        assignments =assignments.Where(p=>p.Percentage >= dto.PercentageFilter);
-                }
-                if (dto.PageNumber != 0 && dto.PageSize != 0)
-                {
-                    assignments = assignments.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
+                    assignments = assignments.Where(p=>p.Percentage <= dto.PercentageFilterTo && p.Percentage >=dto.PercentageFilterFrom);
                 }
             }
             if(sort!=null)
@@ -168,7 +159,7 @@ namespace server.Repositories
                     else
                         assignments = assignments.OrderByDescending(a=>a.Priority.Level);
                 }
-                else if(sort.PropertyName.ToLower()=="start")
+                else if(sort.PropertyName.ToLower()=="start date")
                 {
                     if(sort.SortFlag==1)
                     {
@@ -177,7 +168,7 @@ namespace server.Repositories
                     else
                         assignments = assignments.OrderByDescending(a=>a.Start);
                 }
-                else if(sort.PropertyName.ToLower()=="end")
+                else if(sort.PropertyName.ToLower()=="end date")
                 {
                     if(sort.SortFlag==1)
                     {
@@ -186,7 +177,7 @@ namespace server.Repositories
                     else
                         assignments = assignments.OrderByDescending(a=>a.End);
                 }
-                else if(sort.PropertyName.ToLower()=="percentage")
+                else if(sort.PropertyName.ToLower()=="progress")
                 {
                     if(sort.SortFlag==1)
                     {
@@ -195,6 +186,10 @@ namespace server.Repositories
                     else
                         assignments = assignments.OrderByDescending(a=>a.Percentage);
                 }
+                else if(sort.SortFlag==1)
+                   assignments =assignments.OrderBy(p=>p.LastTimeChanged);
+                else
+                   assignments =assignments.OrderByDescending(p=>p.LastTimeChanged);
             }
             return await assignments.ToListAsync();
         }

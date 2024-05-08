@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
-import { StateService } from '../../services/state.service';
 import { AssignmentService } from '../../services/assignment.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EditProjectOverlayComponent } from '../edit-project-overlay/edit-project-overlay.component';
@@ -10,6 +9,9 @@ import { Project } from '../../models/project/project';
 import { ProjectFilter } from '../../models/project/project-filter';
 import { ProjectsComponent } from '../../pages/projects/projects.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { User } from '../../models/user/user';
+import { UserService } from '../../services/user.service';
+import { ProjectFilterComponent } from '../project-filter/project-filter.component';
 
 @Component({
   selector: 'app-project-preview',
@@ -19,13 +21,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 export class ProjectPreviewComponent implements OnInit {
 
-  @Output() searchFilterChanged = new EventEmitter<ProjectFilter>();
-  @Output() searchSortChanged = new EventEmitter<ProjectFilter>();
+  // @Output() searchFilterChanged = new EventEmitter<ProjectFilter>();
+  // @Output() searchSortChanged = new EventEmitter<ProjectFilter>();
 
   @ViewChild('projectHeader', { static: false }) projectHeaderComponent: ProjectsComponent | undefined;
+  @ViewChild("filter_sort_project") projectFilters : ProjectFilterComponent | undefined;
 
   public filter: ProjectFilter = {
-
+    propertyName : "Last Updated",
+    sortFlag : -1
   };
 
   isClick = false;
@@ -39,12 +43,12 @@ export class ProjectPreviewComponent implements OnInit {
   
   data: any;
   projectsData: Project[] = [];
+  users: User[] = [];
+  profilePicturesLoaded = false;
 
-  // Properties for character limits
   titleCharacterLimit: number = 0;
   descriptionCharacterLimit: number = 0;
 
-  // Properties for pagination
   cards: any[] = [];
   currentPage: number = 1;
   cardsPerPage: number = 8;
@@ -53,13 +57,11 @@ export class ProjectPreviewComponent implements OnInit {
 
   assignmentCounts: { [projectId: number]: number } = {};
 
-  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private stateService: StateService, private assignmentService: AssignmentService, private dialog: MatDialog) {
-    // Initialize component
+  constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private assignmentService: AssignmentService, private dialog: MatDialog, private userService: UserService) {
     this.calculateCharacterLimit();
   }
 
   ngOnInit(): void {
-    // Detect changes in screen size for character limits
     this.spinner.show();
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     mediaQuery.addEventListener('change', () => {
@@ -68,7 +70,7 @@ export class ProjectPreviewComponent implements OnInit {
     });
     this.adjustCardsPerPage();
     window.addEventListener('resize', () => {
-      this.adjustCardsPerPage(); // Call adjustCardsPerPage whenever the screen size changes
+      this.adjustCardsPerPage();
     });
     this.loadProjects();
   }
@@ -77,12 +79,12 @@ export class ProjectPreviewComponent implements OnInit {
     this.projectHeaderComponent?.searchValueProjectChanged.subscribe(searchValue => {
       this.searchProjects(searchValue.searchText);
     });
-    this.projectHeaderComponent?.searchFilterProjectChanged.subscribe(filter => {
-      this.filterProjects(filter.filter);
+    this.projectFilters?.searchFilterProjectChanged.subscribe(response=>{
+      this.filterProjects(response.filter);
     });
-    this.projectHeaderComponent?.searchSortProjectChanged.subscribe(filter => {
-      this.sortProjects(filter.filter);
-    });
+    // this.projectHeaderComponent?.searchSortProjectChanged.subscribe(filter => {
+    //   this.sortProjects(filter.filter);
+    // });
   }
 
   searchProjects(searchText: string){
@@ -91,31 +93,37 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   filterProjects(filter: ProjectFilter){
-    if(filter.stateFilter){
-      this.filter.stateFilter=filter.stateFilter;
-    }
-    if(filter.priorityFilter){
-      this.filter.priorityFilter=filter.priorityFilter;
-    }
-    if(filter.dateStartFlag){
-      this.filter.dateStartFlag=filter.dateStartFlag;
-    }
-    if(filter.dateEndFlag){
-      this.filter.dateEndFlag=filter.dateEndFlag;
-    }
-    if(filter.start){
-      this.filter.start=filter.start;
-    }
-    if(filter.end){
-      this.filter.end=filter.end;
-    }
-    if(filter.percentageFlag){
-      this.filter.percentageFlag=filter.percentageFlag;
-    }
-    if(filter.percentageFilter){
-      this.filter.percentageFilter=filter.percentageFilter;
-    }
+    // if(filter.stateFilter){
+    //   this.filter.stateFilter=filter.stateFilter;
+    // }
+    // if(filter.priorityFilter){
+    //   this.filter.priorityFilter=filter.priorityFilter;
+    // }
+    // if(filter.startFrom){
+    //   this.filter.startFrom=filter.startFrom;
+    // }
+    // if(filter.startTo){
+    //   this.filter.startTo=filter.startTo;
+    // }
+    // if(filter.endFrom){
+    //   this.filter.endFrom=filter.endFrom;
+    // }
+    // if(filter.endTo){
+    //   this.filter.endTo=filter.endTo;
+    // }
+    // if(filter.percentageFilterFrom){
+    //   this.filter.percentageFilterFrom=filter.percentageFilterFrom;
+    // }
+    // if(filter.percentageFilterTo){
+    //   this.filter.percentageFilterTo=filter.percentageFilterTo;
+    // }
+    let text = "";
+    if(this.filter.searchTitle)
+      text = this.filter.searchTitle;
+    this.filter = filter;
+    this.filter.searchTitle = text;
 
+    // console.log(this.filter);
     this.loadProjects();
   }
 
@@ -135,6 +143,25 @@ export class ProjectPreviewComponent implements OnInit {
     this.projectService.getProjectsData(this.filter).subscribe(
       (projects: Project[]) => {
         this.projectsData = projects;
+        this.projectsData.forEach(project => {
+          this.users = project.users;
+          this.users.forEach(user => {
+            this.userService.profilePicture(user.id).subscribe({
+              next: (message: { profilePicture: string, type: string }) => {
+                if(message.profilePicture)
+                  user.profile_picture = `data:${message.type};base64,${message.profilePicture}`;
+                else
+                  user.profile_picture = "../../../assets/pictures/defaultpfp.svg";
+              }, 
+              error: (err) => {
+                console.error('Error retrieving profile picture:', err);
+              },
+              complete: () => {
+                this.profilePicturesLoaded = true;
+              }
+            });
+          });
+        });
         this.isLoading = false;
         this.spinner.hide();
         projects.forEach(project => {
@@ -292,8 +319,20 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   getTeamMemberImages(project: any): string[] {
-    const mockImages = ['/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg', '/assets/project-task/person.svg'];
-    return project && project.teamMemberImages ? mockImages.concat(project.teamMemberImages) : mockImages;
+    if (!project || !project.users) {
+      return [];
+    }
+
+    const teamMemberImages: string[] = [];
+    for (const user of project.users) {
+      if (user.profile_picture) {
+        teamMemberImages.push(user.profile_picture);
+      } else {
+        teamMemberImages.push("../../../assets/pictures/defaultpfp.svg");
+      }
+    }
+    
+    return teamMemberImages;
   }
 
   adjustCardsPerPage() {

@@ -7,6 +7,7 @@ import { Project } from '../models/project/project';
 import { JwtDecoderService } from './jwt-decoder.service';
 import { ProjectFilter } from '../models/project/project-filter';
 import { UpdateProject } from '../models/project/update-project';
+import { ProjectFilterLimit } from '../models/project/project-filter-limit';
 
 @Injectable({
   providedIn: 'root'
@@ -20,17 +21,30 @@ export class ProjectService implements OnInit{
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('jwtToken');
-    console.log(token);
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-      this.userId = decodedToken['nameidentifier'];
-      console.log(this.userId);
-    } else {
-      console.error('JWT token not found in local storage');
+    let token = this.jwtDecoder.getToken();
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      this.userId = decode.user_id;
     }
   }
+  getProjectFilterLimits() : Observable<ProjectFilterLimit>
+  {
+    const url = this.baseUrl + "/Project/getProjectLimits";
+    return this.http.get<ProjectFilterLimit>(url);
+  }
+  getUserFilterProjects(): Observable<Project[]>{
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+    }
+    const url = this.baseUrl + "/Project/getFilterProjectsByUser/"+id;
+    return this.http.get<Project[]>(url);
 
+  }
   getProjectsData(params: ProjectFilter = {}): Observable<Project[]> {
   
   //uzimanje id-a iz tokena
@@ -71,41 +85,51 @@ export class ProjectService implements OnInit{
     if (params.searchTitle) {
       httpParams = httpParams.set('SearchTitle', params.searchTitle);
     }
-    if (params.dateStartFlag) {
-      httpParams = httpParams.set('DateStartFlag', params.dateStartFlag.toString());
+    if (params.startFrom) {
+      httpParams = httpParams.set('StartFrom', params.startFrom.toDateString());
     }
-    if (params.start) {
-      httpParams = httpParams.set('Start', params.start.toString());
+    if (params.startTo) {
+      httpParams = httpParams.set('StartTo', params.startTo.toDateString());
     }
-    if (params.dateEndFlag) {
-      httpParams = httpParams.set('DateEndFlag', params.dateEndFlag.toString());
+    if (params.endFrom) {
+      httpParams = httpParams.set('EndFrom', params.endFrom.toDateString());
     }
-    if (params.end) {
-      httpParams = httpParams.set('End', params.end.toString());
+    if (params.endTo) {
+      httpParams = httpParams.set('EndTo', params.endTo.toDateString());
     }
     if (params.stateFilter) {
-      httpParams = httpParams.set('StateFilter', params.stateFilter.toString());
+      params.stateFilter.forEach(element => {
+        if(!httpParams.has("StateFilter"))
+          httpParams = httpParams.set('StateFilter',element.toString());
+        else
+          httpParams = httpParams.append("StateFilter",element.toString());
+      });
     }
-    if (params.percentageFlag) {
-      httpParams = httpParams.set('PercentageFlag', params.percentageFlag.toString());
+    if (params.percentageFilterFrom) {
+      httpParams = httpParams.set('PercentageFilterFrom', params.percentageFilterFrom.toString());
     }
-    if (params.percentageFilter) {
-      httpParams = httpParams.set('PercentageFilter', params.percentageFilter.toString());
+    if (params.percentageFilterTo) {
+      httpParams = httpParams.set('PercentageFilterTo', params.percentageFilterTo.toString());
     }
     if (params.priorityFilter) {
-      httpParams = httpParams.set('PriorityFilter', params.priorityFilter.toString());
+      params.priorityFilter.forEach(element => {
+        if(!httpParams.has("PriorityFilter"))
+          httpParams = httpParams.set('PriorityFilter', element.toString());
+        else
+          httpParams = httpParams.append("PriorityFilter",element.toString());
+      });
     }
-    if(params.budgetFilter){
-      httpParams = httpParams.set('BudgetFilter',params.budgetFilter.toString());
+    if(params.budgetFilterFrom){
+      httpParams = httpParams.set('BudgetFilterFrom',params.budgetFilterFrom.toString());
     }
-    if(params.budgetFlag){
-      httpParams = httpParams.set('BudgetFlag',params.budgetFlag.toString());
+    if(params.budgetFilterTo){
+      httpParams = httpParams.set('BudgetFilterTo',params.budgetFilterTo.toString());
     }
-    if(params.spentFilter){
-      httpParams = httpParams.set('SpentFilter',params.spentFilter.toString());
+    if(params.spentFilterFrom){
+      httpParams = httpParams.set('SpentFilterFrom',params.spentFilterFrom.toString());
     }
-    if(params.spentFlag){
-      httpParams = httpParams.set('SpentFlag',params.spentFlag.toString());
+    if(params.spentFilterTo){
+      httpParams = httpParams.set('SpentFilterTo',params.spentFilterTo.toString());
     }
 
     const apiUrl = `${this.baseUrl}/Project/userProjects/${id}`;

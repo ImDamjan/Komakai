@@ -49,6 +49,9 @@ namespace server.Models
         [Column("profile_picture", TypeName = "BLOB")]
         public byte[]? ProfilePicture { get; set; }
 
+        [Column("picture_type", TypeName = "varchar(45)")]
+        public string PictureType { get; set; } = string.Empty;
+
         [Column("role_id")]
         public int RoleId { get; set; }
 
