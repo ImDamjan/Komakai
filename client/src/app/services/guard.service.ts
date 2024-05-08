@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from './atentication.service';
 import { Location } from '@angular/common';
 import { PreviousUrlService } from './url.service';
+import { JwtDecoderService } from './jwt-decoder.service';
+import { InvalidTokenError } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ import { PreviousUrlService } from './url.service';
 export class AuthGuard{
 
   constructor(private authService: AuthenticationService, private router: Router, private location: Location) {}
-
+  private jwt_serv = inject(JwtDecoderService);
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | boolean | UrlTree {
@@ -22,7 +24,17 @@ export class AuthGuard{
       
       if (route.url[0].path === 'auth') {
         // console.log(this.location.path())
-        this.router.navigate(['/dashboard']);
+        let token = this.jwt_serv.getToken();
+        if(token!==null)
+        {
+          let decoded = this.jwt_serv.decodeToken(token);
+          if(decoded.role==="Admin")
+            this.router.navigate(['/admin']);
+          else if (decoded.role==="Project Manager")
+            this.router.navigate(['/dashboard']);
+          else
+            this.router.navigate(['/projects']);
+        }
         return false;
       }
       return true;

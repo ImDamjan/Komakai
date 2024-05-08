@@ -1,137 +1,174 @@
-<br><br>
 <div id = "task-details" class = "overlay-container">
-    <h1>Task Title</h1>
-    <h2 *ngIf="!showUpdate">{{assignment.title}}</h2><input type="text" class="task-title" *ngIf="showUpdate" [(ngModel)]="updateObj.title">
-    <button style="float: right;" (click)="updateTask()" *ngIf="!showUpdate">Update</button>
-    <br>
-    <div class = 'details'>
-        <div class = "row">
-            <p class="title">Priority</p>
-            <span *ngIf="!showUpdate">{{assignment.priority.description}}</span><span *ngIf="showUpdate"><select id="priority" [(ngModel)] = "updateObj.priorityId"><option *ngFor="let prio of priorities" [value]="prio.id">{{prio.description}}</option></select></span>
-        </div>
-        <div class = "row">
-            <p>Status</p>
-            <span *ngIf="!showUpdate">{{assignment.state.name}}</span><span *ngIf="showUpdate"><select id="state" [(ngModel)] = "updateObj.stateId"><option *ngFor="let state of states" [value]="state.id">{{state.name}}</option></select></span>
-        </div>
-        <div class = "row">
-            <p>Owner</p>
-            <span>{{assignment.owner.name + " "+ assignment.owner.lastname}}</span>
-        </div>
-        <div class = "row">
-            <p>Assignees</p>
-            <span *ngIf="!showUpdate" style = "padding: 0 20px; width: 100%;">                
-                <div *ngFor="let u of assignment.assignees">
-                    {{u.name + " "+u.lastname}},
+    <div class="header">
+        <h1 *ngIf="!showUpdate || !isManager">{{assignment.title}}</h1>
+        <input type="text" class="task-title" *ngIf="showUpdate && isManager" [(ngModel)]="updateObj.title">
+        <button class="update" (click)="updateTask()" *ngIf="!showUpdate && (isManager || isWorker)">Update</button>
+        <br>
+    </div>
+
+    <div class="tabela">
+        <table>
+            <tr>
+                <th>Priority</th>
+                <th>
+                    <span *ngIf="!showUpdate || !isManager">{{ assignment.priority.description }}</span>
+                    <span *ngIf="showUpdate && isManager">
+                        <p-dropdown [options]="priorities" [(ngModel)]="selectedPriority" optionLabel="description" placeholder="Choose priority"></p-dropdown>
+                    </span>
+                </th>
+                
+            <tr>
+                <th>Status</th>
+                <th>
+                    <span *ngIf="(!showUpdate || !isManager)">{{ assignment.state.name }}</span>
+                    <span *ngIf="showUpdate && isManager">
+                        <p-dropdown [options]="states" [(ngModel)]="selectedState" optionLabel="name" placeholder="Choose state"></p-dropdown>
+                    </span>
+                </th>
+                
+            </tr>
+            <tr>
+                <th>Owner</th>
+                <th><span>{{assignment.owner.name + " "+ assignment.owner.lastname}}</span></th>
+            </tr>
+            <tr>
+                <th>Assignees</th>
+                <th>
+                    <span *ngIf="!showUpdate || !isManager" style = "padding: 0 20px; width: 100%;">                
+                        <div *ngFor="let u of assignment.assignees">
+                            {{u.name + " "+u.lastname}}
+                        </div>
+                    </span>
+                    <span *ngIf="showUpdate && isManager" class = "chooseAssignees">
+                        <div class="custom-dropdown">
+                            <span class="selected-option" (click)="toggleDropdown()">Select Assignees</span>
+                            <div class="options" *ngIf="showDropdown">
+                                <div class="member-option" *ngFor="let user of projectUsers" (click)="toggleUserSelection(user.id, $event)">
+                                    <input type="checkbox" style="margin-left: 10px;" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
+                                    {{ user.name }} {{ user.lastname }}
+                                </div>
+                            </div>
+        
+                        </div>
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <th>Start Date</th>
+                <th>
+                    <span *ngIf="!showUpdate || !isManager">{{assignment.start.toDateString()}}</span>
+                    <span *ngIf="showUpdate && isManager"><p-calendar [(ngModel)] = "updateObj.start" placeholder="Start date"></p-calendar>
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <th>End Date</th>
+                <th>
+                    <span *ngIf="!showUpdate || !isManager">{{assignment.end.toDateString()}}</span>
+                    <span *ngIf="showUpdate && isManager">
+                        <p-calendar [(ngModel)] = "updateObj.end" placeholder="End date"></p-calendar>
+                    </span></th>
+            </tr>
+            <tr>
+                <th>Progress</th>
+                <th>
+                    <span *ngIf="!showUpdate"><ngb-progressbar class="mb-3" type="info" [value]="assignment.percentage" [striped]="true" [animated]="true" height="20px"><i>{{assignment.percentage}}%</i></ngb-progressbar></span>
+                    <span *ngIf="showUpdate && !isUser">
+                        <div class="slidecontainer">
+                            <p-slider [(ngModel)]="updateObj.percentage" [min]="0" [step]="5" [max]="100"></p-slider>
+                            {{ updateObj.percentage }}%
+                        </div>
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <th><span *ngIf="!showUpdate || !isManager">{{assignment.type}}</span><span><input type="text" class="task-title" *ngIf="showUpdate && isManager" [(ngModel)]="updateObj.type"></span></th>
+            </tr>
+        </table>
+    </div>
+
+    <hr style="border: 3px;">
+
+    <table>
+        <tr>
+            <th>Dependencies</th>
+            <th><p *ngIf="hasDependent && !showUpdate || !isManager">There are no dependecies for this task !</p>
+                <div *ngIf="!hasDependent && !showUpdate || !isManager">
+                    <div class = "dependecy" *ngFor="let dependent of dependentTasks">
+                        {{dependent.title}}
+                    </div>
                 </div>
-            </span>
-            <span *ngIf="showUpdate" class = "chooseAssignees">
-                <div class="custom-dropdown">
-                    <span class="selected-option" (click)="toggleDropdown()">Select Assignees</span>
-                    <div class="options" *ngIf="showDropdown">
-                        <div class="member-option" *ngFor="let user of projectUsers" (click)="toggleUserSelection(user.id, $event)">
-                            <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
-                            {{ user.name }} {{ user.lastname }}
+                <div *ngIf="showUpdate && isManager" class="custom-dropdown">
+                    <span class="selected-option" (click)="toggleDropdownTask()">Select DependentTasks</span>
+                    <div class="options" *ngIf="showDropdownTask">
+                        <div class="member-option" *ngFor="let asign of projectAssignments" (click)="toggleTaskSelection(asign.id, $event)">
+                            <input type="checkbox" [checked]="isSelectedTask(asign.id)" (click)="toggleTaskSelection(asign.id, $event)">
+                            {{ asign.title }}
                         </div>
                     </div>
-
                 </div>
-            </span>
-        </div>
-        <div class = "row">
-            <p>Start Date</p>
-            <span *ngIf="!showUpdate">{{assignment.start.toLocaleString().split(',')[0]}}</span><span *ngIf="showUpdate"><input type="date" value="{{currentStartDate}}" [(ngModel)] = "currentStartDate"></span>
-        </div>
-        <div class = "row">
-            <p>Due Date</p>
-            <span *ngIf="!showUpdate">{{assignment.end.toLocaleString().split(',')[0]}}</span><span *ngIf="showUpdate"><input type="date" value="{{currentDueDate}}" [(ngModel)] = "currentDueDate"></span>
-        </div>
-        <div class = "row">
-            <p>Progress</p>
-            <span *ngIf="!showUpdate">{{assignment.percentage}}%</span> 
-            <span *ngIf="showUpdate">
-                <div class="slidecontainer">
-                    <input type="range" min="0" max="100" class="slider" id="myRange" [(ngModel)]="updateObj.percentage">{{updateObj.percentage}}%
-                </div>
-            </span>
-        </div>
-        <div class = "row">
-            <p>Type</p>
-            <span *ngIf="!showUpdate">{{assignment.type}}</span><span><input type="text" class="task-title" *ngIf="showUpdate" [(ngModel)]="updateObj.type"></span>
-        </div>
-    </div>
-    <hr>
-    <h2>Dependencies</h2>
-    <div class="dependecies">
-        <p *ngIf="hasDependent && !showUpdate">There are no dependecies for this task !</p>
-        <div *ngIf="!hasDependent && !showUpdate">
-            <div class = "dependecy" *ngFor="let dependent of dependentTasks">
-                {{dependent.title}}
-            </div>
-        </div>
-        <div *ngIf="showUpdate" class="custom-dropdown">
-            <span class="selected-option" (click)="toggleDropdownTask()">Select DependentTasks</span>
-            <div class="options" *ngIf="showDropdownTask">
-                <div class="member-option" *ngFor="let asign of projectAssignments" (click)="toggleTaskSelection(asign.id, $event)">
-                    <input type="checkbox" [checked]="isSelectedTask(asign.id)" (click)="toggleTaskSelection(asign.id, $event)">
-                    {{ asign.title }}
-                </div>
-            </div>
-
-        </div>
-        
-    </div>
-    <hr>
-    <h2>Description</h2>
-    <div *ngIf="!showUpdate" class = "description">
-        {{assignment.description}}
-    </div>
-    <div *ngIf="showUpdate" class = "description">
-        <textarea cols="30" rows="10" class="description-content" [(ngModel)]="updateObj.description">
-
-        </textarea>
-    </div>
-    <br>
-    <button *ngIf="showUpdate" (click)="createUpdateRequest()">Update</button>
-    <button *ngIf="showUpdate" (click)="cancelUpdateRequest()" style="background-color: crimson;">Cancel</button>
-    <hr>
+                </th>
+          </tr>
+    </table>
     
-    <div id = 'comments'>
-        <div class="comment" *ngFor="let comment of comments">
-            <img id="pfp" [src]="picture" alt="slika_korinsika">
-            <div class = 'comment-box'>
-                <!-- <div class = comment-meni>
-                    <select name="" id=""></select>
-                    <p>B</p>
-                    <p>I</p>
-                    <p>...</p>
-                    <p>_</p>
-                    <p>ikona</p>
-                    <p>ikona2</p>
-                </div> -->
-                <p>{{comment.content}}</p>
-                <p>{{comment.editedTime.toLocaleString().split(',')[0]}}</p>
-            </div>
-        </div>
-        <!-- ovo je komentar koji treba da se doda -->
-        <div class="comment" id="add-comment">
-            <ng-container *ngIf="!pictureLoading">
-                <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture">
-              </ng-container>
-            <div class = 'comment-box'>
-                <!-- <div class = comment-meni>
-                    <select name="" id=""></select>
-                    <p>B</p>
-                    <p>I</p>
-                    <p>...</p>
-                    <p>_</p>
-                    <p>ikona</p>
-                    <p>ikona2</p>
-                </div> -->
-                <textarea class="textarea" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText">
+    <hr style="border: 3px;">
 
-                </textarea><br>
-                <button id = 'comment-button' (click)="createComment()">Comment</button>
-            </div>
+    <table>
+        <tr>
+            <th>Description</th>
+            <th><div *ngIf="!showUpdate || !isManager" class = "description">
+                    {{assignment.description}}
+                </div>
+                <div *ngIf="showUpdate && isManager" class = "description">
+                    <textarea cols="30" rows="10" class="description-content" [(ngModel)]="updateObj.description">
+            
+                    </textarea>
+                </div>
+            </th>
+          </tr>
+    </table>
+
+    <br><br>
+    <button *ngIf="showUpdate && !isUser" (click)="createUpdateRequest()">Update</button>
+    <button *ngIf="showUpdate && !isUser" (click)="cancelUpdateRequest()" style="background-color: crimson; margin-left: 15px;">Cancel</button>
+
+    <hr style="border: 3px;">
+
+    <div class="comment" *ngFor="let comment of comments">
+        <div class = 'comment-box'>
+            <!-- <div class = comment-meni>
+                <select name="" id=""></select>
+                <p>B</p>
+                <p>I</p>
+                <p>...</p>
+                <p>_</p>
+                <p>ikona</p>
+                <p>ikona2</p>
+            </div> -->
+            <p style="color: gray;"> <img id="pfp" [src]="picture" alt="slika_korinsika"> {{comment.user.name}} {{comment.user.lastname}} &commat;{{comment.user.username}}</p>
+            <p style="width: 100%; border: 1px solid; padding: 10px; color: black;">{{comment.content}}</p>
+            <p style="color: gray;">{{ comment.editedTime.toLocaleString().split(',')[0] }}     {{ comment.editedTime.toLocaleString().split(',')[1] }}</p>
+        </div>
+    </div>
+
+    <div class="comment" id="add-comment">
+        <ng-container *ngIf="!pictureLoading">
+            <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture"> Leave your comment
+          </ng-container>
+        <div *ngIf="isManager || isUser || isWorker" class = 'comment-box'>
+            <!-- <div class = comment-meni>
+                <select name="" id=""></select>
+                <p>B</p>
+                <p>I</p>
+                <p>...</p>
+                <p>_</p>
+                <p>ikona</p>
+                <p>ikona2</p>
+            </div> -->
+            <textarea class="textarea" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText">
+            </textarea><br>
+            <button id = 'comment-button' (click)="createComment()">Comment</button>
         </div>
     </div>
 

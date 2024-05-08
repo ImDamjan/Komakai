@@ -159,12 +159,12 @@ namespace server.Controllers
 
         [HttpGet]
         [Route("getByUser/{user_id}")]
-        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] int project_id, [FromQuery] SortDto sort, [FromQuery] AssignmentFilterDto filter)
+        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] List<int> projects, [FromQuery] SortDto sort, [FromQuery] AssignmentFilterDto filter)
         {
             var user = await _user_repo.GetUserByIdAsync(user_id);
             if (user == null)
                 return NotFound("User " + user_id + " does not exist");
-            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter, sort, project_id);
+            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter, sort, projects);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)

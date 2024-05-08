@@ -3,18 +3,20 @@
 // searchTitle property  je case insensitive.
 export interface TaskFilter {
     user_id? : number,
-    project_id? : number,
-    propertyName? : string,// title,start,end,..(za detalje vidi Repostories/AssignmentRepository.cs 94 linija funkcija)
-    sortFlag? : number,// 1 = asc , -1 = desc
+    projects? : number[],
     pageNumber? : number,
     pageSize? : number,
+    //ovaj deo ti je za sortiranje
+    propertyName? : string,// title,start,end,..(za detalje vidi Repostories/ProjectRepository.cs 174 linija funkcija)
+    sortFlag? : number, // 1 = asc , -1 = desc
+    //ovo sve drugo su filteri
     searchTitle? : string,
-    dateStartFlag? : number,
-    start? : Date,
-    dateEndFlag? : number,
-    end? : Date,
-    stateFilter? : number,
-    percentageFlag? : number,
-    percentageFilter? : number,
-    priorityFilter? : number
+    startFrom? : Date,
+    startTo? : Date,
+    endFrom? : Date,
+    endTo? : Date,
+    priorityFilter? : number[],
+    stateFilter? : number[],
+    percentageFilterFrom? : number,
+    percentageFilterTo? : number
 }

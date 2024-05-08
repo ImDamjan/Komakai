@@ -67,31 +67,31 @@ export class ProjectsComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       if(result){
 
-        if(result.stateFilter){
-          this.filter.stateFilter=result.stateFilter;
-        }
-        if(result.priorityFilter){
-          this.filter.priorityFilter=result.priorityFilter;
-        }
-        if(result.dateStartFlag){
-          this.filter.dateStartFlag=result.dateStartFlag;
-        }
-        if(result.dateEndFlag){
-          this.filter.dateEndFlag=result.dateEndFlag;
-        }
-        if(result.start){
-          this.filter.start=result.start;
-        }
-        if(result.end){
-          this.filter.end=result.end;
-        }
-        if(result.percentageFlag){
-          this.filter.percentageFlag=result.percentageFlag;
-        }
-        if(result.percentageFilter){
-          this.filter.percentageFilter=result.percentageFilter;
-        }
-        this.searchFilterProjectChanged.emit({filter: this.filter})
+      //   if(result.stateFilter){
+      //     this.filter.stateFilter=result.stateFilter;
+      //   }
+      //   if(result.priorityFilter){
+      //     this.filter.priorityFilter=result.priorityFilter;
+      //   }
+      //   if(result.dateStartFlag){
+      //     this.filter.dateStartFlag=result.dateStartFlag;
+      //   }
+      //   if(result.dateEndFlag){
+      //     this.filter.dateEndFlag=result.dateEndFlag;
+      //   }
+      //   if(result.start){
+      //     this.filter.start=result.start;
+      //   }
+      //   if(result.end){
+      //     this.filter.end=result.end;
+      //   }
+      //   if(result.percentageFlag){
+      //     this.filter.percentageFlag=result.percentageFlag;
+      //   }
+      //   if(result.percentageFilter){
+      //     this.filter.percentageFilter=result.percentageFilter;
+      //   }
+      //   this.searchFilterProjectChanged.emit({filter: this.filter})
       }
     });
   }

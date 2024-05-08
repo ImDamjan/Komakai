@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { StateService } from '../../services/state.service';
@@ -16,6 +16,7 @@ import { UpdateTask } from '../../models/task/update-task';
 import { error } from 'console';
 import { DateConverterService } from '../../services/date-converter.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+
 
 @Component({
   selector: 'app-task-details',
@@ -77,8 +78,14 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     description: '',
     priorityId: 0
   }
-  
 
+  public isManager:boolean = false;
+  public isUser : boolean = false;
+  public isWorker : boolean = false;
+  public fromKanban : boolean = false;
+  public selectedPriority!:Priority;
+  public selectedState! :State;
+  
 
   constructor() {
 
@@ -89,7 +96,19 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   ngOnInit(): void {
     this.spinner.show();
     this.assignment = this.data[0];
+    if(this.data[1]===1)
+      this.fromKanban = true;
     console.log(this.assignment);
+    let user = this.jwt_service.getLoggedUser();
+    if(user!==null)
+    {
+      if(user.role==="Project Manager")
+        this.isManager = true;
+      else if(user.role==="User")
+        this.isUser = true;
+      else if(user.role==="Project Worker")
+        this.isWorker = true;
+    }
 
     this.profilePicture(this.assignment.owner.id);
 
@@ -109,6 +128,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         comments.forEach(comment => {
           comment.editedTime = new Date(comment.editedTime);
           comment.postTime = new Date(comment.postTime);
+          console.log(comments);
         });
       }
     });
@@ -117,11 +137,13 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   }
   updateTask()
   {
+    this.selectedAssignees = [];
+    this.selectedDependentOn = [];
     this.updateObj.percentage = this.assignment.percentage;
     this.updateObj.type = this.assignment.type;
     this.updateObj.description = this.assignment.description;
-    this.updateObj.priorityId = this.assignment.priority.id;
-    this.updateObj.stateId = this.assignment.state.id;
+    this.selectedPriority = this.assignment.priority;
+    this.selectedState = this.assignment.state;
     this.updateObj.start = this.assignment.start;
     this.updateObj.end = this.assignment.end;
     this.updateObj.title = this.assignment.title;
@@ -178,15 +200,14 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   createUpdateRequest()
   {
     this.spinner.show();
-    this.updateObj.end = new Date(this.currentDueDate);
-    this.updateObj.start = new Date(this.currentStartDate);
     this.updateObj.dependentOn = this.selectedDependentOn;
     this.updateObj.userIds = this.selectedAssignees;
-    
+    this.updateObj.priorityId = this.selectedPriority.id;
+    this.updateObj.stateId = this.selectedState.id;
     
     let todayTime = new Date();
-    this.updateObj.end = new Date(this.updateObj.end);
-    this.updateObj.start = new Date(this.updateObj.start);
+    this.updateObj.end = new Date(this.updateObj.end.toDateString());
+    this.updateObj.start = new Date(this.updateObj.start.toDateString());
     //provera da li je end pre starta
     console.log(this.updateObj.end);
     console.log(this.updateObj.start);
@@ -200,15 +221,15 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.updateObj.end.setHours(12,12,12,12);
 
     //prvera da li je start date pre danasnjeg
-    if(this.updateObj.end < todayTime)
-    {
-      alert("End date comes before today.");
-      this.spinner.hide();
-      return;
+    // if(this.updateObj.end < todayTime)
+    // {
+    //   alert("End date comes before today.");
+    //   this.spinner.hide();
+    //   return;
 
-    }
-    console.log(todayTime);
-    console.log(this.updateObj.end);
+    // }
+    // console.log(todayTime);
+    // console.log(this.updateObj.end);
     if(this.selectedAssignees.length > 0)
     {
       this.assignment_service.updateAssignmentById(this.updateObj,this.assignment.id).subscribe
@@ -216,8 +237,19 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         next : (updatedTask :Task) =>
           {
             this.assignment = updatedTask;
+            this.assignment.dummyTitle = this.assignment.title;
+            if(this.assignment.title.length > 20)
+            {
+              let new_title = "";
+              for (let i = 0; i < 20; i++) {
+                const element = this.assignment.title[i];
+                new_title+=element;
+              }
+              new_title+="...";
+              this.assignment.dummyTitle = new_title;
+            }
             this.date_task_service.setDateParametersForTask(this.assignment);
-            confirm("Task successfully updated!");
+            // confirm("Task successfully updated!");
             this.showUpdate = false;
             this.closeOverlay();
             this.spinner.hide();
@@ -231,7 +263,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     }
     else
     {
-      alert("there must be at least one perosn that is assigned to this task");
+      alert("There must be at least one person that is assigned to this task");
     }
   }
 
@@ -253,6 +285,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
             comm.editedTime = new Date(comm.editedTime);
             comm.postTime = new Date(comm.postTime);
             this.comments.push(comm);
+            this.commentText = "";
           }
         });
       }

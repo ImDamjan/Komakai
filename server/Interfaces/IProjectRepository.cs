@@ -26,5 +26,6 @@ namespace server.Interfaces
         Task<List<Project>> GetAllUserProjectsAsync(int id,ProjectFilterDto? filter=null,SortDto? sort = null);
         //brisanje
         Task<Project?> DeleteProjectByIdAsync(int project_id);
+        Task<List<Project>> getFilterProjectsAsync(int user_id);
     }
 }

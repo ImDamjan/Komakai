@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { Task } from '../../models/task/task';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
@@ -15,7 +15,7 @@ export class TaskCardKanbanComponent implements OnInit {
     this.task.end = new Date(this.task.end);
     this.task.start = new Date(this.task.start);
   }
-
+  @Output() newItemEvent = new EventEmitter<{previous_state : number, task: Task}>();
   public hoverDateFormat()
   {
     return "Date Format: yyyy-mm-dd"
@@ -35,6 +35,13 @@ export class TaskCardKanbanComponent implements OnInit {
 
 
   }
+  public getUpdateEmitter(task:Task)
+  {
+    if(this.task.id===task.id)
+    {
+      this.task = task;
+    }
+  }
 
   public transformDate(date : Date) : string
   {
@@ -50,11 +57,13 @@ export class TaskCardKanbanComponent implements OnInit {
   }
 
   openShowTaskOverlay(): void {
+    console.log(this.task);
     const dialogRef = this.dialog.open(TaskDetailsComponent, {
       data:[this.task]
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.newItemEvent.emit({previous_state : this.task.state.id,task:result});
       this.task = result;
     });
   }
