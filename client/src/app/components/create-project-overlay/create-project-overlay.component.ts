@@ -278,4 +278,9 @@ export class CreateProjectOverlayComponent implements OnInit {
           team.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
   }
+
+  removeSelectedUser(user: User): void {
+    this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== user.id);
+    this.selectedUserRolesMap.delete(user.id);
+  } 
 }

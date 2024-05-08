@@ -75,7 +75,7 @@
                         <div class="selected-users">
                             <div *ngFor="let selectedUser of selectedUsers" class="selected-user">
                                 {{ selectedUser.name }} {{ selectedUser.lastname }}
-                                <button class="remove-user">x</button>
+                                <button *ngIf="selectedUser.id != loggedInUserId" class="remove-user" (click)="removeSelectedUser(selectedUser)">x</button>
                             </div>
                         </div>
                         <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members">
