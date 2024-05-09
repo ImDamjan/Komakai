@@ -222,5 +222,49 @@ namespace server.Repositories
             return asignment.DependentOnAssignments.ToList();
             
         }
+
+        public async Task<Assignment> UpdateGanttAssignmentAsync(Assignment assignment, UpdateGanttAssignmentDto dto)
+        {
+            if(dto.AddDependentOn.Count > 0)
+            {
+                foreach (var taskId in dto.AddDependentOn)
+                {
+                    var task = await GetAssignmentByidAsync(taskId);
+                    if(task!=null && assignment.DependentOnAssignments.FirstOrDefault(t=>t.Id==task.Id)==null)
+                        assignment.DependentOnAssignments.Add(task);
+                }
+            }
+            if(dto.RemoveDependentOn.Count > 0)
+            {
+                foreach (var taskId in dto.RemoveDependentOn)
+                {
+                    var task = await GetAssignmentByidAsync(taskId);
+                    if(task!=null)
+                        assignment.DependentOnAssignments.Remove(task);
+                }
+            }
+            if(dto.EndTs!=0)
+            {
+                assignment.End = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(dto.EndTs).ToLocalTime();
+            }
+            if(dto.StartTs!=0)
+            {
+                assignment.Start = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(dto.StartTs).ToLocalTime();
+            }
+            if(dto.Type!="")
+                assignment.Type = dto.Type;
+            if(dto.Percentage >= 0)
+                assignment.Percentage = dto.Percentage;
+            if(dto.Description!="")
+                assignment.Description = dto.Description;
+            if(dto.PriorityId > 0)
+                assignment.PriorityId = dto.PriorityId;
+            if(dto.StateId > 0)
+                assignment.StateId = dto.StateId;
+            await _context.SaveChangesAsync();
+            
+
+            return assignment;
+        }
     }
 }
