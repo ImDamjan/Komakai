@@ -4,7 +4,9 @@
     height: 100vh;
     padding-top: 120px;
     z-index: -150;
+    width: calc(100vw - 80px);
   }
+
   .board {
     display: flex;
     flex-direction: column;
