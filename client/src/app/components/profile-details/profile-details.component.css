@@ -45,11 +45,12 @@
 }
 
 #pfp {
-    width: 30%;
-    height: 30%;
+    width: 90px;
+    height: 90px;
     border: 1px solid black;
     background-color: #001B47;
-    border-radius: 70px;
+    border-radius: 100px;
+    object-fit: cover;
 }
 
 .editdetails {

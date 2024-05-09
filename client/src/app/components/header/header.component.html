@@ -7,7 +7,7 @@
         
     </div>
     <div class="picture" (click)="toggleMenu()">
-        <img class="pfp" src="../../../assets/pictures/defaultpfp.svg" />
+        <img class="pfp" [src]="picture" />
         <div class="menu" *ngIf="isMenuVisible">
             <p id="pfdetails"  (click)="openProfileOverlay(user.id,$event)"><img class="icon" src="../../../assets/profile-settings/pfsettings.svg"  (click)="openProfileOverlay(user.id,$event)"> Profile Details</p>
             <app-logout></app-logout>

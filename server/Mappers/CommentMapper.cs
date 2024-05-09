@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using MimeKit.Text;
 using server.DTOs.Comment;
+using server.DTOs.Users;
 using server.Models;
 
 namespace server.Mappers
 {
     public static class CommentMapper
     {
-        public static CommentDto ToCommentDto(this Comment comment)
+        public static CommentDto ToCommentDto(this Comment comment, UserDto dto)
         {
             return new CommentDto{
                 Id = comment.Id,
@@ -18,7 +19,8 @@ namespace server.Mappers
                 UserId = comment.UserId,
                 AssignmentId = comment.AssignmentId,
                 EditedTime = comment.EditedTime,
-                PostTime = comment.PostTime
+                PostTime = comment.PostTime,
+                User = dto
             };
         }
         public static Comment fromCreateToComment(this CreateCommentDto dto)

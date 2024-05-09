@@ -1,15 +1,20 @@
-import { Component, Input, inject} from '@angular/core';
+import { Component, Input, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Task } from '../../models/task/task';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
+import { UserService } from '../../services/user.service';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-project-task',
   templateUrl: './project-task.component.html',
   styleUrl: './project-task.component.css',
 })
-export class ProjectTaskComponent {
+export class ProjectTaskComponent implements OnInit{
+  
+  private userService = inject(UserService);
+  private cdr = inject(ChangeDetectorRef);
   @Input() task!: Task;
   private router = inject(Router);
   private dialog = inject(MatDialog);
@@ -18,6 +23,18 @@ export class ProjectTaskComponent {
   initialX: number | undefined;
   initialY: number | undefined;
   threshold = 1;
+  picture!: string;
+
+  ngOnInit(): void {
+
+    this.userService.picture$.subscribe(picture => {
+       this.picture = picture;
+       if(this.picture == '')
+        this.profilePicture(this.task.owner.id);
+
+       this.cdr.detectChanges();
+    });
+  }
 
   getPriorityClass(priority: string): string {
     switch (priority) {
@@ -180,4 +197,17 @@ export class ProjectTaskComponent {
     
   }
 
+
+  profilePicture(userId: number) {
+    this.userService.profilePicture(userId).subscribe({
+      next: (message: { profilePicture: string, type: string }) => {
+        if(message.profilePicture)
+          this.picture = `data:${message.type};base64,${message.profilePicture}`;
+        else 
+          this.picture = "../../../assets/pictures/defaultpfp.svg";
+      }, error: (err) => {
+        console.error('Error retrieving profile picture:', err);
+      }
+    });
+  }
 }

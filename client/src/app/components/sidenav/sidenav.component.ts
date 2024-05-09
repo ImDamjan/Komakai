@@ -1,7 +1,9 @@
-import { Component, Output, EventEmitter, OnInit, HostListener } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, HostListener, inject } from '@angular/core';
 import { navbarData } from './nav-data';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { faSlack, faUncharted } from '@fortawesome/free-brands-svg-icons';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { jwtDecode } from 'jwt-decode';
 
 
 interface SideNavToggle {
@@ -60,9 +62,32 @@ export class SidenavComponent implements OnInit {
       this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
     }
   }
-
+  private jwt_decode = inject(JwtDecoderService);
+  
   ngOnInit(): void {
     // this.screenWidth = window.innerWidth;
+    this.navData = [];
+    let user = this.jwt_decode.getLoggedUser();
+    if(user!==null)
+    {
+      let nav = navbarData;
+      if(user.role==="Project Manager")
+      {
+        for (let i = 1; i < nav.length; i++) {
+          const element = nav[i];
+          this.navData.push(element);
+          
+        }
+      }
+      else if(user.role==="Admin")
+      {
+        this.navData = [nav[0]];
+      }
+      else
+        this.navData = [nav[2],nav[3],nav[4],nav[5]];
+
+        console.log(this.navData);
+    }
   }
 
   toggleCollapse(): void{

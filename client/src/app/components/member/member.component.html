@@ -1,8 +1,8 @@
-<table id="wrapper">
+<table id="wrapper" *ngIf="profilePicturesLoaded">
     <thead>
         <tr *ngFor="let user of users">
             <td id="profile-picture">
-                <!-- <img src=""  class="slika"> -->
+               <img id="pfp" [src]="user.profile_picture">
             </td>
             <td id="username">{{user.name + " " + user.lastname}}</td>
             <td id="dropdown" class = "drop">

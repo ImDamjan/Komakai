@@ -38,7 +38,13 @@ export class LoginComponent{
       next:(response)=>{
         this.spinner.hide();
         this.authService.setToken(response);
-        this.router.navigate(['/dashboard']);
+        let decoded = this.jwtDecoderService.decodeToken(response);
+        if(decoded.role==="Admin")
+          this.router.navigate(['/admin']);
+        else if (decoded.role==="Project Manager")
+          this.router.navigate(['/dashboard']);
+        else
+          this.router.navigate(['/projects']);
       },
       error:(error)=>{
         this.spinner.hide();

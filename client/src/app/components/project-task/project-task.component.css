@@ -239,3 +239,12 @@
 .cancelled{
   background-color: #C10A0A;
 }
+
+#pfp {
+  height: 50px;
+  width: 50px;
+  border-radius: 100px;
+  object-fit: cover;
+  border: 1px solid black;
+  background-color: #001B47;
+}

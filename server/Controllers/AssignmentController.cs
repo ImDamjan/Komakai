@@ -159,12 +159,12 @@ namespace server.Controllers
 
         [HttpGet]
         [Route("getByUser/{user_id}")]
-        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] int project_id, [FromQuery] SortDto sort, [FromQuery] AssignmentFilterDto filter)
+        public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] List<int> projects, [FromQuery] SortDto sort, [FromQuery] AssignmentFilterDto filter)
         {
             var user = await _user_repo.GetUserByIdAsync(user_id);
             if (user == null)
                 return NotFound("User " + user_id + " does not exist");
-            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter, sort, project_id);
+            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter, sort, projects);
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)
@@ -196,6 +196,42 @@ namespace server.Controllers
             
 
             return Ok(task.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
+        }
+
+        [HttpPut("updateAssigmentGantt/{asign_id}")]
+        public async Task<IActionResult> updateAssignmentGantt([FromRoute] int asign_id,[FromBody] UpdateGanttAssignmentDto dto)
+        {
+            var task = await _asign_repo.GetAssignmentByidAsync(asign_id);
+            if(task==null)
+                return NotFound("Assignment not found");
+
+
+            if(dto.EndTs !=0 && dto.StartTs!=0 && dto.StartTs > dto.EndTs)
+            {
+               return BadRequest("Start date comes after end date");
+            }
+            var baseDate = new DateTime (1970, 01, 01);
+            var EndTs = task.End.Subtract (baseDate).TotalSeconds;
+            var StartTs = task.Start.Subtract (baseDate).TotalSeconds;
+            if(dto.StartTs!=0 && dto.EndTs==0 && dto.StartTs > EndTs)
+                return BadRequest("Start date comes after end date");
+            if(dto.EndTs!=0 && dto.StartTs==0 && dto.EndTs < StartTs)
+                return BadRequest("Start date comes after end date");
+            
+            task = await _asign_repo.UpdateGanttAssignmentAsync(task,dto);
+
+            var ownerDto = task.User.toAssignmentUserDto();
+            var stateDto = task.State.toStateDto();
+            var teamDto = task.Users.Select(u=>u.toAssignmentUserDto()).ToList();
+            var groupdto = task.TaskGroup.toTaskGroupDto();
+            var prioDto = task.Priority.toPrioDto();
+
+            var dep = task.DependentOnAssignments.Select(u=>u.Id).ToList();
+            
+            var dtoAs = task.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto);
+            dtoAs.DepndentOn = dep;
+            return Ok(dtoAs);
+
         }
 
         [HttpPut]

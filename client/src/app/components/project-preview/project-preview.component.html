@@ -1,5 +1,6 @@
 <div id="strana">
 <app-projects #projectHeader [filter]="filter" *ngIf="showProjectPreview"></app-projects>
+<app-project-filter #filter_sort_project [filter]="filter"/>
 <div *ngIf="projectsData && projectsData.length === 0 && !isLoading">
   <h3>{{ errorMessage }}</h3>
 </div>
@@ -9,53 +10,61 @@
       <div class="header-section">
         <header class="title-wrapper">
           <h1 [title]="project.title">{{ project.truncatedTitle }}</h1>
-          <img src="assets\project-preview\more.svg" alt=""/>
-          <img class="cursor" src="assets\project-preview\edit.svg" alt="" (click)="openEditOverlay(project,$event)" />
         </header>
-        <span class="status-label" [ngClass]="{
-          'ready': project.state.id === 2,
-          'in-progress': project.state.id === 3,
-          'done': project.state.id === 5,
-          'not-started': project.state.id === 1,
-          'cancelled': project.state.id === 6,
-          'blocked': project.state.id === 4
-        }">{{project.state.name}}</span>
+        <img class="cursor" src="assets\project-preview\edit.svg" alt="" (click)="openEditOverlay(project,$event)" />
       </div>
       <hr class="divider" />
+
+      <span class="status-label" [ngClass]="{
+        'ready': project.state.id === 2,
+        'in-progress': project.state.id === 3,
+        'done': project.state.id === 5,
+        'not-started': project.state.id === 1,
+        'cancelled': project.state.id === 6,
+        'blocked': project.state.id === 4
+      }">{{project.state.name}}</span>
+      <br><br>
       <p class="description" [title]="project.description">{{ project.truncatedDescription }}</p>
-      <div class="date-section">
-        <img src="assets\project-preview\time.svg" alt="" />
-        <time *ngIf="project.end">{{ project.end | date: 'dd MMMM yyyy' }}</time>
+      <div class="project-details">
+        <!-- <p (click)="openShowProjectOverlay()">Details...</p> -->
+        <p>Details...</p>
       </div>
+      
       <div class="issue-section">
         <!-- Team members -->
-        <div class="team-members" *ngIf="project">
+        <!-- <div class="team-members" *ngIf="project">
           <ng-container *ngFor="let imageUrl of getTeamMemberImages(project).slice(0, 4); let i = index">
             <img class="team-member" [src]="imageUrl" [alt]="'Team Member ' + (i+1)" [style.left.px]="i * 20" />
           </ng-container>
           <div *ngIf="getTeamMemberImages(project).length > 4" class="additional-members">
             +{{ getTeamMemberImages(project).length - 4 }}
           </div>
+        </div> -->
+        <div class="date-section">
+          <img src="assets\project-preview\time.svg" alt="" />
+          <time *ngIf="project.end">{{ project.end | date: 'dd MMMM yyyy' }}</time>
         </div>
-
         <div class="issue-details">
-          <img src="assets\project-preview\issues.svg" alt=""/>
-          {{ getAssignmentCount(project.id) === 0 ? 'No issues' : (getAssignmentCount(project.id) === 1 ? '1 issue' : getAssignmentCount(project.id) + ' issues') }}
+          <img src="assets\project-preview\issues.svg" alt=""/> 
+           {{ getAssignmentCount(project.id) === 0 ? ' No issues' : (getAssignmentCount(project.id) === 1 ? ' 1 issue' :  getAssignmentCount(project.id) + ' issues') }}
         </div>
       </div>
+      
     </section>
   </article>
 </div>
 
+
+
 <!-- Kontrole paginacije -->
-<div class="pagination-container" [ngClass]="{'bottom': shouldShowBottomPagination()}" *ngIf="showProjectPreview">
+<!-- <div class="pagination-container" [ngClass]="{'bottom': shouldShowBottomPagination()}" *ngIf="showProjectPreview">
   <div class="pagination-controls">
     <span class="pagination-text-prev" (click)="previousPage()" [class.disabled]="currentPage === 1" [style.visibility]="currentPage === 1 ? 'hidden' : 'visible'">Previous</span>
     <ng-container *ngFor="let page of pagesToShow()">
       <button class="pagination-page" (click)="goToPage(page)" [class.active]="currentPage === page">{{ page }}</button>
       <span class="pagination-space"></span>
     </ng-container>
-    <span class="pagination-text" (click)="nextPage()" [class.disabled]="currentPage === totalPages()" [style.visibility]="shouldShowBottomPagination() ? 'visible' : 'hidden'">Next</span>
+      <span class="pagination-text" (click)="nextPage()" [class.disabled]="currentPage === totalPages()" [style.visibility]="shouldShowBottomPagination() ? 'visible' : 'hidden'">Next</span>
+    </div>
   </div>
-</div>
-</div>
+</div> -->

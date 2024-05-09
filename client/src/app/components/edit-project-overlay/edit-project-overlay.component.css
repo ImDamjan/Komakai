@@ -204,3 +204,35 @@
 .custom-slider {
     width: 12vw;
   }
+
+.selected-users {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.selected-user {
+    display: flex;
+    align-items: center;
+    background-color: aliceblue;
+    border: solid 1px black;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 2px;
+}
+
+.selected-user p {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.remove-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+}

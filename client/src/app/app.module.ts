@@ -55,6 +55,10 @@ import { ThyNotifyModule } from 'ngx-tethys/notify';
 import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
 
 
+import {SliderModule} from 'primeng/slider'
+import {MultiSelectModule} from 'primeng/multiselect'
+import {CalendarModule} from 'primeng/calendar'
+import { DropdownModule } from 'primeng/dropdown';
 
 import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
@@ -71,6 +75,9 @@ import { MatButtonModule } from '@angular/material/button';
 
 import {NgToastModule} from 'ng-angular-popup'
 import { MatChipsModule } from '@angular/material/chips';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ProjectFilterComponent } from './components/project-filter/project-filter.component';
+import { TaskFilterComponent } from './components/task-filter/task-filter.component';
 
 
 
@@ -115,10 +122,16 @@ import { MatChipsModule } from '@angular/material/chips';
     SortDetailsComponent,
     FilterProjectComponent,
     SortProjectComponent,
+    ProjectFilterComponent,
+    TaskFilterComponent,
   ],
   imports: [
     FormsModule,
     BrowserModule,
+    SliderModule,
+    CalendarModule,
+    MultiSelectModule,
+    DropdownModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
@@ -142,6 +155,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatButtonModule,
     NgToastModule,
     MatChipsModule,
+    NgbModule,
 
   ],
   providers: [

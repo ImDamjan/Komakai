@@ -1,13 +1,20 @@
 #tasks{
     margin-top: 35px;
     flex-grow: 1;
-    padding: 40px;
+    width: 93vw;
+    padding: 40px 0px 0px 40px;
   }
 
 #task-header {
   display: flex;
 }
-
+#task-list{
+  display: flex;
+  flex-direction: column;
+}
 #title {
   margin-right: 25vw;
+}
+app-project-task:hover{
+  cursor: pointer;
 }

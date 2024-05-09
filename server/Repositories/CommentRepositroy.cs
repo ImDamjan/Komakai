@@ -37,12 +37,12 @@ namespace server.Repositories
 
         public async Task<List<Comment>> GetAllCommentsByAssignmentIdAsync(int asignment_id)
         {
-            return await _context.Comments.Where(c=>c.AssignmentId==asignment_id).ToListAsync();
+            return await _context.Comments.Include(c=>c.User).Where(c=>c.AssignmentId==asignment_id).ToListAsync();
         }
 
         public async Task<Comment?> GetCommentByIdAsync(int comment_id)
         {
-            return await _context.Comments.FirstOrDefaultAsync(c=>c.Id==comment_id);
+            return await _context.Comments.Include(c=>c.User).FirstOrDefaultAsync(c=>c.Id==comment_id);
         }
 
         public async Task<Comment?> UpdateCommentAsync(UpdateCommentDto dto)
