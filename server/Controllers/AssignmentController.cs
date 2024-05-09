@@ -213,9 +213,9 @@ namespace server.Controllers
             var baseDate = new DateTime (1970, 01, 01);
             var EndTs = task.End.Subtract (baseDate).TotalSeconds;
             var StartTs = task.Start.Subtract (baseDate).TotalSeconds;
-            if(dto.StartTs!=0 && dto.StartTs > EndTs)
+            if(dto.StartTs!=0 && dto.EndTs==0 && dto.StartTs > EndTs)
                 return BadRequest("Start date comes after end date");
-            if(dto.EndTs!=0 && dto.EndTs < StartTs)
+            if(dto.EndTs!=0 && dto.StartTs==0 && dto.EndTs < StartTs)
                 return BadRequest("Start date comes after end date");
             
             task = await _asign_repo.UpdateGanttAssignmentAsync(task,dto);
