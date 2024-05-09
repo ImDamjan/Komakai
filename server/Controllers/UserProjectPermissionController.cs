@@ -11,10 +11,12 @@ namespace server.Controllers
     public class UserProjectPermissionController : ControllerBase
     {
         private readonly IUserProjectPermissionRepository _userProjectPermissionRepo;
+        private readonly IUserProjectPermissionService _userProjectPermissionService;
 
-        public UserProjectPermissionController(IUserProjectPermissionRepository userProjectPermissionRepo)
+        public UserProjectPermissionController(IUserProjectPermissionRepository userProjectPermissionRepo, IUserProjectPermissionService userProjectPermissionService)
         {
             _userProjectPermissionRepo = userProjectPermissionRepo;
+            _userProjectPermissionService = userProjectPermissionService;
         }
 
         [HttpPost("add")]
