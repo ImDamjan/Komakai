@@ -58,14 +58,6 @@ export class ProjectStatusComponent implements AfterViewInit, OnInit {
             break;
         }
       });
-      console.log("Not started: "+this.notStartedCount);
-    console.log("Ready: "+this.readyCount);
-    console.log("In progress: "+this.inProgressCount);
-    console.log("Blocked: "+this.blockedCount);
-    console.log("Done: "+this.doneCount);
-    console.log("Cancelled: "+this.cancelledCount);
-
-
 
           this.chart = new Chart('canvas', {
             type: 'doughnut',
