@@ -4,6 +4,7 @@ import { CreateProjectOverlayComponent } from '../../components/create-project-o
 import { ProjectFilter } from '../../models/project/project-filter';
 import { FilterProjectComponent } from '../../components/filter-project/filter-project.component';
 import { SortProjectComponent } from '../../components/sort-project/sort-project.component';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 
 @Component({
@@ -31,9 +32,23 @@ export class ProjectsComponent implements OnInit{
   private overlay = inject(MatDialog);
 
   private overlay2 = inject(MatDialog);
+  public isManager:boolean = false;
+  public isUser : boolean = false;
+  public isWorker : boolean = false;
+  
+  public jwt_service = inject(JwtDecoderService);
 
   ngOnInit(){
-
+    let user = this.jwt_service.getLoggedUser();
+    if(user!==null)
+    {
+      if(user.role==="Project Manager")
+        this.isManager = true;
+      else if(user.role==="User")
+        this.isUser = true;
+      else if(user.role==="Project Worker")
+        this.isWorker = true;
+    }
   }
 
   openCreateOverlay(): void {

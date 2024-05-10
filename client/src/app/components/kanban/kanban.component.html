@@ -12,15 +12,23 @@
             {{ column.name }}
           </div>
           <!-- Dodajemo dugme na početak kolone -->
-          <div class="create" *ngIf="showCreateButton"><button class="task-button" (click)="openCreateOverlay(column.id)">New task</button></div>
+          <div class="create" *ngIf="showCreateButton && isManager"><button class="task-button" (click)="openCreateOverlay(column.id)">New task</button></div>
           <!-- ovde treba da se omoguci da kada se klikne na task da se otvori task details -->
-          <div class="tasks-container"
+          <div *ngIf="isManager" class="tasks-container"
           id="{{column.id}}"
           [cdkDropListConnectedTo]="column.columnIds"
           cdkDropList
           [cdkDropListData]="column.tasks"
           (cdkDropListDropped)="drop($event)">
           <app-task-card-kanban (newItemEvent)="changeState($event)" class="task" *ngFor="let item of column.tasks" [task]="item"  cdkDrag [cdkDragData]="item"/>
+          </div>
+          <div *ngIf="!isManager" class="tasks-container"
+          id="{{column.id}}"
+          [cdkDropListConnectedTo]="column.columnIds"
+          cdkDropList
+          [cdkDropListData]="column.tasks"
+          (cdkDropListDropped)="drop($event)">
+          <app-task-card-kanban (newItemEvent)="changeState($event)" class="task" *ngFor="let item of column.tasks" [task]="item"/>
           </div>
 
         </div>
