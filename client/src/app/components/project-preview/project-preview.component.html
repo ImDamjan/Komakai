@@ -11,7 +11,7 @@
         <header class="title-wrapper">
           <h1 [title]="project.title">{{ project.truncatedTitle }}</h1>
         </header>
-        <img class="cursor" src="assets\project-preview\edit.svg" alt="" (click)="openEditOverlay(project,$event)" />
+        <img *ngIf="isManager" class="cursor" src="assets\project-preview\edit.svg" alt="" (click)="openEditOverlay(project,$event)" />
       </div>
       <hr class="divider" />
 

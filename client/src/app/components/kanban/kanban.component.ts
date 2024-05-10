@@ -14,6 +14,7 @@ import { stat } from 'fs';
 import { Task } from '../../models/task/task';
 import { UpdateTask } from '../../models/task/update-task';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-kanban',
@@ -27,9 +28,10 @@ export class KanbanComponent implements OnInit{
    private state_service = inject(StateService);
    private assignment_service = inject (AssignmentService);
    private route = inject(ActivatedRoute);
+   private jwt_service = inject(JwtDecoderService);
    private assignments : Task[] = [];
    private spinner = inject(NgxSpinnerService);
-   
+   private states : State[] = [];
   constructor(private dialog: MatDialog)
   {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
@@ -39,7 +41,9 @@ export class KanbanComponent implements OnInit{
   showProjectDetails: boolean = true;
   showCreateButton: boolean = true;
   projectText: string = 'Project details';
-
+  public isManager:boolean = false;
+  public isUser : boolean = false;
+  public isWorker : boolean = false;
 
   //otvaranje create Taska
   openCreateOverlay(column_id : string): void {
@@ -62,6 +66,16 @@ export class KanbanComponent implements OnInit{
   
   //pravljenje kanbana
   public ngOnInit(): void {
+    let user = this.jwt_service.getLoggedUser();
+    if(user!==null)
+    {
+      if(user.role==="Project Manager")
+        this.isManager = true;
+      else if(user.role==="User")
+        this.isUser = true;
+      else if(user.role==="Project Worker")
+        this.isWorker = true;
+    }
     this.getBoard();
   }
 
@@ -71,6 +85,7 @@ export class KanbanComponent implements OnInit{
     this.state_service.fetchAllStates().subscribe({
       next : (states : State[])=>
     {
+      this.states = states;
       let ids :string[]= []
       states.forEach(state => {
         ids.push(state.id + "");
@@ -131,14 +146,18 @@ export class KanbanComponent implements OnInit{
 
   //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)
   public dropGrid(event: CdkDragDrop<Task[]>): void {
-    moveItemInArray(this.board.columns, event.previousIndex, event.currentIndex);
+    if(this.isManager)
+      moveItemInArray(this.board.columns, event.previousIndex, event.currentIndex);
   }
   //promenjeno na interfejs Assignment(bilo je TaskCardKanbanComponent)
   public drop(event: CdkDragDrop<Task[]>): void {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else 
+    if(this.isManager)
     {
+      
+      if (event.previousContainer === event.container) {
+        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      } else 
+      {
       let user_ids :number[] = [];
 
       for (let i = 0; i < event.item.data.assignees.length; i++) {
@@ -160,12 +179,15 @@ export class KanbanComponent implements OnInit{
         description: event.item.data.description,
         priorityId: event.item.data.priority.id
       }
+      // console.log(body);
+      let state = this.states.filter(s=>s.id===Number(event.container.id));
+      event.item.data.state = state[0];
       this.assignment_service.updateAssignmentById(body,event.item.data.id).subscribe({
         next : (assignment : Task)=> {
           event.item.data = assignment;
           console.log(this.board.columns);
-          console.log(event.container);
-          console.log(event.previousContainer);
+          // console.log(event.container);
+          // console.log(event.previousContainer);
           // this.getBoard();
         }
       });
@@ -175,6 +197,6 @@ export class KanbanComponent implements OnInit{
           event.previousIndex,
           event.currentIndex);
       }
-      console.log(event.item.data);
+    }
   }
 }

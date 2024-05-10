@@ -12,6 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { User } from '../../models/user/user';
 import { UserService } from '../../services/user.service';
 import { ProjectFilterComponent } from '../project-filter/project-filter.component';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-project-preview',
@@ -60,8 +61,23 @@ export class ProjectPreviewComponent implements OnInit {
   constructor(private http: HttpClient, private projectService: ProjectService, private router: Router, private assignmentService: AssignmentService, private dialog: MatDialog, private userService: UserService) {
     this.calculateCharacterLimit();
   }
+  public isManager:boolean = false;
+  public isUser : boolean = false;
+  public isWorker : boolean = false;
+  
+  public jwt_service = inject(JwtDecoderService);
 
   ngOnInit(): void {
+    let user = this.jwt_service.getLoggedUser();
+    if(user!==null)
+    {
+      if(user.role==="Project Manager")
+        this.isManager = true;
+      else if(user.role==="User")
+        this.isUser = true;
+      else if(user.role==="Project Worker")
+        this.isWorker = true;
+    }
     this.spinner.show();
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     mediaQuery.addEventListener('change', () => {

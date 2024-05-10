@@ -14,6 +14,6 @@
     <div class="sort">
         <button class="sort-button" (click)="openSortProjectDialog()"><img src="assets\task-header\sort.svg" alt="" height="33" width="25"></button>
     </div> -->
-    <button class="create" *ngIf="showCreateButton" (click)="openCreateOverlay()">Create</button>
+    <button class="create" *ngIf="showCreateButton && isManager" (click)="openCreateOverlay()">Create</button>
 </div>
 <!-- <app-project-preview *ngIf="showProjectPreview"></app-project-preview> -->
