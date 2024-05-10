@@ -125,6 +125,11 @@ namespace server.Repositories
                 {
                     assignments = assignments.Where(p=>p.Percentage <= dto.PercentageFilterTo && p.Percentage >=dto.PercentageFilterFrom);
                 }
+                if (dto.PageNumber > 0 && dto.PageSize > 0)
+                {
+                    int skip = (dto.PageNumber - 1) * dto.PageSize;
+                    assignments = assignments.Skip(skip).Take(dto.PageSize);
+                }
             }
             if(sort!=null)
             {
