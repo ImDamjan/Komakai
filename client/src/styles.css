@@ -25,7 +25,7 @@ app-project-header {
     width: 100%;
 }
 
-app-tasks {
+app-tasks, app-dashboard {
     width: 100vw;
     height: 100%;
 }

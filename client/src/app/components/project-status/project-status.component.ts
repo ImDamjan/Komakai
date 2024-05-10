@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -6,11 +6,14 @@ import Chart from 'chart.js/auto';
   templateUrl: './project-status.component.html',
   styleUrl: './project-status.component.css'
 })
-export class ProjectStatusComponent implements OnInit{
-  ngOnInit(): void {
+export class ProjectStatusComponent implements AfterViewInit {
+
+  ngAfterViewInit(): void {
     this.createPieChart();
   }
+
   chart: any;
+
   createPieChart(): void {
     this.chart = new Chart('canvas', {
       type: 'doughnut',
@@ -40,6 +43,7 @@ export class ProjectStatusComponent implements OnInit{
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: true,
@@ -49,11 +53,11 @@ export class ProjectStatusComponent implements OnInit{
             }
           },
           legend: {
-            position: 'right'
+            position: 'right',
+            onClick: function() {}
           }
         }
       }
     });
   }
-
 }

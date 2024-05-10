@@ -48,6 +48,7 @@ export class TaskTrackComponent implements AfterViewInit  {
           }
         },
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: true,

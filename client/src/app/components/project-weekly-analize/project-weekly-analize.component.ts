@@ -32,7 +32,11 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
       options: {
         aspectRatio: 2.5,
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
+          legend: {
+            onClick: function() {} 
+          },
           title: {
             display: true,
             text: 'Project Deadline Preview',

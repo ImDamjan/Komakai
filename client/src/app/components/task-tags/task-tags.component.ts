@@ -47,6 +47,7 @@ export class TaskTagsComponent implements AfterViewInit{
           }
         },
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: true,
@@ -56,7 +57,8 @@ export class TaskTagsComponent implements AfterViewInit{
             }
           },
           legend: {
-            display: false 
+            display: false,
+            onClick: function() {} 
           }
         }
       }
