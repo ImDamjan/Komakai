@@ -2,7 +2,6 @@ import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, ViewChild, i
 import {srLatn} from 'date-fns/locale'
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
-import {MatChipsModule} from '@angular/material/chips';
 import {GantogramService} from '../../services/gantogram.service'
 import { GanttMapper } from '../../models/gantogram/gan_mapper';
 import {
@@ -23,7 +22,7 @@ import {
   GanttViewType,
   NgxGanttComponent 
 } from '@worktile/gantt';
-import { finalize, of } from 'rxjs';
+import { Observable, Subject, finalize, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../../helper';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
@@ -32,8 +31,8 @@ import { Task } from '../../models/task/task';
 import { ActivatedRoute } from '@angular/router';
 
 import html2Canvas from 'html2Canvas'
-import { dateToUnixTimestamp } from 'ngx-tethys/util';
-
+import { UpdateGant } from '../../models/gantogram/update_gant_task';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -41,7 +40,7 @@ import { dateToUnixTimestamp } from 'ngx-tethys/util';
   templateUrl: './gantogram.component.html',
   styleUrl: './gantogram.component.css',
   template: ``,
-  providers: [GanttPrintService],
+  providers: [GanttPrintService,  DatePipe],
 })
 export class GantogramComponent implements OnInit, AfterViewInit{
   
@@ -125,7 +124,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   };
   private spinner = inject(NgxSpinnerService);
 
-  constructor(private printService: GanttPrintService,private toast : NgToastService) {
+  constructor(private printService: GanttPrintService,private toast : NgToastService,private datePipe: DatePipe) {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
   }
 
@@ -168,6 +167,35 @@ export class GantogramComponent implements OnInit, AfterViewInit{
       error:(error: any)=> console.log(error)
     });
   }
+  private updateSuccessSubject = new Subject<boolean>();
+
+  public emitUpdateSuccess(success: boolean): void {
+    this.updateSuccessSubject.next(success);
+  }
+
+  public getUpdateSuccessObservable(): Observable<boolean> {
+    return this.updateSuccessSubject.asObservable();
+  }
+
+  updateGantItemById(assign_id:number, update :UpdateGant, ){
+    this.loading = true;
+    console.log(update);
+    
+    this.ganttService.updateTaskById(update,assign_id).subscribe({
+      next : (task: Task)=> 
+        {
+          this.loading = false;
+          const success = task !== null;
+          this.emitUpdateSuccess(success)
+        },
+      error:(error: any)=> this.showError("Update error",error)
+    });
+
+  }
+
+
+
+
 
   //show Toast on top center position
   showSuccess(topic:string,message:string) {
@@ -197,21 +225,45 @@ showWarn(topic:string,message:string) {
   }
 
   barClick(event: GanttBarClickEvent) {
+
+    //  ovde treba otvoriti modal za task details 
     this.showSuccess("BarClick", `Ovo je poruka za success obavestenje kada se klikne na bar gantograma [id = ${event.item.id}] [Task Name = ${event.item.title}`);
   }
 //   kada kliknemo na vezxu tj liniju izmedju dva taska (bara)
   lineClick(event: GanttLineClickEvent) {
-    
+    // ovde treba pozvati modal sa  upitom da li ste sigurni da zelite da obrsete vezu izmedju taska ime taska 1 i taska ime taska 2 
     this.showError("LineClick",`Error poruka za line click gantograma  id = ${event.source.id} task_name = ${event.source.title}`)
   }
 
 //    kada se uhvati bar da se pomera
   dragMoved(event: GanttDragEvent) {
+    // ovde treba pozvati update start end date 
     this.showInfo("DragMoved",`INFO poruka za DragMoved gantograma  id = ${event.item.id} task_name = ${event.item.title}`);
   }
 //   Kada se pusti bar nakon pomeranja
   dragEnded(event: GanttDragEvent) {
-    this.showWarn("DragEnded",`Warning poruka za DragEnded gantograma  id = ${event.item.id} task_name = ${event.item.title} time_start = ${event.item.start} time_end = ${event.item.end}`);
+    let update: UpdateGant = {
+      startTs: event.item.start, 
+      endTs: event.item.end,
+    };
+    let res = this.updateGantItemById(parseInt(event.item.id),update);
+    console.log(res);
+
+    this.getUpdateSuccessObservable().subscribe((success: boolean) => {
+      if( update.startTs !== undefined && update.endTs !== undefined){
+        let start = new Date(update.startTs*1000);
+        let end  = new Date(update.endTs*1000 );
+        const formattedStart = this.datePipe.transform(start, 'medium');
+        const formattedEnd = this.datePipe.transform(end, 'medium');
+        this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska pocetak ["+ formattedStart +"], kraj ["+ formattedEnd + "]" )
+      }
+      // console.log('Ažuriranje uspešno:', success);
+    });
+    
+        // ovde treba pozvatiu update  start end date 
+
+
+    // this.showWarn("DragEnded",`Warning poruka za DragEnded gantograma  id = ${event.item.id} task_name = ${event.item.title} time_start = ${event.item.start} time_end = ${event.item.end}`);
   }
 
   selectedChange(event: GanttSelectedEvent) {
