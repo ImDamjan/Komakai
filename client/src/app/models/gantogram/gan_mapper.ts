@@ -1,4 +1,4 @@
-import { GanttItem, GanttItemType } from "@worktile/gantt";
+import { GanttItem, GanttItemType, GanttLink, GanttLinkType, } from "@worktile/gantt";
 import { TaskCardKanbanComponent } from "../../components/task-card-kanban/task-card-kanban.component";
 import { Task } from "../task/task";
 import { Priority } from "../priority/priority";
@@ -20,7 +20,7 @@ export class GanttMapper {
             title: task.title,
             start: new Date(task.start).getTime()/1000, // ili drugi odgovarajući atribut za početak
             end: new Date(task.end).getTime()/1000, // ili drugi odgovarajući atribut za kraj
-            links: [], // Možete dodati logiku za mapiranje linkova ako je potrebno
+            links: this.convertToGantLinks(task.depndentOn), // Možete dodati logiku za mapiranje linkova ako je potrebno
             draggable: true, // Postavite na true ako želite omogućiti povlačenje
             itemDraggable:  true, // Postavite na true ako želite omogućiti povlačenje samo na ovom elementu
             linkable: true, // Postavite na true ako želite omogućiti dodavanje linkova
@@ -36,9 +36,14 @@ export class GanttMapper {
     }
 
     // Logika na osnovu role da li je korisniku dozvoljeno da menja vreme start-end draggable: (true/false)
+    private static convertToGantLinks(array: number[]): GanttLink[] {
+        return array.map(number => ({
+            type: 1, // Modulo operacija garantuje da se type vrednosti kreću od 1 do 4
+            link: number.toString()
+          }));
+    }
 
-
-    static mapPrioprityToColor(priority:Priority):string{
+    private static mapPrioprityToColor(priority:Priority):string{
         switch(priority.level){
             case  1: return "#A9A9A9" // low;
             case  2: return "#FFD700" // Medium;
@@ -47,6 +52,28 @@ export class GanttMapper {
             default: return "#1E90FF" // default
         }
     }
+
+    static checkIfNumberExists(id: string, numberToCheck: number, items: GanttItem[]): boolean {
+        // Pronalazimo GanttItem sa odgovarajućim id
+        const item = items.find(item => item.id === id);
+
+        // Proveravamo da li smo pronašli GanttItem sa datim id
+        if (item && item.links) {
+            // Proveravamo da li postoji niz links i da li numberToCheck već postoji u tom nizu
+            console.log("Nasao sam item");
+            // console.log(item.links);
+            if (item.links.some(link => link.link === numberToCheck.toString())) {
+                console.log("================================================")
+                // console.log(item.links);
+                console.log("num-check " + numberToCheck);
+                console.log("================================================")
+                return true; // Ako postoji, vraćamo true
+            }
+            
+        }
+      
+        return false; // Ako ne postoji ili nije pronađen odgovarajući GanttItem, vraćamo false
+      }
 
 
 } 

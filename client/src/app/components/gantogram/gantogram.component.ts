@@ -4,6 +4,7 @@ import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
 import {GantogramService} from '../../services/gantogram.service'
 import { GanttMapper } from '../../models/gantogram/gan_mapper';
+import { DomSanitizer } from '@angular/platform-browser';
 import {
   GanttBarClickEvent,
   GanttBaselineItem,
@@ -33,6 +34,7 @@ import { ActivatedRoute } from '@angular/router';
 import html2Canvas from 'html2Canvas'
 import { UpdateGant } from '../../models/gantogram/update_gant_task';
 import { DatePipe } from '@angular/common';
+import { exec } from 'child_process';
 
 
 @Component({
@@ -49,7 +51,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   private projectId : number = 0;
   private route = inject(ActivatedRoute);
   private ganttService = inject(GantogramService)
-
+  private itemsOldState: GanttItem[] = [];
 
   views = [
       
@@ -124,7 +126,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   };
   private spinner = inject(NgxSpinnerService);
 
-  constructor(private printService: GanttPrintService,private toast : NgToastService,private datePipe: DatePipe) {
+  constructor(private printService: GanttPrintService,private toast : NgToastService,private datePipe: DatePipe,private sanitizer: DomSanitizer) {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
   }
 
@@ -151,6 +153,11 @@ export class GantogramComponent implements OnInit, AfterViewInit{
       
   }
 
+  copyItems(items: GanttItem[]): GanttItem[] {
+    // Koristimo map metodu za pravljenje kopije svakog elementa niza
+    return items.map(item => ({ ...item }));
+  }
+
   getGanttItemsByProjectId(){
     this.loading = true;
     this.ganttService.GetAssignemntsByProjectId(this.projectId).subscribe({
@@ -159,6 +166,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
           if (tasks && tasks.length > 0){
             var res = GanttMapper.mapTasksToGantItems(tasks)
             this.items = res
+            this.itemsOldState = this.copyItems(this.items)
             this.loading = false;
           } else {
               console.log("No tasks found or tasks[0] is undefined.");
@@ -179,7 +187,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   updateGantItemById(assign_id:number, update :UpdateGant, ){
     this.loading = true;
-    console.log(update);
+    // console.log(update);
     
     this.ganttService.updateTaskById(update,assign_id).subscribe({
       next : (task: Task)=> 
@@ -187,6 +195,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
           this.loading = false;
           const success = task !== null;
           this.emitUpdateSuccess(success)
+          this.itemsOldState = this.copyItems(this.items)
         },
       error:(error: any)=> this.showError("Update error",error)
     });
@@ -204,12 +213,13 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   //show Toast on bottom center position
   showError(topic:string,message:string) {
-    this.toast.error({detail:topic, summary:message, duration:5000, sticky:false, position:'bottomRight'});
+    const mess = `<b>${message}\n\n</b>`;
+    this.toast.error({detail:topic, summary:"poruke \n poruka ", duration:5000, sticky:false, position:'bottomRight'});
   }
 
   //show Toast on top left position
   showInfo(topic:string,message:string) {
-    this.toast.info({detail:topic,summary:message, duration:5000, sticky:false, position: 'bottomRight'});
+    this.toast.info({detail:topic,summary:message, duration:5000, sticky:false, position: 'bottomRight',});
 }
 
 //show Toast on bottom left position
@@ -238,7 +248,11 @@ showWarn(topic:string,message:string) {
 //    kada se uhvati bar da se pomera
   dragMoved(event: GanttDragEvent) {
     // ovde treba pozvati update start end date 
-    this.showInfo("DragMoved",`INFO poruka za DragMoved gantograma  id = ${event.item.id} task_name = ${event.item.title}`);
+    this.showInfo("Izmena trajanja taska",`Da biste promenili vreme na gantogramu, pratite ove korake: \n\n
+
+    Pomeranje granica: Kliknite na levu ili desnu granicu vremenskog okvira koji želite da promenite. Držite taster miša pritisnutim i pomerajte miša levo ili desno kako biste pomerili granicu na odgovarajuće mesto. \n\n
+    
+    Pomeranje trake: Kliknite na samu traku vremenskog okvira i prevucite je levo ili desno kako biste je pomerali unapred ili unazad kroz vreme.`);
   }
 //   Kada se pusti bar nakon pomeranja
   dragEnded(event: GanttDragEvent) {
@@ -246,24 +260,21 @@ showWarn(topic:string,message:string) {
       startTs: event.item.start, 
       endTs: event.item.end,
     };
-    let res = this.updateGantItemById(parseInt(event.item.id),update);
-    console.log(res);
+    this.updateGantItemById(parseInt(event.item.id),update);
+    
 
     this.getUpdateSuccessObservable().subscribe((success: boolean) => {
-      if( update.startTs !== undefined && update.endTs !== undefined){
+      if(success && update.startTs !== undefined && update.endTs !== undefined){
         let start = new Date(update.startTs*1000);
         let end  = new Date(update.endTs*1000 );
         const formattedStart = this.datePipe.transform(start, 'medium');
         const formattedEnd = this.datePipe.transform(end, 'medium');
-        this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska pocetak ["+ formattedStart +"], kraj ["+ formattedEnd + "]" )
+        this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
+      }else{
+        this.showError("Greška","Greška pri izmeni vremena trajanja taska - "+event.item.title)
+        this.getGanttItemsByProjectId()
       }
-      // console.log('Ažuriranje uspešno:', success);
-    });
-    
-        // ovde treba pozvatiu update  start end date 
-
-
-    // this.showWarn("DragEnded",`Warning poruka za DragEnded gantograma  id = ${event.item.id} task_name = ${event.item.title} time_start = ${event.item.start} time_end = ${event.item.end}`);
+    });    
   }
 
   selectedChange(event: GanttSelectedEvent) {
@@ -275,9 +286,80 @@ showWarn(topic:string,message:string) {
       }
       this.showInfo("SelectedChange",`Selektovao sam task ${event.current?.title}`)
   }
+  
 
   linkDragEnded(event: GanttLinkDragEvent) {
-    this.showInfo("Link Drag", `Kada povezemno dva itema Source_id = ${event.source.id} target_id = ${event.target?.id}`)
+    if(event.target !== undefined ){
+      console.log(this.itemsOldState.find(item => item.id === event.source.id));
+      if(GanttMapper.checkIfNumberExists(event.source.id,parseInt(event.target.id),this.itemsOldState)){
+        this.showWarn("Zavisnost već postoji", `Zavisnost između taska [${event.source.title}] i taska [${event.target.title}] već postoji.`);
+        // log(this.items.find(item => item.id == event.source.id))
+        return;
+      }else{
+        let update: UpdateGant = {
+                addDependentOn: [parseInt(event.target?.id)], 
+              };
+              this.updateGantItemById(parseInt(event.source.id),update);
+              this.getUpdateSuccessObservable().subscribe((success: boolean) => {
+                if(success){
+                    this.showSuccess("Uspesno dodata zavisnost",`Uspešno dodata zavisnost. <br> [${event.source.title}]->[${event.target?.title}] \n\n Klikom na vezu(liniju) možete obrisati zavisnost.`)
+
+          
+                //   let start = new Date(update.startTs*1000);
+                //   let end  = new Date(update.endTs*1000 );
+                //   const formattedStart = this.datePipe.transform(start, 'medium');
+                //   const formattedEnd = this.datePipe.transform(end, 'medium');
+                //   this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
+                }else{
+                  this.showError("Greška",`Greška pri kreiranju zavisnosti taska  ${event.source.title}`);
+                  this.getGanttItemsByProjectId();
+                }
+              }
+            );
+        this.showSuccess("USPESNA VEZA", `Zavisnost je kreirana izmedju taska [${event.source.title}] i taska [${event.target.title}].`);
+      }
+    }
+
+
+
+
+  //   if(event.target !== undefined ){
+  //     if(!GanttMapper.checkIfNumberExists(event.source.id,parseInt(event.target.id),this.items)){
+  //       log()
+  //       this.showWarn("Zavisnost već postoji", `Zavisnost između taska [${event.source.title}] i taska [${event.target.title}] već postoji.`);
+  //       return;
+  //     }
+  //     let update: UpdateGant = {
+  //       addDependentOn: [parseInt(event.target?.id)], 
+  //     };
+  //     this.updateGantItemById(parseInt(event.source.id),update);
+  //     this.getUpdateSuccessObservable().subscribe((success: boolean) => {
+  //       if(success){
+  //           this.showSuccess("Uspesno dodata zavisnost","Uspešno dodata zavisnost. \n ["+ event.source.title +"]->["+ event.target?.title + "]" )
+  
+  
+  //       //   let start = new Date(update.startTs*1000);
+  //       //   let end  = new Date(update.endTs*1000 );
+  //       //   const formattedStart = this.datePipe.transform(start, 'medium');
+  //       //   const formattedEnd = this.datePipe.transform(end, 'medium');
+  //       //   this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
+  //       // }else{
+  //       //   this.showError("Greška","Greška pri izmeni vremena trajawa taska - "+event.item.title)
+  //       //   this.getGanttItemsByProjectId()
+  //       }else{
+          
+  //         this.showError("Greška","Greška pri Dodavanju zavisnosti između dva taska - "+event.source.title +"-"+ event.target?.title)
+  //         this.getGanttItemsByProjectId()
+  //       }
+  //     }
+  //   );    
+  // }
+  // else{
+    
+  // }
+
+
+    // this.showInfo("Link Drag", `Kada povezemno dva itema Source_id = ${event.source.id} target_id = ${event.target?.id}`)
   }
 
 // Ovo je kada se leva strana pomera na primer listu taskova menjam jedan da dodje iznad drtugog i tako dalje Ovo je kada kliknem
