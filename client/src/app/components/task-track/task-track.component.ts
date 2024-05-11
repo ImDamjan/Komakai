@@ -98,7 +98,7 @@ export class TaskTrackComponent implements AfterViewInit {
             plugins: {
               title: {
                 display: true,
-                text: 'Tasks status preview',
+                text: 'Tasks Status Overview',
                 font: {
                   size: 18
                 }
