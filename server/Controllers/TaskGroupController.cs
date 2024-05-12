@@ -86,7 +86,7 @@ namespace server.Controllers
             var tasks =  await _asign_repo.GetAllGroupAssignmentsAsync(initial.Id);
             var task_group_children = await _group_repo.getChildrenGroups(initial.Id);
             List<AssignmentDto> asignments = new List<AssignmentDto>();
-            List<TaskGroupTasksDto> children = new List<TaskGroupTasksDto>();
+            List<Object> children = new List<Object>();
             foreach (var task in tasks)
             {
                 var userDtos = task.Users.Select(x=>x.toAssignmentUserDto()).ToList();
@@ -98,10 +98,14 @@ namespace server.Controllers
             foreach (var child in task_group_children)
             {
                 var dto = await makeTree(child);
-                children.Add(dto);          
+                children.Add(dto);
+            }
+            foreach (var asign in asignments)
+            {
+                children.Add(asign);
             }
 
-            return initial.toTaskGroupTasksDto(children,asignments);
+            return initial.toTaskGroupTasksDto(children);
             
         }
 

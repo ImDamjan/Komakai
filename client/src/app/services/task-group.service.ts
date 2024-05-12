@@ -18,4 +18,9 @@ export class TaskGroupService {
     const url = this.baseUrl + "/TaskGroup/getTaskGroupsByProjectId/"+project_id;
     return this.http.get<TaskGroup[]>(url);
   }
+  getAllProjectTaskGroupsWithAssignments(project_id:number): Observable<TaskGroup>
+  {
+    const url = this.baseUrl+"/TaskGroup/getTaskGroupsByProjectWithTasks/" + project_id;
+    return this.http.get<TaskGroup>(url);
+  }
 }
