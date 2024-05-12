@@ -59,14 +59,8 @@ export class GanttMapper {
 
         // Proveravamo da li smo pronašli GanttItem sa datim id
         if (item && item.links) {
-            // Proveravamo da li postoji niz links i da li numberToCheck već postoji u tom nizu
             console.log("Nasao sam item");
-            // console.log(item.links);
             if (item.links.some(link => link.link === numberToCheck.toString())) {
-                console.log("================================================")
-                // console.log(item.links);
-                console.log("num-check " + numberToCheck);
-                console.log("================================================")
                 return true; // Ako postoji, vraćamo true
             }
             
@@ -74,6 +68,28 @@ export class GanttMapper {
       
         return false; // Ako ne postoji ili nije pronađen odgovarajući GanttItem, vraćamo false
       }
+
+      static removeLink(id: string, linkToRemove: string, items: GanttItem[]): GanttItem[] {
+        // Pronalazimo GanttItem sa odgovarajućim ID-om
+        const item = items.find(item => item.id === id);
+    
+        // Proveravamo da li smo pronašli GanttItem sa datim ID-om i da li ima linkove
+        if (item && item.links) {
+            // Pronalazimo indeks linka koji želimo da uklonimo
+            const linkIndex = item.links.findIndex(link => link.link === linkToRemove);
+            
+            // Ako je link pronađen, uklanjamo ga iz liste linkova
+            if (linkIndex !== -1) {
+                item.links.splice(linkIndex, 1);
+                console.log(item);
+                console.log(items);
+                
+                return items; // Vraćamo true ako je link uspešno uklonjen
+            }
+        }
+      
+        return items; // Vraćamo false ako nije pronađen link ili GanttItem sa datim ID-om
+    }
 
 
 } 

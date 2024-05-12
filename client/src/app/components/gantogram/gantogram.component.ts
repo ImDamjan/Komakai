@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import {srLatn} from 'date-fns/locale'
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
@@ -24,17 +24,18 @@ import {
   NgxGanttComponent 
 } from '@worktile/gantt';
 import { Observable, Subject, finalize, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { random, randomItems } from '../../helper';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
-import { log } from 'console';
 import { Task } from '../../models/task/task';
 import { ActivatedRoute } from '@angular/router';
 
-import html2Canvas from 'html2Canvas'
+import html2Canvas from 'html2canvas'
 import { UpdateGant } from '../../models/gantogram/update_gant_task';
 import { DatePipe } from '@angular/common';
-import { exec } from 'child_process';
+
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { log } from 'console';
+
+
 
 
 @Component({
@@ -46,6 +47,7 @@ import { exec } from 'child_process';
 })
 export class GantogramComponent implements OnInit, AfterViewInit{
   
+  private  modalService = inject(NgbModal);
   private decoder = inject(JwtDecoderService);
   private userId : number = 0;
   private projectId : number = 0;
@@ -67,21 +69,24 @@ export class GantogramComponent implements OnInit, AfterViewInit{
           name: 'Quarter',
           value: GanttViewType.quarter
       }
-  ];
-
-
-  viewType: GanttViewType = GanttViewType.month;
-
-  selectedViewType: GanttViewType = GanttViewType.month;
-
-  isBaselineChecked = true;
-
-  isShowToolbarChecked = false;
-
-  loading = false;
-
-  items: GanttItem[] = [];
-
+    ];
+    
+    
+    viewType: GanttViewType = GanttViewType.month;
+    
+    selectedViewType: GanttViewType = GanttViewType.month;
+    
+    isBaselineChecked = true;
+    
+    isShowToolbarChecked = false;
+    
+    loading = false;
+    
+    items: GanttItem[] = [];
+    
+    selectedTask: any
+    selectedAction: boolean = false;
+    
   toolbarOptions: GanttToolbarOptions = {
       viewTypes: [GanttViewType.day, GanttViewType.month, GanttViewType.year]
       
@@ -119,10 +124,11 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   @HostBinding('class.gantt-example-component') class = true;
   @ViewChild('gantt') ganttComponent!: NgxGanttComponent;
   @ViewChild('screenshotElement') screenshotElement!: NgxGanttComponent;
+  @ViewChild('content') contentRef!: TemplateRef<any>;
 
 
   dropEnterPredicate = (event: GanttTableDragEnterPredicateContext) => {
-      return true;
+    return true;
   };
   private spinner = inject(NgxSpinnerService);
 
@@ -151,6 +157,25 @@ export class GantogramComponent implements OnInit, AfterViewInit{
       
 
       
+  }
+  
+
+  openVerticallyCentered(content: TemplateRef<any>): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      let modalRef: NgbModalRef;
+      this.selectedAction = false; // Resetujemo vrednost selectedAction
+      modalRef = this.modalService.open(content, { centered: true });
+  
+      modalRef.result.then((result) => {
+        console.log('Modal zatvoren:', result);
+        // Ovde možemo obraditi povratnu vrednost i izvršiti potrebne akcije
+        this.selectedAction = result;
+        resolve(this.selectedAction);
+      }, (reason) => {
+        console.log('Modal zatvoren bez akcije:', reason);
+        reject(reason);
+      });
+    });
   }
 
   copyItems(items: GanttItem[]): GanttItem[] {
@@ -241,8 +266,29 @@ showWarn(topic:string,message:string) {
   }
 //   kada kliknemo na vezxu tj liniju izmedju dva taska (bara)
   lineClick(event: GanttLineClickEvent) {
-    // ovde treba pozvati modal sa  upitom da li ste sigurni da zelite da obrsete vezu izmedju taska ime taska 1 i taska ime taska 2 
-    this.showError("LineClick",`Error poruka za line click gantograma  id = ${event.source.id} task_name = ${event.source.title}`)
+
+    this.selectedTask = event;
+
+    this.openVerticallyCentered(this.contentRef).then((result) => {
+      if (result === true) {
+        let update: UpdateGant = {
+          removeDependentOn: [parseInt(event.target?.id)], 
+        };
+        this.updateGantItemById(parseInt(event.source.id),update);
+        this.getUpdateSuccessObservable().subscribe((success: boolean) => {
+          if (success) {
+            this.showSuccess("Uspesno obrisana zavisnost",`Uspešno obrisana zavisnost. [${event.source.title}]->[${event.target?.title}]`)
+            this.getGanttItemsByProjectId();
+            
+          } else {
+            this.showError("Greška",`Greška pri brisanju zavisnosti taska  ${event.source.title}`);
+            this.getGanttItemsByProjectId();
+          }
+        });
+      }
+    }).catch((error) => {
+      console.error("Greška pri otvaranju moda:", error);
+    });
   }
 
 //    kada se uhvati bar da se pomera
@@ -302,7 +348,7 @@ showWarn(topic:string,message:string) {
               this.updateGantItemById(parseInt(event.source.id),update);
               this.getUpdateSuccessObservable().subscribe((success: boolean) => {
                 if(success){
-                    this.showSuccess("Uspesno dodata zavisnost",`Uspešno dodata zavisnost. <br> [${event.source.title}]->[${event.target?.title}] \n\n Klikom na vezu(liniju) možete obrisati zavisnost.`)
+                    this.showSuccess("Uspesno dodata zavisnost",`Uspešno dodata zavisnost. [${event.source.title}]->[${event.target?.title}] \n\n Klikom na vezu(liniju) možete obrisati zavisnost.`)
 
           
                 //   let start = new Date(update.startTs*1000);
@@ -323,43 +369,7 @@ showWarn(topic:string,message:string) {
 
 
 
-  //   if(event.target !== undefined ){
-  //     if(!GanttMapper.checkIfNumberExists(event.source.id,parseInt(event.target.id),this.items)){
-  //       log()
-  //       this.showWarn("Zavisnost već postoji", `Zavisnost između taska [${event.source.title}] i taska [${event.target.title}] već postoji.`);
-  //       return;
-  //     }
-  //     let update: UpdateGant = {
-  //       addDependentOn: [parseInt(event.target?.id)], 
-  //     };
-  //     this.updateGantItemById(parseInt(event.source.id),update);
-  //     this.getUpdateSuccessObservable().subscribe((success: boolean) => {
-  //       if(success){
-  //           this.showSuccess("Uspesno dodata zavisnost","Uspešno dodata zavisnost. \n ["+ event.source.title +"]->["+ event.target?.title + "]" )
-  
-  
-  //       //   let start = new Date(update.startTs*1000);
-  //       //   let end  = new Date(update.endTs*1000 );
-  //       //   const formattedStart = this.datePipe.transform(start, 'medium');
-  //       //   const formattedEnd = this.datePipe.transform(end, 'medium');
-  //       //   this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
-  //       // }else{
-  //       //   this.showError("Greška","Greška pri izmeni vremena trajawa taska - "+event.item.title)
-  //       //   this.getGanttItemsByProjectId()
-  //       }else{
-          
-  //         this.showError("Greška","Greška pri Dodavanju zavisnosti između dva taska - "+event.source.title +"-"+ event.target?.title)
-  //         this.getGanttItemsByProjectId()
-  //       }
-  //     }
-  //   );    
-  // }
-  // else{
-    
-  // }
-
-
-    // this.showInfo("Link Drag", `Kada povezemno dva itema Source_id = ${event.source.id} target_id = ${event.target?.id}`)
+  //   i"Link Drag", `Kada povezemno dva itema Source_id = ${event.source.id} target_id = ${event.target?.id}`)
   }
 
 // Ovo je kada se leva strana pomera na primer listu taskova menjam jedan da dodje iznad drtugog i tako dalje Ovo je kada kliknem
