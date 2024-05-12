@@ -52,17 +52,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         });
 
 
-/*builder.Services.AddAuthorization(options =>
-{
-    foreach (Permisija permission in Enum.GetValues(typeof(Permisija)))
-    {
-        options.AddPolicy(permission.ToString(), policy =>
-        {
-            policy.RequireClaim("permission", permission.ToString());
-        });
-    }
-});
-*/
+
 builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
 builder.Services.AddScoped<ITeamRepository,TeamRepository>();
 builder.Services.AddScoped<IPriorityRepository,PriorityRepository>();
