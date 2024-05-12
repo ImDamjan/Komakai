@@ -109,22 +109,17 @@ export class CreateProjectOverlayComponent implements OnInit {
     const target = event.target;
     if (target && target.value !== undefined) {
       const selectedRoleId = event.target?.value;
-      // Handle user selection
       if (this.isSelected(user)) {
           this.selectedUserRolesMap.delete(user.id);
-          // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
       } else {
-          // this.selectedUserIds.push(user.id);
           this.selectedUserRolesMap.set(user.id,selectedRoleId);
       }
     }
 }
 
   isSelected(user: User): boolean {
-    // Check if user is selected
     if(user.id == this.roleid)
       return true;
-    // return this.selectedUserIds.includes(user.id);
     return this.selectedUserRolesMap.has(user.id);
   }
 
@@ -150,7 +145,6 @@ export class CreateProjectOverlayComponent implements OnInit {
 
 
   closeOverlay(): void {
-      // Close the overlay dialog
       this.dialogRef.close();
   }
 
@@ -185,6 +179,11 @@ export class CreateProjectOverlayComponent implements OnInit {
       alert('Project created successfully!');
       this.spinner.hide();
       this.resetForm();
+      this.selectedUsers = [];
+      this.userService.getUserById(this.userid).subscribe(user =>{
+        this.selectedUsers[0] = user;
+      });
+      console.log(this.selectedUsers);
       this.submitted = false;
     }, error => {
       console.error('Error creating project:', error);
@@ -194,7 +193,6 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   resetForm(): void {
-    // Reset all input fields to their default state
     this.projectObj.title = '';
     this.projectObj.priorityId = 0;
     this.projectObj.start = new Date();
@@ -211,15 +209,14 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   showTeamMembers(team: Team): void {
-    this.hoveredTeam = team; // Set the hovered team
+    this.hoveredTeam = team;
   }
 
   hideTeamMembers(event: MouseEvent): void {
     const target = event.relatedTarget as HTMLElement;
 
-    // Check if the mouse is moving from the overlay to the team members
     if (target && target.closest('.team-option') === null && target.closest('.team-members') === null) {
-        this.hoveredTeam = null; // Reset the hovered team
+        this.hoveredTeam = null; 
     }
   }
 
@@ -228,7 +225,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     if (user) {
         return `${user.name} ${user.lastname}`;
     } else {
-        return ''; // Handle the case where user is not found
+        return '';
     }
   }
 
@@ -258,7 +255,6 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   isSelectedTeam(teamId: number): boolean {
-      // Check if all members of the team are selected
       const team = this.teams.find((team: Team) => team.id === teamId);
       if (team) {
           return team.members.every((member: User) => this.isSelected(member));

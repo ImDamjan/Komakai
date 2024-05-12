@@ -27,5 +27,19 @@ namespace server.Controllers
             return Ok();
 
         }
+
+        [HttpPost("send-notification")]
+        public async Task<IActionResult> SendCustomNotification([FromBody] NotificationDto notification)
+        {
+            try
+            {
+                await _emailService.SendCustomNotificationAsync(notification);
+                return Ok("Email sent successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

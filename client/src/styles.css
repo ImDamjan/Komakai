@@ -30,6 +30,11 @@ app-tasks {
     height: 100%;
 }
 
+app-dashboard {
+    height: 43vw;
+    width: 100vw;
+}
+
 body { margin: 0; font-family: Poppins, "Helvetica Neue", sans-serif; height: 100%; overflow-y: hidden;}
 
 
