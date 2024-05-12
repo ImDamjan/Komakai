@@ -203,7 +203,7 @@ export class AddTaskComponent implements OnInit {
     this.assignmentService.createAssignment(this.createTaskObj).subscribe({
       next : (asign : Task) => {
         console.log("Creation succesful");
-        confirm("Task created successfully!");
+        // confirm("Task created successfully!");
         this.spinner.hide();
         this.closeOverlay();
       },
@@ -212,38 +212,8 @@ export class AddTaskComponent implements OnInit {
 
      
   }
-  // toggleUserSelection(user_id: number,event: Event) {
-  //   event.stopPropagation();
-  //   if(this.isSelected(user_id))
-  //     this.selectedAssignees = this.selectedAssignees.filter(id=>id!==user_id);
-  //   else
-  //     this.selectedAssignees.push(user_id);
-  //   console.log(this.selectedAssignees);
-  // }
-  // isSelected(userid: number) {
-  //   return this.selectedAssignees.includes(userid);
-  // }
-  // toggleDropdown() {
-  //   this.showDropdown = !this.showDropdown;
-  // }
   closeOverlay(): void {
     // Close the overlay dialog
     this.dialogRef.close();
   }
-  // toggleDropdownTask()
-  // {
-  //   this.showDropdownTask = !this.showDropdownTask;
-  // }
-  // isSelectedTask(task_id:number)
-  // {
-  //   return this.selectedDependentOn.includes(task_id);
-  // }
-  // toggleTaskSelection(task_id:number, event: Event)
-  // {
-  //   event.stopPropagation();
-  //   if(this.isSelectedTask(task_id))
-  //     this.selectedDependentOn = this.selectedDependentOn.filter(id=>id !== task_id);
-  //   else
-  //     this.selectedDependentOn.push(task_id);
-  // }
 }

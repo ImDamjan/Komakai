@@ -81,6 +81,7 @@ import { TaskFilterComponent } from './components/task-filter/task-filter.compon
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { MatTreeModule } from '@angular/material/tree';
 import { TaskListTaskComponent } from './components/task-list-task/task-list-task.component';
+import { AddTaskGroupComponent } from './components/add-task-group/add-task-group.component';
 
 
 
@@ -129,6 +130,7 @@ import { TaskListTaskComponent } from './components/task-list-task/task-list-tas
     TaskFilterComponent,
     TaskListComponent,
     TaskListTaskComponent,
+    AddTaskGroupComponent,
   ],
   imports: [
     FormsModule,

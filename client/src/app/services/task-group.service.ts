@@ -85,4 +85,9 @@ export class TaskGroupService {
 
     return this.http.get<TaskGroup>(url,{params:httpParams});
   }
+
+  createTaskGroup(body:any){
+    const url = this.baseUrl + "/TaskGroup/createTaskGroup";
+    return this.http.post(url,body);
+  }
 }

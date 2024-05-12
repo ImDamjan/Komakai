@@ -12,6 +12,7 @@ import { TaskFilterComponent } from '../task-filter/task-filter.component';
 import { filter } from 'rxjs';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AddTaskGroupComponent } from '../add-task-group/add-task-group.component';
 
 
 @Component({
@@ -96,6 +97,17 @@ export class TaskListComponent implements OnInit,AfterViewInit{
       }
     });
   }
+  openCreateGroupOverlay(node:any)
+  {
+    const dialogRef = this.dialog.open(AddTaskGroupComponent, {
+      data:[this.projectId,node]
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadTasks();
+    });
+  }
+
 
   openCreateOverlay(node:any): void {
     const dialogRef = this.dialog.open(AddTaskComponent, {
