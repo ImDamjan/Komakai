@@ -8,7 +8,7 @@
 .grid-container {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-gap: 80px;
+  grid-gap: 100px;
   height: 70%;
   width: 70%;
   place-items: center;
@@ -23,7 +23,7 @@
   width: 320px;
   margin: 0;
   height: 200px;
-  margin-bottom: 30px;
+  margin-bottom: 250px;
 }
 
 .card-content {
@@ -82,6 +82,11 @@
   color: white;
 }
 
+
+.elements{
+  width: 100%;align-items: center;
+}
+
 .status-label {
   border-radius: 5px;
   color: #fff;
@@ -89,6 +94,18 @@
   align-items: center;
   font: 400 16px/1.2 'Poppins', sans-serif;
   /* margin-left: auto; */
+  width: 120px;
+  height: 30px;
+}
+
+.priority-label{
+  
+  border-radius: 5px;
+  color: #fff;
+  padding: 8px 16px;
+  align-items: center;
+  font: 400 16px/1.2 'Poppins', sans-serif;
+  margin-left:15px;
   width: 120px;
   height: 30px;
 }
@@ -257,17 +274,7 @@
   cursor: pointer;
 }
 
-.priority-label{
-  
-  border-radius: 5px;
-  color: #fff;
-  padding: 8px 16px;
-  align-items: center;
-  font: 400 16px/1.2 'Poppins', sans-serif;
-  /* margin-left: auto; */
-  width: 120px;
-  height: 30px;
-}
+
 
 .at-risk{
   font-family: 'Poppins', sans-serif;

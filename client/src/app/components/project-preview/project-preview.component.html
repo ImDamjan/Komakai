@@ -15,26 +15,51 @@
       </div>
       <hr class="divider" />
 
-      <span class="status-label" [ngClass]="{
-        'ready': project.state.id === 2,
-        'in-progress': project.state.id === 3,
-        'done': project.state.id === 5,
-        'not-started': project.state.id === 1,
-        'cancelled': project.state.id === 6,
-        'blocked': project.state.id === 4
-      }">{{project.state.name}}</span>
+      <div class="elements">
+        <span class="status-label" [ngClass]="{
+          'ready': project.state.id === 2,
+          'in-progress': project.state.id === 3,
+          'done': project.state.id === 5,
+          'not-started': project.state.id === 1,
+          'cancelled': project.state.id === 6,
+          'blocked': project.state.id === 4
+        }">{{project.state.name}}</span>
+
+        <span class="priority-label" [ngClass]="{
+          'low': project.priority.id === 4,
+          'at-risk': project.priority.id === 1,
+          'medium': project.priority.id === 3,
+          'high': project.priority.id === 2
+        }">{{project.priority.description}}</span>
+
+      </div>
+
+      
       <br><br>
       <p class="description" [title]="project.description">{{ project.truncatedDescription }}</p>
       <br>
 
-      <span class="priority-label" [ngClass]="{
-        'low': project.priority.id === 4,
-        'at-risk': project.priority.id === 1,
-        'medium': project.priority.id === 3,
-        'high': project.priority.id === 2
-      }">{{project.priority.description}}</span>
-
       
+
+
+  <div class="details">
+    <table>
+      <tr>
+        <th>Budget</th>
+        <th>{{project.budget}}</th>
+      </tr>
+      <tr>
+        <th>Spent:</th>
+        <th>{{project.spent}}</th>
+      </tr>
+      <tr>
+        <th>Percentage:</th>
+        <th>{{project.percentage}}</th>
+      </tr>
+    </table>
+  </div>
+
+  <hr class="divider" />
       <div class="issue-section">
         <div class="date-section">
           <table>
@@ -54,24 +79,9 @@
         </div>
       </div>
 
-      <hr class="divider" />
+      
 
-      <div class="details">
-        <table>
-          <tr>
-            <th>Budget</th>
-            <th>{{project.budget}}</th>
-          </tr>
-          <tr>
-            <th>Spent:</th>
-            <th>{{project.spent}}</th>
-          </tr>
-          <tr>
-            <th>Percentage:</th>
-            <th>{{project.percentage}}</th>
-          </tr>
-        </table>
-      </div>
+      
       
     </section>
   </article>

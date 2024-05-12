@@ -239,14 +239,14 @@ export class ProjectPreviewComponent implements OnInit {
   calculateCharacterLimit() {
     const screenWidth = window.innerWidth;
     if (screenWidth < 768) {
-      this.titleCharacterLimit = 5;
-      this.descriptionCharacterLimit = 30;
+      this.titleCharacterLimit = 13;
+      this.descriptionCharacterLimit = 40;
     } else if (screenWidth >= 768 && screenWidth < 1025) {
-      this.titleCharacterLimit = 10;
-      this.descriptionCharacterLimit = 100;
+      this.titleCharacterLimit = 18;
+      this.descriptionCharacterLimit = 120;
     } else {
-      this.titleCharacterLimit = 12;
-      this.descriptionCharacterLimit = 190;
+      this.titleCharacterLimit = 20;
+      this.descriptionCharacterLimit = 210;
     }
   }
 
