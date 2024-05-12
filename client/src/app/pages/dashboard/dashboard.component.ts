@@ -1,4 +1,4 @@
-import { Component, OnInit, inject} from '@angular/core';
+import { AfterViewInit, Component, OnInit, inject} from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -6,11 +6,17 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit{
-  private spinner = inject(NgxSpinnerService);
-  ngOnInit(): void {
+export class DashboardComponent implements AfterViewInit {
+  constructor(private spinner: NgxSpinnerService) { }
+
+  ngAfterViewInit(): void {
     this.spinner.show();
-    this.spinner.hide();
+    this.hideSpinnerAfterLoad();
   }
-  //ng create component components/naziv-komponente
+
+  hideSpinnerAfterLoad(): void {
+    setTimeout(() => {
+      this.spinner.hide();
+    }, 2000); 
+  }
 }
