@@ -21,6 +21,8 @@ export class ProjectDetailsComponent implements OnInit{
   spinner = inject(NgxSpinnerService);
   showCreateButton: boolean = true;
   projectText: string = 'Project details';
+  
+  searchText : string = "";
 
   currentView: string = 'kanban';
   scrolledDown: boolean = false;
@@ -62,6 +64,10 @@ export class ProjectDetailsComponent implements OnInit{
 
   changeView(view: string): void {
     this.currentView = view;
+  }
+  getSearchText(text: string)
+  {
+    this.searchText = text;
   }
 
   @HostListener('window:scroll')

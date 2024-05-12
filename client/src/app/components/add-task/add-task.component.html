@@ -9,11 +9,15 @@
             
             <div class="status-type">
                 <div class="labels">
-                    <span class="name">Status</span>
+                    <span class="name">State</span>
                     <span class="name" id="type">Type</span>
                 </div>
                 <div class="inputs">
-                    <p id="status-select" class="input-field">{{state.name}}</p>
+                    <p-dropdown 
+                    [options]="states" 
+                    [(ngModel)]="selectedState" 
+                    optionLabel="name" 
+                    placeholder="Select a State" />
                     <input class="input-field" id="type-input" type="text" placeholder=" Type" [(ngModel)] = "createTaskObj.type">
                 </div>
             </div>
@@ -23,35 +27,42 @@
                     <span class="name" id="enddate">End Date</span>
                 </div>
                 <div class="inputs">
-                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY" [(ngModel)] = "createTaskObj.start">
-                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY" [(ngModel)] = "createTaskObj.end">
+                    <p-calendar 
+                    [(ngModel)]="StartDate" 
+                    dateFormat="dd.mm.yy" />
+                    <p-calendar 
+                    [(ngModel)]="EndDate" 
+                    dateFormat="dd.mm.yy" />
                 </div>
             </div>
             <div class="role">
                 
                 <div class="custom-dropdown">
                     <span class="name">Assignee</span>
-                    <span class="selected-option" (click)="toggleDropdown()">Select Assignees</span>
-                    <div class="options" *ngIf="showDropdown">
-                        <div class="member-option" *ngFor="let user of users" (click)="toggleUserSelection(user.id, $event)">
-                            <input type="checkbox" [checked]="isSelected(user.id)" (click)="toggleUserSelection(user.id, $event)">
-                            {{ user.name }} {{ user.lastname }}
-                        </div>
-                    </div>
+                    <p-multiSelect 
+                    [options]="users" 
+                    [(ngModel)]="selectedAssignees" 
+                    optionLabel="fulname" 
+                    placeholder="Select Assignees" />
+
 
                 </div>
                 <div class = "custom-dropdown">
-                    <span class = "name">TaskGroup</span><br>
-                    <select id="task_group" [(ngModel)] = "createTaskObj.taskGroupId">
-                        <option *ngFor="let group of taskGroups" [value]="group.id">{{group.title}}</option>
-                    </select>
+                    <span class='name'>Task Group</span>
+                    <p-dropdown 
+                    [options]="taskGroups" 
+                    [(ngModel)]="selectedTaskGroup" 
+                    optionLabel="title" 
+                    placeholder="Select a Task-Group" />
                 </div>
 
                 <div class = "custom-dropdown">
-                    <span class = "name">Priority</span><br>
-                    <select id="task_group" [(ngModel)] = "createTaskObj.priorityId">
-                        <option *ngFor="let priority of priorities" [value]="priority.id">{{priority.description}}</option>
-                    </select>
+                    <span class='name'>Priority</span>
+                    <p-dropdown 
+                    [options]="priorities" 
+                    [(ngModel)]="selectedPriority" 
+                    optionLabel="description" 
+                    placeholder="Select a Priority" />
                 </div>
             </div>
         </div>
@@ -62,14 +73,15 @@
                 <textarea class="input-field" id="description" placeholder="  Write your description" [(ngModel)] = "createTaskObj.description"></textarea>
             </div>
             <div class="related">
-                <span class="name" id="relatedproject">Related tasks</span>
                 <div class="link-create-cancel">
-                    <span id="related-button" (click)="toggleDropdownTask()">Link task</span>
-                    <div class = "task-options" *ngIf="showDropdownTask">
-                        <div class = "task-option" *ngFor="let task of assignments" (click)="toggleTaskSelection(task.id,$event)" >
-                            <input type="checkbox" [checked]="isSelectedTask(task.id)" (click)="toggleTaskSelection(task.id,$event)"> 
-                            <span [title]="task.title">{{task.dummyTitle}}</span>
-                        </div>
+                    <div>
+
+                        <span class="name" id="relatedproject">Related tasks</span><br>
+                    <p-multiSelect 
+                    [options]="assignments" 
+                    [(ngModel)]="selectedDependentOn" 
+                    optionLabel="title" 
+                    placeholder="Select Dependent Tasks" />
                     </div>
                     <div class="create-cancel">
                         <button class="create" (click)="createTask()">Create</button>

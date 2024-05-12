@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild, inject, viewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, Input, OnInit, ViewChild, inject, viewChild } from '@angular/core';
 import { TaskGroup } from '../../models/task/task-group';
 import { ListFlatNode } from '../../models/list-flat-node';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
@@ -10,6 +10,8 @@ import { DateConverterService } from '../../services/date-converter.service';
 import { TaskFilter } from '../../models/task/task-filter';
 import { TaskFilterComponent } from '../task-filter/task-filter.component';
 import { filter } from 'rxjs';
+import { AddTaskComponent } from '../add-task/add-task.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -19,11 +21,13 @@ import { filter } from 'rxjs';
 })
 export class TaskListComponent implements OnInit,AfterViewInit{
   private convertDate = inject(DateConverterService);
+  private dialog = inject(MatDialog);
   public filter : TaskFilter = {
     sortFlag : -1,
     propertyName : "Last Updated"
 
   }
+  @Input() searchFilter! : string; 
   @ViewChild("taskFilter") taskfilterComponent : TaskFilterComponent | undefined;  
   private _transformer = (node: TaskGroup, level: number) => {
     if(node.children!==undefined)
@@ -72,12 +76,14 @@ export class TaskListComponent implements OnInit,AfterViewInit{
   ngAfterViewInit(): void {
     this.taskfilterComponent?.filterEmiter.subscribe(filter=>{
       this.filter = filter;
-      console.log(filter)
-      console.log("stigao filter");
+      this.filter.searchTitle = this.searchFilter;
+      // console.log(filter)
+      // console.log("stigao filter");
       this.loadTasks();
     });
   }
   ngOnInit(): void {
+    this.filter.searchTitle = this.searchFilter;
     this.loadTasks();
   }
 
@@ -89,5 +95,16 @@ export class TaskListComponent implements OnInit,AfterViewInit{
         console.log(this.dataSource.data);
       }
     });
+  }
+
+  openCreateOverlay(node:any): void {
+    const dialogRef = this.dialog.open(AddTaskComponent, {
+      data:[1,this.projectId,node]
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadTasks();
+    });
+    
   }
 }

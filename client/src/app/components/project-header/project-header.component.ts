@@ -7,7 +7,15 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class ProjectHeaderComponent {
   currentView: string = 'kanban';
+  searchText: string = "";
   @Output() viewChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() getSearchText: EventEmitter<string> = new EventEmitter<string>();
+
+  getText()
+  {
+    this.getSearchText.emit(this.searchText);
+  }
+
 
   changeView(view: string) {
     this.viewChange.emit(view);

@@ -5,7 +5,7 @@
     transform: translate(-50%, -50%);
     width: 80%;
     height: auto;
-    background-color: white;
+    background-color: #113a7c;
     z-index: 9999;
     box-shadow: 10px 20px 20px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
@@ -50,7 +50,7 @@
 
 .name {
     font: normal 600 18px/31px 'Open Sans', sans-serif;
-    color: #333333;
+    color: white;
 }
 
 .input-field {
@@ -93,6 +93,7 @@
 
 .link-create-cancel {
     display: flex;
+    color: black;
     justify-content: space-between;
     align-items: center;
     margin-top: 10px; /* Adjust the margin as needed */
