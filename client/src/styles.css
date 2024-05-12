@@ -25,9 +25,14 @@ app-project-header {
     width: 100%;
 }
 
-app-tasks, app-dashboard {
+app-tasks {
     width: 100vw;
     height: 100%;
+}
+
+app-dashboard {
+    height: 45vw;
+    width: 100vw;
 }
 
 body { margin: 0; font-family: Poppins, "Helvetica Neue", sans-serif; height: 100%; overflow-y: hidden;}
