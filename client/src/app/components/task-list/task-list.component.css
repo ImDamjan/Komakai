@@ -1,8 +1,18 @@
 .task-list{
-    padding-top: 120px;
-    width: 90vw;
-    padding-left: 50px;
+    padding-top: 150px;
+    padding-left: 30px;
+    width: 95vw;
 }
 .task{
     color: black;
+}
+mat-tree{
+    overflow-y: auto;
+    width: 70vw;
+    height: 600px;
+    float: left;
+}
+.filter{
+    float: right;
+    padding-right: 20px;
 }

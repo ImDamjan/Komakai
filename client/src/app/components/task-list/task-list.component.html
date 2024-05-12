@@ -1,5 +1,4 @@
 <div class="task-list">
-
   <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
     <!-- This is the tree node template for leaf nodes -->
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
@@ -15,15 +14,18 @@
     </mat-tree-node>
     <!-- This is the tree node template for expandable nodes -->
     <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
-      <button mat-icon-button matTreeNodeToggle
+      <button mat-icon-button matTreeNodeToggle class="expand-field"
               [attr.aria-label]="'Toggle ' + node.name">
         <mat-icon class="mat-icon-rtl-mirror">
           {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
         </mat-icon>
+        <span>{{node.node.title}}</span>
       </button>
-      {{node.node.title}}
     </mat-tree-node>
   </mat-tree>
-  
+  <div class="filter">
+    <app-task-filter #taskFilter [filter]="filter"/>
+
+  </div>
   
 </div>

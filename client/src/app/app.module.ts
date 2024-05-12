@@ -80,6 +80,7 @@ import { ProjectFilterComponent } from './components/project-filter/project-filt
 import { TaskFilterComponent } from './components/task-filter/task-filter.component';
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { MatTreeModule } from '@angular/material/tree';
+import { TaskListTaskComponent } from './components/task-list-task/task-list-task.component';
 
 
 
@@ -127,6 +128,7 @@ import { MatTreeModule } from '@angular/material/tree';
     ProjectFilterComponent,
     TaskFilterComponent,
     TaskListComponent,
+    TaskListTaskComponent,
   ],
   imports: [
     FormsModule,

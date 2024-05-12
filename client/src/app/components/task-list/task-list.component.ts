@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild, inject, viewChild } from '@angular/core';
 import { TaskGroup } from '../../models/task/task-group';
 import { ListFlatNode } from '../../models/list-flat-node';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
@@ -7,6 +7,9 @@ import { AssignmentService } from '../../services/assignment.service';
 import { TaskGroupService } from '../../services/task-group.service';
 import { ActivatedRoute } from '@angular/router';
 import { DateConverterService } from '../../services/date-converter.service';
+import { TaskFilter } from '../../models/task/task-filter';
+import { TaskFilterComponent } from '../task-filter/task-filter.component';
+import { filter } from 'rxjs';
 
 
 @Component({
@@ -14,8 +17,14 @@ import { DateConverterService } from '../../services/date-converter.service';
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
-export class TaskListComponent{
+export class TaskListComponent implements OnInit,AfterViewInit{
   private convertDate = inject(DateConverterService);
+  public filter : TaskFilter = {
+    sortFlag : -1,
+    propertyName : "Last Updated"
+
+  }
+  @ViewChild("taskFilter") taskfilterComponent : TaskFilterComponent | undefined;  
   private _transformer = (node: TaskGroup, level: number) => {
     if(node.children!==undefined)
       {
@@ -42,7 +51,6 @@ export class TaskListComponent{
     node => node.children,
   );
   isTask(smth : any) : boolean{
-    console.log(smth);
     if(smth.assignees!==undefined)
       return true;
     return false;
@@ -53,7 +61,7 @@ export class TaskListComponent{
   // constructor() {
   //   this.dataSource.data = TREE_DATA;
   // }
-  hasChild = (_: number, node: ListFlatNode) => {console.log(node); return node.expandable};
+  hasChild = (_: number, node: ListFlatNode) => {return node.expandable};
   
   private projectId : number = 0;
   private route = inject(ActivatedRoute);
@@ -61,9 +69,25 @@ export class TaskListComponent{
   constructor() {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
   }
+  ngAfterViewInit(): void {
+    this.taskfilterComponent?.filterEmiter.subscribe(filter=>{
+      this.filter = filter;
+      console.log(filter)
+      console.log("stigao filter");
+      this.loadTasks();
+    });
+  }
   ngOnInit(): void {
-    this.task_service.getAllProjectTaskGroupsWithAssignments(this.projectId).subscribe({
-      next : (group: TaskGroup) => {this.dataSource.data = [group]; console.log(this.dataSource.data);}
+    this.loadTasks();
+  }
+
+  loadTasks(): void{
+    this.task_service.getAllProjectTaskGroupsWithAssignments(this.projectId,this.filter).subscribe({
+      next : (group: TaskGroup) => {
+        this.dataSource.data = [group];
+        this.treeControl.expand(this.treeControl.dataNodes[0]);
+        console.log(this.dataSource.data);
+      }
     });
   }
 }
