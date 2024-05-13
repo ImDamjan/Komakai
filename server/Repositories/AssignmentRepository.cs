@@ -28,7 +28,7 @@ namespace server.Repositories
             return a;
 
         }
-        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null, int user_id = 0)
+        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null, List<int>? user_ids = null)
         {
             var assingments_query = _context.Assignments.Where(a=>a.TaskGroupId==group_id)
             .Include(a=>a.Users).ThenInclude(u=>u.Role)
@@ -39,9 +39,10 @@ namespace server.Repositories
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged)
             .AsQueryable();
 
-            if (user_id != 0)
+            if (user_ids !=null && user_ids.Count > 0)
             {
-                assingments_query = assingments_query.Where(a => a.Users.Any(b => b.Id == user_id));
+                // System.Console.WriteLine("Ima nestoooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+                assingments_query = assingments_query.Where(a => a.Users.Any(b => user_ids.Contains(b.Id)));
             }
 
             return await FilterAssignments(assingments_query,filter,sort);

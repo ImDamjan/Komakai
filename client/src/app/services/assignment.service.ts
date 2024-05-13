@@ -108,37 +108,4 @@ export class AssignmentService {
     const url = this.baseUrl + "/Assignment/create";
     return this.http.post<Task>(url,createAssignmentData);
   }
-  // getAllTasks(): Observable<Task[]> { // Specify Task[] as the expected response type
-
-  //   const token = localStorage.getItem('token');
-
-  //   let nameidentifier = '';
-
-  //   if (token) {
-  //     try {
-  //       const decodedToken = jwtDecode(token) as { 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier': string };
-  //       nameidentifier = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-  //       console.log(nameidentifier)
-  //     } catch (error) {
-  //       console.error('Error decoding JWT token:', error);
-  //     }
-  //   }
-
-  //   return this.http.get<Task[]>(this.baseUrl+`/Assignment/getByUser/` + nameidentifier);
-  // }
-  // "taskGroupId": 1,
-  // "userIds": [
-  //   1,4
-  // ],
-  // "start": "2024-04-02T19:24:33.129Z",
-  // "end": "2024-05-02T19:24:33.129Z",
-  // "dependentOn": [
-    
-  // ],
-  // "stateId": 4,
-  // "percentage": 0,
-  // "title": "string",
-  // "type": "string",
-  // "description": "string",
-  // "priorityId": 2
 }

@@ -16,5 +16,10 @@ export class RoleService {
     const url = this.baseUrl + "/Role/getAll";
     return this.http.get<Role[]>(url);
   }
+  getUserProjectRole(user_id: number, project_id : number):Observable<Role>
+  {
+    const url = this.baseUrl + "/Role/getUserRoleOnProject/"+project_id+"/"+user_id;
+    return this.http.get<Role>(url);
+  }
   constructor() { }
 }

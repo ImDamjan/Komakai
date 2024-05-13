@@ -380,6 +380,6 @@ export class ProjectPreviewComponent implements OnInit {
       this.showProjectPreview = true;
     });
     
-    this.showProjectPreview = false;
+    // this.showProjectPreview = false;
   }
 }

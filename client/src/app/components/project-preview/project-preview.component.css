@@ -9,7 +9,8 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-gap: 100px;
-  height: 70%;
+  overflow: auto;
+  height: 600px;
   width: 70%;
   place-items: center;
   padding-top: 15px;

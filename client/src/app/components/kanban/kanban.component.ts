@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, VERSION, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, VERSION, inject } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
 import { Board } from '../../models/kanban/board.model';
 import { Column } from '../../models/kanban/column.model';
@@ -15,6 +15,8 @@ import { Task } from '../../models/task/task';
 import { UpdateTask } from '../../models/task/update-task';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { Role } from '../../models/role';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-kanban',
@@ -25,10 +27,12 @@ export class KanbanComponent implements OnInit{
   name = 'Angular Material ' + VERSION.major + ' Kanban board';
    public board: Board;
    private projectId : number = 0;
+   userProjectRole! : Role;
    private state_service = inject(StateService);
    private assignment_service = inject (AssignmentService);
    private route = inject(ActivatedRoute);
    private jwt_service = inject(JwtDecoderService);
+   private role_service = inject(RoleService);
    private assignments : Task[] = [];
    private spinner = inject(NgxSpinnerService);
    private states : State[] = [];
@@ -48,7 +52,7 @@ export class KanbanComponent implements OnInit{
   //otvaranje create Taska
   openCreateOverlay(column_id : string): void {
     const dialogRef = this.dialog.open(AddTaskComponent, {
-      data:[column_id,this.projectId, this.assignments]
+      data:[column_id,this.projectId]
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -58,8 +62,8 @@ export class KanbanComponent implements OnInit{
       this.projectText = 'Project details';
     });
     
-    this.showProjectDetails = false;
-    this.showCreateButton = false;
+    this.showProjectDetails = true;
+    this.showCreateButton = true;
     this.projectText = 'Project details/Create task';
   }
 
@@ -67,14 +71,20 @@ export class KanbanComponent implements OnInit{
   //pravljenje kanbana
   public ngOnInit(): void {
     let user = this.jwt_service.getLoggedUser();
-    if(user!==null)
+    if(user!==undefined)
     {
-      if(user.role==="Project Manager")
-        this.isManager = true;
-      else if(user.role==="User")
-        this.isUser = true;
-      else if(user.role==="Project Worker")
-        this.isWorker = true;
+
+      this.role_service.getUserProjectRole(user.user_id,this.projectId).subscribe({
+        next : (role: Role)=>{
+          this.userProjectRole = role;
+          if(this.userProjectRole.name==="Project Manager")
+            this.isManager = true;
+          else if(this.userProjectRole.name==="User")
+            this.isUser = true;
+          else if(this.userProjectRole.name==="Project Worker")
+            this.isWorker = true;
+        }
+      });
     }
     this.getBoard();
   }
@@ -118,14 +128,14 @@ export class KanbanComponent implements OnInit{
           columns.push(new Column(state.name,state.id + "",stateProjects,ids));
         });
         this.board.columns = columns;
-
+        this.spinner.hide();
       },
       error : (error:any)=> {console.log(error);}
       });
-      this.spinner.hide();
     },
     error :(error)=> console.log(error)});
   }
+  //menjanje iz detalaja
   public changeState(updated:any)
   {
     //brisanje iz postojece kolone

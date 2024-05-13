@@ -5,6 +5,7 @@ export interface User {
     name : string,
     lastname : string,
     username : string,
+    fulname : string,
     email : string,
     jobTitle : string,
     organisation : string,

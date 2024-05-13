@@ -2,7 +2,7 @@
 // ako je 1 daje sve sto je vece ili jednako vrednosti na koju se odnosi flag, ako je -1 vraca, manje,
 // searchTitle property  je case insensitive.
 export interface TaskFilter {
-    user_id? : number,
+    user_ids? : number[],
     projects? : number[],
     pageNumber? : number,
     pageSize? : number,

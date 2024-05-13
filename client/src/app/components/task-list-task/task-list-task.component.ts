@@ -1,28 +1,29 @@
-import { Component, Input, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
-import { Task } from '../../models/task/task';
-import { MatDialog } from '@angular/material/dialog';
-import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
-import { UserService } from '../../services/user.service';
-import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { ChangeDetectorRef, Component, Input, inject } from '@angular/core';
 import { Role } from '../../models/role';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { Task } from '../../models/task/task';
 import { RoleService } from '../../services/role.service';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { UserService } from '../../services/user.service';
+import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
 
 @Component({
-  selector: 'app-project-task',
-  templateUrl: './project-task.component.html',
-  styleUrl: './project-task.component.css',
+  selector: 'app-task-list-task',
+  templateUrl: './task-list-task.component.html',
+  styleUrl: './task-list-task.component.css'
 })
-export class ProjectTaskComponent implements OnInit{
-  
+export class TaskListTaskComponent {
   private userService = inject(UserService);
   private cdr = inject(ChangeDetectorRef);
-  private jwt_service = inject(JwtDecoderService);
-  private role_service = inject(RoleService);
+  // private jwt_service = inject(JwtDecoderService);
+  // private role_service = inject(RoleService);
   @Input() task!: Task;
-  userProjectRole! : Role;
+  @Input()userProjectRole! : Role;
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  public asigneesString = "";
+  public realAssignessStr = "";
 
   isClick = false;
   initialX: number | undefined;
@@ -31,37 +32,35 @@ export class ProjectTaskComponent implements OnInit{
   picture!: string;
 
   ngOnInit(): void {
-    let loggedUser = this.jwt_service.getLoggedUser();
-    if(loggedUser!==undefined)
+    // let loggedUser = this.jwt_service.getLoggedUser();
+    // if(loggedUser!==undefined)
+    //   this.role_service.getUserProjectRole(loggedUser.user_id,this.task.taskGroup.projectId).subscribe({
+    //     next:(role:Role)=>{
+    //       this.userProjectRole = role;
+    //     }
+    //   });
+    if(this.task!==undefined)
     {
-      this.role_service.getUserProjectRole(loggedUser.user_id,this.task.taskGroup.projectId).subscribe({
-        next:(role:Role)=>{
-          this.userProjectRole = role;
-        }
-      });
-      this.userService.picture$.subscribe(picture => {
-        this.picture = picture;
-        if(this.picture == '')
-          this.profilePicture(this.task.owner.id);
+      this.asigneesString = this.task.assignees[0].name + " "+ this.task.assignees[0].lastname;
+      this.realAssignessStr = this.task.assignees[0].name + " "+ this.task.assignees[0].lastname;
+      for (let index = 1; index < this.task.assignees.length; index++) {
+        const element = this.task.assignees[index];
+        if(index < 2)
+          this.asigneesString+=", " + element.name + " "+element.lastname;
         
-        this.cdr.detectChanges();
-      });
+        this.realAssignessStr+=", " + element.name + " "+element.lastname;
+      }
+      if(this.task.assignees.length >= 3)
+        this.asigneesString+=" +"+(this.task.assignees.length - 2);
+      // console.log(this.asigneesString);
     }
-  }
-
-  getPriorityClass(priority: string): string {
-    switch (priority) {
-        case 'Low':
-            return 'low-priority';
-        case 'Medium':
-            return 'medium-priority';
-        case 'High':
-            return 'high-priority';
-        case 'At risk':
-            return 'at-risk';
-        default:
-            return '';
-    }
+    this.userService.picture$.subscribe(picture => {
+      this.picture = picture;
+      if(this.picture == '')
+        this.profilePicture(this.task.owner.id);
+      
+      this.cdr.detectChanges();
+    });
   }
 
   getStateClass(state: string): string{
@@ -208,6 +207,21 @@ export class ProjectTaskComponent implements OnInit{
     this.isClick = false;
     }
     
+  }
+  public getPriorityClass()
+  {
+    if(this.task.priority.description.toLowerCase() === "low")
+      return "low";
+    if(this.task.priority.description.toLowerCase() === "at risk")
+      return "at-risk";
+    if(this.task.priority.description.toLowerCase() === "medium")
+      return "medium";
+    if(this.task.priority.description.toLowerCase() === "high")
+      return "high";
+    
+    return "";
+
+
   }
 
 

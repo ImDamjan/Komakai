@@ -8,6 +8,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
+import { Role } from '../../models/role';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 
 @Component({
@@ -21,6 +23,8 @@ export class ProjectDetailsComponent implements OnInit{
   spinner = inject(NgxSpinnerService);
   showCreateButton: boolean = true;
   projectText: string = 'Project details';
+  user_project_role! : Role;
+  searchText : string = "";
 
   currentView: string = 'kanban';
   scrolledDown: boolean = false;
@@ -37,31 +41,36 @@ export class ProjectDetailsComponent implements OnInit{
     });
   }
 
-  //treba da vraca ceo projekat koji ce kasnije da se prosledi overlay-u
+
+
   fetchProjectName(projectId: number): void {
     this.projectService.getProjectById(projectId)
     .subscribe((project: Project) => {
-      this.projectName = project.title; 
+        this.projectName = project.title; 
     });
   }
 
-  openCreateOverlay(): void {
-    const dialogRef = this.dialog.open(AddTaskComponent, {
-    });
+  // openCreateOverlay(): void {
+  //   const dialogRef = this.dialog.open(AddTaskComponent, {
+  //   });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.showProjectDetails = true;
-      this.showCreateButton = true;
-      this.projectText = 'Project details';
-    });
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     this.showProjectDetails = true;
+  //     this.showCreateButton = true;
+  //     this.projectText = 'Project details';
+  //   });
     
-    this.showProjectDetails = false;
-    this.showCreateButton = false;
-    this.projectText = 'Project details/Create task';
-  }
+  //   this.showProjectDetails = false;
+  //   this.showCreateButton = false;
+  //   this.projectText = 'Project details/Create task';
+  // }
 
   changeView(view: string): void {
     this.currentView = view;
+  }
+  getSearchText(text: string)
+  {
+    this.searchText = text;
   }
 
   @HostListener('window:scroll')

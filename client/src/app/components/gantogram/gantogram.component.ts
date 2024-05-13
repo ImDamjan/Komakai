@@ -37,6 +37,7 @@ import { log } from 'console';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
 import { AssignmentService } from '../../services/assignment.service';
+import { Role } from '../../models/role';
 
 
 
@@ -54,6 +55,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   private  modalService = inject(NgbModal);
   private decoder = inject(JwtDecoderService);
   private userId : number = 0;
+  userProjectRole! : Role;//dodati role servis i uzeti project role
   private projectId : number = 0;
   private route = inject(ActivatedRoute);
   private ganttService = inject(GantogramService)

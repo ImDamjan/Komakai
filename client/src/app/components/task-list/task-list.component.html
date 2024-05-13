@@ -1,0 +1,39 @@
+<div class="task-list">
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <!-- This is the tree node template for leaf nodes -->
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+      <!-- use a disabled button to provide padding for tree leaf -->
+      <button mat-icon-button disabled></button>
+      <!-- {{node.name}} -->
+      <div *ngIf="isTask(node.node)" class = 'task'>
+        <app-task-list-task [userProjectRole]="userProjectRole" [task]="node.node"></app-task-list-task>
+      </div>
+      <div *ngIf="!isTask(node.node)" class = 'taskGroup'>
+        <span class="text-task-group"><b>{{node.node.title}}</b></span>
+        <div *ngIf="isManager" class="create-buttons" style="display: inline;">
+          <button (click)="openCreateOverlay(node.node)">Create task</button>
+          <button class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
+        </div>
+      </div>
+    </mat-tree-node>
+    <!-- This is the tree node template for expandable nodes -->
+    <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+      <button mat-icon-button matTreeNodeToggle class="expand-field"
+              [attr.aria-label]="'Toggle ' + node.name">
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+        <span>{{node.node.title}}</span>
+      </button>
+      <div *ngIf="isManager" class="create-buttons">
+        <button (click)="openCreateOverlay(node.node)">Create task</button>
+        <button class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
+      </div>
+    </mat-tree-node>
+  </mat-tree>
+  <div class="filter">
+    <app-task-filter #taskFilter [filter]="filter"/>
+
+  </div>
+  
+</div>

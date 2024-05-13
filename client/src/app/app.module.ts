@@ -63,7 +63,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { ProfileDetailsComponent } from './components/profile-details/profile-details.component';
 import { SortDetailsComponent } from './components/sort-details/sort-details.component';
 import { FilterProjectComponent } from './components/filter-project/filter-project.component';
@@ -78,6 +78,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectFilterComponent } from './components/project-filter/project-filter.component';
 import { TaskFilterComponent } from './components/task-filter/task-filter.component';
+import { TaskListComponent } from './components/task-list/task-list.component';
+import { MatTreeModule } from '@angular/material/tree';
+import { TaskListTaskComponent } from './components/task-list-task/task-list-task.component';
+import { AddTaskGroupComponent } from './components/add-task-group/add-task-group.component';
 
 
 
@@ -124,6 +128,9 @@ import { TaskFilterComponent } from './components/task-filter/task-filter.compon
     SortProjectComponent,
     ProjectFilterComponent,
     TaskFilterComponent,
+    TaskListComponent,
+    TaskListTaskComponent,
+    AddTaskGroupComponent,
   ],
   imports: [
     FormsModule,
@@ -153,6 +160,8 @@ import { TaskFilterComponent } from './components/task-filter/task-filter.compon
     MatIconModule,
     MatTooltipModule,
     MatButtonModule,
+    MatIconModule,
+    MatTreeModule,
     NgToastModule,
     MatChipsModule,
     NgbModule,

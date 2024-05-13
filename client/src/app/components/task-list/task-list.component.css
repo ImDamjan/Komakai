@@ -1,0 +1,36 @@
+.task-list{
+    padding-top: 150px;
+    padding-left: 30px;
+    width: 95vw;
+}
+.task{
+    color: black;
+}
+mat-tree{
+    overflow-y: auto;
+    background-color: #113a7c;;;
+    width: 70vw;
+    height: 600px;
+    float: left;
+}
+.filter{
+    float: right;
+    padding-right: 20px;
+}
+.create-buttons{
+    padding-left: 250px;
+}
+.create-buttons button{
+    padding: 5px 20px;
+    background-color:  #001B47;
+    color: white;
+    border: 1px solid #001B47;
+    border-radius: 25px;
+}
+.create-buttons button:hover{
+    background-color:   #17315D;
+    color: white;
+}
+.tgb{
+    margin-left: 20px;
+}

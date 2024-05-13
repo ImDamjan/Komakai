@@ -298,9 +298,14 @@ namespace server.Controllers
         {
             var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project_id);
             var res = new List<AssignmentDto>();
+            var user = new List<int>();
+            if(user_id > 0)
+            {
+                user.Add(user_id);
+            }
             foreach (var group in groups)
             {
-                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id, filter,sort, user_id);
+                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id, filter,sort, user);
                 for (int i = 0; i< tasks.Count;i++)
                 {
                     var dep = new List<int>();
