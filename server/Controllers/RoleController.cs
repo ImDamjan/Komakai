@@ -43,5 +43,15 @@ namespace server.Controllers
 
             return Ok(permissionDtos);
         }
+
+        [HttpGet("getUserRoleOnProject/{project_id}/{user_id}")]
+        public async Task<IActionResult> GetUserRoleOnProject([FromRoute]int project_id, [FromRoute]int user_id)
+        {
+            var role = await _role_repo.GetUserRoleOnProject(project_id,user_id);
+            if(role==null)
+                return BadRequest("user or project not found");
+            
+            return Ok(role.toRoleDto());
+        }
     }
 }

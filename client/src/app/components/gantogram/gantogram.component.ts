@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, ViewChild, inject } from '@angular/core';
 import {srLatn} from 'date-fns/locale'
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
@@ -33,6 +33,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import html2Canvas from 'html2Canvas'
 import { dateToUnixTimestamp } from 'ngx-tethys/util';
+import { Role } from '../../models/role';
 
 
 
@@ -47,6 +48,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   
   private decoder = inject(JwtDecoderService);
   private userId : number = 0;
+  userProjectRole! : Role;//dodati role servis i uzeti project role
   private projectId : number = 0;
   private route = inject(ActivatedRoute);
   private ganttService = inject(GantogramService)

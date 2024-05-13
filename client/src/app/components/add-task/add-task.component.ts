@@ -100,7 +100,9 @@ export class AddTaskComponent implements OnInit {
     }
       // this.assignments = this.data[2];
     this.assignmentService.getAllProjectAssignments(this.data[1]).subscribe({
-      next: (tasks: Task[]) => {this.assignments = tasks;}
+      next: (tasks: Task[]) => {
+        this.assignments = tasks;
+      }
     });
   
     this.priority_service.getPriorities().subscribe({

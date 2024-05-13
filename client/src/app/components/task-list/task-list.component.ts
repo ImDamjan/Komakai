@@ -13,6 +13,9 @@ import { filter } from 'rxjs';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskGroupComponent } from '../add-task-group/add-task-group.component';
+import { Role } from '../../models/role';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { RoleService } from '../../services/role.service';
 
 
 @Component({
@@ -22,12 +25,15 @@ import { AddTaskGroupComponent } from '../add-task-group/add-task-group.componen
 })
 export class TaskListComponent implements OnInit,AfterViewInit{
   private convertDate = inject(DateConverterService);
+  private jwt_service = inject(JwtDecoderService);
+  private role_service = inject(RoleService);
   private dialog = inject(MatDialog);
   public filter : TaskFilter = {
     sortFlag : -1,
     propertyName : "Last Updated"
 
   }
+  userProjectRole! : Role;
   @Input() searchFilter! : string; 
   @ViewChild("taskFilter") taskfilterComponent : TaskFilterComponent | undefined;  
   private _transformer = (node: TaskGroup, level: number) => {
@@ -60,6 +66,9 @@ export class TaskListComponent implements OnInit,AfterViewInit{
       return true;
     return false;
   }
+  isManager : boolean = false;
+  isUser : boolean = false;
+  isWorker : boolean = false;
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
@@ -83,7 +92,26 @@ export class TaskListComponent implements OnInit,AfterViewInit{
       this.loadTasks();
     });
   }
+
+  //za ogranicavanje napravi api na beku za uzimanje project role korisnika i sa tim poredi
   ngOnInit(): void {
+    let user = this.jwt_service.getLoggedUser();
+    if(user!==undefined)
+    {
+
+      this.role_service.getUserProjectRole(user.user_id,this.projectId).subscribe({
+        next : (role: Role)=>{
+          this.userProjectRole = role;
+          if(this.userProjectRole.name==="Project Manager")
+            this.isManager = true;
+          else if(this.userProjectRole.name==="User")
+            this.isUser = true;
+          else if(this.userProjectRole.name==="Project Worker")
+            this.isWorker = true;
+        }
+      });
+    }
+
     this.filter.searchTitle = this.searchFilter;
     this.loadTasks();
   }
@@ -92,7 +120,8 @@ export class TaskListComponent implements OnInit,AfterViewInit{
     this.task_service.getAllProjectTaskGroupsWithAssignments(this.projectId,this.filter).subscribe({
       next : (group: TaskGroup) => {
         this.dataSource.data = [group];
-        this.treeControl.expand(this.treeControl.dataNodes[0]);
+        // this.treeControl.expand(this.treeControl.dataNodes[0]);
+        this.treeControl.expandAll();
         console.log(this.dataSource.data);
       }
     });

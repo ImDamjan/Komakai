@@ -2,6 +2,7 @@ import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, Simp
 import { Task } from '../../models/task/task';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
+import { Role } from '../../models/role';
 
 @Component({
   selector: 'app-task-card-kanban',
@@ -10,6 +11,7 @@ import { TaskDetailsComponent } from '../../pages/task-details/task-details.comp
 })
 export class TaskCardKanbanComponent implements OnInit {
   @Input() public task! : Task;
+  @Input()userProjectRole! : Role;
   private dialog = inject(MatDialog);
   ngOnInit(): void {
     this.task.end = new Date(this.task.end);
@@ -59,7 +61,7 @@ export class TaskCardKanbanComponent implements OnInit {
   openShowTaskOverlay(): void {
     console.log(this.task);
     const dialogRef = this.dialog.open(TaskDetailsComponent, {
-      data:[this.task]
+      data:[this.task,0,this.userProjectRole]
     });
 
     dialogRef.afterClosed().subscribe(result => {

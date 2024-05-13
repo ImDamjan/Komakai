@@ -5,6 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
 import { UserService } from '../../services/user.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { Role } from '../../models/role';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-project-task',
@@ -15,7 +17,10 @@ export class ProjectTaskComponent implements OnInit{
   
   private userService = inject(UserService);
   private cdr = inject(ChangeDetectorRef);
+  private jwt_service = inject(JwtDecoderService);
+  private role_service = inject(RoleService);
   @Input() task!: Task;
+  userProjectRole! : Role;
   private router = inject(Router);
   private dialog = inject(MatDialog);
 
@@ -26,14 +31,22 @@ export class ProjectTaskComponent implements OnInit{
   picture!: string;
 
   ngOnInit(): void {
-
-    this.userService.picture$.subscribe(picture => {
-       this.picture = picture;
-       if(this.picture == '')
-        this.profilePicture(this.task.owner.id);
-
-       this.cdr.detectChanges();
-    });
+    let loggedUser = this.jwt_service.getLoggedUser();
+    if(loggedUser!==undefined)
+    {
+      this.role_service.getUserProjectRole(loggedUser.user_id,this.task.taskGroup.projectId).subscribe({
+        next:(role:Role)=>{
+          this.userProjectRole = role;
+        }
+      });
+      this.userService.picture$.subscribe(picture => {
+        this.picture = picture;
+        if(this.picture == '')
+          this.profilePicture(this.task.owner.id);
+        
+        this.cdr.detectChanges();
+      });
+    }
   }
 
   getPriorityClass(priority: string): string {
@@ -185,7 +198,7 @@ export class ProjectTaskComponent implements OnInit{
 
     if (this.isClick && deltaX < this.threshold && deltaY < this.threshold){
       const dialogRef = this.dialog.open(TaskDetailsComponent, {
-        data:[this.task]
+        data:[this.task, 0,this.userProjectRole]
       });
 
       dialogRef.afterClosed().subscribe(result => {

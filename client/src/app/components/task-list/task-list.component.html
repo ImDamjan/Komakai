@@ -10,7 +10,7 @@
       </div>
       <div *ngIf="!isTask(node.node)" class = 'taskGroup'>
         <span class="text-task-group"><b>{{node.node.title}}</b></span>
-        <div class="create-buttons" style="display: inline;">
+        <div *ngIf="isManager" class="create-buttons" style="display: inline;">
           <button (click)="openCreateOverlay(node.node)">Create task</button>
           <button class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
         </div>
@@ -25,7 +25,7 @@
         </mat-icon>
         <span>{{node.node.title}}</span>
       </button>
-      <div class="create-buttons">
+      <div *ngIf="isManager" class="create-buttons">
         <button (click)="openCreateOverlay(node.node)">Create task</button>
         <button class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
       </div>
