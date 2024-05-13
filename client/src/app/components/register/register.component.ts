@@ -37,9 +37,7 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.spinner.show();
     if (this.registerForm.valid) {
-      // Remove confirmPassword from the form value before sending to the server
       const { ConfirmPassword, ...formData } = this.registerForm.value;
-      console.log(formData);
       let register : Register = {
         username: formData.Username,
         name: formData.Name,
@@ -55,15 +53,12 @@ export class RegisterComponent implements OnInit {
         return;
       }
       this.validRole = false;
-      // Send the object to the database
       this.reg.register(register)
         .subscribe({
           next: (res) => {
             alert("User registered successfully");
-            // this.router.navigate(['auth/']);
             this.registerForm.reset();
             this.spinner.hide();
-            //add redirection to login
           },
           error: (err) => {
             alert(err?.error.message);

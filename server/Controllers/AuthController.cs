@@ -53,7 +53,15 @@ namespace server.Controllers
                 IsActivated = true
             };
 
-
+            var role = await _role_repo.GetRoleByIdAsync(request.RoleId);
+            if (role != null)
+            {
+                newUser.JobTitle = role.Name;
+            }
+            else
+            {
+                newUser.JobTitle = "Unknown";
+            }
 
             //Dodavanje korsnika u DBContext
             await _repos.AddUserAsync(newUser);
