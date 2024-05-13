@@ -128,11 +128,10 @@ export class KanbanComponent implements OnInit{
           columns.push(new Column(state.name,state.id + "",stateProjects,ids));
         });
         this.board.columns = columns;
-
+        this.spinner.hide();
       },
       error : (error:any)=> {console.log(error);}
       });
-      this.spinner.hide();
     },
     error :(error)=> console.log(error)});
   }
