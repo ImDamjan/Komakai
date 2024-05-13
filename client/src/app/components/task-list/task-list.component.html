@@ -6,7 +6,7 @@
       <button mat-icon-button disabled></button>
       <!-- {{node.name}} -->
       <div *ngIf="isTask(node.node)" class = 'task'>
-        <app-project-task [task]="node.node"></app-project-task>
+        <app-task-list-task [userProjectRole]="userProjectRole" [task]="node.node"></app-task-list-task>
       </div>
       <div *ngIf="!isTask(node.node)" class = 'taskGroup'>
         <span class="text-task-group"><b>{{node.node.title}}</b></span>

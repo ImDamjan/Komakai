@@ -6,5 +6,6 @@ export interface TaskGroup {
     projectId: number,
     parentTaskGroupId: number,
     children? : any[],
-    assignments : Task[]
+    assignments : Task[],
+    dummyTitle?: string
 }

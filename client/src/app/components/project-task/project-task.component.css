@@ -76,14 +76,14 @@
   align-items: center;
   justify-content: center;
 }
+.vreme img{
+  vertical-align: middle;
+}
 
 .vreme2{
   position: relative;
 }
 
-.vreme img{
-  vertical-align: middle;
-}
 
 .tekst{
   font-size: 13px;

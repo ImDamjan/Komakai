@@ -41,7 +41,20 @@ export class TaskListComponent implements OnInit,AfterViewInit{
       {
         node.children.forEach(element => {
           if(this.isTask(element))
+          {
+            element.dummyTitle = element.title;
+            if(element.title.length > 20)
+            {
+              let new_title = "";
+              for (let i = 0; i < 20; i++) {
+                const elem = element.title[i];
+                new_title+=elem;
+              }
+              new_title+="...";
+              element.dummyTitle = new_title;
+            }
             this.convertDate.setDateParametersForTask(element);
+          }
         });
       }
     return {
