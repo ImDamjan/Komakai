@@ -26,7 +26,7 @@ app-project-header {
     width: 100%;
 }
 
-app-tasks {
+app-tasks, app-admin {
     width: 100vw;
     height: 100%;
 }

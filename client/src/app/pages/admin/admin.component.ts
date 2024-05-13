@@ -17,6 +17,8 @@ export class AdminComponent implements OnInit {
   private role_service = inject(RoleService);
   private spinner = inject(NgxSpinnerService);
   private user_service = inject(UserService);
+  register: boolean = false;
+  members: boolean = true;
   
   ngOnInit(): void {
     this.spinner.show();
@@ -32,4 +34,13 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  showRegister(): void {
+    this.register = true;
+    this.members = false;
+  }
+
+  showMembers(): void {
+    this.members = true;
+    this.register = false;
+  }
 }

@@ -1,4 +1,18 @@
 <div class="wrapper">
-    <div class="register"><app-register [roles]="roles"></app-register></div>
-    <div class="members"><app-member [roles]="roles" [users]="users"></app-member></div>
+  <div id="header">
+    <div class="search" [class.hide]="!members">
+      <input type="text" pInputText id="search-field" placeholder="Search for a user...">
+    </div>
+    <button id="registerButton" pButton type="button" (click)="showRegister()" label="Add a new user"></button>
+    <button id="membersButton" pButton type="button" (click)="showMembers()" label="Show all users"></button>
   </div>
+
+  <div class="content">
+    <div class="register" *ngIf="register">
+      <app-register [roles]="roles"></app-register>
+    </div>
+    <div class="members" *ngIf="members">
+      <app-member [roles]="roles" [users]="users"></app-member>
+    </div>
+  </div>
+</div>

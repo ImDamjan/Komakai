@@ -59,6 +59,7 @@ import {SliderModule} from 'primeng/slider'
 import {MultiSelectModule} from 'primeng/multiselect'
 import {CalendarModule} from 'primeng/calendar'
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
@@ -165,7 +166,7 @@ import { AddTaskGroupComponent } from './components/add-task-group/add-task-grou
     NgToastModule,
     MatChipsModule,
     NgbModule,
-
+    InputTextModule,
   ],
   providers: [
     provideClientHydration(),
