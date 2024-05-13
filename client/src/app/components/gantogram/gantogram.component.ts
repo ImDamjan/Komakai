@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, EventEmitter,Component, ElementRef, HostBinding, Input, OnInit, Output, TemplateRef, ViewChild, inject } from '@angular/core';
 import {srLatn} from 'date-fns/locale'
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
@@ -34,6 +34,10 @@ import { DatePipe } from '@angular/common';
 
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { log } from 'console';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
+import { AssignmentService } from '../../services/assignment.service';
+
 
 
 
@@ -53,7 +57,12 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   private projectId : number = 0;
   private route = inject(ActivatedRoute);
   private ganttService = inject(GantogramService)
+  private assignmentService = inject(AssignmentService)
   private itemsOldState: GanttItem[] = [];
+
+  @Input() task!: Task;
+  private dialog = inject(MatDialog);
+  @Output() newItemEvent = new EventEmitter<{previous_state : number, task: Task}>();
 
   views = [
       
@@ -158,6 +167,43 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
       
   }
+
+  public getUpdateEmitter(task:Task)
+  {
+    if(this.task.id===task.id)
+    {
+      this.task = task;
+    }
+  }
+
+  openShowTaskOverlay(task : Task): void {
+    console.log(task);
+    const dialogRef = this.dialog.open(TaskDetailsComponent, {
+      data:[task]
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.newItemEvent.emit({previous_state : task.state.id,task:result});
+      this.task = result;
+    });
+  }
+
+  getTaskByID(id:string){
+      this.assignmentService.getAssignmentById(parseInt(id)).subscribe({
+        next : (task: Task)=> 
+          {
+            if (task){
+              task.start = new Date(task.start);
+              task.end = new Date(task.end);
+              this.openShowTaskOverlay(task);
+
+            } else {
+                console.log("No tasks found or tasks[0] is undefined.");
+            }
+          },
+        error:(error: any)=> console.log(error)
+      });
+  }
   
 
   openVerticallyCentered(content: TemplateRef<any>): Promise<boolean> {
@@ -260,9 +306,9 @@ showWarn(topic:string,message:string) {
   }
 
   barClick(event: GanttBarClickEvent) {
-
+    this.getTaskByID(event.item.id)
     //  ovde treba otvoriti modal za task details 
-    this.showSuccess("BarClick", `Ovo je poruka za success obavestenje kada se klikne na bar gantograma [id = ${event.item.id}] [Task Name = ${event.item.title}`);
+    // this.showSuccess("BarClick", `Ovo je poruka za success obavestenje kada se klikne na bar gantograma [id = ${event.item.id}] [Task Name = ${event.item.title}`);
   }
 //   kada kliknemo na vezxu tj liniju izmedju dva taska (bara)
   lineClick(event: GanttLineClickEvent) {
