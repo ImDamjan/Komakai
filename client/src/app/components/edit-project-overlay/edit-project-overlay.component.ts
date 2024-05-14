@@ -69,10 +69,12 @@ export class EditProjectOverlayComponent {
 
   ngOnInit(): void {
     let token = this.jwtService.getToken();
+    let userId = 0;
         if (token != null) {
             let decode = this.jwtService.decodeToken(token);
             this.loggedInUserId = decode.user_id;
             this.roleid = decode.role_id;
+            userId = decode.user_id;
             this.fullname = decode.fullname;
         }
     this.roleService.getAllRoles().subscribe(roles => {
@@ -96,7 +98,7 @@ export class EditProjectOverlayComponent {
     this.priorityService.getPriorities().subscribe(priorities => {
       this.priorities = priorities;
     });
-    this.teamService.getTeams().subscribe(teams => {
+    this.teamService.getMyCreatedTeams(userId).subscribe(teams => {
       this.teams = teams;
     });
     this.stateService.fetchAllStates().subscribe(states => {

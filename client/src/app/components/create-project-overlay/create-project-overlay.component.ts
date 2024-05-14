@@ -77,7 +77,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.priorityService.getPriorities().subscribe(priorities => {
       this.priorities = priorities;
     });
-    this.teamService.getTeams().subscribe(teams => {
+    this.teamService.getMyCreatedTeams(this.userid).subscribe(teams => {
       this.teams = teams;
     });
     this.projectObj = {

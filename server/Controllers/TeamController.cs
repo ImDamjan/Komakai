@@ -37,6 +37,20 @@ namespace server.Controllers
 
             return Ok(teamDtos);
         }
+        [HttpGet("getAllCreatedTeamsByUser/{user_id}")]
+        public async Task<IActionResult> GetAllCreatedTeamsByUser([FromRoute] int user_id,[FromQuery] string searchText = "")
+        {
+            var teams = await _team_repo.GetAllCreatedTeamsByUserAsync(user_id, searchText);
+
+            var teamDtos = new List<TeamDto>();
+            foreach (var team in teams)
+            {
+                var members = team.Users.Select(u=>u.toUserRoleDto(u.Role.toRoleDto())).ToList();
+                teamDtos.Add(team.ToTeamDto(members));
+            }
+
+            return Ok(teamDtos);
+        }
         [HttpGet]
         [Route("getTeam/{teamId}")]
 
@@ -70,8 +84,11 @@ namespace server.Controllers
         [HttpPost("createTeam")]
         public async Task<IActionResult> CreateTeam([FromBody]CreateTeamDto dto)
         {
+            if(dto.CreatedBy <= 0)
+                return BadRequest("that user cannot create team");
+            if(dto.Members.Count() <= 0)
+                return BadRequest("memeber list is empty");
             var team = dto.fromCreateDtoToTeam();
-            
             var users =  new List<User>();
             foreach (var userId in dto.Members)
             {
@@ -108,6 +125,17 @@ namespace server.Controllers
             var user_dtos = users.Select(u=>u.toUserRoleDto(u.Role.toRoleDto())).ToList();
             return Ok(response.ToTeamDto(user_dtos));
         }
+
+        [HttpDelete("delete/{team_id}")]
+        public async Task<IActionResult> DeleteTeam([FromRoute] int team_id)
+        {
+            var team = await _team_repo.DeleteTeamAsync(team_id);
+            if(team==null)
+                return NotFound("team not found");
+
+            return Ok("team deleted successfully");
+        }
+        
 
     }
 }

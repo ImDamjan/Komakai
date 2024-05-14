@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Team } from '../models/team';
 import { environment } from '../environments/environment';
@@ -14,5 +14,13 @@ export class TeamService {
 
   getTeams(): Observable<Team[]> {
     return this.http.get<Team[]>(`${this.apiUrl}/Team/getTeams`);
+  }
+  getMyCreatedTeams(userId : number, searchText: string = "") : Observable<Team[]>
+  {
+    const url = this.apiUrl + "/Team/getAllCreatedTeamsByUser/" + userId;
+    let httpParams : HttpParams = new HttpParams();
+    if(searchText!=="")
+      httpParams.set("searchText",searchText);
+    return this.http.get<Team[]>(url,{params:httpParams});
   }
 }

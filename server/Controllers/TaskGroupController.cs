@@ -126,5 +126,13 @@ namespace server.Controllers
             return Ok(group.toTaskGroupDto());
 
         }
+        [HttpDelete("delete/{group_id}")]
+        public async Task<IActionResult> Delete([FromRoute] int group_id)
+        {
+            var group = await _group_repo.deleteTaskGroupAsync(group_id);
+            if(group==null)
+                return NotFound("group not found");
+            return Ok("group deleted successfully");
+        }
     }
 }

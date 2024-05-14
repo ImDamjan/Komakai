@@ -4,5 +4,6 @@ export interface Team {
     id : number,
     name : string,
     type : string,
-    members : User[]
+    members : User[],
+    createdBy: number,
 }
