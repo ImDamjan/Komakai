@@ -30,11 +30,7 @@ export class TeamsComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.show();
     this.loggedUser = this.jwt_service.getLoggedUser();
-    this.team_service.getMyCreatedTeams(this.loggedUser.user_id).subscribe({
-      next :(teams: Team[]) =>{
-        this.teams = teams;
-      }
-    });
+    this.loadTeams();
     this.user_service.getUsers().subscribe({
       next :(users: User[])=>{
         let pom: User[] = []
@@ -44,6 +40,17 @@ export class TeamsComponent implements OnInit {
           pom.push(element);
         });
         this.users = pom;
+        this.spinner.hide();
+      }
+    });
+  }
+
+  loadTeams()
+  {
+    this.spinner.show();
+    this.team_service.getMyCreatedTeams(this.loggedUser.user_id).subscribe({
+      next :(teams: Team[]) =>{
+        this.teams = teams;
         this.spinner.hide();
       }
     });

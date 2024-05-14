@@ -23,4 +23,8 @@ export class TeamService {
       httpParams.set("searchText",searchText);
     return this.http.get<Team[]>(url,{params:httpParams});
   }
+
+  createTeam(){
+    
+  }
 }

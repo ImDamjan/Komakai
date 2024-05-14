@@ -19,7 +19,7 @@ export const pmAuthorizationGuard: CanActivateFn = (route, state) => {
     }
     else
     {
-      if(route.url[0].path === 'dashboard')
+      if(route.url[0].path === 'dashboard' || route.url[0].path==="teams")
       {
           router.navigate(['/projects'])
           return false;
