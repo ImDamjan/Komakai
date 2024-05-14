@@ -20,11 +20,12 @@ export class TeamService {
     const url = this.apiUrl + "/Team/getAllCreatedTeamsByUser/" + userId;
     let httpParams : HttpParams = new HttpParams();
     if(searchText!=="")
-      httpParams.set("searchText",searchText);
+      httpParams = httpParams.set("searchText",searchText);
     return this.http.get<Team[]>(url,{params:httpParams});
   }
 
-  createTeam(){
-    
+  createTeam(body: any) : Observable<Team>{
+    const url = this.apiUrl + "/Team/createTeam";
+    return this.http.post<Team>(url,body);
   }
 }
