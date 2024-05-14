@@ -16,7 +16,8 @@ namespace server.Mappers
                 Id = t.Id,
                 Name = t.Name,
                 Type = t.Type,
-                Members = members
+                Members = members,
+                CreatedBy = t.CreatedBy
             };
         }
 
@@ -25,6 +26,7 @@ namespace server.Mappers
             return new Team{
                 Name = dto.Name,
                 Type = dto.Type,
+                CreatedBy = dto.CreatedBy
             };
         }
     }

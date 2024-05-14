@@ -19,6 +19,7 @@ namespace server.Models
         [Column("owner")]
         public int Owner { get; set; }
 
+        public bool IsClosed { get; set; }
         [Column("description")]
         public string Description { get; set; } = null!;
 

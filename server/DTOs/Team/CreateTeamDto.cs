@@ -10,6 +10,7 @@ namespace server.DTOs.Team
     {
         public string Name { get; set; } = null!;
         public string Type { get; set; } = null!;
+        public int CreatedBy { get; set; }
 
         public List<int> Members { get; set; } =  new List<int>();
     }

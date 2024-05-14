@@ -312,11 +312,11 @@ namespace server.Data
                     //Teams
                     var teams = new List<Team>
                     {
-                        new Team { Id = 1, Name = "Team A", Type = "Type 1", Users = new List<User>{users[0],users[2],users[3],users[6]} },
-                        new Team { Id = 2, Name = "Team B", Type = "Type 2", Users = new List<User>{users[1],users[5],users[4],users[7]} },
-                        new Team { Id = 3, Name = "Team C", Type = "Type 1", Users = new List<User>{users[8],users[0],users[2],users[4]} },
-                        new Team { Id = 4, Name = "Team D", Type = "Type 2", Users = new List<User>{users[1],users[4],users[3],users[6]} },
-                        new Team { Id = 5, Name = "Team E", Type = "Type 1", Users = new List<User>{users[5],users[7],users[8],users[0]} }
+                        new Team { Id = 1, Name = "Team A", Type = "Type 1", CreatedBy = users[0].Id, Users = new List<User>{users[0],users[2],users[3],users[6]} },
+                        new Team { Id = 2, Name = "Team B", Type = "Type 2", CreatedBy = users[1].Id, Users = new List<User>{users[1],users[5],users[4],users[7]} },
+                        new Team { Id = 3, Name = "Team C", Type = "Type 1", CreatedBy = users[0].Id, Users = new List<User>{users[8],users[0],users[2],users[4]} },
+                        new Team { Id = 4, Name = "Team D", Type = "Type 2", CreatedBy = users[1].Id, Users = new List<User>{users[1],users[4],users[3],users[6]} },
+                        new Team { Id = 5, Name = "Team E", Type = "Type 1", CreatedBy = users[0].Id, Users = new List<User>{users[5],users[7],users[8],users[0]} }
                     };
 
                     _context.Teams.AddRange(teams);
@@ -732,6 +732,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[0],users[2]},
                                     
                                 },
@@ -748,6 +749,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[6],users[3]},
                                     
                                 },
@@ -764,6 +766,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[2],users[3]},
                                     
                                 },
@@ -781,6 +784,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[1],users[4]},
                                     
                                 },
@@ -797,6 +801,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[5],users[7]},
                                     
                                 },
@@ -813,6 +818,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[1]},
                                     
                                 },
@@ -830,6 +836,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[8],users[0]},
                                     
                                 },
@@ -846,6 +853,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[2],users[4]},
                                     
                                 },
@@ -862,6 +870,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[0],users[4]},
                                     
                                 },
@@ -879,6 +888,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[1],users[4],users[6]},
                                     
                                 },
@@ -895,6 +905,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[6],users[3]},
                                     
                                 },
@@ -911,6 +922,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[4]},
                                     
                                 },
@@ -928,6 +940,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 5,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[5],users[7]},
                                     
                                 },
@@ -944,6 +957,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 5,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[8]},
                                     
                                 },
@@ -960,6 +974,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 5,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[0],users[7]},
                                     
                                 },
@@ -977,6 +992,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[0],users[2]},
                                     
                                 },
@@ -993,6 +1009,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[6],users[3]},
                                     
                                 },
@@ -1009,6 +1026,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[2],users[3]},
                                     
                                 },
@@ -1026,6 +1044,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[1],users[4]},
                                     
                                 },
@@ -1042,6 +1061,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[5],users[7]},
                                     
                                 },
@@ -1058,6 +1078,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[1]},
                                     
                                 },
@@ -1075,6 +1096,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[8],users[0]},
                                     
                                 },
@@ -1091,6 +1113,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[4],users[2]},
                                     
                                 },
@@ -1107,6 +1130,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[0],users[4],users[8]},
                                     
                                 },
@@ -1124,6 +1148,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[3],users[6],users[4]},
                                     
                                 },
@@ -1140,6 +1165,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[3],users[6]},
                                     
                                 },
@@ -1156,6 +1182,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[1],users[4]},
                                     
                                 },
@@ -1173,6 +1200,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 10,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[8],users[7]},
                                     
                                 },
@@ -1189,6 +1217,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 10,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[0],users[7]},
                                     
                                 },
@@ -1205,6 +1234,7 @@ namespace server.Data
                                     Type = "Neki tip",
                                     TaskGroupId = 10,
                                     LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
                                     Users = new List<User>{users[5]},
                                     
                                 },
