@@ -214,4 +214,8 @@ export class AddTaskComponent implements OnInit {
 
      
   }
+  closeOverlay(): void {
+    // Close the overlay dialog
+    this.dialogRef.close();
+  }
 }
