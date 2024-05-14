@@ -83,6 +83,7 @@ namespace server.Mappers
                 Children = children,
                 Title = taskGroup.Title,
                 ProjectId = taskGroup.ProjectId,
+                ParentTaskGroupId = taskGroup.ParentTaskGroupId
             };
         }
     }

@@ -58,5 +58,16 @@ namespace server.Repositories
 
             return children;
         }
+
+        public async Task<TaskGroup?> deleteTaskGroupAsync(int id)
+        {
+            var group = await GetTaskGroupByIdAsync(id);
+            if(group==null)
+                return null;
+            
+            _context.TaskGroups.Remove(group);
+            await _context.SaveChangesAsync();
+            return group;
+        }
     }
 }

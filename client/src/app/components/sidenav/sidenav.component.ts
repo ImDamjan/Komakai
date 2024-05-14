@@ -84,7 +84,7 @@ export class SidenavComponent implements OnInit {
         this.navData = [nav[0]];
       }
       else
-        this.navData = [nav[2],nav[3],nav[4],nav[5]];
+        this.navData = [nav[2],nav[3],nav[5]];
 
         console.log(this.navData);
     }

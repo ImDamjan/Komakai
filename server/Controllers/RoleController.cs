@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Permissions;
 using server.Interfaces;
 using server.Mappers;
-using server.Migrations;
 using server.Models;
 
 namespace server.Controllers
