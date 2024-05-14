@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
       this.reg.register(register)
         .subscribe({
           next: (res) => {
-            alert("User registered successfully");
+            alert("User " + register.name + " " + register.lastname + " added successfully!");
             this.registerForm.reset();
             this.spinner.hide();
           },
