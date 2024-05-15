@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EditProjectOverlayComponent } from '../edit-project-overlay/edit-project-overlay.component';
@@ -30,8 +30,12 @@ export class ProjectPreviewComponent implements OnInit {
 
   public filter: ProjectFilter = {
     propertyName : "Last Updated",
-    sortFlag : -1
+    sortFlag : -1,
+    pageNumber: 1,
+    pageSize: 4
   };
+
+  private activatedRoute = inject(ActivatedRoute);
 
   isClick = false;
   initialX: number | undefined;
@@ -66,7 +70,18 @@ export class ProjectPreviewComponent implements OnInit {
   public isWorker : boolean = false;
   
   public jwt_service = inject(JwtDecoderService);
-
+  getCreatedProject(createdProject: Project)
+  {
+    createdProject.truncatedTitle = this.truncate(createdProject.title, this.titleCharacterLimit);
+    createdProject.truncatedDescription = this.truncate(createdProject.description, this.descriptionCharacterLimit);
+    let projects : Project[] = [];
+    projects.push(createdProject);
+    this.projectsData.forEach(element=>{
+      projects.push(element);
+    });
+    this.projectsData = projects;
+    // console.log("Iz projekata:",createdProject);
+  }
   ngOnInit(): void {
     let user = this.jwt_service.getLoggedUser();
     if(user!==null)
@@ -88,7 +103,13 @@ export class ProjectPreviewComponent implements OnInit {
     window.addEventListener('resize', () => {
       this.adjustCardsPerPage();
     });
-    this.loadProjects();
+    this.activatedRoute.paramMap.subscribe(params => {
+      if (params.has('pageNumber')) {
+        this.currentPage = parseInt(params.get('pageNumber')!);
+        this.filter.pageNumber = this.currentPage;
+      }
+      this.loadProjects();
+    });
   }
 
   ngAfterViewInit() {
@@ -109,30 +130,6 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   filterProjects(filter: ProjectFilter){
-    // if(filter.stateFilter){
-    //   this.filter.stateFilter=filter.stateFilter;
-    // }
-    // if(filter.priorityFilter){
-    //   this.filter.priorityFilter=filter.priorityFilter;
-    // }
-    // if(filter.startFrom){
-    //   this.filter.startFrom=filter.startFrom;
-    // }
-    // if(filter.startTo){
-    //   this.filter.startTo=filter.startTo;
-    // }
-    // if(filter.endFrom){
-    //   this.filter.endFrom=filter.endFrom;
-    // }
-    // if(filter.endTo){
-    //   this.filter.endTo=filter.endTo;
-    // }
-    // if(filter.percentageFilterFrom){
-    //   this.filter.percentageFilterFrom=filter.percentageFilterFrom;
-    // }
-    // if(filter.percentageFilterTo){
-    //   this.filter.percentageFilterTo=filter.percentageFilterTo;
-    // }
     let text = "";
     if(this.filter.searchTitle)
       text = this.filter.searchTitle;
@@ -270,26 +267,50 @@ export class ProjectPreviewComponent implements OnInit {
   // Pagination functions
 
   // Get projects for the current page
+  // getPaginatedProjects(): any[] {
+  //   if (!this.projectsData) {
+  //     return [];
+  //   }
+  //   const startIndex = (this.currentPage - 1) * this.cardsPerPage;
+  //   return this.projectsData.slice(startIndex, startIndex + this.cardsPerPage);
+  // }
+
+  // Go to the next page
+  // nextPage(): void {
+  //   if (this.currentPage < this.totalPages()) {
+  //     this.currentPage++;
+  //   }
+  // }
+
+  // // Go to the previous page
+  // previousPage(): void {
+  //   if (this.currentPage > 1) {
+  //     this.currentPage--;
+  //   }
+  // }
+
   getPaginatedProjects(): any[] {
     if (!this.projectsData) {
       return [];
     }
-    const startIndex = (this.currentPage - 1) * this.cardsPerPage;
-    return this.projectsData.slice(startIndex, startIndex + this.cardsPerPage);
+    return this.projectsData;
   }
 
-  // Go to the next page
-  nextPage(): void {
-    if (this.currentPage < this.totalPages()) {
-      this.currentPage++;
-    }
-  }
-
-  // Go to the previous page
-  previousPage(): void {
+  previousPage(){
     if (this.currentPage > 1) {
       this.currentPage--;
+      this.filter.pageNumber=this.currentPage;
+      // this.loadProjects();
+      this.router.navigate(['/projects', this.currentPage]);
+      this.loadProjects();
     }
+  }
+
+  nextPage(){
+    this.currentPage++;
+    this.filter.pageNumber=this.currentPage;
+    this.router.navigate(['/projects', this.currentPage]);
+    this.loadProjects();
   }
 
   // Get the total number of pages
@@ -301,28 +322,28 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   // Calculate the pages to show in pagination control
-  pagesToShow(): number[] {
-    const total = this.totalPages();
-    const current = this.currentPage;
-    const pagesToShowCount = 3;
+  // pagesToShow(): number[] {
+  //   const total = this.totalPages();
+  //   const current = this.currentPage;
+  //   const pagesToShowCount = 3;
   
-    let from = Math.max(1, current - Math.floor(pagesToShowCount / 2));
-    let to = Math.min(total, from + pagesToShowCount - 1);
+  //   let from = Math.max(1, current - Math.floor(pagesToShowCount / 2));
+  //   let to = Math.min(total, from + pagesToShowCount - 1);
   
-    if (to - from + 1 < pagesToShowCount) {
-      if (current < Math.ceil(pagesToShowCount / 2)) {
-        to = Math.min(total, pagesToShowCount);
-      } else {
-        from = Math.max(1, total - pagesToShowCount + 1);
-      }
-    }
+  //   if (to - from + 1 < pagesToShowCount) {
+  //     if (current < Math.ceil(pagesToShowCount / 2)) {
+  //       to = Math.min(total, pagesToShowCount);
+  //     } else {
+  //       from = Math.max(1, total - pagesToShowCount + 1);
+  //     }
+  //   }
   
-    const pages: number[] = [];
-    for (let i = from; i <= to; i++) {
-      pages.push(i);
-    }
-    return pages;
-  }
+  //   const pages: number[] = [];
+  //   for (let i = from; i <= to; i++) {
+  //     pages.push(i);
+  //   }
+  //   return pages;
+  // }
   
   // Method to navigate to a specific page
   goToPage(page: number): void {

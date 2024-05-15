@@ -146,7 +146,19 @@ export class TaskListComponent implements OnInit,AfterViewInit{
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.loadTasks();
+      if(result===1)
+        this.loadTasks();
+    });
+  }
+
+  openEditGroupOverlay(node:any){
+    const dialogRef = this.dialog.open(AddTaskGroupComponent, {
+      data:[this.projectId,node,1]
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result===1)
+        this.loadTasks();
     });
   }
 
@@ -157,7 +169,8 @@ export class TaskListComponent implements OnInit,AfterViewInit{
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.loadTasks();
+      if(result===1)
+        this.loadTasks();
     });
     
   }

@@ -77,7 +77,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.priorityService.getPriorities().subscribe(priorities => {
       this.priorities = priorities;
     });
-    this.teamService.getTeams().subscribe(teams => {
+    this.teamService.getMyCreatedTeams(this.userid).subscribe(teams => {
       this.teams = teams;
     });
     this.projectObj = {
@@ -118,7 +118,7 @@ export class CreateProjectOverlayComponent implements OnInit {
 }
 
   isSelected(user: User): boolean {
-    if(user.id == this.roleid)
+    if(user.id == this.userid)
       return true;
     return this.selectedUserRolesMap.has(user.id);
   }
@@ -176,13 +176,15 @@ export class CreateProjectOverlayComponent implements OnInit {
     }
 
     this.projectService.createProject(this.projectObj).subscribe(response => {
-      alert('Project created successfully!');
+      // alert('Project created successfully!');
       this.spinner.hide();
-      this.resetForm();
-      this.selectedUsers = [];
-      this.userService.getUserById(this.userid).subscribe(user =>{
-        this.selectedUsers[0] = user;
-      });
+      // console.log("iz overlaya:",response);
+      this.dialogRef.close(response);
+      // this.resetForm();
+      // this.selectedUsers = [];
+      // this.userService.getUserById(this.userid).subscribe(user =>{
+      //   this.selectedUsers[0] = user;
+      // });
       console.log(this.selectedUsers);
       this.submitted = false;
     }, error => {

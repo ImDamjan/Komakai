@@ -90,4 +90,9 @@ export class TaskGroupService {
     const url = this.baseUrl + "/TaskGroup/createTaskGroup";
     return this.http.post(url,body);
   }
+  updateTaskGroup(body : TaskGroup)
+  {
+    const url = this.baseUrl + "/TaskGroup/updateTaskGroup";
+    return this.http.put(url,body);
+  }
 }

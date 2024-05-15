@@ -13,7 +13,9 @@ namespace server.Interfaces
         Task<List<Team>> GetAllUserTeams(int userid);
         Task<Team?> GetTeamByIdAsync(int id);
         Task<Team> CreateTeamAsync(Team team);
+        Task<List<Team>> GetAllCreatedTeamsByUserAsync(int user_id, string searchText);
         Task<Team?> UpdateTeamAsync(CreateTeamDto dto, int team_id, List<User> memebers);
+        Task<Team?> DeleteTeamAsync(int team_id);
     }
         // Task<List<int>> GetTeamUsersByIdAsync(int teamId);
 }

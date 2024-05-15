@@ -15,31 +15,8 @@ export class AssignmentService {
   private baseUrl = environment.apiUrl;
   constructor() { }
 
-
-  getAllProjectAssignments(project_id : number) : Observable<Task[]>
+  private setUpParams(params: TaskFilter)
   {
-    const url = this.baseUrl + "/Assignment/getAssignmentsByProject/"+project_id;
-    return this.http.get<Task[]>(url);
-  }
-
-  updateAssignmentById(body : UpdateTask, asign_id: number) : Observable<Task>
-  {
-    const url = this.baseUrl + "/Assignment/update/" + asign_id;
-    return this.http.put<Task>(url,body);
-  }
-  getDependentAssignmentsFor(asign_id:number) : Observable<Task[]>
-  {
-    const url = this.baseUrl + "/Assignment/getDependentOnAssignments/" + asign_id;
-    return this.http.get<Task[]>(url);
-  }
-  getAssignmentById(asign_id:number): Observable<Task>
-  {
-    return this.http.get<Task>(this.baseUrl + "/Assignment/getById/" + asign_id);
-  }
-
-  getAllUserAssignments(user_id: number,params: TaskFilter = {}): Observable<Task[]> {
-    const url = this.baseUrl + `/Assignment/getByUser/${user_id}`;
-
     let httpParams = new HttpParams();
     
     if (params.propertyName) {
@@ -98,6 +75,43 @@ export class AssignmentService {
         else
           httpParams = httpParams.append("PriorityFilter",element.toString());
       });
+    }
+    return httpParams;
+  }
+
+  getAllProjectAssignments(project_id : number, filter : TaskFilter = {}) : Observable<Task[]>
+  {
+    const url = this.baseUrl + "/Assignment/getAssignmentsByProject/"+project_id;
+    let httpParams = this.setUpParams(filter);
+    return this.http.get<Task[]>(url,{params:httpParams});
+  }
+
+  updateAssignmentById(body : UpdateTask, asign_id: number) : Observable<Task>
+  {
+    const url = this.baseUrl + "/Assignment/update/" + asign_id;
+    return this.http.put<Task>(url,body);
+  }
+  getDependentAssignmentsFor(asign_id:number) : Observable<Task[]>
+  {
+    const url = this.baseUrl + "/Assignment/getDependentOnAssignments/" + asign_id;
+    return this.http.get<Task[]>(url);
+  }
+  getAssignmentById(asign_id:number): Observable<Task>
+  {
+    return this.http.get<Task>(this.baseUrl + "/Assignment/getById/" + asign_id);
+  }
+
+  getAllUserAssignments(user_id: number,params: TaskFilter = {}): Observable<Task[]> {
+    const url = this.baseUrl + `/Assignment/getByUser/${user_id}`;
+
+    let httpParams = this.setUpParams(params);
+
+    if(params.pageNumber){
+      httpParams = httpParams.set('PageNumber',params.pageNumber.toString());
+    }
+
+    if(params.pageSize){
+      httpParams = httpParams.set('PageSize',params.pageSize.toString());
     }
 
     return this.http.get<Task[]>(url, { params: httpParams });

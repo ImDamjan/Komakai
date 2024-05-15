@@ -8,7 +8,7 @@
         <app-project-header (viewChange)="changeView($event)" (getSearchText)="getSearchText($event)"></app-project-header>
     </div>
     <div class="product" [ngSwitch]="currentView">
-        <app-kanban *ngSwitchCase="'kanban'" ></app-kanban>
+        <app-kanban [searchText]="searchText" *ngSwitchCase="'kanban'" ></app-kanban>
         <!-- <app-list *ngSwitchCase="'list'"></app-list> -->
         <app-gantogram *ngSwitchCase="'gantt'"></app-gantogram>
 

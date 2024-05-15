@@ -83,6 +83,7 @@ import { TaskListComponent } from './components/task-list/task-list.component';
 import { MatTreeModule } from '@angular/material/tree';
 import { TaskListTaskComponent } from './components/task-list-task/task-list-task.component';
 import { AddTaskGroupComponent } from './components/add-task-group/add-task-group.component';
+import { EditTeamComponent } from './components/edit-team/edit-team.component';
 
 
 
@@ -132,6 +133,7 @@ import { AddTaskGroupComponent } from './components/add-task-group/add-task-grou
     TaskListComponent,
     TaskListTaskComponent,
     AddTaskGroupComponent,
+    EditTeamComponent,
   ],
   imports: [
     FormsModule,

@@ -207,7 +207,7 @@ export class AddTaskComponent implements OnInit {
         console.log("Creation succesful");
         // confirm("Task created successfully!");
         this.spinner.hide();
-        this.closeOverlay();
+        this.dialogRef.close(1);
       },
       error: (error)=> console.log(error)
     });

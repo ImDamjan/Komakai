@@ -13,6 +13,7 @@
         <div *ngIf="isManager" class="create-buttons" style="display: inline;">
           <button (click)="openCreateOverlay(node.node)">Create task</button>
           <button class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
+          <button *ngIf="node.level!==0" (click)="openEditGroupOverlay(node.node)">Edit task group</button>
         </div>
       </div>
     </mat-tree-node>
@@ -28,6 +29,7 @@
       <div *ngIf="isManager" class="create-buttons">
         <button (click)="openCreateOverlay(node.node)">Create task</button>
         <button class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
+        <button *ngIf="node.level!==0" (click)="openEditGroupOverlay(node.node)">Edit task group</button>
       </div>
     </mat-tree-node>
   </mat-tree>

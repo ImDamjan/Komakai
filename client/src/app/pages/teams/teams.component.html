@@ -1,0 +1,31 @@
+<div class="teams">
+    <div class="search">
+        <input id="search-field" type="text" placeholder="Search team..." [(ngModel)]="searchText" (keyup)="loadTeams()">
+    </div>
+    <br>
+    <div class="teams_content">
+        <div class="createTeam">
+            <h2>New Team</h2>
+            <input type="text" class="teamName" placeholder="Team name" [(ngModel)]="createTeam.name">
+            <p-multiSelect [options]="users" placeholder="Select Members" optionLabel="fulname" [(ngModel)]="selectedUsers"/>
+            <button (click)="createTeamRequest()">Create</button>
+        </div>
+        <div class="tabela">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Members</th>
+                </tr>
+                <tr *ngFor="let team of teams">
+                    <td class="team">
+                        <span>{{team.name}}</span>
+                        <button (click)="openEditOverlay(team)">Edit Team</button>
+                    </td>
+                    <td class="users">
+                        <span *ngFor="let user of team.members">{{user.name + " " + user.lastname}}</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './pages/auth/auth.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { ProjectsComponent } from './pages/projects/projects.component';
-import { ActivityComponent } from './pages/activity/activity.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
 // import { TeamsComponent } from './pages/teams/teams.component';
 import { HelpcentreComponent } from './pages/helpcentre/helpcentre.component';
@@ -16,15 +14,17 @@ import { TaskDetailsComponent } from './pages/task-details/task-details.componen
 import { ProjectPreviewComponent } from './components/project-preview/project-preview.component';
 import { adminAuthorizationGuard } from './guards/admin-authorization.guard';
 import { pmAuthorizationGuard } from './guards/pm-authorization.guard';
+import { TeamsComponent } from './pages/teams/teams.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full'},
   {path: 'auth' ,component: AuthComponent,canActivate: [AuthGuard]},
-  {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
-  {path: 'projects',component: ProjectPreviewComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
-  {path: 'activity', component: ActivityComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
-  {path: 'tasks', component: TasksComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
-  // {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
+  {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard]},
+  {path: 'projects', redirectTo: '/projects/1', pathMatch: 'full'},
+  {path: 'projects/:pageNumber',component: ProjectPreviewComponent,canActivate: [AuthGuard]},
+  {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
+  {path: 'tasks', redirectTo: '/tasks/1', pathMatch: 'full'},
+  {path: 'tasks/:pageNumber', component: TasksComponent,canActivate: [AuthGuard]},
   {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
   
   {path: 'projects/project-details/:projectId', component: ProjectDetailsComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},

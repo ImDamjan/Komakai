@@ -220,10 +220,10 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       alert("End date comes before start date.");
       return;
     }
-    todayTime.setHours(12, 12, 12, 12);
-    this.updateObj.end.setHours(12,12,12,12);
+    // todayTime.setHours(12, 12, 12, 12);
+    // this.updateObj.end.setHours(12,12,12,12);
 
-    //prvera da li je start date pre danasnjeg
+    // //provera da li je start date pre danasnjeg
     // if(this.updateObj.end < todayTime)
     // {
     //   alert("End date comes before today.");

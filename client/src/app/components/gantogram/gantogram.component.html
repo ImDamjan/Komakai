@@ -47,8 +47,8 @@
     
     [baselineItems]="baselineItems"
     [viewType]="viewType"
-    [draggable]="true"
-    [linkable]="true"
+    [draggable]="isDragable"
+    [linkable]="isLinkable"
     [selectable]="false"
     [multiple]="true"
     [viewOptions]="viewOptions"
@@ -65,7 +65,7 @@
     (linkDragEnded)="linkDragEnded($event)"
   >
     <ngx-gantt-table
-      [draggable]="true"
+      [draggable]="isDragable"
       [dropEnterPredicate]="dropEnterPredicate"
       (dragDropped)="onDragDropped($event)"
       (dragStarted)="onDragStarted($event)"

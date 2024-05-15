@@ -1,38 +1,25 @@
-  <div class="taskContent" (mousedown)="check($event)" (click)="openShowTaskOverlay($event)">
+<div class="taskContent" (mousedown)="check($event)" (click)="openShowTaskOverlay($event)">
     <div class="task_start">
         <div class="title">
             <p>{{task.dummyTitle}}</p>
         </div>
         <div class="progress">
-            <!-- <h2><strong>Progress</strong></h2> -->
             <ngb-progressbar class="mb-3" type="info" [value]="task.percentage" [striped]="true" [animated]="true" height="20px"><i>{{task.percentage}}%</i></ngb-progressbar>
         </div>
     </div>
+
     <div class="data">
-        <div class="priority">
-            <p>Priority:</p>
-            <span [ngClass]="getPriorityClass()">{{task.priority.description}}</span>
-        </div>
-        <div class = "state">
-            <p>State:</p>
-            <span class="state_content">{{task.state.name}}</span>
-        </div>
+        <table>
+            <tr>
+                <th>Start: {{task.start.toDateString()}}</th>
+                <th>Priority: <span [ngClass]="getPriorityClass()">{{task.priority.description}}</span></th>
+                <th>Assignees: </th>
+            </tr>
+            <tr>
+                <th>End: {{task.end.toDateString()}}</th>
+                <th>State: <span class="state_content">{{task.state.name}}</span></th>
+                <th><span [title]="realAssignessStr">{{asigneesString}}</span></th>
+            </tr>
+        </table>
     </div>
-    <div class="dates">
-        <div class="start">
-            <p>Start:</p>
-            <span>{{task.start.toDateString()}}</span>
-        </div>
-        <div class = "end">
-            <p>End:</p>
-            <span>{{task.end.toDateString()}}</span>
-        </div>
-    </div>
-    <div id="time">
-        <div class="vreme" [ngClass]="getCorrectTime(task.remaining,task.timeDifference)"><div class="vreme2"><img src="assets\project-task\pie.svg" alt="" width="20" height="20"> &nbsp; <span class="tekst"> <b>{{ getFloorRemaining(task.remaining) }}</b> </span></div></div>
-    </div>
-    <div class="assignees">
-        <p>Assignees</p>
-        <span [title]="realAssignessStr">{{asigneesString}}</span>
-    </div>
-  </div>
+</div>

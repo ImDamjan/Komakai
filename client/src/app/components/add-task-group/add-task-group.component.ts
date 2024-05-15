@@ -23,9 +23,37 @@ export class AddTaskGroupComponent implements OnInit{
     parentTaskGroupId: 0,
     assignments: []
   };
+  IsEdit = false;
   ngOnInit(): void {
     this.createTaskGroup.projectId = this.data[0];
     this.createTaskGroup.parentTaskGroupId = this.data[1].id;
+    if(this.data[2]!==undefined)
+    {
+      console.log("edit je")
+      this.createTaskGroup.id = this.data[1].id;
+      this.createTaskGroup.parentTaskGroupId = this.data[1].parentTaskGroupId;
+      this.createTaskGroup.title = this.data[1].title;
+      this.title = this.data[1].title;
+      this.IsEdit = true;
+      console.log(this.createTaskGroup);
+    }
+  }
+  editGroup(){
+    if(this.title!=="")
+      {
+        console.log("kliknuo edit");
+        this.spinner.show();
+        this.createTaskGroup.title = this.title;
+        console.log(this.createTaskGroup);
+        this.task_group_service.updateTaskGroup(this.createTaskGroup).subscribe({
+          next : (group:any)=>{
+            this.spinner.hide();
+            this.dialogRef.close(1);
+          }
+        });
+      }
+      else
+        alert("Please enter the new name");
   }
   createGroup()
   {
@@ -36,7 +64,7 @@ export class AddTaskGroupComponent implements OnInit{
       this.task_group_service.createTaskGroup(this.createTaskGroup).subscribe({
         next : (group:any)=>{
           this.spinner.hide();
-          this.dialogRef.close();
+          this.dialogRef.close(1);
         }
       });
     }

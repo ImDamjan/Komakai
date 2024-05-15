@@ -70,6 +70,8 @@ namespace server.Models
         [InverseProperty("User")]
         public virtual ICollection<Assignment> OwnedAssignments { get; set; } = new List<Assignment>();
 
+        [InverseProperty("Owner")]
+        public virtual ICollection<Team> CreatedTeams { get; set; } = new List<Team>();
 
         //many-to-many-condition
         [InverseProperty("Users")]

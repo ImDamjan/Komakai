@@ -28,6 +28,28 @@ namespace server.Repositories
 
         }
 
+        public async Task<Team?> DeleteTeamAsync(int team_id)
+        {
+            var team = await GetTeamByIdAsync(team_id);
+            if(team==null)
+                return null;
+            
+            _context.Teams.Remove(team);
+            await _context.SaveChangesAsync();
+            return team;
+        }
+
+        public async Task<List<Team>> GetAllCreatedTeamsByUserAsync(int user_id, string searchText)
+        {
+            var teams = _context.Teams.Include(t=>t.Owner).Include(t=> t.Users).ThenInclude(u=>u.Role).Where(t=>t.Owner.Id==user_id).AsQueryable();
+            if(searchText!="")
+            {
+                teams = teams.Where(t=>t.Name.ToLower().Contains(searchText.ToLower()));
+            }
+
+            return await teams.ToListAsync();
+        }
+
         public async Task<List<Team>> GetAllTeamsAsync()
         {
             return await _context.Teams.Include(t=> t.Users).ThenInclude(u=>u.Role).ToListAsync();
@@ -70,9 +92,12 @@ namespace server.Repositories
             if(team==null)
                 return null;
             
-            team.Name = dto.Name;
-            team.Users = members;
-            team.Type = dto.Type;
+            if(dto.Name !="")
+                team.Name = dto.Name;
+            if(members.Count > 0)
+                team.Users = members;
+            if(dto.Type!="")
+                team.Type = dto.Type;
             
             await _context.SaveChangesAsync();
 
