@@ -56,7 +56,7 @@
 
 .drop:hover .dropdown-content {display: block;}
 
-.drop:hover .dropbtn {background-color: #3e8e41;}
+
 
 #dropdown-container { 
   display: inline-block;
@@ -109,4 +109,14 @@ td, th {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+.default-role {
+  font-weight: bolder;
+  color: blue;
+}
+
+.default-activation {
+  font-weight: bolder;
+  color: blue;
 }

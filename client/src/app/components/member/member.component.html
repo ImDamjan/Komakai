@@ -5,13 +5,13 @@
                <img id="pfp" [src]="user.profile_picture">
             </td>
             <td id="username">{{user.name + " " + user.lastname}}</td>
-            <td id="dropdown" class = "drop" >
+            <td id="dropdown" class = "drop" [ngClass]="{'default-role': isDefaultRole(user)}">
                 <div class="dropbtn">{{user.role.name}}</div>
                     <div class="dropdown-content">
                     <p *ngFor="let role of roles" (click)="updateUserRole(role, user)">{{role.name}}</p>
                 </div>
             </td>
-            <td class="drop">
+            <td class="drop" [ngClass]="{'default-activation': isDefaultActivation(user)}">
                 <div *ngIf="user.isActivated" class="dropbtn">Activated</div>
                 <div *ngIf="!user.isActivated" class="dropbtn">Deactivated</div>
                 <div class="dropdown-content">

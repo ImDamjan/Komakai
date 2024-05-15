@@ -23,10 +23,17 @@ export class MemberComponent implements OnInit{
   private spinner = inject(NgxSpinnerService);
   private search_service = inject(SearchService);
   profilePicturesLoaded = false;
+  initialRoles: Map<number, Role> = new Map<number, Role>();
+  initialActivation: Map<number, boolean> = new Map<number, boolean>();
 
   ngOnInit(): void {
     this.user_service.getUsers().subscribe(users => {
       this.allUsers = users;
+
+      this.allUsers.forEach(user => {
+        this.initialRoles.set(user.id, user.role);
+        this.initialActivation.set(user.id,user.isActivated);
+      });
       
       this.filteredUsers = this.allUsers;
       this.profilePicture(this.allUsers);
@@ -130,5 +137,15 @@ export class MemberComponent implements OnInit{
         }
       });
     });
+  }
+
+  isDefaultRole(user: User): boolean {
+    const initialRole = this.initialRoles.get(user.id);
+    return initialRole ? initialRole.id === user.role.id : false;
+  }
+  
+  isDefaultActivation(user: User): boolean {
+    const initialActivate = this.initialActivation.get(user.id);
+    return initialActivate !== undefined ? initialActivate === user.isActivated : false; 
   }
 }
