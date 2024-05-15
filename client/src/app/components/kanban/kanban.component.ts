@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, VERSION, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, SimpleChanges, VERSION, inject } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
 import { Board } from '../../models/kanban/board.model';
 import { Column } from '../../models/kanban/column.model';
@@ -17,16 +17,19 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
+import { TaskFilter } from '../../models/task/task-filter';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-kanban',
   templateUrl: './kanban.component.html',
   styleUrl: './kanban.component.css'
 })
-export class KanbanComponent implements OnInit{
+export class KanbanComponent implements OnInit,OnChanges{
   name = 'Angular Material ' + VERSION.major + ' Kanban board';
    public board: Board;
    private projectId : number = 0;
+   @Input() searchText!: string;
    userProjectRole! : Role;
    private state_service = inject(StateService);
    private assignment_service = inject (AssignmentService);
@@ -36,10 +39,18 @@ export class KanbanComponent implements OnInit{
    private assignments : Task[] = [];
    private spinner = inject(NgxSpinnerService);
    private states : State[] = [];
+   private taskFilter : TaskFilter = {
+
+   };
   constructor(private dialog: MatDialog)
   {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
     this.board = new Board('Kanban', []);
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.taskFilter.searchTitle = this.searchText;
+    this.getBoard();
+    console.log("promena");
   }
 
   showProjectDetails: boolean = true;
@@ -102,7 +113,7 @@ export class KanbanComponent implements OnInit{
       });
       
       //treba da se stavi od kliknutog projekta id
-        this.assignment_service.getAllProjectAssignments(this.projectId).subscribe({
+        this.assignment_service.getAllProjectAssignments(this.projectId,this.taskFilter).subscribe({
           next : (assignments : Task[])=>
         {
           this.assignments = assignments;
