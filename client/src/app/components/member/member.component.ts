@@ -41,6 +41,9 @@ export class MemberComponent implements OnInit{
       });
     });
 
+    this.user_service.filteredUsers$.subscribe(users => {
+      this.filteredUsers = users;
+    });
     
   }
 

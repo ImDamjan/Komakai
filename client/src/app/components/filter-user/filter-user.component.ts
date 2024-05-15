@@ -30,7 +30,7 @@ export class FilterUserComponent implements OnInit{
       sortFlag: this.sortMode
     };
     this.userService.getUsers(filters).subscribe(data => {
-      console.log(data);
+      this.userService.updateFilteredUsers(data);
     });
   }
 }

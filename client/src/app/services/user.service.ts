@@ -10,6 +10,9 @@ import { UpdateUser } from '../models/user/update-user';
 })
 export class UserService {
   private pictureSource = new BehaviorSubject<string>('');
+  private filteredUsersSubject = new BehaviorSubject<User[]>([]);
+  filteredUsers$ = this.filteredUsersSubject.asObservable();
+
 
   picture$ = this.pictureSource.asObservable();
   
@@ -59,5 +62,9 @@ export class UserService {
 
   setProfilePicture(picture: string) {
     this.pictureSource.next(picture);
+  }
+
+  updateFilteredUsers(users: User[]) {
+    this.filteredUsersSubject.next(users);
   }
 }
