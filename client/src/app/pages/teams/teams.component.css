@@ -1,0 +1,96 @@
+.teams{
+    margin-top: 65px;
+    padding: 20px;
+
+    width: 95.3vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.createTeam{
+    display: flex;
+    flex-direction: column;
+    padding: 20px 60px 0px 60px;
+    border-radius: 25px;
+    height: 200px;
+    border: 1px solid #001B47;
+}
+:host::ng-deep.p-multiselect-label{
+    width: 250px;
+}
+table{
+    width: 100%;
+    border: 1px solid black;
+}
+th{
+    border: 1px solid black;
+    text-align: center;
+}
+tr{
+    border: 1px solid black;
+}
+p-multiSelect{
+    margin: 20px 0px;
+}
+#search-field {
+    width: 15vw;
+    height: 40px;
+    background: #FEFEFE;
+    border: 1px solid #9A93B3;
+    border-radius: 5px;
+    text-indent: 10%;
+}
+
+input#search-field {
+    background-image: url("../../../assets/project-task-header/search.svg");
+    background-repeat: no-repeat;
+    background-position: 3% center;
+}
+
+.search {
+    width: 30vw;
+    height: 40px;
+    margin-right: 1%;
+}
+
+.createTeam{
+    float: right;
+}
+.users{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border-left: 1px solid black;
+}
+.team{
+    text-align: center;
+}
+.team span{
+    position: relative;
+    top: 10px;
+}
+.team button{
+    float: right;
+    position: relative;
+    right: 5px;
+}
+
+button{
+    padding: 10px 20px;
+    background-color:  #001B47;
+    color: white;
+    border: 1px solid #001B47;
+    border-radius: 25px;
+}
+.teams_content{
+    height: 70vw;
+}
+button:hover{
+    background-color:   #17315D;
+    color: white;
+}
+.tabela{
+    overflow: auto;
+    height: 40%;
+    width: 70%;
+}

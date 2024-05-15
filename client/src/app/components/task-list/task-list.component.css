@@ -1,0 +1,45 @@
+.task-list{
+    padding-top: 150px;
+    padding-left: 30px;
+    width: 95vw;
+}
+.task{
+    color: black;
+}
+mat-tree{
+    overflow-y: auto;
+    background-color: white;
+    width: 70vw;
+    height: 600px;
+    float: left;
+    border-radius: .5rem;
+    box-shadow: rgb(36, 36, 36) 0px 13px 27px -5px, rgb(36, 36, 36) 0px 8px 16px -8px;
+}
+.filter{
+    float: right;
+    padding-right: 20px;
+}
+.create-buttons{
+    /* padding-left: 250px; */
+    margin-left: auto;
+}
+.create-buttons button{
+    padding: 5px 20px;
+    background-color:   white;
+    color: darkgray;
+    border: 1px solid darkgray;
+    border-radius: 25px;
+}
+.create-buttons button:hover{
+    background-color:   white;
+    color: darkgray;
+}
+.tgb{
+    margin:0px 20px;
+}
+
+.expand-field{
+    color: black;
+    font-size: 26px;
+    font-family: 'Poppins',sans-serif;
+}

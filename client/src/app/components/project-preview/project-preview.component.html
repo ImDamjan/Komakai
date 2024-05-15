@@ -4,55 +4,88 @@
 <div *ngIf="projectsData && projectsData.length === 0 && !isLoading">
   <h3>{{ errorMessage }}</h3>
 </div>
-<div class="grid-container" *ngIf="showProjectPreview">
+<p-table class="grid-container" *ngIf="showProjectPreview"  [scrollable]="true" [virtualScroll]="true">
   <article class="card" *ngFor="let project of getPaginatedProjects()" (mousedown)="check($event)" (click)="navigateToProjectDetails($event,project.id)">
     <section class="card-content">
       <div class="header-section">
         <header class="title-wrapper">
           <h1 [title]="project.title">{{ project.truncatedTitle }}</h1>
         </header>
-        <img class="cursor" src="assets\project-preview\edit.svg" alt="" (click)="openEditOverlay(project,$event)" />
+        <img *ngIf="isManager" class="cursor" src="assets\project-preview\edit.svg" alt="" (click)="openEditOverlay(project,$event)" />
       </div>
       <hr class="divider" />
 
-      <span class="status-label" [ngClass]="{
-        'ready': project.state.id === 2,
-        'in-progress': project.state.id === 3,
-        'done': project.state.id === 5,
-        'not-started': project.state.id === 1,
-        'cancelled': project.state.id === 6,
-        'blocked': project.state.id === 4
-      }">{{project.state.name}}</span>
+      <div class="elements">
+        <span class="status-label" [ngClass]="{
+          'ready': project.state.id === 2,
+          'in-progress': project.state.id === 3,
+          'done': project.state.id === 5,
+          'not-started': project.state.id === 1,
+          'cancelled': project.state.id === 6,
+          'blocked': project.state.id === 4
+        }">{{project.state.name}}</span>
+
+        <span class="priority-label" [ngClass]="{
+          'low': project.priority.id === 4,
+          'at-risk': project.priority.id === 1,
+          'medium': project.priority.id === 3,
+          'high': project.priority.id === 2
+        }">{{project.priority.description}}</span>
+
+      </div>
+
+      
       <br><br>
       <p class="description" [title]="project.description">{{ project.truncatedDescription }}</p>
-      <div class="project-details">
-        <!-- <p (click)="openShowProjectOverlay()">Details...</p> -->
-        <p>Details...</p>
-      </div>
+      <br>
+
       
+
+
+  <div class="details">
+    <table>
+      <tr>
+        <th>Budget</th>
+        <th>{{project.budget}}</th>
+      </tr>
+      <tr>
+        <th>Spent:</th>
+        <th>{{project.spent}}</th>
+      </tr>
+      <tr>
+        <th>Percentage:</th>
+        <th>{{project.percentage}}</th>
+      </tr>
+    </table>
+  </div>
+
+  <hr class="divider" />
       <div class="issue-section">
-        <!-- Team members -->
-        <!-- <div class="team-members" *ngIf="project">
-          <ng-container *ngFor="let imageUrl of getTeamMemberImages(project).slice(0, 4); let i = index">
-            <img class="team-member" [src]="imageUrl" [alt]="'Team Member ' + (i+1)" [style.left.px]="i * 20" />
-          </ng-container>
-          <div *ngIf="getTeamMemberImages(project).length > 4" class="additional-members">
-            +{{ getTeamMemberImages(project).length - 4 }}
-          </div>
-        </div> -->
         <div class="date-section">
-          <img src="assets\project-preview\time.svg" alt="" />
-          <time *ngIf="project.end">{{ project.end | date: 'dd MMMM yyyy' }}</time>
+          <table>
+            <tr>
+              <th>Start date:</th>
+              <th><time *ngIf="project.start">{{ project.start | date: 'dd MMMM yyyy' }}</time></th>
+            </tr>
+            <tr>
+              <th>End date:</th>
+              <th><time *ngIf="project.end">{{ project.end | date: 'dd MMMM yyyy' }}</time></th>
+            </tr>
+          </table>
         </div>
         <div class="issue-details">
           <img src="assets\project-preview\issues.svg" alt=""/> 
            {{ getAssignmentCount(project.id) === 0 ? ' No issues' : (getAssignmentCount(project.id) === 1 ? ' 1 issue' :  getAssignmentCount(project.id) + ' issues') }}
         </div>
       </div>
+
+      
+
+      
       
     </section>
   </article>
-</div>
+</p-table>
 
 
 

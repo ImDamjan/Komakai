@@ -4,7 +4,9 @@
     height: 100vh;
     padding-top: 120px;
     z-index: -150;
+    width: calc(100vw - 80px);
   }
+
   .board {
     display: flex;
     flex-direction: column;
@@ -27,11 +29,12 @@
     flex-direction: column;
     flex-grow: 1;
     flex-basis: 0;
-    width: 300px;
+    width: 350px;
     max-width: 300px;
     margin: 50px;
-    padding: 25px;
-    min-height: 500px;
+    padding: 15px;
+    min-height: 590px;
+    max-height: 590px;
     height: fit-content;
     border-radius: .5rem;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;

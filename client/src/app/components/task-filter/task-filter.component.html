@@ -3,9 +3,13 @@
         <h2>Filters</h2>
         <button class="filter-button" (click)="sendFilter()" ><img src="assets\task-header\filter.svg" alt="img-filter" width="20" height="20"></button>
     </div>
-    <div class ='projects'>
+    <div *ngIf="notProjectDetails" class ='projects'>
         <h4>Projects</h4>
         <p-multiSelect [options]="projects" placeholder="Select Projects" optionLabel="title" [(ngModel)]="selectedProjects"></p-multiSelect>
+    </div>
+    <div *ngIf="!notProjectDetails" class ='projects'>
+        <h4>Project Members</h4>
+        <p-multiSelect [options]="users" placeholder="Select Project Members" optionLabel="fulname" [(ngModel)]="selectedUsers"></p-multiSelect>
     </div>
     <div class = 'priority'>
         <h4>Priorities</h4>

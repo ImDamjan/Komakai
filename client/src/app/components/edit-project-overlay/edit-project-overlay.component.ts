@@ -26,6 +26,7 @@ export class EditProjectOverlayComponent {
   private jwtService = inject(JwtDecoderService);
   private roleService = inject(RoleService);
   loggedInUserId: number | null = null;
+  fullname!: string;
   roleid!: number;
   
   users: User[] = [];
@@ -56,6 +57,10 @@ export class EditProjectOverlayComponent {
   userRoles: Map<number, number> = new Map<number, number>();
   defaultRoles: Map<number, number> = new Map<number, number>();
   private spinner = inject(NgxSpinnerService);
+
+  searchQuery: string = '';
+  selectedUsers: User[] = [];
+
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
@@ -64,10 +69,13 @@ export class EditProjectOverlayComponent {
 
   ngOnInit(): void {
     let token = this.jwtService.getToken();
+    let userId = 0;
         if (token != null) {
             let decode = this.jwtService.decodeToken(token);
             this.loggedInUserId = decode.user_id;
             this.roleid = decode.role_id;
+            userId = decode.user_id;
+            this.fullname = decode.fullname;
         }
     this.roleService.getAllRoles().subscribe(roles => {
       this.roles = roles;
@@ -90,16 +98,20 @@ export class EditProjectOverlayComponent {
     this.priorityService.getPriorities().subscribe(priorities => {
       this.priorities = priorities;
     });
-    this.teamService.getTeams().subscribe(teams => {
+    this.teamService.getMyCreatedTeams(userId).subscribe(teams => {
       this.teams = teams;
     });
     this.stateService.fetchAllStates().subscribe(states => {
       this.states = states;
-    })
+    });
+    this.selectedUsers = this.project.users;
   }
 
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
+    if (!this.showDropdown) {
+      this.searchQuery = '';
+    }
   }
 
   onUserSelected(user: User, event: any): void {
@@ -128,13 +140,12 @@ export class EditProjectOverlayComponent {
 
   toggleUserSelection(user: User): void {
     const selectedRoleId = this.userRoles.get(user.id);
-    // Handle user selection
     if (this.isSelected(user)) {
         this.selectedUserRolesMap.delete(user.id);
-        // this.selectedUserIds = this.selectedUserIds.filter(id => id !== user.id);
+        this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== user.id);
     } else {
-        // this.selectedUserIds.push(user.id);
-        this.selectedUserRolesMap.set(user.id,selectedRoleId!);
+        this.selectedUserRolesMap.set(user.id, selectedRoleId!);
+        this.selectedUsers.push(user);
     }
   }
 
@@ -182,14 +193,17 @@ export class EditProjectOverlayComponent {
         team_member_ids.forEach(member => {
             if (member.id != this.loggedInUserId) {
                 this.selectedUserRolesMap.delete(member.id);
+                this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== member.id);
             }
         });
     } else {
         team_member_ids.forEach(member => {
             if (member.id != this.loggedInUserId) {
                 const selectedRoleId = this.userRoles.get(member.id);
-                if (!this.isSelected(member))
+                if (!this.isSelected(member)) {
                     this.selectedUserRolesMap.set(member.id, selectedRoleId!);
+                    this.selectedUsers.push(member);
+                }
             }
         });
     }
@@ -264,4 +278,21 @@ export class EditProjectOverlayComponent {
   getRolesForUser(user: User): Role[] {
     return this.roles.filter(role => role.authority >= user.role.authority);
   }
+
+  get filteredUsers(): any[] {
+    return this.users.filter(user =>
+      (user.name + ' ' + user.lastname).toLowerCase().includes(this.searchQuery.toLowerCase()) && user.role.authority != 1
+    );
+  }
+
+  get filteredTeams(): any[] {
+      return this.teams.filter(team =>
+          team.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+  }
+
+  removeSelectedUser(user: User): void {
+    this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== user.id);
+    this.selectedUserRolesMap.delete(user.id);
+  } 
 }

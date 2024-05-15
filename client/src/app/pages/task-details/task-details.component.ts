@@ -16,6 +16,7 @@ import { UpdateTask } from '../../models/task/update-task';
 import { error } from 'console';
 import { DateConverterService } from '../../services/date-converter.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Role } from '../../models/role';
 
 
 @Component({
@@ -34,6 +35,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   private date_task_service = inject(DateConverterService);
   private data : any =  inject(MAT_DIALOG_DATA);
   private spinner = inject(NgxSpinnerService);
+
+  userProjectRole!: Role;
 
 
 
@@ -82,7 +85,6 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   public isManager:boolean = false;
   public isUser : boolean = false;
   public isWorker : boolean = false;
-  public fromKanban : boolean = false;
   public selectedPriority!:Priority;
   public selectedState! :State;
   
@@ -96,17 +98,18 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   ngOnInit(): void {
     this.spinner.show();
     this.assignment = this.data[0];
-    if(this.data[1]===1)
-      this.fromKanban = true;
-    console.log(this.assignment);
-    let user = this.jwt_service.getLoggedUser();
-    if(user!==null)
+    this.userProjectRole = this.data[2];
+
+
+    // console.log(this.assignment);
+    // let user = this.jwt_service.getLoggedUser();
+    if(this.userProjectRole!==undefined)
     {
-      if(user.role==="Project Manager")
+      if(this.userProjectRole.name==="Project Manager")
         this.isManager = true;
-      else if(user.role==="User")
+      else if(this.userProjectRole.name==="User")
         this.isUser = true;
-      else if(user.role==="Project Worker")
+      else if(this.userProjectRole.name==="Project Worker")
         this.isWorker = true;
     }
 

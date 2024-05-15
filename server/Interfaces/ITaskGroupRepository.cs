@@ -15,5 +15,6 @@ namespace server.Interfaces
         Task<List<TaskGroup>> getChildrenGroups(int task_group);
         Task<TaskGroup?> getInitialTaskGroupOfProject(int project_id);
         Task<TaskGroup> UpdateTaskGroupAsync(TaskGroup group);
+        Task<TaskGroup?> deleteTaskGroupAsync(int id);
     }
 }

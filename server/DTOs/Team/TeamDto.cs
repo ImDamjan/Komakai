@@ -13,6 +13,7 @@ namespace server.DTOs.Team
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Type { get; set; } = null!;
+        public int CreatedBy { get; set; }
 
         public List<UserRoleDto> Members { get; set; } =  new List<UserRoleDto>();
     }

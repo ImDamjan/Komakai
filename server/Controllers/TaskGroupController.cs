@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using server.DTOs;
 using server.DTOs.Assignment;
 using server.Mappers;
 using server.Models;
@@ -57,7 +58,7 @@ namespace server.Controllers
         }
 
         [HttpGet("getTaskGroupsByProjectWithTasks/{project_id}")]
-        public async Task<IActionResult> GetByProjectId([FromRoute] int project_id)
+        public async Task<IActionResult> GetByProjectId([FromRoute] int project_id, [FromQuery] SortDto sort,[FromQuery] List<int> user_ids,[FromQuery] AssignmentFilterDto filter)
         {
             //provera da li projekat postoji
             var project = await _project_repo.GetProjectByIdAsync(project_id);            
@@ -67,7 +68,7 @@ namespace server.Controllers
             var initial = await _group_repo.getInitialTaskGroupOfProject(project_id);
             if(initial==null)
                 return NotFound("initi group not found");
-            var tree = await makeTree(initial);
+            var tree = await makeTree(initial,sort,user_ids,filter);
 
             return Ok(tree);
         }
@@ -81,12 +82,12 @@ namespace server.Controllers
 
 
         [NonAction]
-        public async Task<TaskGroupTasksDto> makeTree(TaskGroup initial)
+        public async Task<TaskGroupTasksDto> makeTree(TaskGroup initial, SortDto sort, List<int> user_ids, AssignmentFilterDto filter)
         {   
-            var tasks =  await _asign_repo.GetAllGroupAssignmentsAsync(initial.Id);
+            var tasks =  await _asign_repo.GetAllGroupAssignmentsAsync(initial.Id,filter,sort,user_ids);
             var task_group_children = await _group_repo.getChildrenGroups(initial.Id);
             List<AssignmentDto> asignments = new List<AssignmentDto>();
-            List<TaskGroupTasksDto> children = new List<TaskGroupTasksDto>();
+            List<Object> children = new List<Object>();
             foreach (var task in tasks)
             {
                 var userDtos = task.Users.Select(x=>x.toAssignmentUserDto()).ToList();
@@ -97,11 +98,15 @@ namespace server.Controllers
             
             foreach (var child in task_group_children)
             {
-                var dto = await makeTree(child);
-                children.Add(dto);          
+                var dto = await makeTree(child,sort,user_ids,filter);
+                children.Add(dto);
+            }
+            foreach (var asign in asignments)
+            {
+                children.Add(asign);
             }
 
-            return initial.toTaskGroupTasksDto(children,asignments);
+            return initial.toTaskGroupTasksDto(children);
             
         }
 
@@ -120,6 +125,14 @@ namespace server.Controllers
             
             return Ok(group.toTaskGroupDto());
 
+        }
+        [HttpDelete("delete/{group_id}")]
+        public async Task<IActionResult> Delete([FromRoute] int group_id)
+        {
+            var group = await _group_repo.deleteTaskGroupAsync(group_id);
+            if(group==null)
+                return NotFound("group not found");
+            return Ok("group deleted successfully");
         }
     }
 }

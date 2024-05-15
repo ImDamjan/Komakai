@@ -1,42 +1,50 @@
-<table id="task-content">
-  <thead>
-    <tr id="row" (mousedown)="check($event)" (click)="openShowTaskOverlay($event)">
-      <td id="bulb">
-        <img src="assets\project-task\bulb.svg" alt="Company Logo" width="20" height="20" />
-      </td>
-      <td id="details">
-          <div class="namediv" appMyTooltip>
-            <span class="name"><b>{{ task.title }}</b></span>
-          </div><br>
-          <div id="bottom">
-            <div id="more">#402236 Opened 10 days ago by <b>Yash Ghori</b></div>
-            <div [ngClass]="getStateClass(task.state.name)" id="status"><b>{{ task.state.name }}</b></div>
-            <div [ngClass]="getPriorityClass(task.priority.description)" id="priority"><b>{{ task.priority.description }}</b></div>
-          </div>
-      </td>
-      <td id="start">
-        <div><span id="date">Start Date</span></div>
-        <div class="datum"><img src="assets\project-task\date.svg" alt="" width="20" height="20"> &nbsp;
+<table id="task-content" (mousedown)="check($event)" (click)="openShowTaskOverlay($event)">
+  <tr>
+      <th>
+          <span class="name" ><b>{{ task.title }}</b></span>
+      </th>
+      <th>
+          Status:
+      </th>
+      <th>
+          Priority:
+      </th>
+      <th>
+          Start date:
+      </th>
+      <th>
+          End date:
+      </th>
+      <th>
+        Time remaining:
+      </th>
+  </tr>
+  <tr>
+      <th>
+          <ngb-progressbar class="mb-3" type="info" [value]="task.percentage" [striped]="true" [animated]="true" height="20px"><i>{{task.percentage}}%</i></ngb-progressbar>
+      </th>
+      <th>
+          <div [ngClass]="getStateClass(task.state.name)"><b>{{ task.state.name }}</b></div>
+      </th>
+      <th>
+          <div [ngClass]="getPriorityClass(task.priority.description)"><b>{{ task.priority.description }}</b></div>
+      </th>
+      <th>
+          <div><img src="assets\project-task\date.svg" alt="" width="20" height="20"> &nbsp;
           <span class="tekst">{{ task.startDate }}/{{ task.startMonth }}/{{ task.startYear }}</span></div>
-      </td>
-      <td id="end">
-        <div><span id="date">End Date</span></div>
-        <div class="datum"><img src="assets\project-task\date.svg" alt="" width="20" height="20"> &nbsp;
+      </th>
+      <th>
+          <div><img src="assets\project-task\date.svg" alt="" width="20" height="20"> &nbsp;
           <span class="tekst">{{ task.endDate }}/{{ task.endMonth }}/{{ task.endYear }}</span></div>
-      </td>
-      <td id="time">
-        <div class="vreme" [ngClass]="getCorrectTime(task.remaining,task.timeDifference)"><div class="vreme2"><img src="assets\project-task\pie.svg" alt="" width="20" height="20"> &nbsp; <span class="tekst"> <b>{{ getFloorRemaining(task.remaining) }}</b> </span></div></div>
-      </td>
-      <!-- <td id="person">  
-        <img src="assets\project-task\person.svg" alt="">
-      </td>
-      <td id="com">
-        <img src="assets\project-task\comment.svg" alt="">
-      </td>
-      <td id="tri">
-        <img src="assets\project-task\tri.svg" alt="">
-      </td> -->
-    </tr>
-  </thead>
+      </th>
+      <th>
+        <div [ngClass]="getCorrectTime(task.remaining,task.timeDifference)">
+          <div class="vreme2">
+            <img src="assets\project-task\pie.svg" alt="" width="20" height="20"> &nbsp; 
+            <span class="tekst"> <b>{{ getFloorRemaining(task.remaining) }}</b> 
+            </span>
+          </div>
+        </div>
+      </th>
+  </tr>
 </table>
-<br> 

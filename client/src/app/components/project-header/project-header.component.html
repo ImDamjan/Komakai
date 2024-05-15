@@ -1,6 +1,6 @@
 <div class="project-header">
     <div class="search">
-        <input id="search-field" type="text" placeholder="Search for task...">
+        <input id="search-field" type="text" [(ngModel)]="searchText" (keyup)="getText()" placeholder="Search for task...">
     </div>
     <div id="list">
         <button id="list-button" (click)="changeView('list')" [style.background]="currentView === 'list' ? '#36454F' : 'white'" [style.color]="currentView === 'list' ? 'white' : 'black'">

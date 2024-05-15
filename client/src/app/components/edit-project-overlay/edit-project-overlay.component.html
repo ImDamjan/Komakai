@@ -72,9 +72,15 @@
                 <div class="inputs">
                     <input class="input-field" id="budget-input" type="number" placeholder="  Spent"  [(ngModel)]="project.spent">
                     <div class="custom-dropdown">
-                        <span class="selected-option" (click)="toggleDropdown()">Select Members</span>
+                        <div class="selected-users">
+                            <span *ngFor="let selectedUser of selectedUsers" class="selected-user">
+                                <p>{{ selectedUser.name }} {{ selectedUser.lastname }}</p>
+                                <span *ngIf="selectedUser.id != loggedInUserId" class="remove-user" (click)="removeSelectedUser(selectedUser)">X</span>
+                            </span>
+                        </div>
+                        <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members" [readonly]="!showDropdown">
                         <div class="options" *ngIf="showDropdown">
-                            <div class="member-option" *ngFor="let user of users">
+                            <div class="member-option" *ngFor="let user of filteredUsers">
 
                                 <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user)" [disabled]="user.id == loggedInUserId">
                                 
@@ -85,7 +91,7 @@
                                 {{ user.name }} {{ user.lastname }}
                             </div>
 
-                            <div class="team-option" *ngFor="let team of teams" (mouseover)="showTeamMembers(team)" (mouseout)="hideTeamMembers($event)">
+                            <div class="team-option" *ngFor="let team of filteredTeams" (mouseover)="showTeamMembers(team)" (mouseout)="hideTeamMembers($event)">
                                 <input type="checkbox" [checked]="isSelectedTeam(team.id)" (change)="onTeamSelected(team)">
                                 {{ team.name }}
                                 <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">

@@ -7,6 +7,9 @@ import { Priority } from '../../models/priority/priority';
 import { TaskFilter } from '../../models/task/task-filter';
 import { State } from '../../models/state/state';
 import { Project } from '../../models/project/project';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user/user';
 
 @Component({
   selector: 'app-task-filter',
@@ -16,8 +19,12 @@ import { Project } from '../../models/project/project';
 export class TaskFilterComponent implements OnInit {
   
   @Input() public filter! : TaskFilter;
+  private router = inject(Router);
+  private projectId :number = 0;
   private state_service = inject(StateService);
+  private user_service = inject(UserService);
   private spinner = inject(NgxSpinnerService);
+  private route = inject(ActivatedRoute);
   filterEmiter = new EventEmitter<TaskFilter>();
   private priority_service = inject(PriorityService);
   private projectService = inject(ProjectService);
@@ -27,6 +34,8 @@ export class TaskFilterComponent implements OnInit {
   public StartRange : Date[] | undefined;
   public projects : Project[] = [];
   public selectedProjects : Project[] = [];
+  public users : User[] = [];
+  public selectedUsers : User[] = []
   public sortList : string[] = [
     "Last Updated",
     "State",
@@ -37,16 +46,36 @@ export class TaskFilterComponent implements OnInit {
     "Progress"
   ];
 
+  notProjectDetails : boolean = true;
+
   selectedPrios : Priority[] = [];
   selectedStates : State[] = [];
   public percentageValues :number[] = [0, 100];
+  //uzimanje podataka
   ngOnInit(): void {
     this.spinner.show();
-    this.projectService.getUserFilterProjects().subscribe({
-      next : (res:Project[])=>{this.projects = res; this.spinner.hide(); console.log(res);}
-    });
+    if(this.router.url!=="/tasks")
+      this.notProjectDetails = false;
+    if(this.notProjectDetails)
+    {
+      this.projectService.getUserFilterProjects().subscribe({
+        next : (res:Project[])=>{this.projects = res; this.spinner.hide(); console.log(res);}
+      });
+    }
+    else
+    {
+      this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+      this.user_service.getProjectUsers(this.projectId).subscribe({
+        next : (users : User[]) => {
+          users.forEach(user => {
+            user.fulname = user.name +" " +user.lastname;
+          });
+          this.users = users;
+        }
+      });
+    }
     this.state_service.fetchAllStates().subscribe({
-      next : (res:State[]) => {this.states = res}
+      next : (res:State[]) => {this.states = res; this.spinner.hide();}
     });
     this.priority_service.getPriorities().subscribe({
       next : (res:Priority[])=>{this.priorities=res;}
@@ -56,11 +85,12 @@ export class TaskFilterComponent implements OnInit {
     this.filter.sortFlag = mode;
     this.sendFilter();
   }
-  
+  //slanje filter
   sendFilter(){
     this.filter.priorityFilter = []
     this.filter.stateFilter = [];
     this.filter.projects = [];
+    this.filter.user_ids = [];
     this.filter.percentageFilterFrom = this.percentageValues[0];
     this.filter.percentageFilterTo = this.percentageValues[1];
     if(this.EndRange!==null && this.EndRange!==undefined && this.EndRange.length > 0)
@@ -91,9 +121,17 @@ export class TaskFilterComponent implements OnInit {
         this.filter.priorityFilter?.push(prio.id);
       });
     }
-    this.selectedProjects.forEach(project => {
-      this.filter.projects?.push(project.id);
-    });
+    if(this.notProjectDetails)
+    {
+      this.selectedProjects.forEach(project => {
+        this.filter.projects?.push(project.id);
+      });
+    }
+    else{
+      this.selectedUsers.forEach(user => {
+        this.filter.user_ids?.push(user.id);
+      });
+    }
     if(this.selectedStates.length > 0)
     {
       this.filter.stateFilter = [];

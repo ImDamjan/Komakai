@@ -13,6 +13,7 @@ import { Priority } from '../../models/priority/priority';
 import { Task } from '../../models/task/task';
 import { CreateTask } from '../../models/task/create-task';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { group } from 'console';
 
 @Component({
   selector: 'app-add-task',
@@ -28,8 +29,6 @@ export class AddTaskComponent implements OnInit {
   public users : User[] = [];
   public taskGroups : TaskGroup[] = [];
   public message : string = "";
-  private selectedAssignees : number[] = []
-  private selectedDependentOn : number[] = [];
   public createTaskObj : CreateTask = {
     title: "",
     type: "",
@@ -72,6 +71,16 @@ export class AddTaskComponent implements OnInit {
   private spinner = inject(NgxSpinnerService);
   public assignments : Task[] = [];
   public priorities : Priority[] = [];
+  public selectedPriority! : Priority;
+  public selectedState! : State;
+  public states : State[] = [];
+  public StartDate! : Date;
+  public EndDate! : Date;
+  public selectedTaskGroup! : TaskGroup;
+  public selectedAssignees : User[] = [];
+  public selectedDependentOn : Task[] = [];
+
+
 
   constructor() { 
     this.showDropdown = false;
@@ -89,27 +98,50 @@ export class AddTaskComponent implements OnInit {
       let decode = this.decoder.decodeToken(token);
       this.userId = decode.user_id;
     }
-      this.assignments = this.data[2];
+      // this.assignments = this.data[2];
+    this.assignmentService.getAllProjectAssignments(this.data[1]).subscribe({
+      next: (tasks: Task[]) => {
+        this.assignments = tasks;
+      }
+    });
   
     this.priority_service.getPriorities().subscribe({
       next : (prios :Priority[]) =>{
         this.priorities = prios;
+        this.selectedPriority = prios[prios.length-1];
       }
     })
-    this.stateService.fetchStateName(Number(this.data[0])).subscribe({
-      next : (stateName : string) => {
-        this.state = {id : Number(this.data[0]), name : stateName};
-        this.createTaskObj.stateId = this.state.id;
-      },
-      error: (error)=> console.log(error)
-    })
+    this.stateService.fetchAllStates().subscribe({
+      next: (states: State[])=>{
+        this.states = states;
+        let a = states.find(s=>s.id==this.data[0]);
+        if(a!==undefined)
+          this.selectedState = a;
+      }
+    });
     console.log(this.data);
     this.userService.getProjectUsers(Number(this.data[1])).subscribe({
-      next : (users: User[])=>{this.users = users}
+      next : (users: User[])=>{
+        this.users = users
+        this.users.forEach(element => {
+          element.fulname = element.name + " "+ element.lastname;
+        });
+      }
     });
 
     this.taskGroupService.getAllProjectTaskGroups(this.data[1]).subscribe({
-      next : (groups: TaskGroup[])=> {this.taskGroups = groups; this.spinner.hide();},
+      next : (groups: TaskGroup[])=> {
+        this.taskGroups = groups;
+        if(this.data[2]===undefined) 
+          this.selectedTaskGroup = groups[0];
+        else
+        {
+          let group = groups.filter(g=>g.id==this.data[2].id);
+          if(group!==undefined)
+            this.selectedTaskGroup = group[0];
+        } 
+        this.spinner.hide();
+      },
       error:(error: any)=> console.log(error)
     });
 
@@ -119,11 +151,30 @@ export class AddTaskComponent implements OnInit {
   createTask() : void{
     this.spinner.show();
     this.message = "";
-    this.createTaskObj.assignees = this.selectedAssignees;
-    this.createTaskObj.dependentOn = this.selectedDependentOn;
+    this.createTaskObj.assignees = [];
+    this.createTaskObj.stateId = this.selectedState.id;
+    this.createTaskObj.priorityId = this.selectedPriority.id;
+    this.createTaskObj.taskGroupId = this.selectedTaskGroup.id;
+    this.createTaskObj.type = "";
+    if(this.EndDate===undefined || this.StartDate===undefined)
+    {
+      this.message = "Form is not filled properly, check if you entered everything correctly.";
+      this.spinner.hide();
+      return;
+    }
+    this.createTaskObj.end = new Date(this.EndDate.toDateString());
+    this.createTaskObj.start = new Date(this.StartDate.toDateString());
+    this.createTaskObj.dependentOn = [];
     this.createTaskObj.owner = this.userId;
+    this.selectedAssignees.forEach(element => {
+      this.createTaskObj.assignees.push(element.id);
+    });
+    this.selectedDependentOn.forEach(element => {
+      this.createTaskObj.dependentOn.push(element.id);
+    });
+
     console.log(this.createTaskObj);
-    if(this.createTaskObj.assignees.length == 0 || this.createTaskObj.description =="" || this.createTaskObj.end== 0 || this.createTaskObj.start==0 || this.createTaskObj.taskGroupId==0)
+    if(this.createTaskObj.assignees.length == 0 || this.createTaskObj.title==="")
     {
       this.message = "Form is not filled properly, check if you entered everything correctly.";
       this.spinner.hide();
@@ -154,47 +205,17 @@ export class AddTaskComponent implements OnInit {
     this.assignmentService.createAssignment(this.createTaskObj).subscribe({
       next : (asign : Task) => {
         console.log("Creation succesful");
-        confirm("Task created successfully!");
+        // confirm("Task created successfully!");
         this.spinner.hide();
-        this.closeOverlay();
+        this.dialogRef.close(1);
       },
       error: (error)=> console.log(error)
     });
 
      
   }
-  toggleUserSelection(user_id: number,event: Event) {
-    event.stopPropagation();
-    if(this.isSelected(user_id))
-      this.selectedAssignees = this.selectedAssignees.filter(id=>id!==user_id);
-    else
-      this.selectedAssignees.push(user_id);
-    console.log(this.selectedAssignees);
-  }
-  isSelected(userid: number) {
-    return this.selectedAssignees.includes(userid);
-  }
-  toggleDropdown() {
-    this.showDropdown = !this.showDropdown;
-  }
   closeOverlay(): void {
     // Close the overlay dialog
     this.dialogRef.close();
-  }
-  toggleDropdownTask()
-  {
-    this.showDropdownTask = !this.showDropdownTask;
-  }
-  isSelectedTask(task_id:number)
-  {
-    return this.selectedDependentOn.includes(task_id);
-  }
-  toggleTaskSelection(task_id:number, event: Event)
-  {
-    event.stopPropagation();
-    if(this.isSelectedTask(task_id))
-      this.selectedDependentOn = this.selectedDependentOn.filter(id=>id !== task_id);
-    else
-      this.selectedDependentOn.push(task_id);
   }
 }

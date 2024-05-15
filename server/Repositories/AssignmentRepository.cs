@@ -28,7 +28,7 @@ namespace server.Repositories
             return a;
 
         }
-        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null, int user_id = 0)
+        public async Task<List<Assignment>> GetAllGroupAssignmentsAsync(int group_id, AssignmentFilterDto? filter = null,SortDto? sort = null, List<int>? user_ids = null)
         {
             var assingments_query = _context.Assignments.Where(a=>a.TaskGroupId==group_id)
             .Include(a=>a.Users).ThenInclude(u=>u.Role)
@@ -39,9 +39,10 @@ namespace server.Repositories
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged)
             .AsQueryable();
 
-            if (user_id != 0)
+            if (user_ids !=null && user_ids.Count > 0)
             {
-                assingments_query = assingments_query.Where(a => a.Users.Any(b => b.Id == user_id));
+                // System.Console.WriteLine("Ima nestoooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+                assingments_query = assingments_query.Where(a => a.Users.Any(b => user_ids.Contains(b.Id)));
             }
 
             return await FilterAssignments(assingments_query,filter,sort);
@@ -219,6 +220,50 @@ namespace server.Repositories
 
             return asignment.DependentOnAssignments.ToList();
             
+        }
+
+        public async Task<Assignment> UpdateGanttAssignmentAsync(Assignment assignment, UpdateGanttAssignmentDto dto)
+        {
+            if(dto.AddDependentOn.Count > 0)
+            {
+                foreach (var taskId in dto.AddDependentOn)
+                {
+                    var task = await GetAssignmentByidAsync(taskId);
+                    if(task!=null && assignment.DependentOnAssignments.FirstOrDefault(t=>t.Id==task.Id)==null)
+                        assignment.DependentOnAssignments.Add(task);
+                }
+            }
+            if(dto.RemoveDependentOn.Count > 0)
+            {
+                foreach (var taskId in dto.RemoveDependentOn)
+                {
+                    var task = await GetAssignmentByidAsync(taskId);
+                    if(task!=null)
+                        assignment.DependentOnAssignments.Remove(task);
+                }
+            }
+            if(dto.EndTs!=0)
+            {
+                assignment.End = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(dto.EndTs).ToLocalTime();
+            }
+            if(dto.StartTs!=0)
+            {
+                assignment.Start = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(dto.StartTs).ToLocalTime();
+            }
+            if(dto.Type!="")
+                assignment.Type = dto.Type;
+            if(dto.Percentage >= 0)
+                assignment.Percentage = dto.Percentage;
+            if(dto.Description!="")
+                assignment.Description = dto.Description;
+            if(dto.PriorityId > 0)
+                assignment.PriorityId = dto.PriorityId;
+            if(dto.StateId > 0)
+                assignment.StateId = dto.StateId;
+            await _context.SaveChangesAsync();
+            
+
+            return assignment;
         }
     }
 }

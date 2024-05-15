@@ -1,250 +1,148 @@
 #task-content{
-  border-radius: 15px; 
-  background-color: white;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); 
-  height: 80px;
-  width: 100;
-  overflow-x: scroll;
-  table-layout: fixed;
+    cursor: pointer;
+    background-color: white;
+    height: 100px;
+    width: 900px;
+    margin: 10px 0px;
+    padding: 5px 10px;
+    border-radius: .5rem;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+table {
+  font-family: 'Poppins', sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  margin-left: 10px;
 }
 
-#row{
-  height: 80px;
-  width: 1300px;
+td, th {
+  text-align: left;
+  padding: 6px;
 }
 
-#bulb{
-  width: 52px;
-  max-width: 52px;
-  text-align: center;
-  padding-left: 10px;
-}
-
-.namediv{
-  min-width: 450px;
-  width: 500px;
-  max-width: 500px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.name{
-  font-size: 14px;
-}
-
-#details{
-  min-width: 450px;
-  width: 520px;
-  max-width: 520px;
-  overflow: hidden;
-}
-
-#more{
-  min-width: 200px;
-  width: 50%;
-  font-size: 11px;
-}
-
-#start{
-  min-width: 69px;
-  width: 130px;
-  max-width: 130px;
-}
-
-#end{
-  min-width: 69px;
-  width: 130px;
-  max-width: 130px;
-}
-
-#time{
-  min-width: 125px;
-  width: 156px;
-  max-width: 156px;
-  text-align: center;
-}
-
-.vreme{
-  border-radius: 20%;
-  width: 80%;
-  height: 30%;
-  background: #E8FFDC;
-  opacity: 0.7;
-  padding: 5px 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.vreme2{
-  position: relative;
-}
-
-.vreme img{
-  vertical-align: middle;
-}
-
-.tekst{
-  font-size: 13px;
-  vertical-align: middle;
-}
-
-.datum img{
-  vertical-align: middle;
-}
-
-#date{
-  font-size: 15px;  
-}
-
-#datum{
-  margin-top: 10px;
-}
-
-#mark{
-  background-color: #E8FFDC;
-  color: #3FB202;
-}
-
-#status{
-  margin-left: 40px;
-  border-radius: 25%;
-  width: 20%;
-  height: 30%;
-  opacity: 0.7;
-  padding: 5px 0px;
-  text-align: center;
-  margin-right: -10px;
-}
-
-#priority{
-  margin-left: 40px;
-  border-radius: 15%;
-  width: 20%;
-  height: 30%;
-  opacity: 0.7;
-  padding: 5px 0px;
-  text-align: center;
-  margin-right: 20px;
-}
-
-#person{
-  width: 104px;
-  max-width: 104px;
-  text-align: center;
-}
-
-#com{
-  width: 104px;
-  text-align: center;
-}
-
-#tri{
-  width: 104px;
-  text-align: center;
-}
-
-#bottom{
-  display: flex;
-}
-
-.toolTipMy::before{
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent #f1f1f1 transparent;
-}
-
-.toolTipMy{
-  display: inline-block;
-  border: 1px solid black;
-  visibility: visible;
-  background-color: white;
-  color: black;
-  text-align: center;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
-
-  width: auto;
-
-  padding: 10px;
-}
-
-.low-priority {
-  background-color: #86FF41;
-  /* color: green; */
-  color: black;
-  /* text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; */
-}
-
-.medium-priority {
-  background-color: #FFFC2B;
-  /* color: #E7E400; */
-  color: black;
-  /* text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; */
-}
-
-.high-priority {
-  background: #FFAE21;
-  /* color: #FF8F00; */
-  color: black;
-  /* text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; */
+th{
+  margin-left: 10px;
+  /* border: 1px solid rgb(241, 241, 241); */
 }
 
 .at-risk{
-  background-color: #FF5151;
-  /* color: #D30000; */
-  color: black;
-  /* text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; */
+  width: 100px;
+  padding: 5px 20px;
+  margin-left: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  background-color: #dc3545;
+  border-radius: .5rem;
+  color: white;
+}
+.high-priority{
+  width: 100px;
+  margin-left: 10px;
+  padding: 5px 20px;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  background-color: #ffc107;
+  border-radius: .5rem;
+  color: white;
+}
+.medium-priority{
+  width: 100px;
+  margin-left: 10px;
+  padding: 5px 20px;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: .5rem;
+  color: white;
+  background-color: #65d2e4;
+}
+.low-priority{
+  width: 100px;
+  margin-left: 10px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: .5rem;
+  padding: 5px 20px;
+  background-color: #a0e6ba;
 }
 
-.high-time{
-  background-color: lightgreen;
+
+.ready {
+  width: 100px;
+  margin-left: 10px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: .5rem;
+  padding: 5px 10px;
+  background-color: #074173;
 }
 
-.medium-time{
-  background-color: #FFFD80;
+.in-progress {
+  width: 100px;
+  margin-left: 10px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: .5rem;
+  padding: 5px 10px;
+  background-color: #1679AB;
 }
 
-.low-time{
-  background-color: #FF5151;
+.done {
+  width: 100px;
+  margin-left: 10px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: .5rem;
+  padding: 5px 10px;
+  background-color: #5DEBD7;
 }
 
-.not-started{
-  background-color: #FFFC2B;
+.cancelled, .blocked {
+  width: 100px;
+  margin-left: 10px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: .5rem;
+  padding: 5px 10px;
+  background-color: #C5FF95;
 }
 
-.ready{
-  background-color: #86FF41;
+.not-started {
+  width: 100px;
+  margin-left: 10px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: .5rem;
+  padding: 5px 10px;
+  background-color: #FF76CE;
 }
 
-.in-progress{
-  background-color: #FFAE21;
-}
 
-.blocked{
-  background-color: #FF4B27;
-}
-
-.done{
-  background-color: #45bf00;
-}
-
-.cancelled{
-  background-color: #C10A0A;
-}
-
-#pfp {
-  height: 50px;
-  width: 50px;
-  border-radius: 100px;
-  object-fit: cover;
-  border: 1px solid black;
-  background-color: #001B47;
+.name{
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: lighter;
 }

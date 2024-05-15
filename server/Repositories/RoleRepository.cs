@@ -35,10 +35,19 @@ namespace server.Repositories
             return role?.RolePermissions.Select(rp => rp.Permission).ToList() ?? new List<Permission>();
         }
 
+        
+
 
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Role?> GetUserRoleOnProject(int projectId, int userId)
+        {
+            var project_user = await _context.ProjectUsers.Include(pu=>pu.Role).FirstOrDefaultAsync(pu => pu.ProjectId==projectId && pu.UserId==userId);
+            
+            return project_user?.Role;
         }
     }
 }

@@ -2,10 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
-import { tick } from '@angular/core/testing';
 import { Task } from '../models/task/task';
 import { TaskGroup } from '../models/task/task-group';
-import { UpdateTask } from '../models/task/update-task';
+import { UpdateGant } from '../models/gantogram/update_gant_task';
 
 @Injectable({
   providedIn: 'root'
@@ -39,9 +38,9 @@ export class GantogramService {
   }
 
 
-  updateTaskById(body : UpdateTask, task_id: number) : Observable<Task>
+  updateTaskById(body : UpdateGant, asign_id : number) : Observable<Task>
   {
-    const url = this.baseUrl + "/Assignment/update/" + task_id;
+    const url = this.baseUrl + "/Assignment/updateAssigmentGantt/" + asign_id;
     return this.http.put<Task>(url,body);
   }
 }

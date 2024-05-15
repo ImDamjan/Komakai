@@ -6,11 +6,11 @@
     <div class ="time">
       <div class = "start">
         <h2>Start date</h2>
-        <p [title]="hoverDateFormat()">{{transformDate(task.start)}}</p>
+        <p>{{task.start.toDateString()}}</p>
       </div>
       <div class = "end">
         <h2>End date</h2>
-        <p [title]="hoverDateFormat()">{{transformDate(task.end)}}</p>
+        <p>{{task.end.toDateString()}}</p>
       </div>
     </div>
     <div class="progress-bar">

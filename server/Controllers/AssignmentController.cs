@@ -198,6 +198,42 @@ namespace server.Controllers
             return Ok(task.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
         }
 
+        [HttpPut("updateAssigmentGantt/{asign_id}")]
+        public async Task<IActionResult> updateAssignmentGantt([FromRoute] int asign_id,[FromBody] UpdateGanttAssignmentDto dto)
+        {
+            var task = await _asign_repo.GetAssignmentByidAsync(asign_id);
+            if(task==null)
+                return NotFound("Assignment not found");
+
+
+            if(dto.EndTs !=0 && dto.StartTs!=0 && dto.StartTs > dto.EndTs)
+            {
+               return BadRequest("Start date comes after end date");
+            }
+            var baseDate = new DateTime (1970, 01, 01);
+            var EndTs = task.End.Subtract (baseDate).TotalSeconds;
+            var StartTs = task.Start.Subtract (baseDate).TotalSeconds;
+            if(dto.StartTs!=0 && dto.EndTs==0 && dto.StartTs > EndTs)
+                return BadRequest("Start date comes after end date");
+            if(dto.EndTs!=0 && dto.StartTs==0 && dto.EndTs < StartTs)
+                return BadRequest("Start date comes after end date");
+            
+            task = await _asign_repo.UpdateGanttAssignmentAsync(task,dto);
+
+            var ownerDto = task.User.toAssignmentUserDto();
+            var stateDto = task.State.toStateDto();
+            var teamDto = task.Users.Select(u=>u.toAssignmentUserDto()).ToList();
+            var groupdto = task.TaskGroup.toTaskGroupDto();
+            var prioDto = task.Priority.toPrioDto();
+
+            var dep = task.DependentOnAssignments.Select(u=>u.Id).ToList();
+            
+            var dtoAs = task.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto);
+            dtoAs.DepndentOn = dep;
+            return Ok(dtoAs);
+
+        }
+
         [HttpPut]
         [Route("update/{asign_id}")]
         public async Task<IActionResult> UpdateAssignmentById([FromBody]UpdateAssignmentDto dto,[FromRoute] int asign_id)
@@ -262,9 +298,14 @@ namespace server.Controllers
         {
             var groups = await _group_repo.GetAllProjectTaskGroupsAsync(project_id);
             var res = new List<AssignmentDto>();
+            var user = new List<int>();
+            if(user_id > 0)
+            {
+                user.Add(user_id);
+            }
             foreach (var group in groups)
             {
-                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id, filter,sort, user_id);
+                var tasks = await _asign_repo.GetAllGroupAssignmentsAsync(group.Id, filter,sort, user);
                 for (int i = 0; i< tasks.Count;i++)
                 {
                     var dep = new List<int>();
