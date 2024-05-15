@@ -50,3 +50,13 @@ input#search-field {
     opacity: 0;
     pointer-events: none; 
 }
+
+.members {
+    display: flex;
+    gap: 20%;
+}
+  
+.members,
+.filter-user {
+    flex: 1;
+}

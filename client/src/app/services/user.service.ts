@@ -16,8 +16,9 @@ export class UserService {
   baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}/User`);
+  getUsers(filters: any = {}): Observable<User[]> {
+    const apiUrl = `${this.baseUrl}/User`;
+    return this.http.get<User[]>(apiUrl, { params: filters });
   }
 
   getProjectUsers(project_id : number) : Observable<User[]>
