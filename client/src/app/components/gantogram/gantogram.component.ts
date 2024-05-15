@@ -38,6 +38,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
 import { AssignmentService } from '../../services/assignment.service';
 import { Role } from '../../models/role';
+import { RoleService } from '../../services/role.service';
 
 
 
@@ -56,13 +57,14 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   private decoder = inject(JwtDecoderService);
   private userId : number = 0;
   userProjectRole! : Role;//dodati role servis i uzeti project role
+  private roleService = inject(RoleService);
   private projectId : number = 0;
   private route = inject(ActivatedRoute);
   private ganttService = inject(GantogramService)
   private assignmentService = inject(AssignmentService)
   private itemsOldState: GanttItem[] = [];
 
-  @Input() task!: Task;
+  task!: Task;
   private dialog = inject(MatDialog);
   @Output() newItemEvent = new EventEmitter<{previous_state : number, task: Task}>();
 
@@ -146,6 +148,8 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   constructor(private printService: GanttPrintService,private toast : NgToastService,private datePipe: DatePipe,private sanitizer: DomSanitizer) {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
   }
+  public isDragable:boolean = false;
+  public isLinkable:boolean = false;
 
   ngOnInit(): void {
       // init items children
@@ -154,6 +158,16 @@ export class GantogramComponent implements OnInit, AfterViewInit{
       {
         let decode = this.decoder.decodeToken(token);
         this.userId = decode.user_id;
+        this.roleService.getUserProjectRole(this.userId,this.projectId).subscribe({
+          next: (role:Role)=>{
+            this.userProjectRole = role;
+            if(role.name==="Project Manager")
+            {
+              this.isDragable = true;
+              this.isLinkable = true;
+            }
+          }
+        });
       }
 
       this.getGanttItemsByProjectId();
@@ -181,11 +195,13 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   openShowTaskOverlay(task : Task): void {
     console.log(task);
     const dialogRef = this.dialog.open(TaskDetailsComponent, {
-      data:[task]
+      data:[task,0,this.userProjectRole]
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.newItemEvent.emit({previous_state : task.state.id,task:result});
+      console.log(this.task);
+      console.log(result);
       this.task = result;
     });
   }
