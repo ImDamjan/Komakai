@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.DTOs;
 using server.DTOs.Projects;
 using server.DTOs.Users;
 using server.Models;
@@ -18,7 +19,7 @@ namespace server.Interfaces
 
         Task<Role?> GetRoleByNameAsync(string roleName);
 
-        Task <List<User>> GetAllUsersAsync();
+        Task <List<User>> GetAllUsersAsync(UserFilterDto? filter=null,SortDto? sort = null);
 
         Task<User?> GetUserByIdAsync(int id);
 

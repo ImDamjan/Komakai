@@ -56,7 +56,7 @@ export class MemberComponent implements OnInit{
       organisation: user.organisation,
       department: user.department,
       roleId: user.role.id,
-      roleName: '',
+      roleName: user.role.name,
       isActivated: user.isActivated,
       profile_picture: user.profile_picture
     }

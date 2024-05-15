@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MimeKit.Encodings;
 using server.Data;
+using server.DTOs;
 using server.DTOs.Projects;
 using server.DTOs.Users;
 using server.Interfaces;
@@ -26,16 +27,72 @@ namespace server.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsersAsync(UserFilterDto? filter = null, SortDto? sort = null)
         {
-            return await _context.Users.Include(u=>u.Role).ToListAsync();
+            var user_query = _context.Users
+            .Include(u => u.Role)
+            .AsQueryable();
+            return await GetAllFilteredUsersAsync(user_query, filter, sort);
         }
 
         public async Task<User?> GetUserByIdAsync(int id)
         {
             return await _context.Users.Include(u=>u.Role).FirstOrDefaultAsync(u=>u.Id==id);
         }
-  
+
+        public async Task<List<User>> GetAllFilteredUsersAsync(IQueryable<User> usersQuery, UserFilterDto? filter,SortDto? sort = null)
+        {
+                if (filter != null)
+                {
+                    if (!string.IsNullOrEmpty(filter.SearchUser))
+                    {
+                        var searchTerms = filter.SearchUser.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var term in searchTerms)
+                        {
+                            usersQuery = usersQuery.Where(u => EF.Functions.Like(u.Name, $"%{term}%") ||
+                                                                EF.Functions.Like(u.Lastname, $"%{term}%"));
+                        }
+                    }
+
+                    if (filter.RoleFilter != null && filter.RoleFilter.Count > 0)
+                    {
+                        usersQuery = usersQuery.Where(u => filter.RoleFilter.Contains(u.Role.Id));
+                    }
+
+                    if (filter.IsActivatedFilter != null && filter.IsActivatedFilter.Count > 0)
+                    {
+                        usersQuery = usersQuery.Where(u => filter.IsActivatedFilter.Contains(u.IsActivated ? 1 : 0));
+                    }
+                }
+                if (sort != null)
+                {
+                    switch (sort.PropertyName?.ToLower())
+                    {
+                        case "firstname":
+                            usersQuery = sort.SortFlag == 1? usersQuery.OrderBy(u => u.Name) : usersQuery.OrderByDescending(u => u.Name);
+                            break;
+                        case "lastname":
+                            usersQuery = sort.SortFlag == 1? usersQuery.OrderBy(u => u.Lastname) : usersQuery.OrderByDescending(u => u.Lastname);
+                            break;
+                        case "role":
+                            usersQuery = sort.SortFlag == 1? usersQuery.OrderByDescending(u => u.Role.Name) : usersQuery.OrderBy(u => u.Role.Name);
+                            break;
+                        case "isactive":
+                            usersQuery = sort.SortFlag == 1? usersQuery.OrderByDescending(u => u.IsActivated) : usersQuery.OrderBy(u => u.IsActivated);
+                            break;
+                        default:
+                            usersQuery = sort.SortFlag == 1? usersQuery.OrderByDescending(u => u.Id) : usersQuery.OrderBy(u => u.Id);
+                            break;
+                    }
+                }
+                else
+                {
+                    // Default sorting
+                    usersQuery = usersQuery.OrderByDescending(u => u.Id);
+                }
+
+                return await usersQuery.ToListAsync();
+        }
 
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
@@ -88,7 +145,6 @@ namespace server.Repositories
             if(user == null)
                 return null;
             user.Email = dto.Email;
-            user.JobTitle = dto.JobTitle;
             user.Organisation =dto.Organisation;
             user.Department = dto.Department;
             user.IsActivated = dto.IsActivated;
@@ -96,6 +152,11 @@ namespace server.Repositories
             user.Name = dto.Name;
             user.Lastname = dto.Lastname;
             user.RoleId = dto.RoleId;
+            var role = await _context.Roles.FindAsync(dto.RoleId);
+            if (role != null)
+            {
+                user.JobTitle = role.Name;
+            }
             await _context.SaveChangesAsync();
 
             return user;

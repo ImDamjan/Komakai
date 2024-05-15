@@ -10,7 +10,7 @@ namespace server.Mappers
 {
     public static class UserMapper
     {
-        public static UserDto toUserDto(this User u)
+        public static UserDto toUserDto(this User u, RoleDto role)
         {
             return new UserDto{
                 Id = u.Id,
@@ -21,6 +21,7 @@ namespace server.Mappers
                 Department = u.Department,
                 Name = u.Name,
                 Lastname = u.Lastname,
+                Role = role,
                 IsActivated = u.IsActivated
             };
         }
