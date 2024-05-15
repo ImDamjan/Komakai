@@ -5,6 +5,8 @@ import { Team } from '../../models/team';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user/user';
+import { MatDialog } from '@angular/material/dialog';
+import { EditTeamComponent } from '../../components/edit-team/edit-team.component';
 
 @Component({
   selector: 'app-teams',
@@ -23,6 +25,7 @@ export class TeamsComponent implements OnInit {
   private jwt_service = inject(JwtDecoderService);
   private team_service = inject(TeamService);
   private user_service = inject(UserService);
+  private dialog = inject(MatDialog);
   public searchText = "";
   private loggedUser:any;
   public createTeam = {
@@ -69,6 +72,17 @@ export class TeamsComponent implements OnInit {
         this.teams.push(team);
       }
     })
+  }
+
+  openEditOverlay(team: Team)
+  {
+    const dialogRef = this.dialog.open(EditTeamComponent,
+      {data : [this.users,team]}
+    )
+    dialogRef.afterClosed().subscribe(result=>{
+      let index = this.teams.findIndex(t=>t.id==result.id);
+      this.teams.splice(index,1,result);
+    });
   }
 
   loadTeams()

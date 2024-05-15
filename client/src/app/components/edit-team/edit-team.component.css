@@ -1,0 +1,36 @@
+button{
+    padding: 10px 20px;
+    background-color:  #001B47;
+    color: white;
+    border: 1px solid #001B47;
+    border-radius: 25px;
+}
+button:hover{
+    background-color:   #17315D;
+    color: white;
+}
+p-multiSelect{
+    margin: 20px 0px;
+}
+.overlay{
+    width: 420px;
+    height: 360px;
+    padding: 20px;
+}
+:host::ng-deep.p-multiselect-items
+{
+    height: 150px;
+    overflow: auto;
+}
+:host::ng-deep.p-multiselect-label{
+    width: 250px;
+}
+.editTeam{
+    display: flex;
+    flex-direction: column;
+    padding: 20px 60px 0px 60px;
+    border-radius: 25px;
+    height: 200px;
+    width: 380px;
+    border: 1px solid #001B47;
+}

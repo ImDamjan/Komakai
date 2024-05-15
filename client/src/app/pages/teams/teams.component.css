@@ -82,12 +82,12 @@ button{
     border: 1px solid #001B47;
     border-radius: 25px;
 }
-.teams_content{
-    height: 70vw;
-}
 button:hover{
     background-color:   #17315D;
     color: white;
+}
+.teams_content{
+    height: 70vw;
 }
 .tabela{
     overflow: auto;

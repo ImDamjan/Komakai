@@ -19,7 +19,7 @@
                 <tr *ngFor="let team of teams">
                     <td class="team">
                         <span>{{team.name}}</span>
-                        <button>Edit Team</button>
+                        <button (click)="openEditOverlay(team)">Edit Team</button>
                     </td>
                     <td class="users">
                         <span *ngFor="let user of team.members">{{user.name + " " + user.lastname}}</span>

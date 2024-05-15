@@ -28,4 +28,9 @@ export class TeamService {
     const url = this.apiUrl + "/Team/createTeam";
     return this.http.post<Team>(url,body);
   }
+
+  updateTeam(body: any, team_id:number) : Observable<Team>{
+    const url = this.apiUrl + "/Team/update/" + team_id;
+    return this.http.put<Team>(url,body);
+  }
 }
