@@ -87,7 +87,6 @@ namespace server.Repositories
                 }
                 else
                 {
-                    // Default sorting
                     usersQuery = usersQuery.OrderByDescending(u => u.Id);
                 }
 

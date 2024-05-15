@@ -27,6 +27,7 @@ export class MemberComponent implements OnInit{
   ngOnInit(): void {
     this.user_service.getUsers().subscribe(users => {
       this.allUsers = users;
+      
       this.filteredUsers = this.allUsers;
       this.profilePicture(this.allUsers);
 
@@ -43,6 +44,27 @@ export class MemberComponent implements OnInit{
 
     this.user_service.filteredUsers$.subscribe(users => {
       this.filteredUsers = users;
+      this.filteredUsers.forEach(user => {
+        this.user_service.profilePicture(user.id).subscribe({
+          next: (message: { profilePicture: string, type: string }) => {
+            if(message.profilePicture)
+              {
+                user.profile_picture = `data:${message.type};base64,${message.profilePicture}`;
+              }
+              
+            else
+            {
+              user.profile_picture = "../../../assets/pictures/defaultpfp.svg";
+            }
+          }, 
+          error: (err) => {
+            console.error('Error retrieving profile picture:', err);
+          },
+          complete: () => {
+            this.profilePicturesLoaded = true;
+          }
+        });
+      });
     });
     
   }
@@ -91,9 +113,14 @@ export class MemberComponent implements OnInit{
       this.user_service.profilePicture(user.id).subscribe({
         next: (message: { profilePicture: string, type: string }) => {
           if(message.profilePicture)
-            user.profile_picture = `data:${message.type};base64,${message.profilePicture}`;
+            {
+              user.profile_picture = `data:${message.type};base64,${message.profilePicture}`;
+            }
+            
           else
+          {
             user.profile_picture = "../../../assets/pictures/defaultpfp.svg";
+          }
         }, 
         error: (err) => {
           console.error('Error retrieving profile picture:', err);

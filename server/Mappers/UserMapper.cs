@@ -12,7 +12,15 @@ namespace server.Mappers
     {
         public static UserDto toUserDto(this User u, RoleDto role)
         {
-            return new UserDto{
+            string profilePictureBase64 = null;
+
+            if (u.ProfilePicture != null)
+            {
+                profilePictureBase64 = Convert.ToBase64String(u.ProfilePicture);
+            }
+
+            return new UserDto
+            {
                 Id = u.Id,
                 Username = u.Username,
                 Email = u.Email,
@@ -22,7 +30,8 @@ namespace server.Mappers
                 Name = u.Name,
                 Lastname = u.Lastname,
                 Role = role,
-                IsActivated = u.IsActivated
+                IsActivated = u.IsActivated,
+                ProfilePicturePath = profilePictureBase64 // Assign the base64 string or null if ProfilePicture is null
             };
         }
         public static AssignmentUserDto toAssignmentUserDto(this User u)
