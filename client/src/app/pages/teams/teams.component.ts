@@ -5,6 +5,8 @@ import { Team } from '../../models/team';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user/user';
+import { MatDialog } from '@angular/material/dialog';
+import { EditTeamComponent } from '../../components/edit-team/edit-team.component';
 
 @Component({
   selector: 'app-teams',
@@ -23,20 +25,29 @@ export class TeamsComponent implements OnInit {
   private jwt_service = inject(JwtDecoderService);
   private team_service = inject(TeamService);
   private user_service = inject(UserService);
+  private dialog = inject(MatDialog);
+  public searchText = "";
   private loggedUser:any;
+  public createTeam = {
+    name : "",
+    type : "",
+    createdBy : 0,
+    members : [1]
+  }
   public users: User[]= [];
   public selectedUsers: User[] =  [];
   public teams : Team[] = [];
   ngOnInit(): void {
     this.spinner.show();
     this.loggedUser = this.jwt_service.getLoggedUser();
+    this.createTeam.createdBy = this.loggedUser.user_id;
     this.loadTeams();
     this.user_service.getUsers().subscribe({
       next :(users: User[])=>{
         let pom: User[] = []
         users.forEach(element => {
           element.fulname = element.name + " " + element.lastname;
-          if(element.id!==Number(this.loggedUser.user_id))
+          if(element.id!==Number(this.loggedUser.user_id) && element.role.name!=="Admin")
           pom.push(element);
         });
         this.users = pom;
@@ -45,13 +56,42 @@ export class TeamsComponent implements OnInit {
     });
   }
 
+  createTeamRequest()
+  {
+    if(this.selectedUsers.length <= 0 || this.createTeam.name==="")
+    {
+      alert("Create form not filled correctly");
+      return;
+    }
+    this.createTeam.members = [];
+    this.selectedUsers.forEach(element => {
+      this.createTeam.members.push(element.id);
+    });
+    this.team_service.createTeam(this.createTeam).subscribe({
+      next: (team: Team) =>{
+        this.teams.push(team);
+      }
+    })
+  }
+
+  openEditOverlay(team: Team)
+  {
+    const dialogRef = this.dialog.open(EditTeamComponent,
+      {data : [this.users,team]}
+    )
+    dialogRef.afterClosed().subscribe(result=>{
+      let index = this.teams.findIndex(t=>t.id==result.id);
+      this.teams.splice(index,1,result);
+    });
+  }
+
   loadTeams()
   {
-    this.spinner.show();
-    this.team_service.getMyCreatedTeams(this.loggedUser.user_id).subscribe({
+    // this.spinner.show();
+    // console.log(this.searchText);
+    this.team_service.getMyCreatedTeams(this.loggedUser.user_id,this.searchText).subscribe({
       next :(teams: Team[]) =>{
         this.teams = teams;
-        this.spinner.hide();
       }
     });
   }

@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateProjectOverlayComponent } from '../../components/create-project-overlay/create-project-overlay.component';
 import { ProjectFilter } from '../../models/project/project-filter';
 import { FilterProjectComponent } from '../../components/filter-project/filter-project.component';
 import { SortProjectComponent } from '../../components/sort-project/sort-project.component';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
+import { Project } from '../../models/project/project';
 
 
 @Component({
@@ -29,6 +30,8 @@ export class ProjectsComponent implements OnInit{
 
   searchSortProjectChanged = new EventEmitter<{filter: ProjectFilter}>();
 
+  @Output() createdObject = new EventEmitter<Project>();
+
   private overlay = inject(MatDialog);
 
   private overlay2 = inject(MatDialog);
@@ -50,12 +53,21 @@ export class ProjectsComponent implements OnInit{
         this.isWorker = true;
     }
   }
-
+  
+  private CreatedProject! : Project;
+  getProject()
+  {
+    if(this.CreatedProject!==undefined)
+      this.createdObject.emit(this.CreatedProject);
+  }
   openCreateOverlay(): void {
     const dialogRef = this.dialog.open(CreateProjectOverlayComponent, {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+
+      this.CreatedProject = result;
+      this.getProject();
       this.showProjectPreview = true;
       this.showCreateButton = true;
       this.projectText = 'Project list';
