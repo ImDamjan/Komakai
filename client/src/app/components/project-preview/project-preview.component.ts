@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EditProjectOverlayComponent } from '../edit-project-overlay/edit-project-overlay.component';
@@ -34,6 +34,8 @@ export class ProjectPreviewComponent implements OnInit {
     pageNumber: 1,
     pageSize: 4
   };
+
+  private activatedRoute = inject(ActivatedRoute);
 
   isClick = false;
   initialX: number | undefined;
@@ -90,7 +92,13 @@ export class ProjectPreviewComponent implements OnInit {
     window.addEventListener('resize', () => {
       this.adjustCardsPerPage();
     });
-    this.loadProjects();
+    this.activatedRoute.paramMap.subscribe(params => {
+      if (params.has('pageNumber')) {
+        this.currentPage = parseInt(params.get('pageNumber')!);
+        this.filter.pageNumber = this.currentPage;
+      }
+      this.loadProjects();
+    });
   }
 
   ngAfterViewInit() {
