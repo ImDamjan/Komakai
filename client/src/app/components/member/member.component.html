@@ -1,6 +1,6 @@
 <table id="wrapper" *ngIf="profilePicturesLoaded">
     <thead>
-        <tr *ngFor="let user of users">
+        <tr *ngFor="let user of filteredUsers">
             <td id="profile-picture">
                <img id="pfp" [src]="user.profile_picture">
             </td>

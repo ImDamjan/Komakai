@@ -6,6 +6,7 @@ import { UserService } from '../../services/user.service';
 import { error } from 'console';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { EMPTY, catchError, forkJoin, tap } from 'rxjs';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-member',
@@ -17,15 +18,27 @@ export class MemberComponent implements OnInit{
   @Input() roles :Role[] = [];
   @Input() users : User[] = [];
   allUsers: User[] = [];
+  filteredUsers: User[] = [];
   private user_service = inject(UserService);
   private spinner = inject(NgxSpinnerService);
+  private search_service = inject(SearchService);
   profilePicturesLoaded = false;
 
   ngOnInit(): void {
     this.user_service.getUsers().subscribe(users => {
       this.allUsers = users;
+      this.filteredUsers = this.allUsers;
       this.profilePicture(this.allUsers);
+
+      this.search_service.currentSearchQuery.subscribe(query => {
+        this.filteredUsers = this.users.filter(user =>
+          user.name.toLowerCase().includes(query.toLowerCase()) ||
+          user.lastname.toLowerCase().includes(query.toLowerCase())
+        );
+      });
     });
+
+    
   }
 
   updateUserRole(role: Role,user : User)

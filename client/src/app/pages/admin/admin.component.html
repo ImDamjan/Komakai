@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div id="header">
     <div class="search" [class.hide]="!members">
-      <input type="text" pInputText id="search-field" placeholder="Search for a user...">
+      <input type="text" pInputText id="search-field" placeholder="Search for a user..." (input)="searchUsers($event)">
     </div>
     <button id="registerButton" pButton type="button" (click)="showRegister()" label="Add a new user"></button>
     <button id="membersButton" pButton type="button" (click)="showMembers()" label="Show all users"></button>

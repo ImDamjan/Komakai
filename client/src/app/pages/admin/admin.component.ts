@@ -4,6 +4,7 @@ import { RoleService } from '../../services/role.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user/user';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-admin',
@@ -17,6 +18,7 @@ export class AdminComponent implements OnInit {
   private role_service = inject(RoleService);
   private spinner = inject(NgxSpinnerService);
   private user_service = inject(UserService);
+  private search_service = inject(SearchService);
   register: boolean = false;
   members: boolean = true;
   
@@ -42,5 +44,10 @@ export class AdminComponent implements OnInit {
   showMembers(): void {
     this.members = true;
     this.register = false;
+  }
+
+  searchUsers(event: Event) {
+    const query = (event.target as HTMLInputElement).value;
+    this.search_service.changeSearchQuery(query);
   }
 }
