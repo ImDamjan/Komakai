@@ -1,11 +1,11 @@
-<table id="wrapper" *ngIf="profilePicturesLoaded">
+<table class="tabela" *ngIf="profilePicturesLoaded" >
     <thead>
         <tr *ngFor="let user of filteredUsers">
             <td id="profile-picture">
                <img id="pfp" [src]="user.profile_picture">
             </td>
             <td id="username">{{user.name + " " + user.lastname}}</td>
-            <td id="dropdown" class = "drop">
+            <td id="dropdown" class = "drop" >
                 <div class="dropbtn">{{user.role.name}}</div>
                     <div class="dropdown-content">
                     <p *ngFor="let role of roles" (click)="updateUserRole(role, user)">{{role.name}}</p>

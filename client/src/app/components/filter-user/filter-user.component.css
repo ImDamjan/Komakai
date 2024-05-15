@@ -1,8 +1,13 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+  }
 .project-filter{
     display: flex;
     float: right;
-    width: 350px;
-    height: 100%;
+    width: 100%;
     background-color: white;
     padding: 30px 100px 20px 30px;
     flex-direction: column;

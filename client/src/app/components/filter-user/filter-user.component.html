@@ -1,20 +1,22 @@
-<div class = 'project-filter'>
-    <div class="header-filter">
-        <h2>Filters</h2>
-        <button class="filter-button" (click)="applyFilters()"><img src="assets\task-header\filter.svg" alt="img-filter" width="20" height="20"></button>
-    </div>
-    <div class = 'priority'>
-        <h4>Role</h4>
-        <p-multiSelect [options]="roles" placeholder="Select Roles" optionLabel="name" [(ngModel)]="selectedRoles">
-        </p-multiSelect>
-    </div>
-    <div class="sort">
-        Activated <input type="radio" name="activation-mode" [(ngModel)]="isActivated" [value]="1" cl checked>
-        Deactivated <input type="radio" name="activation-mode" [(ngModel)]="isActivated" [value]="0">
-    </div>
-    <div class="sort">
-        <h4>Sorted By</h4><br><br>
-        Ascending <input type="radio" name="sort-mode" [(ngModel)]="sortMode" [value]="1">
-        Descending <input type="radio" name="sort-mode" [(ngModel)]="sortMode" [value]="-1" cl checked>
+<div class="container">
+    <div class = 'project-filter'>
+        <div class="header-filter">
+            <h2>Filters</h2>
+            <button class="filter-button" (click)="applyFilters()"><img src="assets\task-header\filter.svg" alt="img-filter" width="20" height="20"></button>
+        </div>
+        <div class = 'priority'>
+            <h4>Role</h4>
+            <p-multiSelect [options]="roles" placeholder="Select Roles" optionLabel="name" [(ngModel)]="selectedRoles">
+            </p-multiSelect>
+        </div>
+        <div class="sort">
+            Activated <input type="radio" name="activation-mode" [(ngModel)]="isActivated" [value]="1" cl checked>
+            Deactivated <input type="radio" name="activation-mode" [(ngModel)]="isActivated" [value]="0">
+        </div>
+        <div class="sort">
+            <h4>Sorted By</h4><br><br>
+            Ascending <input type="radio" name="sort-mode" [(ngModel)]="sortMode" [value]="1">
+            Descending <input type="radio" name="sort-mode" [(ngModel)]="sortMode" [value]="-1" cl checked>
+        </div>
     </div>
 </div>
