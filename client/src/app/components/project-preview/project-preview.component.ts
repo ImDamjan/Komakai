@@ -301,21 +301,21 @@ export class ProjectPreviewComponent implements OnInit {
     return this.projectsData;
   }
 
-  previousPage(): void {
+  previousPage(){
     if (this.currentPage > 1) {
       this.currentPage--;
       this.filter.pageNumber=this.currentPage;
-      this.loadProjects(); // Call loadProjects to fetch data for the new page
+      // this.loadProjects();
+      this.router.navigate(['/projects', this.currentPage]);
+      this.loadProjects();
     }
   }
 
-  nextPage(): void {
-
-    if (this.currentPage < this.totalPages()) {
-      this.currentPage++;
-      this.filter.pageNumber=this.currentPage;
-      this.loadProjects(); // Call loadProjects to fetch data for the new page
-    }
+  nextPage(){
+    this.currentPage++;
+    this.filter.pageNumber=this.currentPage;
+    this.router.navigate(['/projects', this.currentPage]);
+    this.loadProjects();
   }
 
   // Get the total number of pages
@@ -327,28 +327,28 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   // Calculate the pages to show in pagination control
-  pagesToShow(): number[] {
-    const total = this.totalPages();
-    const current = this.currentPage;
-    const pagesToShowCount = 3;
+  // pagesToShow(): number[] {
+  //   const total = this.totalPages();
+  //   const current = this.currentPage;
+  //   const pagesToShowCount = 3;
   
-    let from = Math.max(1, current - Math.floor(pagesToShowCount / 2));
-    let to = Math.min(total, from + pagesToShowCount - 1);
+  //   let from = Math.max(1, current - Math.floor(pagesToShowCount / 2));
+  //   let to = Math.min(total, from + pagesToShowCount - 1);
   
-    if (to - from + 1 < pagesToShowCount) {
-      if (current < Math.ceil(pagesToShowCount / 2)) {
-        to = Math.min(total, pagesToShowCount);
-      } else {
-        from = Math.max(1, total - pagesToShowCount + 1);
-      }
-    }
+  //   if (to - from + 1 < pagesToShowCount) {
+  //     if (current < Math.ceil(pagesToShowCount / 2)) {
+  //       to = Math.min(total, pagesToShowCount);
+  //     } else {
+  //       from = Math.max(1, total - pagesToShowCount + 1);
+  //     }
+  //   }
   
-    const pages: number[] = [];
-    for (let i = from; i <= to; i++) {
-      pages.push(i);
-    }
-    return pages;
-  }
+  //   const pages: number[] = [];
+  //   for (let i = from; i <= to; i++) {
+  //     pages.push(i);
+  //   }
+  //   return pages;
+  // }
   
   // Method to navigate to a specific page
   goToPage(page: number): void {
