@@ -87,7 +87,12 @@
   </article>
 </p-table>
 
-
+<br><br>
+<div id="paginator">
+  <button (click)="previousPage()">Previous</button>
+  <span> Page {{ currentPage }} </span>
+  <button (click)="nextPage()">Next</button>
+</div>
 
 <!-- Kontrole paginacije -->
 <!-- <div class="pagination-container" [ngClass]="{'bottom': shouldShowBottomPagination()}" *ngIf="showProjectPreview">

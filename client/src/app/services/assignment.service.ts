@@ -100,6 +100,14 @@ export class AssignmentService {
       });
     }
 
+    if(params.pageNumber){
+      httpParams = httpParams.set('PageNumber',params.pageNumber.toString());
+    }
+
+    if(params.pageSize){
+      httpParams = httpParams.set('PageSize',params.pageSize.toString());
+    }
+
     return this.http.get<Task[]>(url, { params: httpParams });
   }
 

@@ -19,10 +19,12 @@ import { TeamsComponent } from './pages/teams/teams.component';
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full'},
   {path: 'auth' ,component: AuthComponent,canActivate: [AuthGuard]},
-  {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
-  {path: 'projects',component: ProjectPreviewComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
-  {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
-  {path: 'tasks', component: TasksComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
+  {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard]},
+  {path: 'projects', redirectTo: '/projects/1', pathMatch: 'full'},
+  {path: 'projects/:pageNumber',component: ProjectPreviewComponent,canActivate: [AuthGuard]},
+  {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
+  {path: 'tasks', redirectTo: '/tasks/1', pathMatch: 'full'},
+  {path: 'tasks/:pageNumber', component: TasksComponent,canActivate: [AuthGuard]},
   {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
   
   {path: 'projects/project-details/:projectId', component: ProjectDetailsComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},

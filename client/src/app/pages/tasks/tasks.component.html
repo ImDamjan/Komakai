@@ -11,4 +11,9 @@
              <app-project-task [task]="task"></app-project-task>
          </div>
      </div>
+    <div id="paginator">
+        <button (click)="previousPage()">Previous</button>
+        <span> Page {{ currentPage }} </span>
+        <button (click)="nextPage()">Next</button>
+    </div>
 </div>

@@ -19,6 +19,10 @@
     font-size: 32px;
     margin-top: 5px;
 }
+
+#paginator{
+  text-align: center;
+}
 app-project-task:hover{
   cursor: pointer;
 }

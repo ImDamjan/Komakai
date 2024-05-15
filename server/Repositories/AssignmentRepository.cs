@@ -105,10 +105,6 @@ namespace server.Repositories
         {
             if(dto!=null)
             {
-                if(dto.PageNumber!=0 && dto.PageSize!=0)
-                {
-                    assignments = assignments.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
-                }
                 if(dto.StateFilter.Count > 0)
                     assignments = assignments.Where(p=>dto.StateFilter.Contains(p.StateId));
                 if(dto.PriorityFilter.Count > 0)
@@ -116,9 +112,6 @@ namespace server.Repositories
                 
                 if(dto.SearchTitle!=string.Empty)
                     assignments = assignments.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower()));
-                
-                if(dto.SearchTitle!=string.Empty)
-                    assignments =assignments.Where(p=>p.Title.ToLower().Contains(dto.SearchTitle.ToLower()));
                 //datumi
                 if(dto.StartFrom!=null && dto.StartTo!=null)
                 {
@@ -126,12 +119,17 @@ namespace server.Repositories
                 }
                 if(dto.EndFrom!=null && dto.EndTo!=null)
                 {
-                    assignments = assignments.Where(p=>p.End >= dto.EndFrom && p.End <=dto.EndTo);
+                    assignments = assignments.Where(p => p.End >= dto.EndFrom && p.End <= dto.EndTo);
                 }
 
                 if(dto.PercentageFilterTo >=0 && dto.PercentageFilterFrom <= dto.PercentageFilterTo)
                 {
                     assignments = assignments.Where(p=>p.Percentage <= dto.PercentageFilterTo && p.Percentage >=dto.PercentageFilterFrom);
+                }
+                if (dto.PageNumber > 0 && dto.PageSize > 0)
+                {
+                    int skip = (dto.PageNumber - 1) * dto.PageSize;
+                    assignments = assignments.Skip(skip).Take(dto.PageSize);
                 }
             }
             if(sort!=null)

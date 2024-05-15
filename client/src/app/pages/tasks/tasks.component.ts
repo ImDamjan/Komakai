@@ -7,6 +7,8 @@ import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { TaskHeaderComponent } from '../../components/task-header/task-header.component';
 import { TaskFilter } from '../../models/task/task-filter';
 import { DateConverterService } from '../../services/date-converter.service';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TaskFilterComponent } from '../../components/task-filter/task-filter.component';
 
 @Component({
@@ -26,9 +28,17 @@ export class TasksComponent {
 
   private task_date_service = inject(DateConverterService);
 
+  public currentPage: number = 1;
+
+  private router = inject(Router);
+
+  private activatedRoute = inject(ActivatedRoute);
+
   public filter: TaskFilter = {
     propertyName : "Last Updated",
-    sortFlag : -1
+    sortFlag : -1,
+    pageNumber: 1,
+    pageSize: 6
   };
 
   private jwtDecoder = inject(JwtDecoderService);
@@ -41,18 +51,27 @@ export class TasksComponent {
   }
 
   ngOnInit(): void {
-    let token = this.jwtDecoder.getToken();
-    let id = 0;
-    if(token!=null)
-    {
-      let decode = this.jwtDecoder.decodeToken(token);
-      id = decode.user_id;
-    }
-    this.taskService.getAllUserAssignments(id).subscribe(tasks => {
-        tasks.forEach(task => {
-          this.task_date_service.setDateParametersForTask(task);
-        });
-        this.filteredTasks = tasks;
+    // let token = this.jwtDecoder.getToken();
+    // let id = 0;
+    // if(token!=null)
+    // {
+    //   let decode = this.jwtDecoder.decodeToken(token);
+    //   id = decode.user_id;
+    // }
+    // this.filter.pageNumber = 1;
+    // this.filter.pageSize = 7;
+    // this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
+    //     tasks.forEach(task => {
+    //       this.task_date_service.setDateParametersForTask(task);
+    //     });
+    //     this.filteredTasks = tasks;
+    // });
+    this.activatedRoute.paramMap.subscribe(params => {
+      if (params.has('pageNumber')) {
+        this.currentPage = parseInt(params.get('pageNumber')!);
+        this.filter.pageNumber = this.currentPage;
+      }
+      this.fetchTasksForCurrentPage();
     });
   }
 
@@ -85,8 +104,70 @@ export class TasksComponent {
         this.task_date_service.setDateParametersForTask(task);
       });
       this.filteredTasks = tasks;
+    });
+  }}
+
+  filterTasks(filter: TaskFilter){
+
+    let collectedTasks: Task[] = [];
+
+    this.filter.pageNumber = this.currentPage;
+    this.filter.pageSize = 6;
+
+    if(filter.projects){
+      this.filter.projects=filter.projects;
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.filter.pageNumber = this.currentPage;
+      this.router.navigate(['/tasks', this.currentPage]);
+      this.fetchTasksForCurrentPage();
+    }
+  }
+  
+  nextPage() {
+    this.currentPage++;
+    this.filter.pageNumber = this.currentPage;
+    this.router.navigate(['/tasks', this.currentPage]);
+    this.fetchTasksForCurrentPage();
+  }
+
+  fetchTasksForCurrentPage() {
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if (token != null) {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+      this.taskService.getAllUserAssignments(id, this.filter).subscribe(tasks => {
+        tasks.forEach(task => {
+          this.task_date_service.setDateParametersForTask(task);
+        });
+        this.filteredTasks = tasks;
       });
     }
+  }
+
+  // getTotalPages(): number {
+  //   if(this.filter.pageSize){
+  //     console.log(this.filter.pageSize)
+  //     return Math.ceil(this.tasks.length / this.filter.pageSize);
+  //   }
+  //   else
+  //     return 0;
+  // }
+
+  constructFilterQueryString(): any {
+    let queryString: TaskFilter = {};
+    if (this.filter.searchTitle) {
+      queryString['searchTitle'] = this.filter.searchTitle;
+    }
+    if(this.filter.stateFilter){
+      queryString['stateFilter'] = this.filter.stateFilter;
+    }
+    return queryString;
   }
 
 }
