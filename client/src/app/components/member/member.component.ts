@@ -31,10 +31,13 @@ export class MemberComponent implements OnInit{
       this.profilePicture(this.allUsers);
 
       this.search_service.currentSearchQuery.subscribe(query => {
-        this.filteredUsers = this.users.filter(user =>
-          user.name.toLowerCase().includes(query.toLowerCase()) ||
-          user.lastname.toLowerCase().includes(query.toLowerCase())
-        );
+        const searchTerms = query.toLowerCase().split(' ');
+        this.filteredUsers = this.users.filter(user => {
+          return searchTerms.every(term =>
+            user.name.toLowerCase().includes(term) ||
+            user.lastname.toLowerCase().includes(term)
+          );
+        });
       });
     });
 
