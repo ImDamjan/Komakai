@@ -272,25 +272,49 @@ export class ProjectPreviewComponent implements OnInit {
   // Pagination functions
 
   // Get projects for the current page
+  // getPaginatedProjects(): any[] {
+  //   if (!this.projectsData) {
+  //     return [];
+  //   }
+  //   const startIndex = (this.currentPage - 1) * this.cardsPerPage;
+  //   return this.projectsData.slice(startIndex, startIndex + this.cardsPerPage);
+  // }
+
+  // Go to the next page
+  // nextPage(): void {
+  //   if (this.currentPage < this.totalPages()) {
+  //     this.currentPage++;
+  //   }
+  // }
+
+  // // Go to the previous page
+  // previousPage(): void {
+  //   if (this.currentPage > 1) {
+  //     this.currentPage--;
+  //   }
+  // }
+
   getPaginatedProjects(): any[] {
     if (!this.projectsData) {
       return [];
     }
-    const startIndex = (this.currentPage - 1) * this.cardsPerPage;
-    return this.projectsData.slice(startIndex, startIndex + this.cardsPerPage);
+    return this.projectsData;
   }
 
-  // Go to the next page
-  nextPage(): void {
-    if (this.currentPage < this.totalPages()) {
-      this.currentPage++;
-    }
-  }
-
-  // Go to the previous page
   previousPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
+      this.filter.pageNumber=this.currentPage;
+      this.loadProjects(); // Call loadProjects to fetch data for the new page
+    }
+  }
+
+  nextPage(): void {
+
+    if (this.currentPage < this.totalPages()) {
+      this.currentPage++;
+      this.filter.pageNumber=this.currentPage;
+      this.loadProjects(); // Call loadProjects to fetch data for the new page
     }
   }
 
