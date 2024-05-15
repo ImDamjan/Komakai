@@ -30,7 +30,9 @@ export class ProjectPreviewComponent implements OnInit {
 
   public filter: ProjectFilter = {
     propertyName : "Last Updated",
-    sortFlag : -1
+    sortFlag : -1,
+    pageNumber: 1,
+    pageSize: 4
   };
 
   isClick = false;

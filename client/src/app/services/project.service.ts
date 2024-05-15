@@ -131,6 +131,12 @@ export class ProjectService implements OnInit{
     if(params.spentFilterTo){
       httpParams = httpParams.set('SpentFilterTo',params.spentFilterTo.toString());
     }
+    if(params.pageNumber){
+      httpParams = httpParams.set('PageNumber',params.pageNumber.toString());
+    }
+    if(params.pageSize){
+      httpParams = httpParams.set('PageSize',params.pageSize.toString());
+    }
 
     const apiUrl = `${this.baseUrl}/Project/userProjects/${id}`;
     return this.http.get<Project[]>(apiUrl,{ params: httpParams });
