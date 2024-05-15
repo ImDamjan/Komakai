@@ -124,8 +124,8 @@ export class TasksComponent {
       this.currentPage--;
       this.filter.pageNumber = this.currentPage;
       const queryParams = this.constructFilterQueryString();
-      this.fetchTasksForCurrentPage(); // Fetch tasks for the previous page
-      this.router.navigate(['/tasks', this.currentPage],{queryParams}); // Update URL
+      this.router.navigate(['/tasks', this.currentPage],{queryParams});
+      this.fetchTasksForCurrentPage();
     }
   }
   
@@ -133,8 +133,8 @@ export class TasksComponent {
     this.currentPage++;
     this.filter.pageNumber = this.currentPage;
     const queryParams = this.constructFilterQueryString();
-    this.fetchTasksForCurrentPage(); // Fetch tasks for the next page
-    this.router.navigate(['/tasks', this.currentPage],{queryParams}); // Update URL
+    this.router.navigate(['/tasks', this.currentPage],{queryParams});
+    this.fetchTasksForCurrentPage();
   }
 
   fetchTasksForCurrentPage() {
