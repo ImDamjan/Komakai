@@ -66,7 +66,18 @@ export class ProjectPreviewComponent implements OnInit {
   public isWorker : boolean = false;
   
   public jwt_service = inject(JwtDecoderService);
-
+  getCreatedProject(createdProject: Project)
+  {
+    createdProject.truncatedTitle = this.truncate(createdProject.title, this.titleCharacterLimit);
+    createdProject.truncatedDescription = this.truncate(createdProject.description, this.descriptionCharacterLimit);
+    let projects : Project[] = [];
+    projects.push(createdProject);
+    this.projectsData.forEach(element=>{
+      projects.push(element);
+    });
+    this.projectsData = projects;
+    // console.log("Iz projekata:",createdProject);
+  }
   ngOnInit(): void {
     let user = this.jwt_service.getLoggedUser();
     if(user!==null)
@@ -109,30 +120,6 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   filterProjects(filter: ProjectFilter){
-    // if(filter.stateFilter){
-    //   this.filter.stateFilter=filter.stateFilter;
-    // }
-    // if(filter.priorityFilter){
-    //   this.filter.priorityFilter=filter.priorityFilter;
-    // }
-    // if(filter.startFrom){
-    //   this.filter.startFrom=filter.startFrom;
-    // }
-    // if(filter.startTo){
-    //   this.filter.startTo=filter.startTo;
-    // }
-    // if(filter.endFrom){
-    //   this.filter.endFrom=filter.endFrom;
-    // }
-    // if(filter.endTo){
-    //   this.filter.endTo=filter.endTo;
-    // }
-    // if(filter.percentageFilterFrom){
-    //   this.filter.percentageFilterFrom=filter.percentageFilterFrom;
-    // }
-    // if(filter.percentageFilterTo){
-    //   this.filter.percentageFilterTo=filter.percentageFilterTo;
-    // }
     let text = "";
     if(this.filter.searchTitle)
       text = this.filter.searchTitle;
