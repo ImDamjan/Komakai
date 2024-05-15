@@ -38,7 +38,7 @@ export class TasksComponent {
     propertyName : "Last Updated",
     sortFlag : -1,
     pageNumber: 1,
-    pageSize: 7
+    pageSize: 6
   };
 
   private jwtDecoder = inject(JwtDecoderService);
@@ -112,7 +112,7 @@ export class TasksComponent {
     let collectedTasks: Task[] = [];
 
     this.filter.pageNumber = this.currentPage;
-    this.filter.pageSize = 7;
+    this.filter.pageSize = 6;
 
     if(filter.projects){
       this.filter.projects=filter.projects;
@@ -123,8 +123,7 @@ export class TasksComponent {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.filter.pageNumber = this.currentPage;
-      const queryParams = this.constructFilterQueryString();
-      this.router.navigate(['/tasks', this.currentPage],{queryParams});
+      this.router.navigate(['/tasks', this.currentPage]);
       this.fetchTasksForCurrentPage();
     }
   }
@@ -132,8 +131,7 @@ export class TasksComponent {
   nextPage() {
     this.currentPage++;
     this.filter.pageNumber = this.currentPage;
-    const queryParams = this.constructFilterQueryString();
-    this.router.navigate(['/tasks', this.currentPage],{queryParams});
+    this.router.navigate(['/tasks', this.currentPage]);
     this.fetchTasksForCurrentPage();
   }
 
