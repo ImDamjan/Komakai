@@ -37,7 +37,11 @@ namespace server.Controllers
             if(user==null)
                 return NotFound("User not found");
             comment = await _comment_repo.CreateCommentAsync(comment);
-            return Ok(comment.ToCommentDto(user.toUserDto()));
+            
+            var roleDto = user.Role.toRoleDto();
+            var userDto = user.toUserDto(roleDto);
+
+            return Ok(comment.ToCommentDto(userDto));
         }
 
         [HttpGet("getCommentById/{comment_id}")]
@@ -47,7 +51,10 @@ namespace server.Controllers
             if(comment==null)
                 return NotFound("Comment not found.ID:" + comment_id);
             
-            return Ok(comment.ToCommentDto(comment.User.toUserDto()));
+            var roleDto = comment.User.Role.toRoleDto();
+            var userDto = comment.User.toUserDto(roleDto);
+
+            return Ok(comment.ToCommentDto(userDto));
         }
 
         [HttpPut("updateComment")]
@@ -57,13 +64,21 @@ namespace server.Controllers
             if(comment==null)
                 return NotFound("Comment not found.ID:" + dto.Id);
 
-            return Ok(comment.ToCommentDto(comment.User.toUserDto()));
+            var roleDto = comment.User.Role.toRoleDto();
+            var userDto = comment.User.toUserDto(roleDto);
+
+            return Ok(comment.ToCommentDto(userDto));
         }
         [HttpGet("getAllCommentsByAssignment/{asign_id}")]
         public async Task<IActionResult> GetAllByAssignmet([FromRoute] int asign_id)
         {
             var comments = await _comment_repo.GetAllCommentsByAssignmentIdAsync(asign_id);
-            var dtos = comments.Select(c=>c.ToCommentDto(c.User.toUserDto()));
+           var dtos = comments.Select(c =>
+            {
+                var roleDto = c.User.Role.toRoleDto();
+                var userDto = c.User.toUserDto(roleDto);
+                return c.ToCommentDto(userDto);
+            });
 
             return Ok(dtos);
         }

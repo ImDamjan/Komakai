@@ -10,14 +10,18 @@ import { UpdateUser } from '../models/user/update-user';
 })
 export class UserService {
   private pictureSource = new BehaviorSubject<string>('');
+  private filteredUsersSubject = new BehaviorSubject<User[]>([]);
+  filteredUsers$ = this.filteredUsersSubject.asObservable();
+
 
   picture$ = this.pictureSource.asObservable();
   
   baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}/User`);
+  getUsers(filters: any = {}): Observable<User[]> {
+    const apiUrl = `${this.baseUrl}/User`;
+    return this.http.get<User[]>(apiUrl, { params: filters });
   }
 
   getProjectUsers(project_id : number) : Observable<User[]>
@@ -58,5 +62,9 @@ export class UserService {
 
   setProfilePicture(picture: string) {
     this.pictureSource.next(picture);
+  }
+
+  updateFilteredUsers(users: User[]) {
+    this.filteredUsersSubject.next(users);
   }
 }

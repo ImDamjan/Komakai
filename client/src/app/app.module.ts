@@ -59,6 +59,7 @@ import {SliderModule} from 'primeng/slider'
 import {MultiSelectModule} from 'primeng/multiselect'
 import {CalendarModule} from 'primeng/calendar'
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { NgxGanttModule } from '@worktile/gantt';
 import { RouterModule } from '@angular/router';
@@ -83,6 +84,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { TaskListTaskComponent } from './components/task-list-task/task-list-task.component';
 import { AddTaskGroupComponent } from './components/add-task-group/add-task-group.component';
 import { EditTeamComponent } from './components/edit-team/edit-team.component';
+import { FilterUserComponent } from './components/filter-user/filter-user.component';
 
 
 
@@ -133,6 +135,7 @@ import { EditTeamComponent } from './components/edit-team/edit-team.component';
     TaskListTaskComponent,
     AddTaskGroupComponent,
     EditTeamComponent,
+    FilterUserComponent,
   ],
   imports: [
     FormsModule,
@@ -167,7 +170,7 @@ import { EditTeamComponent } from './components/edit-team/edit-team.component';
     NgToastModule,
     MatChipsModule,
     NgbModule,
-
+    InputTextModule,
   ],
   providers: [
     provideClientHydration(),
