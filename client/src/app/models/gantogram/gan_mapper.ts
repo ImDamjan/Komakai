@@ -18,8 +18,8 @@ export class GanttMapper {
         const ganttItem: GanttItem = {
             id: task.id.toString(),
             title: task.title,
-            start: new Date(task.start).getTime()/1000, // ili drugi odgovarajući atribut za početak
-            end: new Date(task.end).getTime()/1000, // ili drugi odgovarajući atribut za kraj
+            start: Math.floor(new Date(task.start).getTime()/1000), // ili drugi odgovarajući atribut za početak
+            end: Math.floor(new Date(task.end).getTime()/1000), // ili drugi odgovarajući atribut za kraj
             links: this.convertToGantLinks(task.depndentOn), // Možete dodati logiku za mapiranje linkova ako je potrebno
             draggable: true, // Postavite na true ako želite omogućiti povlačenje
             itemDraggable:  true, // Postavite na true ako želite omogućiti povlačenje samo na ovom elementu
