@@ -301,7 +301,91 @@ namespace server.Data
                         Organisation = "Organization B",
                         Department = "Department 2",
                         RoleId = 5 // Admin
-                    }
+                    },
+                    new User
+                    {
+                        Id = 11,
+                        Name = "Michael",
+                        Lastname = "Smith",
+                        Username = "michaelsmith",
+                        IsActivated = true,
+                        Password = BCrypt.Net.BCrypt.HashPassword("mypass123"),
+                        Email = "michael.smith@example.com",
+                        JobTitle = "Developer",
+                        Organisation = "Organization B",
+                        Department = "Development",
+                        RoleId = 2 // Developer
+                    },
+                    new User
+                    {
+                        Id = 12,
+                        Name = "Emily",
+                        Lastname = "Johnson",
+                        Username = "emilyjohnson",
+                        IsActivated = true,
+                        Password = BCrypt.Net.BCrypt.HashPassword("password123"),
+                        Email = "emily.johnson@example.com",
+                        JobTitle = "Analyst",
+                        Organisation = "Organization C",
+                        Department = "Analytics",
+                        RoleId = 4 // Guest
+                    },
+                    new User
+                    {
+                        Id = 13,
+                        Name = "David",
+                        Lastname = "Brown",
+                        Username = "davidbrown",
+                        IsActivated = true,
+                        Password = BCrypt.Net.BCrypt.HashPassword("brownie567"),
+                        Email = "david.brown@example.com",
+                        JobTitle = "Manager",
+                        Organisation = "Organization D",
+                        Department = "Management",
+                        RoleId = 1 // Project Manager
+                    },
+                    new User
+                    {
+                        Id = 14,
+                        Name = "Sarah",
+                        Lastname = "Wilson",
+                        Username = "sarahwilson",
+                        IsActivated = true,
+                        Password = BCrypt.Net.BCrypt.HashPassword("ilovesarah"),
+                        Email = "sarah.wilson@example.com",
+                        JobTitle = "Consultant",
+                        Organisation = "Organization E",
+                        Department = "Consulting",
+                        RoleId = 5 // Admin
+                    },
+                    new User
+                    {
+                    Id = 15,
+                    Name = "Lauren",
+                    Lastname = "Thomas",
+                    Username = "laurenthomas",
+                    IsActivated = true,
+                    Password = BCrypt.Net.BCrypt.HashPassword("laurenpass"),
+                    Email = "lauren.thomas@example.com",
+                    JobTitle = "Coordinator",
+                    Organisation = "Organization I",
+                    Department = "Coordination",
+                    RoleId = 4 // Guest
+                    },
+                    new User
+                    {
+                        Id = 19,
+                        Name = "Daniel",
+                        Lastname = "Jackson",
+                        Username = "danieljackson",
+                        IsActivated = true,
+                        Password = BCrypt.Net.BCrypt.HashPassword("daniel567"),
+                        Email = "daniel.jackson@example.com",
+                        JobTitle = "Specialist",
+                        Organisation = "Organization J",
+                        Department = "Specialization",
+                        RoleId = 3 // User
+                    },
                 };
 
                 _context.Users.AddRange(users);
