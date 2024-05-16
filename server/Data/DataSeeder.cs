@@ -1415,9 +1415,9 @@ namespace server.Data
                                 },
                                 new Assignment{
                                     Id = 32,
-                                    Title = "Neki task 5",
+                                    Title = "Optimizacija",
                                     Owner = 1,
-                                    Description = "Neki opis",
+                                    Description = "Sprovesti optimizaciju baze podataka kako bi se poboljšalo vreme odziva pri pretraživanju i upitu baze podataka, koriste?i indekse, particionisanje i denormalizaciju gde je to potrebno.",
                                     Start = new DateTime(2023, 12, 15),
                                     End = new DateTime(2024, 1, 14),
                                     StateId = 2,
@@ -1427,7 +1427,7 @@ namespace server.Data
                                     TaskGroupId = 10,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[4]},
+                                    Users = new List<User>{users[0],users[7]},
 
                                 },
                             };
