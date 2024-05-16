@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Answer;
+using server.Mappers;
 using server.Models;
 
 namespace server.Controllers
@@ -11,30 +12,32 @@ namespace server.Controllers
     {
         private readonly IAnswerRepository _answerRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly IUserRepository _user_repo;
 
-        public AnswerController(IAnswerRepository answerRepository,ICommentRepository commentRepository)
+        public AnswerController(IUserRepository user_repo,IAnswerRepository answerRepository,ICommentRepository commentRepository)
         {
             _answerRepository = answerRepository;
             _commentRepository = commentRepository;
+            _user_repo = user_repo;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Answer>> CreateAnswer(AnswerDto dto)
+        [HttpPost("CreateAnswer")]
+        public async Task<ActionResult<Answer>> CreateAnswer(CreateAnswerDto dto)
         {
             var comment = await _commentRepository.GetCommentByIdAsync(dto.CommentId);
             if (comment == null)
             {
                 return NotFound("Comment not found."); // Return NotFound with a message
             }
-            var answer = new Answer
-            {
-                Content = dto.Content,
-                CommentId = dto.CommentId
-            };
+            var user = await _user_repo.GetUserByIdAsync(dto.UserId);
+            if (user == null)
+                return NotFound("User not found");
+
+            var answer = dto.fromCreateDtoToAnswer();
 
             answer = await _answerRepository.CreateAnswerAsync(answer);
 
-            return Ok(answer);
+            return Ok(answer.toAnswerDto(user.toUserDto()));
         }
 
         [HttpDelete("{id}")]
@@ -50,23 +53,17 @@ namespace server.Controllers
             return NoContent();
         }
 
-        [HttpGet]
+        [HttpGet("getAllAnswersByComment/{commentId}")]
         public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswersByCommentId(int commentId)
         {
             var answers = await _answerRepository.GetAllAnswersByCommentIdAsync(commentId);
 
-            if (!answers.Any())
-            {
-                return NotFound("No Answers");
-            }
+            // if (!answers.Any())
+            // {
+            //     return NotFound("No Answers");
+            // }
 
-            var answerDtos = answers.Select(answer => new AnswerDto
-            {
-                Id = answer.Id,
-                Content = answer.Content,
-                PostTime = answer.PostTime,
-                CommentId = (int)answer.CommentId,
-            });
+            var answerDtos = answers.Select(a=>a.toAnswerDto(a.User.toUserDto()));
 
             return Ok(answerDtos);
         }

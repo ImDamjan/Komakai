@@ -157,3 +157,11 @@ table {
   tr:nth-child(even) {
     background-color: #dddddd;
   }
+
+  #comments{
+    max-height: 400px;
+    overflow: auto;
+  }
+  .answer{
+    margin-left: 10%;
+  }

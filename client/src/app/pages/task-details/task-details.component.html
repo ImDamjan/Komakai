@@ -134,41 +134,33 @@
     <button *ngIf="showUpdate && !isUser" (click)="cancelUpdateRequest()" style="background-color: crimson; margin-left: 15px;">Cancel</button>
 
     <hr style="border: 3px;">
-
-    <div class="comment" *ngFor="let comment of comments">
-        <div class = 'comment-box'>
-            <!-- <div class = comment-meni>
-                <select name="" id=""></select>
-                <p>B</p>
-                <p>I</p>
-                <p>...</p>
-                <p>_</p>
-                <p>ikona</p>
-                <p>ikona2</p>
-            </div> -->
-            <p style="color: gray;"> <img id="pfp" [src]="picture" alt="slika_korinsika"> {{comment.user.name}} {{comment.user.lastname}} &commat;{{comment.user.username}}</p>
-            <p style="width: 100%; border: 1px solid; padding: 10px; color: black;">{{comment.content}}</p>
-            <p style="color: gray;">{{ comment.editedTime.toLocaleString().split(',')[0] }}     {{ comment.editedTime.toLocaleString().split(',')[1] }}</p>
-        </div>
-    </div>
-
     <div class="comment" id="add-comment">
         <ng-container *ngIf="!pictureLoading">
             <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture"> Leave your comment
-          </ng-container>
+        </ng-container>
         <div *ngIf="isManager || isUser || isWorker" class = 'comment-box'>
-            <!-- <div class = comment-meni>
-                <select name="" id=""></select>
-                <p>B</p>
-                <p>I</p>
-                <p>...</p>
-                <p>_</p>
-                <p>ikona</p>
-                <p>ikona2</p>
-            </div> -->
             <textarea class="textarea" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText">
             </textarea><br>
             <button id = 'comment-button' (click)="createComment()">Comment</button>
+        </div>
+        <br>
+    <div id="comments">
+        
+            <div class="comment" *ngFor="let comment of comments">
+                <div class = 'comment-box'>
+                    <p style="color: gray;"> <img id="pfp" [src]="picture" alt="slika_korinsika"> {{comment.user.name}} {{comment.user.lastname}} &commat;{{comment.user.username}}</p>
+                    <p style="width: 100%; border: 1px solid; padding: 10px; color: black;">{{comment.content}}</p>
+                    <p style="color: gray;">{{ comment.editedTime.toLocaleString().split(',')[0] }}     {{ comment.editedTime.toLocaleString().split(',')[1] }} <button>Reply</button></p>
+                    <!-- <button>Show Replies</button> -->
+                    <div class="answers">
+                        <div class="answer" *ngFor="let answer of comment.answers">
+                            <p style="color: gray; width: 90%;"> <img id="pfp" [src]="picture" alt="slika_korinsika"> {{answer.user.name}} {{answer.user.lastname}} &commat;{{answer.user.username}}</p>
+                            <p style="width: 90%; border: 1px solid; padding: 10px; color: black;">{{answer.content}}</p>
+                            <p style="color: gray; width: 90%;">{{ answer.editedTime.toLocaleString().split(',')[0] }}     {{ answer.editedTime.toLocaleString().split(',')[1] }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

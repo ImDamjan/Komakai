@@ -131,6 +131,10 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         comments.forEach(comment => {
           comment.editedTime = new Date(comment.editedTime);
           comment.postTime = new Date(comment.postTime);
+          comment.answers.forEach(ans => {
+            ans.editedTime = new Date(ans.editedTime);
+            ans.postTime = new Date(ans.postTime);
+          });
           console.log(comments);
         });
       }
