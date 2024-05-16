@@ -8,18 +8,20 @@
     width: calc(100vw - 180px);
     z-index: 1000;
 }
-.gantt-bar-content-progress > .ng-star-inserted{
-    z-index: -1 !important;
-    /* color: black;
-    font-weight: bold; */
+.gantt-bar-content span {
+    position: relative;
+    z-index: 1;
 }
 
-.gantt-bar-content{
-    z-index: 2;
+:host ::ng-deep .gantt-bar-content span {
+    position: relative;
+    z-index: 1;
 }
+
+
 .ng-star-inserted{
     color: black !important;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 #download_id{
@@ -28,7 +30,7 @@
 }
 #download_id span {
     color: black !important;
-    font-weight: 500 !important;
+    font-weight: 400 !important;
    
 }
 
