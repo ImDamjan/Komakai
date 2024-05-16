@@ -360,21 +360,21 @@ namespace server.Data
                     },
                     new User
                     {
-                    Id = 15,
-                    Name = "Lauren",
-                    Lastname = "Thomas",
-                    Username = "laurenthomas",
-                    IsActivated = true,
-                    Password = BCrypt.Net.BCrypt.HashPassword("laurenpass"),
-                    Email = "lauren.thomas@example.com",
-                    JobTitle = "Coordinator",
-                    Organisation = "Organization I",
-                    Department = "Coordination",
-                    RoleId = 4 // Guest
+                        Id = 15,
+                        Name = "Lauren",
+                        Lastname = "Thomas",
+                        Username = "laurenthomas",
+                        IsActivated = true,
+                        Password = BCrypt.Net.BCrypt.HashPassword("laurenpass"),
+                        Email = "lauren.thomas@example.com",
+                        JobTitle = "Coordinator",
+                        Organisation = "Organization I",
+                        Department = "Coordination",
+                        RoleId = 4 // Guest
                     },
                     new User
                     {
-                        Id = 19,
+                        Id = 16,
                         Name = "Daniel",
                         Lastname = "Jackson",
                         Username = "danieljackson",
