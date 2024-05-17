@@ -1,118 +1,122 @@
 <div class="overlay-container">
     <div class="error" *ngIf="submissionError">{{ submissionError }}</div>
-    <div class="overlay-content">
-        
-        <div class="left">
-            <div class="project-title">
-                <span class="name">Project title</span>
-                <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="projectObj.title">
-                <div *ngIf="!projectObj.title.trim() && submitted" class="error-message">*Please enter a project title.</div>
-            </div>
-            
-            <div class="status-type">
-                <div class="labels">
-                    <span class="name">Priority</span>
-                    <span class="name" id="type">Type</span>
-                </div>
-                <div class="inputs">
-                    <select id="status-select" class="input-field" required [(ngModel)]="selectedPriorityId">
-                        <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
-                    </select>
-                    <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="projectObj.type">
-                </div>
-                <div class="error-message" *ngIf="!projectObj.priorityId && submitted">*Priority is required</div>
-            </div>
-            <div class="dates">
-                <div class="labels">
-                    <span class="name" id="startdate">Start Date</span>
-                    <span class="name" id="enddate">End Date</span>
-                </div>
-                <div class="inputs">
-                    <input type="date" class="input-field" id="startdate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.start">
-                    
-                    <input type="date" class="input-field" id="enddate" placeholder="DD/MM/YYYY" [(ngModel)]="projectObj.end">
-                </div>
-                <div class="error-message" *ngIf="!projectObj.start && submitted">*Start Date is required</div>
-                <div class="error-message" *ngIf="!projectObj.end && submitted">*End Date is required</div>
-                <div class="error-message" *ngIf="projectObj.start && projectObj.end && (projectObj.start > projectObj.end) && (projectObj.start == projectObj.end)">*End Date must be after Start Date</div>
-            </div>
-            <div class="role">
-                <!-- 
-                <span class="name">Project Roles</span>
-                <div class="custom-dropdown">
-                    <span class="selected-option" (click)="toggleDropdown()">Select Team Lead</span>
-                    <div class="options" *ngIf="showDropdown">
-                        <div class="option" *ngFor="let user of users" (click)="toggleUserSelection(user.id)">
-                            <input type="checkbox" [checked]="isSelected(user.id)" (change)="onUserSelected(user.id)">
-                            {{ user.name }} {{ user.lastname }}
-                        </div>
-                    </div>
-                </div>
-                 -->
-            </div>
-        </div>
-        
-        <div class="right">
-            <div class="description">
-                <span class="name">Project Description</span>
-                <textarea class="input-field" id="description" placeholder="  Write your description"  [(ngModel)]="projectObj.description"></textarea>
-            </div>
-            <div class="budget-team">
-                <div class="labels">
-                    <span class="name" id="budget">Budget</span>
-                    <span class="name" id="team">Members</span>
-                </div>
-                <div class="inputs">
-                    <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget">
-                    <div class="custom-dropdown">
-                        <div class="selected-users">
-                            <span *ngFor="let selectedUser of selectedUsers" class="selected-user">
-                                <p>{{ selectedUser.name }} {{ selectedUser.lastname }}</p>
-                                <span *ngIf="selectedUser.id != loggedInUserId" class="remove-user" (click)="removeSelectedUser(selectedUser)">X</span>
-                            </span>
-                        </div>
-                        <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members" [readonly]="!showDropdown">
-                        <div class="options" *ngIf="showDropdown">
-                            <div class="member-option" *ngFor="let user of filteredUsers">
-                                
-                                <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user)" [disabled]="user.id == loggedInUserId">
+        <div class="overlay-content">
+            <div class="left">
+                <table>
+                    <tr>
+                        <th colspan="2">
+                            <span class="name">Project title</span>
+                            <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="projectObj.title">
+                            <div *ngIf="!projectObj.title.trim() && submitted" class="error-message">* Please enter a project title.</div>
+                        </th>
+                    </tr>
 
-                                <select [ngModel]="userRoles.get(user.id)" (change)="onRoleChanged(user, $event)" [disabled]="user.id == loggedInUserId">
-                                    <option *ngFor="let role of getRolesForUser(user)" [value]="role.id">{{role.name}}</option>
-                                </select>
+                    <tr>
+                        <th>
+                            <p><span class="name">Priority: </span></p>
+                            
+                            <select id="status-select" class="input-field" required [(ngModel)]="selectedPriorityId">
+                                <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
+                            </select>
+                            
+                        </th>
+                        <th>
+                            <p><span class="name" id="type">Type: </span></p>
+                            <input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="projectObj.type">
+                        </th>
+                        
+                    </tr>
 
-                                {{ user.name }} {{ user.lastname }}
-                            </div>
+                    <tr>
+                        <div class="error-message" *ngIf="!projectObj.priorityId && submitted">* Priority is required</div>
+                    </tr>
 
-                            <div class="team-option" *ngFor="let team of filteredTeams" (mouseover)="showTeamMembers(team)" (mouseout)="hideTeamMembers($event)">
-                                <input type="checkbox" [checked]="isSelectedTeam(team.id)" (change)="onTeamSelected(team)">
-                                {{ team.name }}
-                                <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
-                                    <div *ngFor="let member of team.members">
-                                        <input type="checkbox" [checked]="isSelected(member)" (change)="toggleUserSelection(member)" [disabled]="member.id == loggedInUserId">
-                                        {{ getUserName(member.id) }}
+                    <tr>
+                        <th>
+                            <p><span class="name" id="startdate">Start Date: </span></p>
+                            
+                            <p-calendar 
+                            [(ngModel)]="projectObj.start"
+                            dateFormat="dd.mm.yy" 
+                            placeholder="Select date"/>
+                        </th>
+                        <th>
+                            <p><span class="name" id="startdate">End Date: </span></p>
+                            
+                            <p-calendar 
+                            [(ngModel)]="projectObj.end" 
+                            dateFormat="dd.mm.yy" 
+                            placeholder="Select date"/>
+                        </th>
+                    </tr>
 
-                                        <select [ngModel]="userRoles.get(member.id)" (change)="onRoleChanged(member, $event)" [disabled]="member.id == loggedInUserId">
-                                            <option *ngFor="let role of getRolesForUser(member)" [value]="role.id">{{role.name}}</option>
-                                        </select>
+                    <tr>
+                        <div class="error-message" *ngIf="!projectObj.start && submitted">* Start Date is required</div>
+                        <div class="error-message" *ngIf="!projectObj.end && submitted">* End Date is required</div>
+                        <div class="error-message" *ngIf="projectObj.start && projectObj.end && (projectObj.start > projectObj.end) && (projectObj.start == projectObj.end)">* End Date must be after Start Date</div>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            <p><span class="name" id="budget">Budget: </span></p>
+                            <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget">
+                        </th>
+                        <th>
+                            <p><span class="name" id="team">Members: </span></p>
+                            <div class="custom-dropdown">
+                                <div class="selected-users">
+                                    <span *ngFor="let selectedUser of selectedUsers" class="selected-user">
+                                        <p>{{ selectedUser.name }} {{ selectedUser.lastname }}</p>
+                                        <span *ngIf="selectedUser.id != loggedInUserId" class="remove-user" (click)="removeSelectedUser(selectedUser)">X</span>
+                                    </span>
+                                </div>
+                                <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members" [readonly]="!showDropdown">
+                                <div class="options" *ngIf="showDropdown">
+                                    <div class="member-option" *ngFor="let user of filteredUsers">
                                         
+                                        <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user)" [disabled]="user.id == loggedInUserId">
+        
+                                        <select [ngModel]="userRoles.get(user.id)" (change)="onRoleChanged(user, $event)" [disabled]="user.id == loggedInUserId">
+                                            <option *ngFor="let role of getRolesForUser(user)" [value]="role.id">{{role.name}}</option>
+                                        </select>
+        
+                                        {{ user.name }} {{ user.lastname }}
+                                    </div>
+        
+                                    <div class="team-option" *ngFor="let team of filteredTeams" (mouseover)="showTeamMembers(team)" (mouseout)="hideTeamMembers($event)">
+                                        <input type="checkbox" [checked]="isSelectedTeam(team.id)" (change)="onTeamSelected(team)">
+                                        {{ team.name }}
+                                        <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
+                                            <div *ngFor="let member of team.members">
+                                                <input type="checkbox" [checked]="isSelected(member)" (change)="toggleUserSelection(member)" [disabled]="member.id == loggedInUserId">
+                                                {{ getUserName(member.id) }}
+        
+                                                <select [ngModel]="userRoles.get(member.id)" (change)="onRoleChanged(member, $event)" [disabled]="member.id == loggedInUserId">
+                                                    <option *ngFor="let role of getRolesForUser(member)" [value]="role.id">{{role.name}}</option>
+                                                </select>
+                                                
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </th>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="right">
+                <div class="description">
+                    <p><span class="name">Project description: </span></p>
+                    <textarea class="input-field" id="description" placeholder="  Write your description"  [(ngModel)]="projectObj.description"></textarea>
+                </div>
+            
+                <div class="create-cancel">
+                    <button class="create" (click)="createProject()">Create</button>
+                    <button class="cancel" (click)="closeOverlay()">Cancel</button>
                 </div>
             </div>
-            <div class="related">
-                <!-- <span class="name" id="relatedproject">Related projects</span> -->
-                <div class="link-create-cancel">
-                    <!-- <button id="related-button">Link project</button> --><p></p>
-                    <div class="create-cancel">
-                        <button class="create" (click)="createProject()">Create</button>
-                        <button class="cancel" (click)="closeOverlay()">Cancel</button>
-                    </div>
-                </div>
-            </div>
+
         </div>
-    </div>
 </div>
