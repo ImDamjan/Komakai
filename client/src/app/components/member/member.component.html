@@ -2,7 +2,7 @@
     <thead>
         <tr *ngFor="let user of users">
             <td id="profile-picture">
-               <img id="pfp" [src]="user.profile_picture">
+               <img id="pfp" [src]="user.profilePicture">
             </td>
             <td id="username">{{user.name + " " + user.lastname}}</td>
             <td id="dropdown" class = "drop">

@@ -4,6 +4,7 @@ import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { tick } from '@angular/core/testing';
 import { Comment } from '../models/comment/comment';
+import { Answer } from '../models/comment/answer';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,10 @@ export class CommentService {
   {
     const url = this.baseUrl + "/Comment/createComment";
     return this.http.post<Comment>(url,data);
+  }
+  createAnswer(data:any)
+  {
+    const url = this.baseUrl + "/Answer/CreateAnswer";
+    return this.http.post<Answer>(url,data);
   }
 }

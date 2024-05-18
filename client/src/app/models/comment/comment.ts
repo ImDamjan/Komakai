@@ -1,4 +1,4 @@
-import { Answer } from "../answer";
+import { Answer } from "./answer";
 import { User } from "../user/user";
 
 export interface Comment {
@@ -8,5 +8,7 @@ export interface Comment {
     postTime : Date,
     userId : number,
     user : User,
-    answers : Answer[]
+    answers : Answer[],
+    replyOpened : boolean,
+    answerContent : string
 }

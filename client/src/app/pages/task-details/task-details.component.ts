@@ -17,6 +17,7 @@ import { error } from 'console';
 import { DateConverterService } from '../../services/date-converter.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Role } from '../../models/role';
+import { Answer } from '../../models/comment/answer';
 
 
 @Component({
@@ -127,14 +128,23 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     })
     this.comment_service.getAllComentsByTask(this.assignment.id).subscribe({
       next : (comments : Comment[]) =>{
-        this.comments = comments;
         comments.forEach(comment => {
           comment.editedTime = new Date(comment.editedTime);
           comment.postTime = new Date(comment.postTime);
+          if(comment.user.profilePicture)
+            comment.user.profilePicturePath = `data:${comment.user.pictureType};base64,${comment.user.profilePicture}`;
+          else
+            comment.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
+          comment.replyOpened = false;
           comment.answers.forEach(ans => {
             ans.editedTime = new Date(ans.editedTime);
             ans.postTime = new Date(ans.postTime);
-          });
+            if(ans.user.profilePicture)
+              ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
+            else
+            ans.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
+        });
+          this.comments = comments;
           console.log(comments);
         });
       }
@@ -288,10 +298,15 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       if(obj.content!=="")
       {
         this.comment_service.createComment(obj).subscribe({
-          next: (comm : Comment)=>{
-            comm.editedTime = new Date(comm.editedTime);
-            comm.postTime = new Date(comm.postTime);
-            this.comments.push(comm);
+          next: (comment : Comment)=>{
+            comment.editedTime = new Date(comment.editedTime);
+            comment.postTime = new Date(comment.postTime);
+            comment.replyOpened = false;
+            if(comment.user.profilePicture)
+              comment.user.profilePicturePath = `data:${comment.user.pictureType};base64,${comment.user.profilePicture}`;
+            else
+              comment.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
+            this.comments.push(comment);
             this.commentText = "";
           }
         });
@@ -374,5 +389,43 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         console.error('Error retrieving profile picture:', err);
       }
     });
+  }
+  createAnswer(comment: Comment)
+  {
+    comment.replyOpened = false;
+    let token = this.jwt_service.getToken();
+    if(token!=null)
+    {
+      let decode = this.jwt_service.decodeToken(token);
+      let body ={
+        content: comment.answerContent,
+        userId: decode.user_id,
+        commentId: comment.id
+      };
+      if(body.content!=="")
+      {
+        this.comment_service.createAnswer(body).subscribe({
+          next: (ans : Answer)=>{
+            ans.editedTime = new Date(ans.editedTime);
+            ans.postTime = new Date(ans.postTime);
+            if(ans.user.profilePicture)
+              ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
+            else
+              ans.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
+            comment.answers.push(ans);
+            comment.answerContent = "";
+          }
+        });
+      }
+    }
+  }
+  showBox(comment:Comment)
+  {
+    comment.answerContent = "";
+    // console.log(comment.replyOpened);
+    if(comment.replyOpened)
+      comment.replyOpened = false;
+    else
+      comment.replyOpened = true;
   }
 }
