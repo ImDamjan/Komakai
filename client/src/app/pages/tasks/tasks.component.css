@@ -26,3 +26,16 @@
 app-project-task:hover{
   cursor: pointer;
 }
+
+.pagination{
+  text-align: center;
+}
+
+.pagination a:hover{
+  cursor: pointer;
+}
+
+.page-item a:hover{
+  background-color: #0D6EFD;
+  color: white;
+}
