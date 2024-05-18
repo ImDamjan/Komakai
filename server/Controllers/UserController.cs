@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using server.DTOs;
 using server.DTOs.Users;
 using server.Interfaces;
 using server.Mappers;
@@ -26,18 +27,30 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([FromQuery]UserFilterDto dto,[FromQuery]SortDto sort)
         {
-            var users = await _repos.GetAllUsersAsync();
-            var dtos = users.Select(u=>u.toUserRoleDto(u.Role.toRoleDto()));
-            return Ok(dtos);
+            var users = await _repos.GetAllUsersAsync(dto, sort);
+            var userDtos = new List<UserRoleDto>();
+
+            foreach (var user in users)
+            {
+                var roleDto = user.Role.toRoleDto();
+                var userDto = user.toUserRoleDto(roleDto);
+                userDtos.Add(userDto);
+            }
+
+            return Ok(userDtos);
         }
 
         [HttpGet("getAssignmentUsers/{asign_id}")]
         public async Task<IActionResult> getAssignmentUsers([FromRoute]int asign_id)
         {
             var users = await _repos.GetAssignmentUsersAsync(asign_id);
-            var dtos = users.Select(x => x.toUserDto());
+            var dtos = users.Select(user =>
+            {
+                var roleDto = user.Role.toRoleDto();
+                return user.toUserRoleDto(roleDto);
+            });
             return Ok(dtos);
         }
 
@@ -50,13 +63,18 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return Ok(user.toUserDto());
+            var roleDto = user.Role.toRoleDto();
+            return Ok(user.toUserRoleDto(roleDto));
         }
         [HttpGet("getProjectUsers/{project_id}")]
         public async Task<IActionResult> getProjectUsers([FromRoute] int project_id)
         {
             var users = await _repos.GetUserByProjectId(project_id);
-            var dtos = users.Select(u=>u.toUserDto());
+            var dtos = users.Select(user =>
+            {
+                var roleDto = user.Role.toRoleDto();
+                return user.toUserRoleDto(roleDto);
+            });
             return Ok(dtos);
         }
 
@@ -111,7 +129,8 @@ namespace server.Controllers
             if(user==null)
                 return NotFound("user not found");
 
-            return Ok(user.toUserDto());
+            var roleDto = user.Role.toRoleDto();
+            return Ok(user.toUserRoleDto(roleDto));
         }
 
         /*

@@ -58,7 +58,13 @@ namespace server.Mappers
 
         public static RoleDto toRoleDto(this Role role)
         {
-            return new RoleDto{
+            if (role == null)
+            {
+                return null;
+            }
+
+            return new RoleDto
+            {
                 Id = role.Id,
                 Name = role.Name,
                 Authority = role.Authority

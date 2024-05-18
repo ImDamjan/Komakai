@@ -30,7 +30,8 @@ export class ProjectService implements OnInit{
   }
   getProjectFilterLimits() : Observable<ProjectFilterLimit>
   {
-    const url = this.baseUrl + "/Project/getProjectLimits";
+    let loggedUser = this.jwtDecoder.getLoggedUser();
+    const url = this.baseUrl + "/Project/getProjectLimits/"+loggedUser.user_id;
     return this.http.get<ProjectFilterLimit>(url);
   }
   getUserFilterProjects(): Observable<Project[]>{

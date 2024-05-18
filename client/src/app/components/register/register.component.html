@@ -26,7 +26,7 @@
     <small *ngIf="registerForm.controls['ConfirmPassword'].dirty && registerForm.hasError('required', 'ConfirmPassword')" style="color:red;">*Confirm password is required</small>
     <small *ngIf="registerForm.hasError('passwordMismatch') && registerForm.controls['ConfirmPassword'].dirty" style="color:red;">*Passwords do not match</small><br>
     
-    <select formControlName="Role" type="role"  name="role">
+    <select formControlName="Role" type="role"  name="role" [ngClass]="{'custom-select': true}">
       <option value="0">Select role</option>
       <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
     </select>

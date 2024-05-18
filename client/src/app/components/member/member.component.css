@@ -1,19 +1,11 @@
-#wrapper {
-    justify-content: center;
-    border-radius: 15px;
-    background-color: white;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    height: 80px;
-    width: 700px;
-    overflow-x: scroll;
-    table-layout: fixed;
-  }
   
+  .tabela {
+    height: 500px;
+    max-height: 200px;
+    overflow-y: scroll;
+  }
   #profile-picture {
-    width: 55.7px;
-    height: 52.03px;
-    display: inline-block;
-    margin-left: 10px;
+    text-align: center;
   }
 
   #user-info {
@@ -64,7 +56,7 @@
 
 .drop:hover .dropdown-content {display: block;}
 
-.drop:hover .dropbtn {background-color: #3e8e41;}
+
 
 #dropdown-container { 
   display: inline-block;
@@ -90,6 +82,7 @@
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  text-align: center;
 }
 
 #pfp {
@@ -99,4 +92,31 @@
   object-fit: cover;
   border: 1px solid black;
   background-color: #001B47;
+}
+
+table {
+  font-family: 'Poppins', sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.default-role {
+  font-weight: bolder;
+  color: blue;
+}
+
+.default-activation {
+  font-weight: bolder;
+  color: blue;
 }

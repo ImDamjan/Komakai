@@ -25,8 +25,13 @@ app-task-header {
 app-project-header {
     width: 100%;
 }
-
-app-tasks {
+app-member {
+    width: 60%;
+    height: 37vw;
+    overflow-y: scroll;
+    padding-left: 10vw;
+}
+app-tasks, app-admin {
     width: 100vw;
     height: 100%;
 }

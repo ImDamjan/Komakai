@@ -19,5 +19,6 @@ namespace server.DTOs.Users
         public string ProfilePicture {get; set;} = string.Empty;
         public string PictureType { get; set; } = string.Empty;
         public bool IsActivated { get; set; }
+        public RoleDto? Role { get; set; }
     }
 }

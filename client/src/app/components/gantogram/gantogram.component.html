@@ -85,9 +85,8 @@
         </ng-template>
       </ngx-gantt-column>
     </ngx-gantt-table>
-
-    <ng-template #bar let-item="item">
-      <span style="color: #fff">&nbsp;&nbsp;{{ item.title }} </span>
+    <ng-template #bar let-item="item" style="z-index: -1;">
+      <span style=" z-index: 100;" >&nbsp;&nbsp;{{ item.title }} </span>
     </ng-template>
   </ngx-gantt>
 </thy-content>

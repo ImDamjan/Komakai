@@ -76,10 +76,10 @@ namespace server.Controllers
             return Ok(dtos);
         }
 
-        [HttpGet("getProjectLimits")]
-        public async Task<IActionResult> getProjectLimits()
+        [HttpGet("getProjectLimits/{user_id}")]
+        public async Task<IActionResult> getProjectLimits(int user_id)
         {
-            var projects = await _repos.GetAllProjectsAsync();
+            var projects = await _repos.getFilterProjectsAsync(user_id);
             var limitDto =  new {
                 budgetMax = projects.Max(p=>p.Budget),
                 budgetMin = projects.Min(p=>p.Budget),
