@@ -28,7 +28,11 @@ export class LoginComponent{
 
   decodedToken: any;
   apiUrl = environment.apiUrl;
-  spinner = inject(NgxSpinnerService)
+  spinner = inject(NgxSpinnerService);
+
+  showForgotPassword = false;
+  forgotPassword = false;
+
   constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService, private authService: AuthenticationService) {
   }
 
@@ -63,4 +67,16 @@ export class LoginComponent{
     this.showPassword = !this.showPassword;
   }
 
+
+  toggleForgotPasswordVisibility() {
+    this.showForgotPassword = !this.showForgotPassword;
+  }
+
+  showForgotPasswordForm() {
+    this.forgotPassword = true;
+  }
+
+  cancelForgotPassword() {
+    this.forgotPassword = false;
+  }
 }
