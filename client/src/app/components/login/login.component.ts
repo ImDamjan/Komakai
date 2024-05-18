@@ -33,9 +33,9 @@ export class LoginComponent{
   showForgotPassword = false;
   forgotPassword = false;
   forgotPasswordEmail = '';
-  successfulText = '';
   invalidEmail: boolean = false;
   buttonClicked: boolean = false;
+  sent: boolean = false;
 
   constructor(private fb: FormBuilder,private http: HttpClient,private router: Router,private jwtDecoderService: JwtDecoderService, private authService: AuthenticationService) {
   }
@@ -91,10 +91,12 @@ export class LoginComponent{
     }
     this.authService.forgotPassword(this.forgotPasswordEmail).subscribe(
       response => {
-        this.successfulText = response;
+        this.forgotPassword = false;
+        this.sent = true;
       },
       error => {
         console.error('Error sending password reset email', error);
+        this.sent = false;
       }
     );
   }
