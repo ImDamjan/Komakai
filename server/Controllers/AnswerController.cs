@@ -67,6 +67,16 @@ namespace server.Controllers
 
             return Ok(answerDtos);
         }
+        [HttpPut("updateAnswer")]
+        public async Task<IActionResult> UpdateAnswerById(UpdateAnswerDto dto)
+        {
+            var answer = await _answerRepository.UpdateAnswerAsync(dto);
+            if(answer ==null)
+                return NotFound("Answer not found !!!");
+            
+            return Ok(answer.toAnswerDto(answer.User.toUserDto()));
+
+        }
 
     }
 }

@@ -7,5 +7,6 @@ export interface Answer {
     editedTime: Date,
     commentId: number,
     user: User,
-    editOpened : boolean
+    editOpened : boolean,
+    answerOldContent: string
 }

@@ -44,7 +44,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
 
 
   public comments : Comment[] = []
-
+  public userId : number = 0;
   public commentText : string = "";
   public assignment! : Task;
   public dependentTasks : Task[] = [];
@@ -98,6 +98,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.closeOverlay();
   }
   ngOnInit(): void {
+    let token = this.jwt_service.getLoggedUser();
+    this.userId = token.user_id;
     this.spinner.show();
     this.assignment = this.data[0];
     this.userProjectRole = this.data[2];
@@ -142,6 +144,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           comment.answers.forEach(ans => {
             ans.editedTime = new Date(ans.editedTime);
             ans.editOpened = false;
+            ans.answerOldContent = ans.content;
             ans.postTime = new Date(ans.postTime);
             if(ans.user.profilePicture)
               ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
@@ -290,13 +293,9 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
 
   createComment()
   {
-    let token = this.jwt_service.getToken();
-    if(token!=null)
-    {
-      let decode = this.jwt_service.decodeToken(token);
       let obj = {
         content: this.commentText,
-        userId: decode.user_id,
+        userId: this.userId,
         assignmentId: this.assignment.id
       };
       if(obj.content!=="")
@@ -317,7 +316,6 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           }
         });
       }
-    }
   }
 
   closeOverlay()
@@ -414,6 +412,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           next: (ans : Answer)=>{
             ans.editedTime = new Date(ans.editedTime);
             ans.postTime = new Date(ans.postTime);
+            ans.answerOldContent = ans.content;
             ans.editOpened = false;
             if(ans.user.profilePicture)
               ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
@@ -456,6 +455,29 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     else{
       comment.editOpened = false;
       comment.content = comment.oldCommentContent;
+    }
+  }
+  updateAnswer(answer:Answer)
+  {
+    let updateData = {
+      id : answer.id,
+      content: answer.content
+    };
+    if(answer.content!=="")
+    {
+      this.comment_service.updateAnswer(updateData).subscribe({
+        next: (com: Answer)=>{
+          answer.content = com.content;
+          answer.answerOldContent = com.content;
+          answer.editedTime = new Date(com.editedTime);
+          answer.postTime = new Date(com.postTime);
+          answer.editOpened = false;
+        }
+      })
+    }
+    else{
+      answer.content = answer.answerOldContent;
+      answer.editOpened = false;
     }
   }
   showBox(comment:Comment)
