@@ -24,8 +24,13 @@ namespace server.Models
         public DateTime EditedTime { get; set; }
 
         [Column("comment_id")]
-        public int? CommentId { get; set; }
+        public int CommentId { get; set; }
+        [Column("user_id")]
+        public int UserId { get; set; }
 
+        [ForeignKey("UserId")]
+        [InverseProperty("Answers")]
+        public virtual User User { get; set; } = null!;
         [ForeignKey("CommentId")]
         [InverseProperty("Answers")]
         public virtual Comment? Comment { get; set; }

@@ -162,9 +162,9 @@ export class ProjectPreviewComponent implements OnInit {
             this.userService.profilePicture(user.id).subscribe({
               next: (message: { profilePicture: string, type: string }) => {
                 if(message.profilePicture)
-                  user.profile_picture = `data:${message.type};base64,${message.profilePicture}`;
+                  user.profilePicture = `data:${message.type};base64,${message.profilePicture}`;
                 else
-                  user.profile_picture = "../../../assets/pictures/defaultpfp.svg";
+                  user.profilePicture = "../../../assets/pictures/defaultpfp.svg";
               }, 
               error: (err) => {
                 console.error('Error retrieving profile picture:', err);

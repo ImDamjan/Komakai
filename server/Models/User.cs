@@ -54,7 +54,9 @@ namespace server.Models
 
         [Column("role_id")]
         public int RoleId { get; set; }
-
+        
+        [InverseProperty("User")]
+        public virtual List<Answer> Answers { get; set; } = new List<Answer>();
 
         [InverseProperty("User")]
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

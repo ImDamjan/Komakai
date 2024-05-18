@@ -76,17 +76,26 @@ namespace server.Controllers
             return Ok(dtos);
         }
 
-        [HttpGet("getProjectLimits")]
-        public async Task<IActionResult> getProjectLimits()
+        [HttpGet("getProjectLimits/{user_id}")]
+        public async Task<IActionResult> getProjectLimits(int user_id)
         {
-            var projects = await _repos.GetAllProjectsAsync();
-            var limitDto =  new {
-                budgetMax = projects.Max(p=>p.Budget),
-                budgetMin = projects.Min(p=>p.Budget),
-                spentMax = projects.Max(p=>p.Spent),
-                spentMin = projects.Min(p=>p.Spent)
-            };
-            return Ok(limitDto);
+            var projects = await _repos.GetAllUserProjectsAsync(user_id);
+            if(projects.Count != 0)
+            {
+                var limitDto =  new {
+                    budgetMax = projects.Max(p=>p.Budget),
+                    budgetMin = projects.Min(p=>p.Budget),
+                    spentMax = projects.Max(p=>p.Spent),
+                    spentMin = projects.Min(p=>p.Spent)
+                };
+                return Ok(limitDto);
+            }
+            return Ok(new {
+                budgetMax = 0,
+                budgetMin = 0,
+                spentMax = 0,
+                spentMin = 0
+            });
         }
         [HttpGet("getFilterProjectsByUser/{user_id}")]
         public async Task<IActionResult> getFilterProjects([FromRoute] int user_id)

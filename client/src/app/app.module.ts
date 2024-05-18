@@ -86,7 +86,7 @@ import { AddTaskGroupComponent } from './components/add-task-group/add-task-grou
 import { EditTeamComponent } from './components/edit-team/edit-team.component';
 import { FilterUserComponent } from './components/filter-user/filter-user.component';
 
-
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -142,6 +142,7 @@ import { FilterUserComponent } from './components/filter-user/filter-user.compon
     BrowserModule,
     SliderModule,
     CalendarModule,
+    ProgressSpinnerModule,
     MultiSelectModule,
     DropdownModule,
     BrowserAnimationsModule,

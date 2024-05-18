@@ -10,17 +10,9 @@ namespace server.Mappers
 {
     public static class UserMapper
     {
-        public static UserDto toUserDto(this User u, RoleDto role)
+        public static UserDto toUserDto(this User u)
         {
-            string profilePictureBase64 = null;
-
-            if (u.ProfilePicture != null)
-            {
-                profilePictureBase64 = Convert.ToBase64String(u.ProfilePicture);
-            }
-
-            return new UserDto
-            {
+            var user = new UserDto{
                 Id = u.Id,
                 Username = u.Username,
                 Email = u.Email,
@@ -29,35 +21,53 @@ namespace server.Mappers
                 Department = u.Department,
                 Name = u.Name,
                 Lastname = u.Lastname,
-                Role = role,
                 IsActivated = u.IsActivated,
-                ProfilePicturePath = profilePictureBase64 // Assign the base64 string or null if ProfilePicture is null
             };
+            if(u.ProfilePicture != null)
+            {
+                user.PictureType = u.PictureType;
+                user.ProfilePicture = Convert.ToBase64String(u.ProfilePicture);
+            }
+            return user;
         }
         public static AssignmentUserDto toAssignmentUserDto(this User u)
         {
-            return new AssignmentUserDto{
+            var user = new AssignmentUserDto{
                 Id = u.Id,
                 Username = u.Username,
                 Name = u.Name,
                 Lastname = u.Lastname
             };
+            if(u.ProfilePicture != null)
+            {
+                user.PictureType = u.PictureType;
+                user.ProfilePicture = Convert.ToBase64String(u.ProfilePicture);
+            }
+
+            return user;
         }
 
         public static ProjectUserDto toProjectUserDto(this User u, RoleDto role)
         {
-            return new ProjectUserDto{
+            var user = new ProjectUserDto{
                 Id = u.Id,
                 Username = u.Username,
                 Name = u.Name,
                 Lastname = u.Lastname,
                 Role = role
             };
+            if(u.ProfilePicture != null)
+            {
+                user.PictureType = u.PictureType;
+                user.ProfilePicture = Convert.ToBase64String(u.ProfilePicture);
+            }
+
+            return user;
         }
 
         public static UserRoleDto toUserRoleDto(this User u, RoleDto role)
         {
-            return new UserRoleDto{
+            var user = new UserRoleDto{
                 Id = u.Id,
                 Username = u.Username,
                 Email = u.Email,
@@ -69,6 +79,14 @@ namespace server.Mappers
                 IsActivated = u.IsActivated,
                 Role = role
             };
+
+            if(u.ProfilePicture != null)
+            {
+                user.PictureType = u.PictureType;
+                user.ProfilePicture = Convert.ToBase64String(u.ProfilePicture);
+            }
+
+            return user;
         }
     }
 }

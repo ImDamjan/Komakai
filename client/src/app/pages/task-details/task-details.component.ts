@@ -17,6 +17,8 @@ import { error } from 'console';
 import { DateConverterService } from '../../services/date-converter.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Role } from '../../models/role';
+import { Answer } from '../../models/comment/answer';
+import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
 
 
 @Component({
@@ -42,7 +44,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
 
 
   public comments : Comment[] = []
-
+  public userId : number = 0;
   public commentText : string = "";
   public assignment! : Task;
   public dependentTasks : Task[] = [];
@@ -96,6 +98,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.closeOverlay();
   }
   ngOnInit(): void {
+    let token = this.jwt_service.getLoggedUser();
+    this.userId = token.user_id;
     this.spinner.show();
     this.assignment = this.data[0];
     this.userProjectRole = this.data[2];
@@ -127,10 +131,27 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     })
     this.comment_service.getAllComentsByTask(this.assignment.id).subscribe({
       next : (comments : Comment[]) =>{
-        this.comments = comments;
         comments.forEach(comment => {
           comment.editedTime = new Date(comment.editedTime);
           comment.postTime = new Date(comment.postTime);
+          comment.oldCommentContent = comment.content;
+          if(comment.user.profilePicture)
+            comment.user.profilePicturePath = `data:${comment.user.pictureType};base64,${comment.user.profilePicture}`;
+          else
+            comment.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
+          comment.replyOpened = false;
+          comment.editOpened = false;
+          comment.answers.forEach(ans => {
+            ans.editedTime = new Date(ans.editedTime);
+            ans.editOpened = false;
+            ans.answerOldContent = ans.content;
+            ans.postTime = new Date(ans.postTime);
+            if(ans.user.profilePicture)
+              ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
+            else
+            ans.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
+        });
+          this.comments = comments;
           console.log(comments);
         });
       }
@@ -272,27 +293,29 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
 
   createComment()
   {
-    let token = this.jwt_service.getToken();
-    if(token!=null)
-    {
-      let decode = this.jwt_service.decodeToken(token);
       let obj = {
         content: this.commentText,
-        userId: decode.user_id,
+        userId: this.userId,
         assignmentId: this.assignment.id
       };
       if(obj.content!=="")
       {
         this.comment_service.createComment(obj).subscribe({
-          next: (comm : Comment)=>{
-            comm.editedTime = new Date(comm.editedTime);
-            comm.postTime = new Date(comm.postTime);
-            this.comments.push(comm);
+          next: (comment : Comment)=>{
+            comment.editedTime = new Date(comment.editedTime);
+            comment.postTime = new Date(comment.postTime);
+            comment.oldCommentContent = comment.content;
+            comment.replyOpened = false;
+            comment.editOpened = false;
+            if(comment.user.profilePicture)
+              comment.user.profilePicturePath = `data:${comment.user.pictureType};base64,${comment.user.profilePicture}`;
+            else
+              comment.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
+            this.comments.push(comment);
             this.commentText = "";
           }
         });
       }
-    }
   }
 
   closeOverlay()
@@ -370,5 +393,100 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         console.error('Error retrieving profile picture:', err);
       }
     });
+  }
+  createAnswer(comment: Comment)
+  {
+    comment.replyOpened = false;
+    let token = this.jwt_service.getToken();
+    if(token!=null)
+    {
+      let decode = this.jwt_service.decodeToken(token);
+      let body ={
+        content: comment.answerContent,
+        userId: decode.user_id,
+        commentId: comment.id
+      };
+      if(body.content!=="")
+      {
+        this.comment_service.createAnswer(body).subscribe({
+          next: (ans : Answer)=>{
+            ans.editedTime = new Date(ans.editedTime);
+            ans.postTime = new Date(ans.postTime);
+            ans.answerOldContent = ans.content;
+            ans.editOpened = false;
+            if(ans.user.profilePicture)
+              ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
+            else
+              ans.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
+            comment.answers.push(ans);
+            comment.answerContent = "";
+          }
+        });
+      }
+    }
+  }
+  showEditBox(CorA:Comment | Answer)
+  {
+    if(CorA.editOpened)
+      CorA.editOpened = false;
+    else
+      CorA.editOpened = true;
+  }
+
+  updateComment(comment:Comment)
+  {
+    let updateData = {
+      id : comment.id,
+      content: comment.content
+    };
+    if(comment.content!=="")
+    {
+      this.comment_service.updateComment(updateData).subscribe({
+        next: (com: Comment)=>{
+          comment.content = com.content;
+          comment.oldCommentContent = com.content;
+          comment.editedTime = new Date(com.editedTime);
+          comment.postTime = new Date(com.postTime);
+          comment.replyOpened = false;
+          comment.editOpened = false;
+        }
+      })
+    }
+    else{
+      comment.editOpened = false;
+      comment.content = comment.oldCommentContent;
+    }
+  }
+  updateAnswer(answer:Answer)
+  {
+    let updateData = {
+      id : answer.id,
+      content: answer.content
+    };
+    if(answer.content!=="")
+    {
+      this.comment_service.updateAnswer(updateData).subscribe({
+        next: (com: Answer)=>{
+          answer.content = com.content;
+          answer.answerOldContent = com.content;
+          answer.editedTime = new Date(com.editedTime);
+          answer.postTime = new Date(com.postTime);
+          answer.editOpened = false;
+        }
+      })
+    }
+    else{
+      answer.content = answer.answerOldContent;
+      answer.editOpened = false;
+    }
+  }
+  showBox(comment:Comment)
+  {
+    comment.answerContent = "";
+    // console.log(comment.replyOpened);
+    if(comment.replyOpened)
+      comment.replyOpened = false;
+    else
+      comment.replyOpened = true;
   }
 }

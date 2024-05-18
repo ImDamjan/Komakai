@@ -11,5 +11,7 @@ namespace server.DTOs.Users
         public string Name { get; set; } = string.Empty;
         public string Lastname { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
+        public string ProfilePicture { get; set; } = string.Empty;
+        public string PictureType { get; set; } = string.Empty;
     }
 }
