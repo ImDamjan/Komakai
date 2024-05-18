@@ -11,9 +11,21 @@
              <app-project-task [task]="task"></app-project-task>
          </div>
      </div>
-    <div id="paginator">
-        <button (click)="previousPage()">Previous</button>
-        <span> Page {{ currentPage }} </span>
-        <button (click)="nextPage()">Next</button>
-    </div>
+     <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item"><a class="page-link">1</a></li>
+          <li class="page-item"><a class="page-link">2</a></li>
+          <li class="page-item"><a class="page-link">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="http://localhost:4200/tasks/2" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
 </div>
