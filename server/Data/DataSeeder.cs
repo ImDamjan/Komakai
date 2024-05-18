@@ -1430,6 +1430,23 @@ namespace server.Data
                                     Users = new List<User>{users[0],users[7]},
 
                                 },
+                                new Assignment{
+                                    Id = 33,
+                                    Title = "Kreiranje baze",
+                                    Owner = 1,
+                                    Description = "Sprovesti optimizaciju baze podataka kako bi se poboljšalo vreme odziva pri pretraživanju i upitu baze podataka, koriste?i indekse, particionisanje i denormalizaciju gde je to potrebno.",
+                                    Start = new DateTime(2023, 12, 15),
+                                    End = new DateTime(2024, 1, 14),
+                                    StateId = 2,
+                                    Percentage = 20,
+                                    PriorityId = 3,
+                                    Type = "Neki tip",
+                                    TaskGroupId = 10,
+                                    LastTimeChanged = DateTime.Now,
+                                    IsClosed = false,
+                                    Users = new List<User>{users[0],users[7]},
+
+                                },
                             };
 
                             _context.AddRange(assignments);
