@@ -26,6 +26,10 @@ export class TasksComponent {
   @ViewChild('taskFilter') taskFilterComponent: TaskFilterComponent | undefined;
   filteredTasks: Task[] = [];
 
+  tasks: Task[] = [];
+
+  isLastPage: boolean = false;
+
   private task_date_service = inject(DateConverterService);
 
   public currentPage: number = 1;
@@ -37,8 +41,7 @@ export class TasksComponent {
   public filter: TaskFilter = {
     propertyName : "Last Updated",
     sortFlag : -1,
-    pageNumber: 1,
-    pageSize: 6
+    pageNumber: 1
   };
 
   private jwtDecoder = inject(JwtDecoderService);
@@ -66,6 +69,22 @@ export class TasksComponent {
     //     });
     //     this.filteredTasks = tasks;
     // });
+
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+      this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
+      tasks.forEach(task => {
+        this.task_date_service.setDateParametersForTask(task);
+      });
+      this.tasks = tasks;
+    })};
+
+    this.filter.pageSize=6;
+
     this.activatedRoute.paramMap.subscribe(params => {
       if (params.has('pageNumber')) {
         this.currentPage = parseInt(params.get('pageNumber')!);
@@ -129,10 +148,18 @@ export class TasksComponent {
   }
   
   nextPage() {
-    this.currentPage++;
-    this.filter.pageNumber = this.currentPage;
-    this.router.navigate(['/tasks', this.currentPage]);
-    this.fetchTasksForCurrentPage();
+    console.log(this.getTotalPages())
+    if(this.currentPage < this.getTotalPages()){
+      this.currentPage++;
+      this.filter.pageNumber = this.currentPage;
+      this.router.navigate(['/tasks', this.currentPage]);
+      this.fetchTasksForCurrentPage();
+    }
+    this.updateIsLastPage();
+  }
+
+  updateIsLastPage() {
+    this.isLastPage = this.currentPage === this.getTotalPages();
   }
 
   fetchTasksForCurrentPage() {
@@ -147,6 +174,15 @@ export class TasksComponent {
         });
         this.filteredTasks = tasks;
       });
+    }
+  }
+
+  getTotalPages(): number {
+    if (this.filter.pageSize) {
+      console.log(this.filteredTasks.length)
+      return Math.ceil(this.tasks.length / this.filter.pageSize);
+    } else {
+      return 0;
     }
   }
 

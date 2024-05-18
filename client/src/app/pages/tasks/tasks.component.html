@@ -22,7 +22,7 @@
           <li class="page-item"><a class="page-link" style="background-color: #0D6EFD; color: white;">{{currentPage}}</a></li>
           <li class="page-item"><a class="page-link">{{currentPage+1}}</a></li>
           <li class="page-item">
-            <a class="page-link" (click)="nextPage()" aria-label="Next">
+            <a class="page-link" (click)="nextPage()" aria-label="Next" disabled="isLastPage">
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>
