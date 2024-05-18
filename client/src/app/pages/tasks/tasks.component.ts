@@ -28,6 +28,8 @@ export class TasksComponent {
 
   tasks: Task[] = [];
 
+  public desiredPage: number = 1;
+
   isLastPage: boolean = false;
 
   private task_date_service = inject(DateConverterService);
@@ -199,6 +201,18 @@ export class TasksComponent {
     const endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
     startPage = Math.max(1, Math.min(startPage, endPage - maxDisplayedPages + 1));
     return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  }
+
+  goToInputPage() {
+    const pageNumber = Math.min(Math.max(this.desiredPage, 1), this.getTotalPages()); // Clamp input value
+    this.currentPage = pageNumber;
+    this.filter.pageNumber = pageNumber;
+    if (pageNumber > this.getTotalPages()) {
+      this.router.navigate(['/tasks', this.getTotalPages()]); // Go to last page if invalid
+    } else {
+      this.router.navigate(['/tasks', pageNumber]);
+    }
+    this.fetchTasksForCurrentPage();
   }
 
   // getTotalPages(): number {
