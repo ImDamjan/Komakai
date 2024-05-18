@@ -49,7 +49,7 @@ export class TasksComponent {
   private jwtDecoder = inject(JwtDecoderService);
   remainingTimeSubscriptions: Subscription[] = [];
 
-  constructor(private taskService: AssignmentService) { }
+  constructor(private taskService: AssignmentService, private route: ActivatedRoute) { }
 
   ngOnDestroy(): void {
     this.remainingTimeSubscriptions.forEach(sub => sub.unsubscribe());
@@ -150,7 +150,6 @@ export class TasksComponent {
   }
   
   nextPage() {
-    console.log(this.getTotalPages())
     if(this.currentPage < this.getTotalPages()){
       this.currentPage++;
       this.filter.pageNumber = this.currentPage;
@@ -181,7 +180,6 @@ export class TasksComponent {
 
   getTotalPages(): number {
     if (this.filter.pageSize) {
-      console.log(this.filteredTasks.length)
       return Math.ceil(this.tasks.length / this.filter.pageSize);
     } else {
       return 0;
@@ -213,26 +211,6 @@ export class TasksComponent {
       this.router.navigate(['/tasks', pageNumber]);
     }
     this.fetchTasksForCurrentPage();
-  }
-
-  // getTotalPages(): number {
-  //   if(this.filter.pageSize){
-  //     console.log(this.filter.pageSize)
-  //     return Math.ceil(this.tasks.length / this.filter.pageSize);
-  //   }
-  //   else
-  //     return 0;
-  // }
-
-  constructFilterQueryString(): any {
-    let queryString: TaskFilter = {};
-    if (this.filter.searchTitle) {
-      queryString['searchTitle'] = this.filter.searchTitle;
-    }
-    if(this.filter.stateFilter){
-      queryString['stateFilter'] = this.filter.stateFilter;
-    }
-    return queryString;
   }
 
 }
