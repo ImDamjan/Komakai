@@ -10,5 +10,7 @@ export interface Comment {
     user : User,
     answers : Answer[],
     replyOpened : boolean,
-    answerContent : string
+    answerContent : string,
+    oldCommentContent: string,
+    editOpened : boolean
 }

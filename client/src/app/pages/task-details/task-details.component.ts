@@ -18,6 +18,7 @@ import { DateConverterService } from '../../services/date-converter.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Role } from '../../models/role';
 import { Answer } from '../../models/comment/answer';
+import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
 
 
 @Component({
@@ -131,13 +132,16 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         comments.forEach(comment => {
           comment.editedTime = new Date(comment.editedTime);
           comment.postTime = new Date(comment.postTime);
+          comment.oldCommentContent = comment.content;
           if(comment.user.profilePicture)
             comment.user.profilePicturePath = `data:${comment.user.pictureType};base64,${comment.user.profilePicture}`;
           else
             comment.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
           comment.replyOpened = false;
+          comment.editOpened = false;
           comment.answers.forEach(ans => {
             ans.editedTime = new Date(ans.editedTime);
+            ans.editOpened = false;
             ans.postTime = new Date(ans.postTime);
             if(ans.user.profilePicture)
               ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
@@ -301,7 +305,9 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           next: (comment : Comment)=>{
             comment.editedTime = new Date(comment.editedTime);
             comment.postTime = new Date(comment.postTime);
+            comment.oldCommentContent = comment.content;
             comment.replyOpened = false;
+            comment.editOpened = false;
             if(comment.user.profilePicture)
               comment.user.profilePicturePath = `data:${comment.user.pictureType};base64,${comment.user.profilePicture}`;
             else
@@ -408,6 +414,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           next: (ans : Answer)=>{
             ans.editedTime = new Date(ans.editedTime);
             ans.postTime = new Date(ans.postTime);
+            ans.editOpened = false;
             if(ans.user.profilePicture)
               ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
             else
@@ -417,6 +424,38 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           }
         });
       }
+    }
+  }
+  showEditBox(CorA:Comment | Answer)
+  {
+    if(CorA.editOpened)
+      CorA.editOpened = false;
+    else
+      CorA.editOpened = true;
+  }
+
+  updateComment(comment:Comment)
+  {
+    let updateData = {
+      id : comment.id,
+      content: comment.content
+    };
+    if(comment.content!=="")
+    {
+      this.comment_service.updateComment(updateData).subscribe({
+        next: (com: Comment)=>{
+          comment.content = com.content;
+          comment.oldCommentContent = com.content;
+          comment.editedTime = new Date(com.editedTime);
+          comment.postTime = new Date(com.postTime);
+          comment.replyOpened = false;
+          comment.editOpened = false;
+        }
+      })
+    }
+    else{
+      comment.editOpened = false;
+      comment.content = comment.oldCommentContent;
     }
   }
   showBox(comment:Comment)

@@ -153,14 +153,26 @@ table {
     text-align: left;
     padding: 8px;
   }
-  
+  .edit{
+    float: right;
+    padding: 3px 10px;
+    position: relative;
+    bottom: 2px;
+  }
+  .cancel{
+    background-color: crimson;
+  }
+  .cancel:hover{
+    background-color: darkred;
+  }
   tr:nth-child(even) {
     background-color: #dddddd;
   }
 
   #comments{
     max-height: 400px;
-    overflow: auto;
+    overflow-wrap: break-word;
+    overflow-y: auto;
   }
   .answer{
     margin-left: 10%;

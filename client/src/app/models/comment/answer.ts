@@ -6,5 +6,6 @@ export interface Answer {
     postTime: Date,
     editedTime: Date,
     commentId: number,
-    user: User
+    user: User,
+    editOpened : boolean
 }

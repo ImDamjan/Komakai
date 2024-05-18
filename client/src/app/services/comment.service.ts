@@ -29,4 +29,16 @@ export class CommentService {
     const url = this.baseUrl + "/Answer/CreateAnswer";
     return this.http.post<Answer>(url,data);
   }
+
+  updateComment(data:any) : Observable<Comment>
+  {
+    const url = this.baseUrl + "/Comment/updateComment";
+    return this.http.put<Comment>(url,data);
+  }
+
+  updateAnswer(data:any):Observable<Answer>
+  {
+    const url = this.baseUrl + "/Answer/updateAnswer";
+    return this.http.put<Answer>(url,data);
+  }
 }
