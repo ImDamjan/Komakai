@@ -153,7 +153,7 @@ namespace server.Controllers
             if (user == null)
             {
                 // Korisnik nije pronadjen
-                return Ok("If the provided email exists in our system, a password reset email has been sent.");
+                return Ok(new { message = "If the provided email exists in our system, a password reset email has been sent." });
             }
 
             // Reset token
@@ -173,7 +173,7 @@ namespace server.Controllers
             };
             await _emailService.SendEmailAsync(emailRequest);
 
-            return Ok("If the provided email exists in our system, a password reset email has been sent.");
+            return Ok(new { message = "If the provided email exists in our system, a password reset email has been sent." });
         }
 
 
