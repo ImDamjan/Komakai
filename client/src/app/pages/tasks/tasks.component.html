@@ -10,22 +10,25 @@
          <div *ngFor="let task of filteredTasks">
              <app-project-task [task]="task"></app-project-task>
          </div>
+
+         <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link" (click)="previousPage()" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item" *ngFor="let pageNumber of getDisplayedPageRange(currentPage, getTotalPages())">
+                <a class="page-link" [ngClass]="{ 'active': currentPage === pageNumber }" (click)="currentPage = pageNumber; navigateToPage(pageNumber)">
+                  {{ pageNumber }}
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" (click)="nextPage()" aria-label="Next" disabled="isLastPage">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
      </div>
-     <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" (click)="previousPage()" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="page-item"><a class="page-link">{{currentPage-1}}</a></li>
-          <li class="page-item"><a class="page-link" style="background-color: #0D6EFD; color: white;">{{currentPage}}</a></li>
-          <li class="page-item"><a class="page-link">{{currentPage+1}}</a></li>
-          <li class="page-item">
-            <a class="page-link" (click)="nextPage()" aria-label="Next" disabled="isLastPage">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
 </div>

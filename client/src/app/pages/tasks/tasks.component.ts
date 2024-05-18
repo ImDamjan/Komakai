@@ -186,6 +186,21 @@ export class TasksComponent {
     }
   }
 
+  navigateToPage(pageNumber: number) {
+    this.currentPage = pageNumber;
+    this.filter.pageNumber = pageNumber;
+    this.router.navigate(['/tasks', pageNumber]);
+    this.fetchTasksForCurrentPage();
+  }
+
+  getDisplayedPageRange(currentPage: number, totalPages: number): number[] {
+    const maxDisplayedPages = 3; // Number of pages to display at a time
+    let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
+    const endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
+    startPage = Math.max(1, Math.min(startPage, endPage - maxDisplayedPages + 1));
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  }
+
   // getTotalPages(): number {
   //   if(this.filter.pageSize){
   //     console.log(this.filter.pageSize)
