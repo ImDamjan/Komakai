@@ -164,7 +164,16 @@ namespace server.Controllers
             await _repos.SaveChangesAsync(); 
 
             // Send email with reset link
-            var resetLink = $"{Request.Scheme}://{Request.Host}/resetpassword?token={resetToken}";
+            string baseUrl = "";
+            if (Request.Host.Host.Contains("localhost"))
+            {
+                baseUrl = "http://localhost:4200";
+            }
+            else
+            {
+                baseUrl = "http://softeng.pmf.kg.ac.rs:10189";
+            }
+            string resetLink = $"{baseUrl}/reset-password?token={resetToken}";
             var emailRequest = new EmailDto
             {
                 To = email,

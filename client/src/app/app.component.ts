@@ -17,7 +17,9 @@ export class AppComponent implements OnInit{
   }
   isLoginPage()
   {
-    return this.router.url==="/auth";
+    const currentUrl = this.router.url;
+    const hasToken = currentUrl.includes('/reset-password') && currentUrl.includes('token=');
+    return currentUrl === '/auth' || currentUrl === '/reset-password' || hasToken;
   }
 
   ngOnInit(): void {

@@ -15,10 +15,13 @@ import { ProjectPreviewComponent } from './components/project-preview/project-pr
 import { adminAuthorizationGuard } from './guards/admin-authorization.guard';
 import { pmAuthorizationGuard } from './guards/pm-authorization.guard';
 import { TeamsComponent } from './pages/teams/teams.component';
+import { ResetpasswordComponent } from './pages/resetpassword/resetpassword/resetpassword.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full'},
   {path: 'auth' ,component: AuthComponent,canActivate: [AuthGuard]},
+  {path: 'reset-password', component: ResetpasswordComponent},
+  {path: 'reset-password/:token', component: ResetpasswordComponent},
   {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard]},
   {path: 'projects', redirectTo: '/projects/1', pathMatch: 'full'},
   {path: 'projects/:pageNumber',component: ProjectPreviewComponent,canActivate: [AuthGuard]},
