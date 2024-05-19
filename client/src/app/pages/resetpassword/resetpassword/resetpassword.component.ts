@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrl: './resetpassword.component.css'
 })
 export class ResetpasswordComponent {
+  showPassword: boolean = false;
 
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
 }
