@@ -14,7 +14,7 @@ export class ResetpasswordComponent implements OnInit{
   newPassword: string = '';
   confirmPassword: string = '';
   token: string = '';
-
+  changed: boolean = false;
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
@@ -35,7 +35,7 @@ export class ResetpasswordComponent implements OnInit{
     this.authService.resetPassword(payload).subscribe(
       response => {
         console.log('Password reset successful', response);
-        alert('Password reset successful');
+        this.changed = true;
       },
       error => {
         console.error('Password reset failed', error);
