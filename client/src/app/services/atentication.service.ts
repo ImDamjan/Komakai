@@ -66,4 +66,9 @@ export class AuthenticationService {
     const url = `${this.baseUrl}/Auth/forgotpassword?email=${email}`;
     return this.httpClient.post<any>(url, {});
   }
+
+  resetPassword(payload: { resetToken: string , newPassword: string }): Observable<any> {
+    const url = `${this.baseUrl}/Auth/resetpassword`;
+    return this.httpClient.post(url, payload);
+  }
 }

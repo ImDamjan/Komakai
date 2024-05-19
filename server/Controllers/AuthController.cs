@@ -208,7 +208,7 @@ namespace server.Controllers
             await _repos.SaveChangesAsync();
 
             // Return a success message
-            return Ok("Password reset successful.");
+            return Ok(new { message = "Password reset successful" });
         }
 
         // Generisanje tokena
