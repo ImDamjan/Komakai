@@ -13,6 +13,6 @@ export interface User {
     profilePicturePath: string,
     isActivated: boolean,
     role : Role,
-    profile_picture: string,
-    picture_type: string
+    profilePicture: string,
+    pictureType: string
 }

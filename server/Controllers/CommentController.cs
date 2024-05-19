@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.Authorization;
+using server.DTOs.Answer;
 using server.DTOs.Comment;
 using server.Mappers;
 
@@ -37,11 +38,7 @@ namespace server.Controllers
             if(user==null)
                 return NotFound("User not found");
             comment = await _comment_repo.CreateCommentAsync(comment);
-            
-            var roleDto = user.Role.toRoleDto();
-            var userDto = user.toUserDto(roleDto);
-
-            return Ok(comment.ToCommentDto(userDto));
+            return Ok(comment.ToCommentDto(user.toUserDto(), new List<AnswerDto>()));
         }
 
         [HttpGet("getCommentById/{comment_id}")]
@@ -51,10 +48,7 @@ namespace server.Controllers
             if(comment==null)
                 return NotFound("Comment not found.ID:" + comment_id);
             
-            var roleDto = comment.User.Role.toRoleDto();
-            var userDto = comment.User.toUserDto(roleDto);
-
-            return Ok(comment.ToCommentDto(userDto));
+            return Ok(comment.ToCommentDto(comment.User.toUserDto(), comment.Answers.Select(a=>a.toAnswerDto(a.User.toUserDto())).ToList()));
         }
 
         [HttpPut("updateComment")]
@@ -64,21 +58,13 @@ namespace server.Controllers
             if(comment==null)
                 return NotFound("Comment not found.ID:" + dto.Id);
 
-            var roleDto = comment.User.Role.toRoleDto();
-            var userDto = comment.User.toUserDto(roleDto);
-
-            return Ok(comment.ToCommentDto(userDto));
+            return Ok(comment.ToCommentDto(comment.User.toUserDto(),comment.Answers.Select(a=>a.toAnswerDto(a.User.toUserDto())).ToList()));
         }
         [HttpGet("getAllCommentsByAssignment/{asign_id}")]
         public async Task<IActionResult> GetAllByAssignmet([FromRoute] int asign_id)
         {
             var comments = await _comment_repo.GetAllCommentsByAssignmentIdAsync(asign_id);
-           var dtos = comments.Select(c =>
-            {
-                var roleDto = c.User.Role.toRoleDto();
-                var userDto = c.User.toUserDto(roleDto);
-                return c.ToCommentDto(userDto);
-            });
+            var dtos = comments.Select(c=>c.ToCommentDto(c.User.toUserDto(),c.Answers.Select(a=>a.toAnswerDto(a.User.toUserDto())).ToList()));
 
             return Ok(dtos);
         }

@@ -1,6 +1,6 @@
 #strana{
   width: 100vw;
-  margin-left: 50px;
+  margin-left: 60px;
   max-width: 100%;
   padding-right: 100px;
 }
@@ -9,7 +9,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-gap: 100px;
-  overflow: auto;
+  /* overflow: auto; */
   height: 600px;
   width: 70%;
   place-items: center;

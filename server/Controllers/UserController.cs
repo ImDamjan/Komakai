@@ -30,12 +30,12 @@ namespace server.Controllers
         public async Task<IActionResult> GetAllUsers([FromQuery]UserFilterDto dto,[FromQuery]SortDto sort)
         {
             var users = await _repos.GetAllUsersAsync(dto, sort);
-            var userDtos = new List<UserDto>();
+            var userDtos = new List<UserRoleDto>();
 
             foreach (var user in users)
             {
                 var roleDto = user.Role.toRoleDto();
-                var userDto = user.toUserDto(roleDto);
+                var userDto = user.toUserRoleDto(roleDto);
                 userDtos.Add(userDto);
             }
 
@@ -49,7 +49,7 @@ namespace server.Controllers
             var dtos = users.Select(user =>
             {
                 var roleDto = user.Role.toRoleDto();
-                return user.toUserDto(roleDto);
+                return user.toUserRoleDto(roleDto);
             });
             return Ok(dtos);
         }
@@ -64,7 +64,7 @@ namespace server.Controllers
                 return NotFound();
             }
             var roleDto = user.Role.toRoleDto();
-            return Ok(user.toUserDto(roleDto));
+            return Ok(user.toUserRoleDto(roleDto));
         }
         [HttpGet("getProjectUsers/{project_id}")]
         public async Task<IActionResult> getProjectUsers([FromRoute] int project_id)
@@ -73,7 +73,7 @@ namespace server.Controllers
             var dtos = users.Select(user =>
             {
                 var roleDto = user.Role.toRoleDto();
-                return user.toUserDto(roleDto);
+                return user.toUserRoleDto(roleDto);
             });
             return Ok(dtos);
         }
@@ -130,7 +130,7 @@ namespace server.Controllers
                 return NotFound("user not found");
 
             var roleDto = user.Role.toRoleDto();
-            return Ok(user.toUserDto(roleDto));
+            return Ok(user.toUserRoleDto(roleDto));
         }
 
         /*
