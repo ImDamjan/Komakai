@@ -17,6 +17,8 @@ namespace server.DTOs.Users
         public string Organisation { get; set; } = string.Empty;
         public string Department { get; set; } = string.Empty;
         public RoleDto Role { get; set; } = null!;
+        public string ProfilePicture { get; set; } = string.Empty;
+        public string PictureType { get; set; } = string.Empty;
         public bool IsActivated { get; set; }
     }
 }

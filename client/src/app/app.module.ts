@@ -87,7 +87,7 @@ import { EditTeamComponent } from './components/edit-team/edit-team.component';
 import { FilterUserComponent } from './components/filter-user/filter-user.component';
 import { ResetpasswordComponent } from './pages/resetpassword/resetpassword/resetpassword.component';
 
-
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -144,6 +144,7 @@ import { ResetpasswordComponent } from './pages/resetpassword/resetpassword/rese
     BrowserModule,
     SliderModule,
     CalendarModule,
+    ProgressSpinnerModule,
     MultiSelectModule,
     DropdownModule,
     BrowserAnimationsModule,

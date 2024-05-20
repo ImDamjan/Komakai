@@ -16,7 +16,6 @@ namespace server.Repositories
 
         public async Task<Answer> CreateAnswerAsync(Answer answer)
         {
-            answer.PostTime=DateTime.Now;
             await _context.Answers.AddAsync(answer);
             await _context.SaveChangesAsync();
             return answer;
@@ -37,12 +36,12 @@ namespace server.Repositories
 
         public async Task<List<Answer>> GetAllAnswersByCommentIdAsync(int commentId)
         {
-            return await _context.Answers.Where(a => a.CommentId == commentId).ToListAsync();
+            return await _context.Answers.Include(a=>a.User).Where(a => a.CommentId == commentId).ToListAsync();
         }
 
         public async Task<Answer?> GetAnswerByIdAsync(int answerId)
         {
-            return await _context.Answers.FirstOrDefaultAsync(a=>a.Id== answerId);
+            return await _context.Answers.Include(a=>a.User).FirstOrDefaultAsync(a=>a.Id== answerId);
         }
 
         public async Task<Answer?> UpdateAnswerAsync(UpdateAnswerDto dto)
