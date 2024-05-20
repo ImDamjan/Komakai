@@ -409,3 +409,30 @@
 #paginator{
   text-align: center;
 }
+
+.pagination{
+  text-align: center;
+}
+
+.pagination a:hover{
+  cursor: pointer;
+}
+
+.page-item a:hover{
+  background-color: #0D6EFD;
+  color: white;
+}
+
+.page-input {
+  border: 1px solid #ccc;
+  outline: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #fff;
+  border-radius: 0.25rem;
+  height: 33.98px;
+  width: 60px;
+  margin-left: 5px;
+  text-align: center;
+  color: #0D6EFD;
+}
