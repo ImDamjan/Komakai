@@ -89,6 +89,7 @@ export class ProjectPreviewComponent implements OnInit {
     });
     this.projectsData = projects;
     // console.log("Iz projekata:",createdProject);
+    window.location.reload()
   }
   ngOnInit(): void {
     let user = this.jwt_service.getLoggedUser();
