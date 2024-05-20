@@ -38,7 +38,6 @@ import { TaskHeaderComponent } from './components/task-header/task-header.compon
 import { ProjectHeaderComponent } from './components/project-header/project-header.component';
 import { GantogramComponent } from './components/gantogram/gantogram.component';
 import { AdminComponent } from './pages/admin/admin.component';
-import { MemberComponent } from './components/member/member.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
@@ -122,7 +121,6 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     LogoutComponent,
     TaskDetailsComponent,
     AdminComponent,
-    MemberComponent,
     EditProjectOverlayComponent,
     ProfileDetailsComponent,
     FilterDetailsComponent,
