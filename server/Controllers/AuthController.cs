@@ -170,7 +170,24 @@ namespace server.Controllers
             {
                 To = email,
                 Subject = "Password Reset Request",
-                Body = $"Please click the following link to reset your password: <a href=\"{resetLink}\">{resetLink}</a>"
+                Body = $@"
+            <html>
+                <body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
+                    <div style='max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;'>
+                        <h2 style='color: #333;'>Password Reset Request</h2>
+                        <p>Hi there,</p>
+                        <p>You recently requested to reset your password for your account. Click the button below to reset it.</p>
+                        <p style='text-align: center;'>
+                            <a href='{resetLink}' style='display: inline-block; padding: 10px 20px; margin: 10px 0; font-size: 16px; color: #fff; background-color: #007bff; border-radius: 5px; text-decoration: none;'>Reset Your Password</a>
+                        </p>
+                        <p>If you did not request a password reset, please ignore this email or let us know.</p>
+                        <p>Thanks,<br>Komakai</p>
+                        <hr style='border: 0; border-top: 1px solid #eee;'>
+                        <p style='font-size: 12px; color: #777;'>If you’re having trouble clicking the password reset button, copy and paste the URL below into your web browser:</p>
+                        <p style='font-size: 12px; color: #007bff;'>{resetLink}</p>
+                    </div>
+                </body>
+            </html>"
             };
             await _emailService.SendEmailAsync(emailRequest);
 
@@ -186,14 +203,14 @@ namespace server.Controllers
             if (user == null)
             {
                 // Invalid or expired reset token
-                return BadRequest("Invalid or expired reset token.");
+                return BadRequest("The reset link is invalid or has expired. Please request a new password reset.");
             }
 
             // Check if the reset token is expired
             if (user.PasswordResetTokenExpiry < DateTime.Now)
             {
                 // Expired reset token
-                return BadRequest("Expired reset token.");
+                return BadRequest("The reset link has expired. Please request a new password reset.");
             }
 
             // Hash the new password
@@ -208,7 +225,7 @@ namespace server.Controllers
             await _repos.SaveChangesAsync();
 
             // Return a success message
-            return Ok(new { message = "Password reset successful" });
+            return Ok(new { message = "Your password has been changed successfully. You can now log in with your new password." });
         }
 
         // Generisanje tokena

@@ -15,6 +15,8 @@ export class ResetpasswordComponent implements OnInit{
   confirmPassword: string = '';
   token: string = '';
   changed: boolean = false;
+  errorMessage: string = '';
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
@@ -26,20 +28,25 @@ export class ResetpasswordComponent implements OnInit{
   }
 
   changePassword() {
-    if (this.newPassword !== this.confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
+      this.errorMessage = '';
+
+        if (this.newPassword !== this.confirmPassword) {
+            this.errorMessage = 'Passwords do not match.';
+            return;
+        }
+
 
     const payload = { resetToken: this.token, newPassword: this.newPassword };
     this.authService.resetPassword(payload).subscribe(
       response => {
-        console.log('Password reset successful', response);
         this.changed = true;
       },
       error => {
-        console.error('Password reset failed', error);
-        alert('Password reset failed');
+        if (error.status === 400) {
+          this.errorMessage = error.error;
+      } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again later.';
+      }
       }
     );
   }
