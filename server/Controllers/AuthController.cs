@@ -85,7 +85,7 @@ namespace server.Controllers
         {
 
             var user = await _repos.GetUserByUsernameAsync(request.Username);
-            if(user==null)
+            if(user==null || !user.IsActivated)
             {
                 return BadRequest("User or Password incorrect");
             }

@@ -66,6 +66,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     });
     this.spinner.show();
     this.userService.getUsers().subscribe(users => {
+      users = users.filter(u=>u.isActivated);
       this.users = users;
 
       this.users.forEach(user => {
