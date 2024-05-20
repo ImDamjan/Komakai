@@ -83,6 +83,7 @@ export class EditProjectOverlayComponent {
     this.spinner.show();
     this.userService.getUsers().subscribe(users => {
       this.spinner.hide();
+      users = users.filter(u=>u.isActivated);
       this.users = users;
 
       this.users.forEach(user => {

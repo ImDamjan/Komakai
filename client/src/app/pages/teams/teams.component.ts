@@ -45,6 +45,7 @@ export class TeamsComponent implements OnInit {
     this.user_service.getUsers().subscribe({
       next :(users: User[])=>{
         let pom: User[] = []
+        users = users.filter(u=>u.isActivated);
         users.forEach(element => {
           element.fulname = element.name + " " + element.lastname;
           if(element.id!==Number(this.loggedUser.user_id) && element.role.name!=="Admin")
@@ -70,6 +71,8 @@ export class TeamsComponent implements OnInit {
     this.team_service.createTeam(this.createTeam).subscribe({
       next: (team: Team) =>{
         this.teams.push(team);
+        this.createTeam.name = "";
+        this.selectedUsers = [];
       }
     })
   }
