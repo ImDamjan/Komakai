@@ -35,7 +35,15 @@ export class ProjectPreviewComponent implements OnInit {
     pageSize: 4
   };
 
+  public desiredPage: number = 1;
+
+  public currentPage: number = 1;
+
+  isLastPage: boolean = false;
+
   private activatedRoute = inject(ActivatedRoute);
+
+  private jwtDecoder = inject(JwtDecoderService);
 
   isClick = false;
   initialX: number | undefined;
@@ -48,6 +56,7 @@ export class ProjectPreviewComponent implements OnInit {
   
   data: any;
   projectsData: Project[] = [];
+  projectsDataOne: Project[] = [];
   users: User[] = [];
   profilePicturesLoaded = false;
 
@@ -55,7 +64,6 @@ export class ProjectPreviewComponent implements OnInit {
   descriptionCharacterLimit: number = 0;
 
   cards: any[] = [];
-  currentPage: number = 1;
   cardsPerPage: number = 8;
 
   showProjectPreview: boolean = true;
@@ -93,6 +101,60 @@ export class ProjectPreviewComponent implements OnInit {
       else if(user.role==="Project Worker")
         this.isWorker = true;
     }
+
+
+    this.projectService.getProjectsData().subscribe(
+      (projects: Project[]) => {
+        this.projectsDataOne = projects;
+        this.projectsDataOne.forEach(project => {
+          this.users = project.users;
+          this.users.forEach(user => {
+            this.userService.profilePicture(user.id).subscribe({
+              next: (message: { profilePicture: string, type: string }) => {
+                if(message.profilePicture)
+                  user.profilePicture = `data:${message.type};base64,${message.profilePicture}`;
+                else
+                  user.profilePicture = "../../../assets/pictures/defaultpfp.svg";
+              }, 
+              error: (err) => {
+                console.error('Error retrieving profile picture:', err);
+              },
+              complete: () => {
+                this.profilePicturesLoaded = true;
+              }
+            });
+          });
+        });
+        this.isLoading = false;
+        this.spinner.hide();
+        projects.forEach(project => {
+          project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
+          project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
+
+          this.assignmentService.getAllProjectAssignments(project.id).subscribe(
+            (assignments: any[]) => {
+              this.assignmentCounts[project.id] = assignments.length;
+              
+            },
+            (error) => {
+              console.error('An error occurred while fetching assignments for project:', project.id, error);
+            }
+          );
+
+        });
+        if (projects.length === 0) {
+          this.spinner.hide();
+          this.errorMessage = 'You don\'t have any projects yet.';
+        }
+      },
+      (error) => {
+        this.isLoading = false;
+        this.spinner.hide();
+        this.errorMessage = 'An error occurred while fetching projects.';
+      }
+    );
+
+
     this.spinner.show();
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     mediaQuery.addEventListener('change', () => {
@@ -307,10 +369,14 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   nextPage(){
-    this.currentPage++;
-    this.filter.pageNumber=this.currentPage;
-    this.router.navigate(['/projects', this.currentPage]);
-    this.loadProjects();
+    console.log(this.projectsData.length)
+    if(this.currentPage<this.getTotalPages()){
+      this.currentPage++;
+      this.filter.pageNumber=this.currentPage;
+      this.router.navigate(['/projects', this.currentPage]);
+      this.loadProjects();
+    }
+    this.updateIsLastPage();
   }
 
   // Get the total number of pages
@@ -319,6 +385,76 @@ export class ProjectPreviewComponent implements OnInit {
       return 0;
     }
     return Math.ceil(this.projectsData.length / this.cardsPerPage);
+  }
+
+  updateIsLastPage() {
+    this.isLastPage = this.currentPage === this.getTotalPages();
+  }
+
+  fetchProjectsForCurrentPage() {
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if (token != null) {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+      this.projectService.getProjectsData(this.filter).subscribe(projects => {
+        this.projectsData = projects;
+        this.projectsData.forEach(project => {
+          this.users = project.users;
+          this.users.forEach(user => {
+            this.userService.profilePicture(user.id).subscribe({
+              next: (message: { profilePicture: string, type: string }) => {
+                if(message.profilePicture)
+                  user.profilePicture = `data:${message.type};base64,${message.profilePicture}`;
+                else
+                  user.profilePicture = "../../../assets/pictures/defaultpfp.svg";
+              }, 
+              error: (err) => {
+                console.error('Error retrieving profile picture:', err);
+              },
+              complete: () => {
+                this.profilePicturesLoaded = true;
+              }
+            });
+          });
+        });
+      });
+    }
+  }
+
+  getTotalPages(): number {
+    if (this.filter.pageSize) {
+      return Math.ceil(this.projectsDataOne.length / this.filter.pageSize);
+    } else {
+      return 0;
+    }
+  }
+
+  navigateToPage(pageNumber: number) {
+    this.currentPage = pageNumber;
+    this.filter.pageNumber = pageNumber;
+    this.router.navigate(['/projects', pageNumber]);
+    this.fetchProjectsForCurrentPage();
+  }
+
+  getDisplayedPageRange(currentPage: number, totalPages: number): number[] {
+    const maxDisplayedPages = 3;
+    let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
+    const endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
+    startPage = Math.max(1, Math.min(startPage, endPage - maxDisplayedPages + 1));
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  }
+
+  goToInputPage() {
+    const pageNumber = Math.min(Math.max(this.desiredPage, 1), this.getTotalPages());
+    this.currentPage = pageNumber;
+    this.filter.pageNumber = pageNumber;
+    if (pageNumber > this.getTotalPages()) {
+      this.router.navigate(['/projects', this.getTotalPages()]);
+    } else {
+      this.router.navigate(['/projects', pageNumber]);
+    }
+    this.fetchProjectsForCurrentPage();
   }
 
   // Calculate the pages to show in pagination control

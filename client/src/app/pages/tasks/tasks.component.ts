@@ -89,6 +89,7 @@ export class TasksComponent {
 
     this.activatedRoute.paramMap.subscribe(params => {
       if (params.has('pageNumber')) {
+        console.log(params.get('pageNumber'))
         this.currentPage = parseInt(params.get('pageNumber')!);
         this.filter.pageNumber = this.currentPage;
       }
@@ -194,7 +195,7 @@ export class TasksComponent {
   }
 
   getDisplayedPageRange(currentPage: number, totalPages: number): number[] {
-    const maxDisplayedPages = 3; // Number of pages to display at a time
+    const maxDisplayedPages = 3;
     let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
     const endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
     startPage = Math.max(1, Math.min(startPage, endPage - maxDisplayedPages + 1));
@@ -202,11 +203,11 @@ export class TasksComponent {
   }
 
   goToInputPage() {
-    const pageNumber = Math.min(Math.max(this.desiredPage, 1), this.getTotalPages()); // Clamp input value
+    const pageNumber = Math.min(Math.max(this.desiredPage, 1), this.getTotalPages());
     this.currentPage = pageNumber;
     this.filter.pageNumber = pageNumber;
     if (pageNumber > this.getTotalPages()) {
-      this.router.navigate(['/tasks', this.getTotalPages()]); // Go to last page if invalid
+      this.router.navigate(['/tasks', this.getTotalPages()]);
     } else {
       this.router.navigate(['/tasks', pageNumber]);
     }
