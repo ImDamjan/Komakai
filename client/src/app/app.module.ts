@@ -85,6 +85,7 @@ import { TaskListTaskComponent } from './components/task-list-task/task-list-tas
 import { AddTaskGroupComponent } from './components/add-task-group/add-task-group.component';
 import { EditTeamComponent } from './components/edit-team/edit-team.component';
 import { FilterUserComponent } from './components/filter-user/filter-user.component';
+import { ResetpasswordComponent } from './pages/resetpassword/resetpassword/resetpassword.component';
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
@@ -136,6 +137,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     AddTaskGroupComponent,
     EditTeamComponent,
     FilterUserComponent,
+    ResetpasswordComponent,
   ],
   imports: [
     FormsModule,
