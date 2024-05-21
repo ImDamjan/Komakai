@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, inject } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
@@ -13,12 +13,8 @@ import { Task } from '../../models/task/task';
 })
 export class ProjectWeeklyAnalizeComponent implements OnInit{
 
-  private projectService = inject(ProjectService);
-  private jwtService = inject(JwtDecoderService);
-  private assignmentService = inject(AssignmentService);
-  userid!: number;
-  projects!: Project[];
-  tasks!: Task[];
+  @Input()projects!: Project[];
+  @Input()tasks!: Task[];
   atRiskCount = 0;
   highCount = 0;
   mediumCount = 0;
@@ -36,18 +32,6 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
   public chart: any;
 
   createChart() {
-    let token = this.jwtService.getToken();
-    if(token!=null)
-    {
-      let decode = this.jwtService.decodeToken(token);
-      this.userid = decode.user_id;
-
-
-      this.projectService.getProjectsData().subscribe(projects => {
-        this.projects = projects;
-
-        this.assignmentService.getAllUserAssignments(this.userid).subscribe(tasks => {
-          this.tasks = tasks;
           
           this.tasks.forEach(task => {
             switch (task.priority.id) {
@@ -125,8 +109,7 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
             }
           }
         });
-        });
-      });
-    }
+
+    
   }
 }

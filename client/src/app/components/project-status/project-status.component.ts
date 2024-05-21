@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, inject } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { Project } from '../../models/project/project';
 import { ProjectService } from '../../services/project.service';
@@ -10,8 +10,7 @@ import { ProjectService } from '../../services/project.service';
 })
 export class ProjectStatusComponent implements AfterViewInit, OnInit {
   
-  projects!: Project[];
-  project_service = inject(ProjectService);
+  @Input()projects!: Project[];
   notStartedCount = 0;
   readyCount = 0;
   inProgressCount = 0;
@@ -31,8 +30,7 @@ export class ProjectStatusComponent implements AfterViewInit, OnInit {
   chart: any;
 
   createPieChart(): void {
-    this.project_service.getProjectsData().subscribe( projects => {
-      this.projects = projects;
+      
 
       this.projects.forEach(project => {
         switch (project.state.id) {
@@ -103,7 +101,6 @@ export class ProjectStatusComponent implements AfterViewInit, OnInit {
               }
             }
           });
-    });
     
     
   }

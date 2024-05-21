@@ -24,9 +24,6 @@
 #paginator{
   text-align: center;
 }
-app-project-task:hover{
-  cursor: pointer;
-}
 
 .pagination{
   text-align: center;
