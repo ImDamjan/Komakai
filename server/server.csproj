@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CSV Data\" />
     <Folder Include="wwwroot\DefaultProfilePicture\" />
   </ItemGroup>
 
