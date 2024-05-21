@@ -44,21 +44,21 @@
                     <input class="input-field" type="text" placeholder="Please enter your first name" [(ngModel)]="user.name" name="firstName" required maxlength="31" pattern="[a-zA-Z ]*" #firstName="ngModel">
                     <p *ngIf="firstName.errors?.['required'] && (firstName.dirty || firstName.touched)" class="error-message" style="color:red;">*First name is required.</p>
                     <p *ngIf="!firstName.errors?.['required'] && firstName.errors?.['pattern'] && (firstName.dirty || firstName.touched)" class="error-message" style="color:red;">*First name must contain only letters.</p>
-                    <p *ngIf="!firstName.errors?.['required'] && firstName.value.length > 30 && (firstName.dirty || firstName.touched)" class="error-message" style="color:red;">*First name cannot be more than 30 characters long.</p>
+                    <p *ngIf="!firstName.errors?.['required'] && firstName.value?.length > 30 && (firstName.dirty || firstName.touched)" class="error-message" style="color:red;">*First name cannot be more than 30 characters long.</p>
                     <br>
 
                     <span id="nametitle" class="title">Last Name</span><br>
                     <input class="input-field" type="text" placeholder="Please enter your last name" [(ngModel)]="user.lastname" name="lastName" required maxlength="31" pattern="[a-zA-Z ]*" #lastName="ngModel">
                     <p *ngIf="lastName.errors?.['required'] && (lastName.dirty || lastName.touched)" class="error-message" style="color:red;">*Last name is required.</p>
                     <p *ngIf="!lastName.errors?.['required'] && lastName.errors?.['pattern'] && (lastName.dirty || lastName.touched)" class="error-message" style="color:red;">*Last name must contain only letters.</p>
-                    <p *ngIf="!lastName.errors?.['required'] && lastName.value.length > 30 && (lastName.dirty || lastName.touched)" class="error-message" style="color:red;">*Last name cannot be more than 30 characters long.</p>
+                    <p *ngIf="!lastName.errors?.['required'] && lastName.value?.length > 30 && (lastName.dirty || lastName.touched)" class="error-message" style="color:red;">*Last name cannot be more than 30 characters long.</p>
                     <br>
 
                     <span id="nametitle" class="title">Username</span><br>
                     <input class="input-field" type="text" placeholder="Please enter your username" [(ngModel)]="user.username" name="username" required minlength="3" maxlength="31" pattern="[a-zA-Z0-9_\-\.]*" #username="ngModel">
                     <p *ngIf="username.errors?.['required'] && (username.dirty || username.touched)" class="error-message" style="color:red;">*Username is required.</p>
                     <p *ngIf="!username.errors?.['required'] && username.errors?.['minlength'] && (username.dirty || username.touched)" class="error-message" style="color:red;">*Username must be at least 3 characters long.</p>
-                    <p *ngIf="!username.errors?.['required'] && username.value.length > 30 && (username.dirty || username.touched)" class="error-message" style="color:red;">*Username cannot be more than 30 characters long.</p>
+                    <p *ngIf="!username.errors?.['required'] && username.value?.length > 30 && (username.dirty || username.touched)" class="error-message" style="color:red;">*Username cannot be more than 30 characters long.</p>
                     <p *ngIf="!username.errors?.['required'] && !username.errors?.['maxlength'] && username.errors?.['pattern'] && (username.dirty || username.touched)" class="error-message" style="color:red;">*Username can contain only letters, numbers, underscores, hyphens, and periods.</p>
                     <br>
                     
@@ -72,17 +72,15 @@
                     <span id="organisationtitle" class="title">
                         <img src="../../../assets/profile-settings/organisation.svg"> Organisation
                     </span><br>
-                    <input class="input-field" type="text" placeholder="Please enter your email organisation" [(ngModel)]="user.organisation" name="organisation" required maxlength="51" #organisation="ngModel">
-                    <p *ngIf="organisation.errors?.['required'] && (organisation.dirty || organisation.touched)" class="error-message" style="color:red;"> *Organisation is required </p>
-                    <p *ngIf="!organisation.errors?.['required'] && organisation.value.length > 50 && (organisation.dirty || organisation.touched)" class="error-message" style="color:red;"> *Organisation cannot be longer than 50 characters </p>
+                    <input class="input-field" type="text" placeholder="Please enter your email organisation" [(ngModel)]="user.organisation" name="organisation" maxlength="51" #organisation="ngModel">
+                    <p *ngIf="!organisation.errors?.['required'] && organisation.value?.length > 50 && (organisation.dirty || organisation.touched)" class="error-message" style="color:red;"> *Organisation cannot be longer than 50 characters </p>
                     <br>
 
                     <span id="departmenttitle" class="title">
                         <img src="../../../assets/profile-settings/department.svg"> Department
                     </span><br>
-                    <input class="input-field" type="text" placeholder="Please enter your email department" [(ngModel)]="user.department" name="department" required maxlength="51" #department="ngModel">
-                    <p *ngIf="department.errors?.['required'] && (department.dirty || department.touched)" class="error-message" style="color:red;"> *Department is required </p>
-                    <p *ngIf="!department.errors?.['required'] && department.value.length > 50 && (department.dirty || department.touched)" class="error-message" style="color:red;"> *Department cannot be longer than 50 characters </p>
+                    <input class="input-field" type="text" placeholder="Please enter your email department" [(ngModel)]="user.department" name="department" maxlength="51" #department="ngModel">
+                    <p *ngIf="!department.errors?.['required'] && department.value?.length > 50 && (department.dirty || department.touched)" class="error-message" style="color:red;"> *Department cannot be longer than 50 characters </p>
                     <br>
                 </div>
             </form>

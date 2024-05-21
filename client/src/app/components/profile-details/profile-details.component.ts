@@ -45,9 +45,16 @@ export class ProfileDetailsComponent {
   }
 
   editProfile(userid: Number,form: NgForm): void {
+    if (form.value.organisation == null || form.value.department == null) {
+      form.value.organisation = '';
+    }
+    if (form.value.department == null) {
+      form.value.department = '';
+    }
     if (form.invalid) {
       return;
     }
+    
     this.userService.updateUser(this.user).subscribe(response => {
       this.userProfileService.setUserProfile(this.user);
       alert('Profile edited successfully!');
