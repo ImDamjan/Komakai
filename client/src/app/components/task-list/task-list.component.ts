@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, Input, OnInit, ViewChild, inject, viewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, inject, viewChild } from '@angular/core';
 import { TaskGroup } from '../../models/task/task-group';
 import { ListFlatNode } from '../../models/list-flat-node';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
@@ -23,7 +23,7 @@ import { RoleService } from '../../services/role.service';
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
-export class TaskListComponent implements OnInit,AfterViewInit{
+export class TaskListComponent implements OnInit,OnChanges,AfterViewInit{
   private convertDate = inject(DateConverterService);
   private jwt_service = inject(JwtDecoderService);
   private role_service = inject(RoleService);
@@ -95,6 +95,10 @@ export class TaskListComponent implements OnInit,AfterViewInit{
   private task_service = inject(TaskGroupService);
   constructor() {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.filter.searchTitle = this.searchFilter;
+    this.loadTasks();
   }
   ngAfterViewInit(): void {
     this.taskfilterComponent?.filterEmiter.subscribe(filter=>{

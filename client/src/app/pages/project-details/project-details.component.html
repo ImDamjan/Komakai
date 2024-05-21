@@ -10,7 +10,7 @@
     <div class="product" [ngSwitch]="currentView">
         <app-kanban [searchText]="searchText" *ngSwitchCase="'kanban'" ></app-kanban>
         <!-- <app-list *ngSwitchCase="'list'"></app-list> -->
-        <app-gantogram *ngSwitchCase="'gantt'"></app-gantogram>
+        <app-gantogram [searchText]="searchText" *ngSwitchCase="'gantt'"></app-gantogram>
 
         <app-task-list [searchFilter]="searchText" *ngSwitchCase="'list'"/>
     </div>

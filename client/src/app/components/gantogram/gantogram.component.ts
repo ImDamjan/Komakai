@@ -1,4 +1,4 @@
-import { AfterViewInit, EventEmitter,Component, ElementRef, HostBinding, Input, OnInit, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, EventEmitter,Component, ElementRef, HostBinding, Input, OnInit, Output, TemplateRef, ViewChild, inject, OnChanges, SimpleChanges } from '@angular/core';
 import {srLatn} from 'date-fns/locale'
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
@@ -23,7 +23,7 @@ import {
   GanttViewType,
   NgxGanttComponent 
 } from '@worktile/gantt';
-import { Observable, Subject, finalize, of } from 'rxjs';
+import { Observable, Subject, filter, finalize, of } from 'rxjs';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { Task } from '../../models/task/task';
 import { ActivatedRoute } from '@angular/router';
@@ -39,6 +39,7 @@ import { TaskDetailsComponent } from '../../pages/task-details/task-details.comp
 import { AssignmentService } from '../../services/assignment.service';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
+import { TaskFilter } from '../../models/task/task-filter';
 
 
 
@@ -51,8 +52,9 @@ import { RoleService } from '../../services/role.service';
   template: ``,
   providers: [GanttPrintService,  DatePipe],
 })
-export class GantogramComponent implements OnInit, AfterViewInit{
+export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
   
+  @Input() searchText!: string;
   private  modalService = inject(NgbModal);
   private decoder = inject(JwtDecoderService);
   private userId : number = 0;
@@ -65,6 +67,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   private itemsOldState: GanttItem[] = [];
 
   task!: Task;
+  taskFilter : TaskFilter = {}
   private dialog = inject(MatDialog);
   @Output() newItemEvent = new EventEmitter<{previous_state : number, task: Task}>();
 
@@ -147,6 +150,10 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   constructor(private printService: GanttPrintService,private toast : NgToastService,private datePipe: DatePipe,private sanitizer: DomSanitizer) {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.taskFilter.searchTitle = this.searchText;
+    this.getGanttItemsByProjectId();
   }
   public isDragable:boolean = false;
   public isLinkable:boolean = false;
@@ -249,7 +256,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   getGanttItemsByProjectId(){
     this.loading = true;
-    this.ganttService.GetAssignemntsByProjectId(this.projectId).subscribe({
+    this.assignmentService.getAllProjectAssignments(this.projectId,this.taskFilter).subscribe({
       next : (tasks: Task[])=> 
         {
           if (tasks && tasks.length > 0){
