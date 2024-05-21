@@ -139,7 +139,7 @@ export class TaskListComponent implements OnInit,OnChanges,AfterViewInit{
         this.dataSource.data = [group];
         // this.treeControl.expand(this.treeControl.dataNodes[0]);
         this.treeControl.expandAll();
-        console.log(this.dataSource.data);
+        // console.log(this.dataSource.data);
       }
     });
   }

@@ -139,7 +139,7 @@ export class TaskFilterComponent implements OnInit {
         this.filter.stateFilter?.push(state.id);
       });
     }
-    console.log(this.filter);
+    // console.log(this.filter);
 
     this.filterEmiter.emit(this.filter);
   }

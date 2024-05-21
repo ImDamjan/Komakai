@@ -81,7 +81,8 @@ export class ProfileDetailsComponent {
 
   uploadProfilePicture(userId: number, base64String: any) {
     this.userService.uploadProfilePicture(userId, base64String).subscribe({
-      next: (message: string) => {this.profilePicture(userId)}, error: (err) => {console.log(err)}
+      next: (message: string) => {this.profilePicture(userId)}, 
+      // error: (err) => {console.log(err)}
     });
   }
 
