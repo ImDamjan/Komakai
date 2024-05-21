@@ -32,7 +32,8 @@
         </div>
         <div class="centered-content">
             <div class="profile-info">
-                <img id="pfp" [src]="picture">
+                <img *ngIf="!uploadingPicture" id="pfp" [src]="picture">
+                <img *ngIf="uploadingPicture" class="spinner">
             </div>
         </div>
         <div class="contact-info">

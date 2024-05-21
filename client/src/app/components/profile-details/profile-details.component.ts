@@ -20,6 +20,7 @@ export class ProfileDetailsComponent {
   roles!: Role[];
   editMode = false;
   picture!: string;
+  uploadingPicture: boolean = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router, private userProfileService: UserProfileService) {
     this.user = data.user;
@@ -63,6 +64,7 @@ export class ProfileDetailsComponent {
   }
 
   onFileSelected(event: any) {
+    this.uploadingPicture = true;
     const file: File = event.target.files[0];
     let picture = {
         data: '',
@@ -84,12 +86,22 @@ export class ProfileDetailsComponent {
     } else {
       alert('Please select a valid image file.');
     }
+    this.uploadingPicture = false;
   } 
 
   uploadProfilePicture(userId: number, base64String: any) {
-    this.userService.uploadProfilePicture(userId, base64String).subscribe({
-      next: (message: string) => {this.profilePicture(userId)}, error: (err) => {console.log(err)}
-    });
+    this.uploadingPicture = true;
+    setTimeout(() => {
+      this.userService.uploadProfilePicture(userId, base64String).subscribe({
+          next: (message: string) => {
+              this.profilePicture(userId);
+              this.uploadingPicture = false; 
+          },
+          error: (err) => {
+              this.uploadingPicture = false;
+          }
+      });
+  }, 2000);
   }
 
   profilePicture(userId: number) {
