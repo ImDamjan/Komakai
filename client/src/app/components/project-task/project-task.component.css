@@ -1,10 +1,10 @@
 #task-content{
     cursor: pointer;
     background-color: white;
-    height: 100px;
-    width: 900px;
+    height: 80px;
+    width: calc(100% - 150px);
     margin: 10px 0px;
-    padding: 5px 10px;
+    padding: 5px 5px;
     border-radius: .5rem;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
@@ -16,13 +16,13 @@ table {
 }
 
 td, th {
+  width: 16.6%;
   text-align: left;
-  padding: 6px;
+  padding-left: 6px;
 }
 
 th{
   margin-left: 10px;
-  /* border: 1px solid rgb(241, 241, 241); */
 }
 
 .at-risk{
@@ -33,7 +33,7 @@ th{
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
-  background-color: #dc3545;
+  background-color: #ef476f;
   border-radius: .5rem;
   color: white;
 }
@@ -45,7 +45,7 @@ th{
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
-  background-color: #ffc107;
+  background-color: #ffd166;
   border-radius: .5rem;
   color: white;
 }
@@ -59,7 +59,7 @@ th{
   font-size: 12px;
   border-radius: .5rem;
   color: white;
-  background-color: #65d2e4;
+  background-color: #118ab2;
 }
 .low-priority{
   width: 100px;
@@ -71,7 +71,7 @@ th{
   font-size: 12px;
   border-radius: .5rem;
   padding: 5px 20px;
-  background-color: #a0e6ba;
+  background-color: #06d6a0;
 }
 
 
@@ -85,7 +85,7 @@ th{
   font-size: 12px;
   border-radius: .5rem;
   padding: 5px 10px;
-  background-color: #074173;
+  background-color: #fd0363;
 }
 
 .in-progress {
@@ -98,7 +98,7 @@ th{
   font-size: 12px;
   border-radius: .5rem;
   padding: 5px 10px;
-  background-color: #1679AB;
+  background-color: #cc095d;
 }
 
 .done {
@@ -111,10 +111,9 @@ th{
   font-size: 12px;
   border-radius: .5rem;
   padding: 5px 10px;
-  background-color: #5DEBD7;
+  background-color: #9c1057;
 }
-
-.cancelled, .blocked {
+.blocked {
   width: 100px;
   margin-left: 10px;
   color: white;
@@ -124,7 +123,20 @@ th{
   font-size: 12px;
   border-radius: .5rem;
   padding: 5px 10px;
-  background-color: #C5FF95;
+  background-color: #6b1650;
+}
+
+.cancelled {
+  width: 100px;
+  margin-left: 10px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: .5rem;
+  padding: 5px 10px;
+  background-color: #0a2344;
 }
 
 .not-started {
@@ -137,7 +149,7 @@ th{
   font-size: 12px;
   border-radius: .5rem;
   padding: 5px 10px;
-  background-color: #FF76CE;
+  background-color: #3b1d4a;
 }
 
 
