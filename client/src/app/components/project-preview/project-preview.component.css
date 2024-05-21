@@ -10,10 +10,8 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-gap: 100px;
   /* overflow: auto; */
-  height: 600px;
+  height: calc(100vh - 250px);
   width: 70%;
-  place-items: center;
-  padding-top: 15px;
 }
 
 .card {
@@ -113,32 +111,38 @@
 
 .ready {
   font-family: 'Poppins', sans-serif;
-  background-color: #074173;
+  background-color: #fd0363;
   padding: auto;
 }
 
 .in-progress {
   font-family: 'Poppins', sans-serif;
-  background-color: #1679AB;
+  background-color: #cc095d;
   padding: auto;
 }
 
 .done {
   font-family: 'Poppins', sans-serif;
-  background-color: #5DEBD7;
+  background-color: #9c1057;
   padding: auto;
 }
 
-.cancelled, .blocked {
+.blocked {
   font-family: 'Poppins', sans-serif;
-  background-color: #C5FF95;
+  background-color: #6b1650;
   padding: 8px 5px;
 }
 
 .not-started {
   font-family: 'Poppins', sans-serif;
-  background-color: #FF76CE;
+  background-color: #3b1d4a;
   padding: auto;
+}
+
+.cancelled {
+  font-family: 'Poppins', sans-serif;
+  background-color: #0a2344;
+  padding: 8px 5px;
 }
 
 .divider {
@@ -279,23 +283,23 @@
 
 .at-risk{
   font-family: 'Poppins', sans-serif;
-  background-color: red;
+  background-color: #ef476f;
   padding: auto;
 }
 .high{
   font-family: 'Poppins', sans-serif;
   padding: auto;
-  background-color: orangered;
+  background-color: #ffd166;
 }
 .medium{
   font-family: 'Poppins', sans-serif;
   padding: auto;
-  background-color: darkgoldenrod;
+  background-color: #118ab2;
 }
 .low{
   font-family: 'Poppins', sans-serif;
   padding: auto;
-  background-color: green;
+  background-color: #06d6a0;
 }
 
 /* paginacija */

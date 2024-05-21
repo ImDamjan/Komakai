@@ -11,6 +11,7 @@
 #task-list{
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 200px);
 }
 #title {
   margin-right: 25vw;

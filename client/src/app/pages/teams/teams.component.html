@@ -23,7 +23,7 @@
                         <button class="edit" (click)="openEditOverlay(team)">Edit Team</button>
                     </td>
                     <td class="users">
-                        <span *ngFor="let user of team.members">{{user.name + " " + user.lastname}}, </span>
+                        <span >{{team.reducedTeam}}</span>
                     </td>
                 </tr>
             </table>

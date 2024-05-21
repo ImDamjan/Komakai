@@ -65,24 +65,24 @@ export class TaskTrackComponent implements AfterViewInit {
         new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: ['Not ready', 'Ready', 'In progress', 'Blocked', 'Done', 'Cancelled'],
+            labels: ['Not started', 'Ready', 'In progress', 'Blocked', 'Done', 'Cancelled'],
             datasets: [{
               data: [this.notStartedCount,this.readyCount, this.inProgressCount, this.blockedCount, this.doneCount, this.cancelledCount],
               backgroundColor: [
-                'rgb(33, 28, 106)',
-                'rgb(89, 180, 195)',
-                'rgb(116, 226, 145)',
-                'rgb(239, 243, 150)',
-                'rgb(255, 207, 150)',
-                'rgb(255, 128, 128)'
+                '#3b1d4a',
+                '#fd0363',
+                '#cc095d',
+                '#6b1650',
+                '#9c1057',
+                '#0a2344'
               ],
               borderColor: [
-                'rgb(33, 28, 106, 0.2)',
-                'rgb(89, 180, 195, 0.2)',
-                'rgb(116, 226, 145, 0.2)',
-                'rgb(239, 243, 150, 0.2)',
-                'rgb(255, 207, 150, 0.2)',
-                'rgb(255, 128, 128, 0.2)'
+                '#3b1d4a',
+                '#fd0363',
+                '#cc095d',
+                '#6b1650',
+                '#9c1057',
+                '#0a2344'
               ],
               borderWidth: 2
             }]

@@ -2,7 +2,7 @@
     display: flex;
     float: right;
     width: 350px;
-    height: 100%;
+    height: calc(100vh - 200px);
     background-color: white;
     padding: 30px 100px 20px 30px;
     flex-direction: column;
@@ -21,11 +21,20 @@ h2{
 }
 
 .filter-button{
-    margin-left: auto;
-    height: 30px;
-    width: 30px;
-    border-radius: .5rem;
+    margin-top: 5px;
+    padding: 5px 20px;
+    background-color:   white;
+    color: darkgray;
+    border: 1px solid darkgray;
+    border-radius: 25px;
 }
+
+.filter-button:hover{
+    background-color:   white;
+    color: #17315D;
+    border: 1px solid #17315D;
+}
+
 h4{
     margin-bottom: 5px;
     font-family: 'Poppins', sans-serif;
