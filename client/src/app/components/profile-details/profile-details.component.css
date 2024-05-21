@@ -138,3 +138,10 @@
     font-size: x-small;
     width: 70%;
 }
+
+.input-field[disabled] {
+    background-color: #f2f2f2;
+    border: 1px solid #d3d3d3;
+    cursor: not-allowed;
+    color: #888888; 
+}

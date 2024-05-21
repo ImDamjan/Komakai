@@ -29,10 +29,6 @@
 <div class="overlay-container" *ngIf="editMode">
     <div class="overlay-content">
         <div class="editdetails">
-            <button id="editprofile" (click)="toggleEditMode()">
-                <img src="../../../assets/profile-settings/editprofile.svg">
-                <span class="tooltip">Edit Profile</span>
-            </button>
         </div>
         <div class="centered-content">
             <div class="profile-info">
@@ -59,7 +55,7 @@
                     <span id="emailtitle" class="title">
                         <img src="../../../assets/profile-settings/email.svg"> Email
                     </span><br>
-                    <input class="input-field" type="email" placeholder="Please enter your email" [(ngModel)]="user.email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" #email="ngModel">
+                    <input class="input-field" type="email" placeholder="Please enter your email" [(ngModel)]="user.email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" #email="ngModel" disabled>
                     <p *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message" style="color:red;"> *Please enter a valid email address </p><br>
                     <span id="organisationtitle" class="title">
                         <img src="../../../assets/profile-settings/organisation.svg"> Organisation
