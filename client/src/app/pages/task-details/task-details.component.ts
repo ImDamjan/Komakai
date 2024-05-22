@@ -238,7 +238,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     if(this.updateObj.end <= this.updateObj.start)
     {
       this.spinner.hide();
-      alert("End date comes before start date.");
+      // alert("End date comes before start date.");
       return;
     }
     // todayTime.setHours(12, 12, 12, 12);
@@ -280,14 +280,14 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           },
           error :(error)=>
           {
-              alert("Task update failed!");
+              // alert("Task update failed!");
               // console.log(error);
           }
       });
     }
     else
     {
-      alert("There must be at least one person that is assigned to this task");
+      // /alert("There must be at least one person that is assigned to this task");
     }
   }
 

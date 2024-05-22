@@ -63,7 +63,7 @@ export class TeamsComponent implements OnInit {
   {
     if(this.selectedUsers.length <= 0 || this.createTeam.name==="")
     {
-      alert("Create form not filled correctly");
+      // alert("Create form not filled correctly");
       return;
     }
     this.createTeam.members = [];

@@ -55,7 +55,7 @@ export class RegisterComponent implements OnInit {
       this.reg.register(register)
         .subscribe({
           next: (res) => {
-            alert("User " + register.name + " " + register.lastname + " added successfully!");
+            // alert("User " + register.name + " " + register.lastname + " added successfully!");
             this.registerForm.reset();
             this.spinner.hide();
           },
@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
         });
     } else {
       this.validateAllFormFields(this.registerForm);
-      alert("Your form is invalid");
+      // alert("Your form is invalid");
       this.spinner.hide();
     }
   }
