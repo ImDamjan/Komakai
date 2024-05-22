@@ -39,12 +39,24 @@
     user-select: none;
 }
 
-.contact-info {
-    width: 100%;
+span{
     margin-top: 10px;
-    text-align: left;
-    margin: 10px 0px 10px 20%;
+    padding: 5px;
 }
+
+table {
+    font-family: 'Poppins', sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  td{
+    border: 0.1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+  }
  
 .title {
     font-weight: bold;
@@ -58,6 +70,11 @@
     background-color: #001B47;
     border-radius: 100px;
     object-fit: cover;
+}
+
+.form-control{
+    margin-top: 10px;
+    width: 100%;
 }
 
 .editdetails {
@@ -127,6 +144,11 @@
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.contact-info{
+    width: 80%;
 }
 
 .input-field {
@@ -166,4 +188,9 @@
     to {
         transform: rotate(360deg);
     }
+}
+
+.input-field, #nametitle, #emailtitle, #organisationtitle, #departmenttitle{
+    width: 100%;
+    margin-top: 10px;
 }
