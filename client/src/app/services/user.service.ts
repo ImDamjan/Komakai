@@ -1,9 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { User } from '../models/user/user';
 import { UpdateUser } from '../models/user/update-user';
+import { UserFilter } from '../models/user-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,26 @@ export class UserService {
   baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getUsers(filters: any = {}): Observable<User[]> {
+  getUsers(filters: UserFilter = {}): Observable<User[]> {
     const apiUrl = `${this.baseUrl}/User`;
-    return this.http.get<User[]>(apiUrl, { params: filters });
+    let httpParams = new HttpParams();
+    if(filters.isActivatedFilter===0 || filters.isActivatedFilter===1)
+      httpParams = httpParams.set("IsActivatedFilter",filters.isActivatedFilter);
+    if(filters.searchUser)
+      httpParams = httpParams.set("SearchUser",filters.searchUser);
+    if(filters.roleFilter)
+    {
+      filters.roleFilter.forEach(element => {
+        if(!httpParams.has("RoleFilter"))
+        {
+          httpParams = httpParams.set("RoleFilter",element);
+        }
+        else
+          httpParams = httpParams.append("RoleFilter",element);
+      });
+    }
+    // console.log(apiUrl);
+    return this.http.get<User[]>(apiUrl, { params: httpParams });
   }
 
   getProjectUsers(project_id : number) : Observable<User[]>

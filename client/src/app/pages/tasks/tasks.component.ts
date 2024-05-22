@@ -89,7 +89,7 @@ export class TasksComponent {
 
     this.activatedRoute.paramMap.subscribe(params => {
       if (params.has('pageNumber')) {
-        console.log(params.get('pageNumber'))
+        // console.log(params.get('pageNumber'))
         this.currentPage = parseInt(params.get('pageNumber')!);
         this.filter.pageNumber = this.currentPage;
       }

@@ -10,9 +10,9 @@
       </div>
       <div *ngIf="!isTask(node.node)" class = 'taskGroup'>
         <span class="text-task-group" style="color: black;"><b>{{node.node.title}} &nbsp;&nbsp;</b></span>
-        <div *ngIf="isManager" class="create-buttons" style="display: inline; font-size: 16px;">
+        <div *ngIf="isManager && node.level < 2" class="create-buttons" style="display: inline; font-size: 16px;">
           <button (click)="openCreateOverlay(node.node)">Create task</button>
-          <button class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
+          <button *ngIf="node.level < 1" class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
           <button *ngIf="node.level!==0" (click)="openEditGroupOverlay(node.node)">Edit task group</button>
         </div>
       </div>
@@ -28,7 +28,7 @@
       </button>
       <div *ngIf="isManager" class="create-buttons">
         <button (click)="openCreateOverlay(node.node)">Create task</button>
-        <button class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
+        <button *ngIf="node.level < 1" class="tgb" (click)="openCreateGroupOverlay(node.node)">Create task group</button>
         <button *ngIf="node.level!==0" (click)="openEditGroupOverlay(node.node)">Edit task group</button>
       </div>
     </mat-tree-node>

@@ -12,23 +12,44 @@
     flex-direction: column;
     padding: 20px 60px 0px 60px;
     border-radius: 25px;
-    height: 200px;
+    height: 250px;
     border: 1px solid #001B47;
 }
+
+h2{
+    font-family: 'Poppins', sans-serif;
+    font-size: 26px;
+}
+
+h3{
+    margin-top: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+}
+
 :host::ng-deep.p-multiselect-label{
     width: 250px;
 }
-table{
+
+table {
+    font-family: 'Poppins', sans-serif;
+    border-collapse: collapse;
     width: 100%;
-    border: 1px solid black;
-}
-th{
-    border: 1px solid black;
+    margin-top: 10px;
+    border-radius: .5rem !important;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+
+  th{
     text-align: center;
+  }
+  
+td, th {
+    border: 1px solid darkgray;
+    padding: 8px;
 }
-tr{
-    border: 1px solid black;
-}
+
+
 p-multiSelect{
     margin: 20px 0px;
 }
@@ -57,15 +78,14 @@ input#search-field {
     float: right;
 }
 .users{
-    display: flex;
     flex-direction: column;
     text-align: center;
-    border-left: 1px solid black;
+
 }
-.team{
-    text-align: center;
-}
+
+
 .team span{
+    margin-left: 15px;
     position: relative;
     top: 10px;
 }
@@ -75,14 +95,16 @@ input#search-field {
     right: 5px;
 }
 
-button{
+.create{
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
     padding: 10px 20px;
     background-color:  #001B47;
     color: white;
     border: 1px solid #001B47;
     border-radius: 25px;
 }
-button:hover{
+.create:hover{
     background-color:   #17315D;
     color: white;
 }
@@ -93,4 +115,28 @@ button:hover{
     overflow: auto;
     height: 40%;
     width: 70%;
+}
+
+input{
+    height: 30px;
+    border-radius: .5rem;
+    padding: 5px;
+}
+
+.edit{
+    padding: 5px 20px;
+    background-color:   white;
+    color: darkgray;
+    border: 1px solid darkgray;
+    border-radius: 25px;
+}
+.edit:hover{
+    background-color:   white;
+    color: #17315D;
+    border: 1px solid #17315D;
+}
+
+.nameTeam{
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
 }

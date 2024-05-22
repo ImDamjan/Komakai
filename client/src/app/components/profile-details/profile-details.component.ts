@@ -91,17 +91,13 @@ export class ProfileDetailsComponent {
 
   uploadProfilePicture(userId: number, base64String: any) {
     this.uploadingPicture = true;
-    setTimeout(() => {
-      this.userService.uploadProfilePicture(userId, base64String).subscribe({
-          next: (message: string) => {
-              this.profilePicture(userId);
-              this.uploadingPicture = false; 
-          },
-          error: (err) => {
-              this.uploadingPicture = false;
-          }
-      });
-  }, 2000);
+    this.userService.uploadProfilePicture(userId, base64String).subscribe({
+      next: (message: string) => {
+        this.profilePicture(userId);
+        this.uploadingPicture = false;
+      }, 
+      error: (err) => {this.uploadingPicture = false;}
+    });
   }
 
   profilePicture(userId: number) {

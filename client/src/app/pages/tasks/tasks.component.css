@@ -11,6 +11,7 @@
 #task-list{
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 200px);
 }
 #title {
   margin-right: 25vw;
@@ -23,9 +24,6 @@
 
 #paginator{
   text-align: center;
-}
-app-project-task:hover{
-  cursor: pointer;
 }
 
 .pagination{

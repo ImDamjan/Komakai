@@ -176,7 +176,7 @@ namespace server.Repositories
         */
         public async Task<List<User>> GetUserByProjectId(int project_id)
         {
-            var users = await _context.Users.Include(u=>u.ProjectUsers).ThenInclude(u=>u.Role).ToListAsync();
+            var users = await _context.Users.Include(u=>u.ProjectUsers).ThenInclude(u=>u.Role).Where(u=>u.IsActivated).ToListAsync();
             List<User> chosenUsers = new List<User>();
             foreach (var user in users)
             {
@@ -193,7 +193,7 @@ namespace server.Repositories
             if (asign == null)
                 return new List<User>();
             
-            return asign.Users.ToList();
+            return asign.Users.Where(u=>u.IsActivated).ToList();
         }
     }
 }

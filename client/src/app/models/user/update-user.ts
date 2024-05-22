@@ -9,6 +9,5 @@ export interface UpdateUser {
     department: string,
     roleId: number,
     roleName : string,
-    isActivated: boolean,
-    profile_picture: string
+    isActivated: boolean
 }

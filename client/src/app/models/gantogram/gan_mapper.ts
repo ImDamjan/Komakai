@@ -45,11 +45,11 @@ export class GanttMapper {
 
     private static mapPrioprityToColor(priority:Priority):string{
         switch(priority.level){
-            case  1: return "#A9A9A9" // low;
-            case  2: return "#FFD700" // Medium;
-            case  3: return "#FF6347" // High;
-            case  4: return "#8B008B" // AtRisk;
-            default: return "#1E90FF" // default
+            case  1: return "#06d6a0" // low;
+            case  2: return "#118ab2" // Medium;
+            case  3: return "#ffd166" // High;
+            case  4: return "#ef476f" // AtRisk;
+            default: return "#dc3545" // default
         }
     }
 

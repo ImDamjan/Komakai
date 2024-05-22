@@ -7,6 +7,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user/user';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTeamComponent } from '../../components/edit-team/edit-team.component';
+import { textAlign } from 'html2canvas/dist/types/css/property-descriptors/text-align';
 
 @Component({
   selector: 'app-teams',
@@ -27,6 +28,7 @@ export class TeamsComponent implements OnInit {
   private user_service = inject(UserService);
   private dialog = inject(MatDialog);
   public searchText = "";
+
   private loggedUser:any;
   public createTeam = {
     name : "",
@@ -45,6 +47,7 @@ export class TeamsComponent implements OnInit {
     this.user_service.getUsers().subscribe({
       next :(users: User[])=>{
         let pom: User[] = []
+        users = users.filter(u=>u.isActivated);
         users.forEach(element => {
           element.fulname = element.name + " " + element.lastname;
           if(element.id!==Number(this.loggedUser.user_id) && element.role.name!=="Admin")
@@ -70,6 +73,8 @@ export class TeamsComponent implements OnInit {
     this.team_service.createTeam(this.createTeam).subscribe({
       next: (team: Team) =>{
         this.teams.push(team);
+        this.createTeam.name = "";
+        this.selectedUsers = [];
       }
     })
   }
@@ -92,8 +97,38 @@ export class TeamsComponent implements OnInit {
     this.team_service.getMyCreatedTeams(this.loggedUser.user_id,this.searchText).subscribe({
       next :(teams: Team[]) =>{
         this.teams = teams;
+        this.reduceTeamMembers();
       }
     });
+  }
+  
+
+  reduceTeamMembers(){
+    
+    for (let i = 0; i < this.teams.length; i++) {
+      let assigneesString = ""
+      let realAssignessStr = ""
+      const team = this.teams[i];
+      if(team!==undefined)
+        {
+          assigneesString = team.members[0].name + " "+ team.members[0].lastname;
+          realAssignessStr = team.members[0].name + " "+ team.members[0].lastname;
+          for (let index = 1; index < team.members.length; index++) {
+            const element = team.members[index];
+            if(index < 3)
+              assigneesString+=", " + element.name + " "+element.lastname;
+            
+            realAssignessStr+=", " + element.name + " "+element.lastname;
+  
+          }
+          if(team.members.length >= 4)
+            assigneesString+=" +"+(team.members.length - 2);
+          // console.log(this.asigneesString);
+
+          team.reducedTeam = assigneesString;
+        }
+      
+    }
   }
 
 }

@@ -5,6 +5,8 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user/user';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SearchService } from '../../services/search.service';
+import { UserFilter } from '../../models/user-filter';
+import { UpdateUser } from '../../models/user/update-user';
 
 @Component({
   selector: 'app-admin',
@@ -18,7 +20,12 @@ export class AdminComponent implements OnInit {
   private role_service = inject(RoleService);
   private spinner = inject(NgxSpinnerService);
   private user_service = inject(UserService);
-  private search_service = inject(SearchService);
+  initialRoles: Map<number, Role> = new Map<number, Role>();
+  initialActivation: Map<number, boolean> = new Map<number, boolean>();
+
+  filter: UserFilter ={
+    searchUser : ""
+  }
   register: boolean = false;
   members: boolean = true;
   
@@ -28,12 +35,10 @@ export class AdminComponent implements OnInit {
       next : (roles: Role[])=> 
       {
         this.roles = roles.filter(r=>r.id!=5);
+        this.spinner.hide();
       }
     });
-
-    this.user_service.getUsers().subscribe({
-      next : (users: User[]) => {this.users = users; this.spinner.hide();}
-    });
+    this.loadUsers();
   }
 
   showRegister(): void {
@@ -46,8 +51,90 @@ export class AdminComponent implements OnInit {
     this.register = false;
   }
 
-  searchUsers(event: Event) {
-    const query = (event.target as HTMLInputElement).value;
-    this.search_service.changeSearchQuery(query);
+  // searchUsers(event: Event) {
+  //   const query = (event.target as HTMLInputElement).value;
+  //   this.search_service.changeSearchQuery(query);
+  // }
+
+  getFilter(filter: UserFilter)
+  {
+    this.filter.isActivatedFilter = filter.isActivatedFilter;
+    this.filter.roleFilter = filter.roleFilter;
+    this.loadUsers();
+  }
+
+  loadUsers()
+  {
+    this.spinner.show();
+    this.user_service.getUsers(this.filter).subscribe({
+      next : (users: User[]) => {
+        this.users = users;
+          this.spinner.hide();
+          this.users = this.users.filter(u=>u.role.id!==5);
+          this.users.forEach(user => {
+            if(user.profilePicture)
+              user.profilePicturePath = `data:${user.pictureType};base64,${user.profilePicture}`;
+            else
+              user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
+            this.initialRoles.set(user.id, user.role);
+            this.initialActivation.set(user.id,user.isActivated);
+          });
+        }
+    });
+  }
+
+
+
+  updateUserRole(role: Role,user : User)
+  {
+      user.role = role;
+  }
+
+  changeActivationStatus(activation : number, user:User)
+  {
+    
+    if(activation==1)
+      user.isActivated = true;
+    else
+      user.isActivated = false;
+
+  }
+
+  sendUpdateRequest(user: User){
+    console.log(user);
+    this.spinner.show();
+    let body : UpdateUser = {
+      id: user.id,
+      name: user.name,
+      lastname: user.lastname,
+      username: user.username,
+      email: user.email,
+      jobTitle: user.jobTitle,
+      organisation: user.organisation,
+      department: user.department,
+      roleId: user.role.id,
+      roleName: user.role.name,
+      isActivated: user.isActivated,
+    }
+
+    this.user_service.updateUser(body).subscribe({
+      next: (updatedUser: User) => {
+        user = updatedUser;
+        this.initialRoles.set(user.id, user.role);
+        this.initialActivation.set(user.id,user.isActivated);
+        this.spinner.hide();
+      },
+      error: (err) => console.log(err)
+    });
+  }
+
+  isDefaultRole(user: User): boolean {
+    const initialRole = this.initialRoles.get(user.id);
+    return initialRole ? initialRole.id === user.role.id : false;
+  }
+  
+  isDefaultActivation(user: User): boolean {
+    const initialActivate = this.initialActivation.get(user.id);
+    return initialActivate !== undefined ? initialActivate === user.isActivated : false; 
   }
 }

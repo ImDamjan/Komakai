@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, inject, Input } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
@@ -11,17 +11,13 @@ import { Project } from '../../models/project/project';
 export class TaskTagsComponent implements AfterViewInit{
   @ViewChild('myChart') myChart!: ElementRef;
 
-  private projectService = inject(ProjectService);
-  projects!: Project[];
+  @Input()projects!: Project[];
   
   ngAfterViewInit() {
     this.createChart();
   }
 
   createChart() {
-    this.projectService.getProjectsData().subscribe(projects => {
-      this.projects = projects;
-
       const projectNames: string[] = [];
       const completionPercentages: number[] = [];
       this.projects.forEach(project => {
@@ -80,7 +76,6 @@ export class TaskTagsComponent implements AfterViewInit{
           }
         }
       });
-    });
 
     
   }
