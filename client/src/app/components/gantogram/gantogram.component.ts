@@ -157,7 +157,18 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
     this.notify = new Notify(toast);
     // this.spinner.show();
-    let token = this.decoder.getToken();
+    
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.taskFilter.searchTitle = this.searchText;
+    this.getGanttItemsByProjectId();
+  }
+
+ 
+
+  ngOnInit(): void {
+      // init items children
+      let token = this.decoder.getToken();
       if(token!=null)
       {
         let decode = this.decoder.decodeToken(token);
@@ -175,17 +186,6 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
           }
         });
       }
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    this.taskFilter.searchTitle = this.searchText;
-    this.getGanttItemsByProjectId();
-  }
-
- 
-
-  ngOnInit(): void {
-      // init items children
-      
 
       
       // this.spinner.show();
