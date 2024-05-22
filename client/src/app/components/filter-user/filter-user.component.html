@@ -2,13 +2,14 @@
     <div class = 'project-filter'>
         <div class="header-filter">
             <h2>Filters</h2>
-            <button class="filter-button" (click)="sendFilter()"><img src="assets\task-header\filter.svg" alt="img-filter" width="20" height="20"></button>
+            
         </div>
         <div class = 'priority'>
             <h4>Role</h4>
             <p-multiSelect [options]="roles" placeholder="Select Roles" optionLabel="name" [(ngModel)]="selectedRoles">
             </p-multiSelect>
         </div>
+        <button class="filter-button" (click)="sendFilter()">Apply</button>
         <div class="sort">
             <h4>Activated status</h4>
             <p-dropdown
@@ -17,6 +18,7 @@
             [(ngModel)]="selectedActivation"
             (ngModelChange)="sendFilter()"></p-dropdown>
         </div>
+        
         <!-- <div class="sort">
             <h4>Sorted By</h4><br><br>
             Ascending <input type="radio" name="sort-mode" [(ngModel)]="sortMode" [value]="1">

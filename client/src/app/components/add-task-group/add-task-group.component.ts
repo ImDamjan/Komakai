@@ -52,8 +52,8 @@ export class AddTaskGroupComponent implements OnInit{
           }
         });
       }
-      else
-        alert("Please enter the new name");
+      // else
+        // alert("Please enter the new name");
   }
   createGroup()
   {
@@ -68,8 +68,8 @@ export class AddTaskGroupComponent implements OnInit{
         }
       });
     }
-    else
-      alert("Please enter the name");
+    // else
+    //   alert("Please enter the name");
   }
 
 }

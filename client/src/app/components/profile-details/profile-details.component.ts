@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RoleService } from '../../services/role.service';
 import { Role } from '../../models/role';
@@ -16,6 +16,7 @@ import { Notify } from '../../models/notifications/notify';
   styleUrl: './profile-details.component.css'
 })
 export class ProfileDetailsComponent {
+  @ViewChild('fileInput') fileInput!: ElementRef;
   user: UpdateUser;
   originalUser: UpdateUser;
   roleId!: number;
@@ -34,7 +35,7 @@ export class ProfileDetailsComponent {
     this.notify = new Notify(toast)
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.roleService.getAllRoles().subscribe(roles => {
       this.roles = roles;
     });
@@ -49,7 +50,7 @@ export class ProfileDetailsComponent {
     this.editMode = !this.editMode;
   }
 
-  editProfile(userid: Number,form: NgForm): void {
+  editProfile(userid: Number, form: NgForm): void {
     if (form.value.organisation == null || form.value.department == null) {
       form.value.organisation = '';
     }
@@ -59,10 +60,11 @@ export class ProfileDetailsComponent {
     if (form.invalid) {
       return;
     }
-    
+
     this.userService.updateUser(this.user).subscribe(response => {
       this.userProfileService.setUserProfile(this.user);
       this.notify.showSuccess("Profile edited","Profile edited successfully!")
+
       // alert('Profile edited successfully!');
       this.originalUser = { ...this.user };
     });
@@ -72,28 +74,33 @@ export class ProfileDetailsComponent {
     this.uploadingPicture = true;
     const file: File = event.target.files[0];
     let picture = {
-        data: '',
-        filename: '', 
-        type: ''
+      data: '',
+      filename: '',
+      type: ''
     }
     picture.type = file.type;
     picture.filename = file.name;
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
-  
+
       reader.onload = () => {
         const base64String = (reader.result as string).split(',')[1];
         picture.data = base64String;
         this.uploadProfilePicture(this.user.id, picture);
       };
-  
+
       reader.readAsDataURL(file);
     } else {
+
       this.notify.showWarn("Image file not valid!","Please select a valid image file.")
       // alert('Please select a valid image file.');
+
+      // alert('Please select a valid image file.');
+      this.fileInput.nativeElement.value = '';
+      this.uploadingPicture = false;
+
     }
-    this.uploadingPicture = false;
-  } 
+  }
 
   uploadProfilePicture(userId: number, base64String: any) {
     this.uploadingPicture = true;
@@ -101,20 +108,18 @@ export class ProfileDetailsComponent {
       next: (message: string) => {
         this.profilePicture(userId);
         this.uploadingPicture = false;
-      }, 
-      error: (err) => {this.uploadingPicture = false;}
+      },
+      error: (err) => { this.uploadingPicture = false; }
     });
   }
 
   profilePicture(userId: number) {
     this.userService.profilePicture(userId).subscribe({
       next: (message: { profilePicture: string, type: string }) => {
-        if(message.profilePicture)
-          {
-            this.picture = `data:${message.type};base64,${message.profilePicture}`;
-            this.userService.setProfilePicture(this.picture);
-          }
-        else {
+        if (message.profilePicture) {
+          this.picture = `data:${message.type};base64,${message.profilePicture}`;
+          this.userService.setProfilePicture(this.picture);
+        } else {
           this.picture = "../../../assets/pictures/defaultpfp.svg";
         }
       }, error: (err) => {
@@ -123,5 +128,4 @@ export class ProfileDetailsComponent {
       }
     });
   }
-  
 }

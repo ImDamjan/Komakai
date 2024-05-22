@@ -25,7 +25,7 @@ th{
   margin-left: 10px;
 }
 
-.at-risk{
+.at-risk, .high-priority, .medium-priority, .low-priority{
   width: 100px;
   padding: 5px 20px;
   margin-left: 10px;
@@ -33,49 +33,26 @@ th{
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
-  background-color: #ef476f;
   border-radius: .5rem;
   color: white;
 }
+
+.at-risk{
+  background-color: #ef476f;
+}
+
 .high-priority{
-  width: 100px;
-  margin-left: 10px;
-  padding: 5px 20px;
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
   background-color: #ffd166;
-  border-radius: .5rem;
-  color: white;
 }
 .medium-priority{
-  width: 100px;
-  margin-left: 10px;
-  padding: 5px 20px;
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  border-radius: .5rem;
-  color: white;
   background-color: #118ab2;
 }
 .low-priority{
-  width: 100px;
-  margin-left: 10px;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  border-radius: .5rem;
-  padding: 5px 20px;
   background-color: #06d6a0;
 }
 
 
-.ready {
+.ready, .in-progress, .done, .blocked, .cancelled, .not-started {
   width: 100px;
   margin-left: 10px;
   color: white;
@@ -85,71 +62,29 @@ th{
   font-size: 12px;
   border-radius: .5rem;
   padding: 5px 10px;
-  background-color: #fd0363;
-}
-
-.in-progress {
-  width: 100px;
-  margin-left: 10px;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  border-radius: .5rem;
-  padding: 5px 10px;
-  background-color: #cc095d;
-}
-
-.done {
-  width: 100px;
-  margin-left: 10px;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  border-radius: .5rem;
-  padding: 5px 10px;
-  background-color: #9c1057;
-}
-.blocked {
-  width: 100px;
-  margin-left: 10px;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  border-radius: .5rem;
-  padding: 5px 10px;
-  background-color: #6b1650;
-}
-
-.cancelled {
-  width: 100px;
-  margin-left: 10px;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  border-radius: .5rem;
-  padding: 5px 10px;
-  background-color: #0a2344;
 }
 
 .not-started {
-  width: 100px;
-  margin-left: 10px;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  border-radius: .5rem;
-  padding: 5px 10px;
+  background-color: #fd0363;
+}
+
+.ready{
+  background-color: #cc095d;
+}
+
+.in-progress {
+  background-color: #9c1057;
+}
+
+.done {
+  background-color: #6b1650;
+}
+.blocked {
   background-color: #3b1d4a;
+}
+
+.cancelled {
+  background-color: #0a2344;
 }
 
 
