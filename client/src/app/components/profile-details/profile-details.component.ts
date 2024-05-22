@@ -7,6 +7,8 @@ import { UpdateUser } from '../../models/user/update-user';
 import { Router } from '@angular/router';
 import { UserProfileService } from '../../services/user-profile.service';
 import { NgForm } from '@angular/forms';
+import { NgToastService } from 'ng-angular-popup';
+import { Notify } from '../../models/notifications/notify';
 
 @Component({
   selector: 'app-profile-details',
@@ -21,13 +23,15 @@ export class ProfileDetailsComponent {
   editMode = false;
   picture!: string;
   uploadingPicture: boolean = false;
+  notify : Notify;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router, private userProfileService: UserProfileService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router, private userProfileService: UserProfileService,private toast : NgToastService,) {
     this.user = data.user;
     this.originalUser = { ...this.user };
     this.roleId = data.role;
     this.user.roleId = this.roleId;
     this.profilePicture(this.user.id);
+    this.notify = new Notify(toast)
   }
 
   ngOnInit() : void {
@@ -58,7 +62,8 @@ export class ProfileDetailsComponent {
     
     this.userService.updateUser(this.user).subscribe(response => {
       this.userProfileService.setUserProfile(this.user);
-      alert('Profile edited successfully!');
+      this.notify.showSuccess("Profile edited","Profile edited successfully!")
+      // alert('Profile edited successfully!');
       this.originalUser = { ...this.user };
     });
   }
@@ -84,7 +89,8 @@ export class ProfileDetailsComponent {
   
       reader.readAsDataURL(file);
     } else {
-      alert('Please select a valid image file.');
+      this.notify.showWarn("Image file not valid!","Please select a valid image file.")
+      // alert('Please select a valid image file.');
     }
     this.uploadingPicture = false;
   } 
@@ -112,6 +118,7 @@ export class ProfileDetailsComponent {
           this.picture = "../../../assets/pictures/defaultpfp.svg";
         }
       }, error: (err) => {
+        this.notify.showError("Error retrieving profile picture:", err)
         console.error('Error retrieving profile picture:', err);
       }
     });

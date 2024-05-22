@@ -39,8 +39,10 @@
         <div class="contact-info">
             <form #editForm="ngForm">
                 <div id="description">
-                    <input type="file" (change)="onFileSelected($event)" accept="image/*"><br>
-
+                    <!-- <label for="UploadimgControlInput" class="form-label">Upload File/Image</label> -->
+                    <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*">
+                    <br>
+                        
                     <span id="nametitle" class="title">First Name</span><br>
                     <input class="input-field" type="text" placeholder="Please enter your first name" [(ngModel)]="user.name" name="firstName" required maxlength="31" pattern="[a-zA-Z ]*" #firstName="ngModel">
                     <p *ngIf="firstName.errors?.['required'] && (firstName.dirty || firstName.touched)" class="error-message" style="color:red;">*First name is required.</p>
