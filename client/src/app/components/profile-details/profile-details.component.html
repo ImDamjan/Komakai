@@ -4,24 +4,34 @@
             <button id="editprofile" (click)="toggleEditMode()"><img src="../../../assets/profile-settings/editprofile.svg"><span class="tooltip">Edit Profile</span></button>
         </div>
         <div class="centered-content">
-            <div class="profile-info">
-                <img id="pfp" [src]="picture">
-                <div id="description">
-                    <span id="nametitle" class="title">Name (username)</span><br>
-                    <span id="fullname">{{user.name}} {{user.lastname}}</span><br> 
-                    <span id="username">({{user.username}})</span><br>
-                    <span id="roletitle" class="title">Role Name</span><br>
-                    <span id="rolename">{{user.jobTitle}}</span><br>
-                </div>
-            </div>
-        </div>
-        <div class="contact-info">
-            <span id="emailtitle" class="title"><img src="../../../assets/profile-settings/email.svg"> Email</span><br>
-            <span id="email">{{user.email}}</span><br>
-            <span id="organisationtitle" class="title"><img src="../../../assets/profile-settings/organisation.svg"> Organisation</span><br>
-            <span id="organisation">{{user.organisation}}</span><br>
-            <span id="departmenttitle" class="title"><img src="../../../assets/profile-settings/department.svg"> Department</span><br>
-            <span id="department">{{user.department}}</span><br>
+            <table>
+                <td>
+                    
+                    <img id="pfp" [src]="picture">
+                </td>
+                <td>
+                    <div>
+                        <div id="description">
+                            <span id="nametitle" class="title">Name (username)</span><br>
+                            <span id="fullname">{{user.name}} {{user.lastname}}</span><br> 
+                            <span id="username">({{user.username}})</span><hr>
+                            <span id="roletitle" class="title">Role Name</span><br>
+                            <span id="rolename">{{user.jobTitle}}</span><br>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <span id="emailtitle" class="title"><img src="../../../assets/profile-settings/email.svg"> Email</span><br>
+                        <span id="email">{{user.email}}</span><hr>
+                        <span id="organisationtitle" class="title"><img src="../../../assets/profile-settings/organisation.svg"> Organisation</span><br>
+                        <span id="organisation">{{user.organisation}}</span><hr>
+                        <span id="departmenttitle" class="title"><img src="../../../assets/profile-settings/department.svg"> Department</span><br>
+                        <span id="department">{{user.department}}</span><hr>
+                    </div>
+                </td>
+            </table>
+            
         </div>
     </div>
 </div>
