@@ -160,6 +160,8 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
 
   ngOnInit(): void {
       // init items children
+      this.isDragable = true;
+      this.isLinkable = true;
       let token = this.decoder.getToken();
       if(token!=null)
       {
@@ -168,10 +170,12 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
         this.roleService.getUserProjectRole(this.userId,this.projectId).subscribe({
           next: (role:Role)=>{
             this.userProjectRole = role;
-            if(role.name==="Project Manager")
+            // console.log(role.name);
+            if(role.name!=="Project Manager")
             {
-              this.isDragable = true;
-              this.isLinkable = true;
+              // console.log("uslo je");
+              this.isDragable = false;
+              this.isLinkable = false;
             }
           }
         });

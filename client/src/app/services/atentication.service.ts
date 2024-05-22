@@ -41,7 +41,7 @@ export class AuthenticationService {
     if(typeof window !== 'undefined' && window.localStorage)
     {
       localStorage = window.localStorage;
-      console.log("Postavio sam token")
+      // console.log("Postavio sam token")
       localStorage.setItem("token", token);
     }
     

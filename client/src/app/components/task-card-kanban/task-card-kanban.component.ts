@@ -59,7 +59,7 @@ export class TaskCardKanbanComponent implements OnInit {
   }
 
   openShowTaskOverlay(): void {
-    console.log(this.task);
+    // console.log(this.task);
     const dialogRef = this.dialog.open(TaskDetailsComponent, {
       data:[this.task,0,this.userProjectRole]
     });

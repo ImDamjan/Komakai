@@ -176,7 +176,7 @@ namespace server.Repositories
         */
         public async Task<List<User>> GetUserByProjectId(int project_id)
         {
-            var users = await _context.Users.Include(u=>u.ProjectUsers).ThenInclude(u=>u.Role).Where(u=>u.IsActivated).ToListAsync();
+            var users = await _context.Users.Include(u=>u.ProjectUsers).ThenInclude(u=>u.Role).ToListAsync();
             List<User> chosenUsers = new List<User>();
             foreach (var user in users)
             {
