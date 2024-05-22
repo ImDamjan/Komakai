@@ -41,14 +41,14 @@
       
     </thy-header>
     <thy-content>
-    <ngx-gantt id="gantt_id" *ngIf="userProjectRole!=undefined"
+    <ngx-gantt *ngIf="userProjectRole!==undefined" id="gantt_id"
     #gantt
     [items]="items"
     
     [baselineItems]="baselineItems"
     [viewType]="viewType"
-    [draggable]="isDragable"
-    [linkable]="isLinkable"
+    [draggable]="userProjectRole.name==='Project Manager'"
+    [linkable]="userProjectRole.name==='Project Manager'"
     [selectable]="false"
     [multiple]="true"
     [viewOptions]="viewOptions"
@@ -65,7 +65,7 @@
     (linkDragEnded)="linkDragEnded($event)"
   >
     <ngx-gantt-table
-      [draggable]="isDragable"
+      [draggable]="userProjectRole.name==='Project Manager'"
       [dropEnterPredicate]="dropEnterPredicate"
       (dragDropped)="onDragDropped($event)"
       (dragStarted)="onDragStarted($event)"

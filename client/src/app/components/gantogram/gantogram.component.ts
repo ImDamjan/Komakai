@@ -168,6 +168,8 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
 
   ngOnInit(): void {
       // init items children
+      this.isDragable = true;
+      this.isLinkable = true;
       let token = this.decoder.getToken();
       if(token!=null)
       {

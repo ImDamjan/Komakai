@@ -114,7 +114,13 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       else if(this.userProjectRole.name==="User")
         this.isUser = true;
       else if(this.userProjectRole.name==="Project Worker")
-        this.isWorker = true;
+      {
+        if(this.assignment.assignees.find(a=>a.id==this.userId)!==undefined)
+          this.isWorker = true;
+        else
+          this.isUser = true;
+
+      }
     }
 
     this.profilePicture(this.assignment.owner.id);

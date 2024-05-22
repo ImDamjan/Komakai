@@ -42,10 +42,6 @@ namespace server.Repositories
         public async Task<List<Team>> GetAllCreatedTeamsByUserAsync(int user_id, string searchText)
         {
             var teams = _context.Teams.Include(t=>t.Owner).Include(t=> t.Users).ThenInclude(u=>u.Role).Where(t=>t.Owner.Id==user_id).AsQueryable();
-            foreach (var team in teams)
-            {
-                team.Users = team.Users.Where(t=>t.IsActivated).ToList();              
-            }
             if(searchText!="")
             {
                 teams = teams.Where(t=>t.Name.ToLower().Contains(searchText.ToLower()));
@@ -66,7 +62,6 @@ namespace server.Repositories
             var user_teams = new List<Team>();
             foreach (var team in teams)
             {
-                team.Users = team.Users.Where(t=>t.IsActivated).ToList();
                 if(team.Users.Any(u=>u.Id==userid))
                     user_teams.Add(team);
             }
