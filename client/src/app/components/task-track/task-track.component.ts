@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, inject, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, inject, OnInit, Input } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { AssignmentService } from '../../services/assignment.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
@@ -11,10 +11,7 @@ import { Task } from '../../models/task/task';
 })
 export class TaskTrackComponent implements AfterViewInit {
   
-  userid!: number;
-  private jwtService = inject(JwtDecoderService);
-  assignmentService = inject(AssignmentService);
-  tasks!: Task[];
+  @Input()tasks!: Task[];
   notStartedCount = 0;
   readyCount = 0;
   inProgressCount = 0;
@@ -28,14 +25,6 @@ export class TaskTrackComponent implements AfterViewInit {
   }
 	
   createChart() {
-    let token = this.jwtService.getToken();
-    if(token!=null)
-    {
-      let decode = this.jwtService.decodeToken(token);
-      this.userid = decode.user_id;
-
-      this.assignmentService.getAllUserAssignments(this.userid).subscribe(tasks => {
-        this.tasks = tasks;
         this.tasks.forEach(task => {
           switch (task.state.id) {
             case 1:
@@ -109,8 +98,5 @@ export class TaskTrackComponent implements AfterViewInit {
             }
           }
         });
-      });
-    }
-    
   }
 }

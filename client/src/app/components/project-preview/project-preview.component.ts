@@ -370,7 +370,7 @@ export class ProjectPreviewComponent implements OnInit {
   }
 
   nextPage(){
-    console.log(this.projectsData.length)
+    // console.log(this.projectsData.length)
     if(this.currentPage<this.getTotalPages()){
       this.currentPage++;
       this.filter.pageNumber=this.currentPage;

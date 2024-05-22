@@ -277,6 +277,12 @@
 
 .cursor {
   cursor: pointer;
+  padding: 5px;
+  border: 1px solid white;
+  border-radius: 25px;
+}
+.cursor:hover{
+  background-color: #0D6EFD;
 }
 
 

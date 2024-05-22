@@ -38,7 +38,7 @@ export class UserService {
           httpParams = httpParams.append("RoleFilter",element);
       });
     }
-    console.log(apiUrl);
+    // console.log(apiUrl);
     return this.http.get<User[]>(apiUrl, { params: httpParams });
   }
 

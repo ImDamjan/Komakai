@@ -126,7 +126,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         this.dependentTasks = tasks;
 
         this.spinner.hide();
-        console.log(tasks);
+        // console.log(tasks);
       }
     })
     this.comment_service.getAllComentsByTask(this.assignment.id).subscribe({
@@ -152,7 +152,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
             ans.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
         });
           this.comments = comments;
-          console.log(comments);
+          // console.log(comments);
         });
       }
     });
@@ -233,8 +233,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.updateObj.end = new Date(this.updateObj.end.toDateString());
     this.updateObj.start = new Date(this.updateObj.start.toDateString());
     //provera da li je end pre starta
-    console.log(this.updateObj.end);
-    console.log(this.updateObj.start);
+    // console.log(this.updateObj.end);
+    // console.log(this.updateObj.start);
     if(this.updateObj.end <= this.updateObj.start)
     {
       this.spinner.hide();
@@ -281,7 +281,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           error :(error)=>
           {
               alert("Task update failed!");
-              console.log(error);
+              // console.log(error);
           }
       });
     }
@@ -345,7 +345,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       this.selectedAssignees = this.selectedAssignees.filter(id=>id!==user_id);
     else
       this.selectedAssignees.push(user_id);
-    console.log(this.selectedAssignees);
+    // console.log(this.selectedAssignees);
   }
 
   isSelected(userid: number) {

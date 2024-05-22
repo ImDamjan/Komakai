@@ -56,7 +56,7 @@ export class LoginComponent{
       },
       error:(error)=>{
         this.spinner.hide();
-        console.log(error)
+        // console.log(error)
         if(this.loginObj.username ===undefined || this.loginObj.password === undefined)
         {
           this.errMessage = "Please enter your credentials.";

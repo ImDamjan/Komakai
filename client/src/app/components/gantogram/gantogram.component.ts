@@ -1,4 +1,4 @@
-import { AfterViewInit, EventEmitter,Component, ElementRef, HostBinding, Input, OnInit, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, EventEmitter,Component, ElementRef, HostBinding, Input, OnInit, Output, TemplateRef, ViewChild, inject, OnChanges, SimpleChanges } from '@angular/core';
 import {srLatn} from 'date-fns/locale'
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
@@ -23,7 +23,7 @@ import {
   GanttViewType,
   NgxGanttComponent 
 } from '@worktile/gantt';
-import { Observable, Subject, finalize, of } from 'rxjs';
+import { Observable, Subject, filter, finalize, of } from 'rxjs';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { Task } from '../../models/task/task';
 import { ActivatedRoute } from '@angular/router';
@@ -39,6 +39,7 @@ import { TaskDetailsComponent } from '../../pages/task-details/task-details.comp
 import { AssignmentService } from '../../services/assignment.service';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
+import { TaskFilter } from '../../models/task/task-filter';
 
 
 
@@ -51,8 +52,9 @@ import { RoleService } from '../../services/role.service';
   template: ``,
   providers: [GanttPrintService,  DatePipe],
 })
-export class GantogramComponent implements OnInit, AfterViewInit{
+export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
   
+  @Input() searchText!: string;
   private  modalService = inject(NgbModal);
   private decoder = inject(JwtDecoderService);
   private userId : number = 0;
@@ -65,6 +67,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   private itemsOldState: GanttItem[] = [];
 
   task!: Task;
+  taskFilter : TaskFilter = {}
   private dialog = inject(MatDialog);
   @Output() newItemEvent = new EventEmitter<{previous_state : number, task: Task}>();
 
@@ -148,6 +151,10 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   constructor(private printService: GanttPrintService,private toast : NgToastService,private datePipe: DatePipe,private sanitizer: DomSanitizer) {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.taskFilter.searchTitle = this.searchText;
+    this.getGanttItemsByProjectId();
+  }
   public isDragable:boolean = false;
   public isLinkable:boolean = false;
 
@@ -193,15 +200,15 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   }
 
   openShowTaskOverlay(task : Task): void {
-    console.log(task);
+    // console.log(task);
     const dialogRef = this.dialog.open(TaskDetailsComponent, {
       data:[task,0,this.userProjectRole]
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.newItemEvent.emit({previous_state : task.state.id,task:result});
-      console.log(this.task);
-      console.log(result);
+      // console.log(this.task);
+      // console.log(result);
       this.task = result;
     });
   }
@@ -216,10 +223,10 @@ export class GantogramComponent implements OnInit, AfterViewInit{
               this.openShowTaskOverlay(task);
 
             } else {
-                console.log("No tasks found or tasks[0] is undefined.");
+                // console.log("No tasks found or tasks[0] is undefined.");
             }
           },
-        error:(error: any)=> console.log(error)
+        // error:(error: any)=> console.log(error)
       });
   }
   
@@ -231,12 +238,12 @@ export class GantogramComponent implements OnInit, AfterViewInit{
       modalRef = this.modalService.open(content, { centered: true });
   
       modalRef.result.then((result) => {
-        console.log('Modal zatvoren:', result);
+        // console.log('Modal zatvoren:', result);
         // Ovde možemo obraditi povratnu vrednost i izvršiti potrebne akcije
         this.selectedAction = result;
         resolve(this.selectedAction);
       }, (reason) => {
-        console.log('Modal zatvoren bez akcije:', reason);
+        // console.log('Modal zatvoren bez akcije:', reason);
         reject(reason);
       });
     });
@@ -249,7 +256,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   getGanttItemsByProjectId(){
     this.loading = true;
-    this.ganttService.GetAssignemntsByProjectId(this.projectId).subscribe({
+    this.assignmentService.getAllProjectAssignments(this.projectId,this.taskFilter).subscribe({
       next : (tasks: Task[])=> 
         {
           if (tasks && tasks.length > 0){
@@ -258,10 +265,10 @@ export class GantogramComponent implements OnInit, AfterViewInit{
             this.itemsOldState = this.copyItems(this.items)
             this.loading = false;
           } else {
-              console.log("No tasks found or tasks[0] is undefined.");
+              // console.log("No tasks found or tasks[0] is undefined.");
           }
         },
-      error:(error: any)=> console.log(error)
+      // error:(error: any)=> console.log(error)
     });
   }
   private updateSuccessSubject = new Subject<boolean>();
@@ -400,7 +407,7 @@ showWarn(topic:string,message:string) {
 
   linkDragEnded(event: GanttLinkDragEvent) {
     if(event.target !== undefined ){
-      console.log(this.itemsOldState.find(item => item.id === event.source.id));
+      // console.log(this.itemsOldState.find(item => item.id === event.source.id));
       if(GanttMapper.checkIfNumberExists(event.source.id,parseInt(event.target.id),this.itemsOldState)){
         this.showWarn("Zavisnost već postoji", `Zavisnost između taska [${event.source.title}] i taska [${event.target.title}] već postoji.`);
         // log(this.items.find(item => item.id == event.source.id))
@@ -438,12 +445,12 @@ showWarn(topic:string,message:string) {
 
 // Ovo je kada se leva strana pomera na primer listu taskova menjam jedan da dodje iznad drtugog i tako dalje Ovo je kada kliknem
 onDragStarted(event: GanttTableDragStartedEvent) {
-    console.log('onDragStarted log', event);
+    // console.log('onDragStarted log', event);
 }
 
 // Ovo je kada se leva strana pomera na primer listu taskova menjam jedan da dodje iznad drtugog i tako dalje  ovo je kada pustim klik
 onDragEnded(event: GanttTableDragEndedEvent) {
-    console.log('onDragEnded log', event);
+    // console.log('onDragEnded log', event);
 }
 
   print(name: string) {
@@ -476,7 +483,7 @@ onDragEnded(event: GanttTableDragEndedEvent) {
   }
 
   viewChange(event: GanttView) {
-      console.log(event.viewType);
+      // console.log(event.viewType);
       this.selectedViewType = event.viewType;
   }
 

@@ -156,7 +156,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       selected_roles.push(value);
       selected_users.push(key);
     });
-    console.log(selected_users);
+    // console.log(selected_users);
     this.projectObj.userProjectRoleIds = selected_roles;
     this.spinner.show();
     this.projectObj.userIds = selected_users;
@@ -186,7 +186,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       // this.userService.getUserById(this.userid).subscribe(user =>{
       //   this.selectedUsers[0] = user;
       // });
-      console.log(this.selectedUsers);
+      // console.log(this.selectedUsers);
       this.submitted = false;
     }, error => {
       console.error('Error creating project:', error);

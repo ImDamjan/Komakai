@@ -50,7 +50,7 @@ export class KanbanComponent implements OnInit,OnChanges{
   ngOnChanges(changes: SimpleChanges): void {
     this.taskFilter.searchTitle = this.searchText;
     this.getBoard();
-    console.log("promena");
+    // console.log("promena");
   }
 
   showProjectDetails: boolean = true;
@@ -135,16 +135,17 @@ export class KanbanComponent implements OnInit,OnChanges{
               if(assignment.state.id==state.id)
                 stateProjects.push(assignment);
             });
-            console.log(stateProjects);
+            // console.log(stateProjects);
           columns.push(new Column(state.name,state.id + "",stateProjects,ids));
         });
         this.board.columns = columns;
         this.spinner.hide();
       },
-      error : (error:any)=> {console.log(error);}
+      // error : (error:any)=> {console.log(error);}
       });
     },
-    error :(error)=> console.log(error)});
+    // error :(error)=> console.log(error)
+  });
   }
   //menjanje iz detalaja
   public changeState(updated:any)
@@ -206,7 +207,7 @@ export class KanbanComponent implements OnInit,OnChanges{
       this.assignment_service.updateAssignmentById(body,event.item.data.id).subscribe({
         next : (assignment : Task)=> {
           event.item.data = assignment;
-          console.log(this.board.columns);
+          // console.log(this.board.columns);
           // console.log(event.container);
           // console.log(event.previousContainer);
           // this.getBoard();
