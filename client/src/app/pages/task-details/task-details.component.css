@@ -49,16 +49,19 @@ h1 {
 
 button{
     padding: 10px 20px;
-    background-color:  #001B47;
-    color: white;
-    border: 1px solid #001B47;
+    background-color:  white;
+    color: darkgray;
+    border: 1px solid darkgray;
     border-radius: 25px;
+    margin-left: 20px;
 }
 
 button:hover{
-    background-color:   #17315D;
-    color: white;
+    background-color:   white;
+    color: #001B47;
+    border: 1px solid #001B47;
 }
+
 
 textarea{
     width: 80%;
@@ -177,3 +180,5 @@ table {
   .answer{
     margin-left: 10%;
   }
+
+  

@@ -110,34 +110,35 @@
   height: 30px;
 }
 
-.ready {
+
+.not-started {
   font-family: 'Poppins', sans-serif;
   background-color: #fd0363;
   padding: auto;
 }
 
-.in-progress {
+.ready {
   font-family: 'Poppins', sans-serif;
   background-color: #cc095d;
   padding: auto;
 }
 
-.done {
+.in-progress {
   font-family: 'Poppins', sans-serif;
   background-color: #9c1057;
   padding: auto;
 }
 
-.blocked {
+.done {
   font-family: 'Poppins', sans-serif;
   background-color: #6b1650;
-  padding: 8px 5px;
+  padding: auto;
 }
 
-.not-started {
+.blocked {
   font-family: 'Poppins', sans-serif;
   background-color: #3b1d4a;
-  padding: auto;
+  padding: 8px 5px;
 }
 
 .cancelled {
@@ -221,56 +222,6 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
-
-/* .team-members {
-  position: relative;
-}
-
-.team-member {
-  position: absolute;
-  width: 35px; 
-  height: 35px; 
-  border-radius: 50%; 
-  border: 1px solid black;
-  background-color: #001B47;
-  object-fit: cover;
-}
-
-.team-member:nth-child(1) {
-  top: -15px; 
-  left: 0;
-}
-
-.team-member:nth-child(2) {
-  top: -15px; 
-  left: 20px; 
-}
-
-.team-member:nth-child(3) {
-  top: -15px;
-  left: 40px; 
-}
-
-.team-member:nth-child(4) {
-  top: -15px; 
-  left: 70px; 
-} */
-
-/* .additional-members {
-  position: absolute;
-  width: 35px;
-  height: 35px;
-  background-color: grey; 
-  border-radius: 50%; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  color: #fff; 
-  left: 80px; 
-  top: -15px; 
-  border: 1px solid white;
-} */
 
 .error-message {
   font-family: 'Poppins', sans-serif;
