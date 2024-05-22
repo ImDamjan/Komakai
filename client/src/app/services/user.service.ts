@@ -67,7 +67,6 @@ export class UserService {
   }
 
   uploadProfilePicture(userId: number, picture: any): Observable<string> {
-    console.log(picture);
     const url = `${this.baseUrl}/User/${userId}/uploadProfilePicture`;
     //const headers = new HttpHeaders().set('Content-Type','application/json');
     return this.http.post<string>(url, picture);

@@ -20,6 +20,7 @@ export class ProfileDetailsComponent {
   roles!: Role[];
   editMode = false;
   picture!: string;
+  uploadingPicture: boolean = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router, private userProfileService: UserProfileService) {
     this.user = data.user;
@@ -45,9 +46,16 @@ export class ProfileDetailsComponent {
   }
 
   editProfile(userid: Number,form: NgForm): void {
+    if (form.value.organisation == null || form.value.department == null) {
+      form.value.organisation = '';
+    }
+    if (form.value.department == null) {
+      form.value.department = '';
+    }
     if (form.invalid) {
       return;
     }
+    
     this.userService.updateUser(this.user).subscribe(response => {
       this.userProfileService.setUserProfile(this.user);
       alert('Profile edited successfully!');
@@ -56,6 +64,7 @@ export class ProfileDetailsComponent {
   }
 
   onFileSelected(event: any) {
+    this.uploadingPicture = true;
     const file: File = event.target.files[0];
     let picture = {
         data: '',
@@ -77,12 +86,17 @@ export class ProfileDetailsComponent {
     } else {
       alert('Please select a valid image file.');
     }
+    this.uploadingPicture = false;
   } 
 
   uploadProfilePicture(userId: number, base64String: any) {
+    this.uploadingPicture = true;
     this.userService.uploadProfilePicture(userId, base64String).subscribe({
-      next: (message: string) => {this.profilePicture(userId)}, 
-      // error: (err) => {console.log(err)}
+      next: (message: string) => {
+        this.profilePicture(userId);
+        this.uploadingPicture = false;
+      }, 
+      error: (err) => {this.uploadingPicture = false;}
     });
   }
 
