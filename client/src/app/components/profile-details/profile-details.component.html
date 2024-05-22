@@ -39,7 +39,7 @@
         <div class="contact-info">
             <form #editForm="ngForm">
                 <div id="description">
-                    <input type="file" (change)="onFileSelected($event)" accept="image/*"><br>
+                    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*"><br>
 
                     <span id="nametitle" class="title">First Name</span><br>
                     <input class="input-field" type="text" placeholder="Please enter your first name" [(ngModel)]="user.name" name="firstName" required maxlength="31" pattern="[a-zA-Z ]*" #firstName="ngModel">
