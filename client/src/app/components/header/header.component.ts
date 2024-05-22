@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit {
       this.userService.getUserById(this.userid).subscribe((userData: any) => {
         this.user = userData;
         this.userProfileService.setUserProfile(this.user);
+        this.profilePicture(this.userid);
       });
       
       

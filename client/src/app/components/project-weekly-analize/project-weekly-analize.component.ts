@@ -13,8 +13,8 @@ import { Task } from '../../models/task/task';
 })
 export class ProjectWeeklyAnalizeComponent implements OnInit{
 
-  @Input()projects!: Project[];
-  @Input()tasks!: Task[];
+  @Input() projects!: Project[];
+  @Input() tasks!: Task[];
   atRiskCount = 0;
   highCount = 0;
   mediumCount = 0;
@@ -26,50 +26,51 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
   plowCount = 0;
 
   constructor() { }
+
   ngOnInit(): void {
     this.createChart();
   }
+
   public chart: any;
 
   createChart() {
-          
-          this.tasks.forEach(task => {
-            switch (task.priority.id) {
-              case 1:
-                this.atRiskCount++;
-                break;
-              case 2:
-                this.highCount++;
-                break;
-              case 3:
-                this.mediumCount++;
-                break;
-              case 4:
-                this.lowCount++;
-                break;
-              default:
-                break;
-            }
-          });
+    this.tasks.forEach(task => {
+      switch (task.priority.id) {
+        case 1:
+          this.atRiskCount++;
+          break;
+        case 2:
+          this.highCount++;
+          break;
+        case 3:
+          this.mediumCount++;
+          break;
+        case 4:
+          this.lowCount++;
+          break;
+        default:
+          break;
+      }
+    });
 
-          this.projects.forEach(project => {
-            switch (project.priority.id) {
-              case 1:
-                this.patRiskCount++;
-                break;
-              case 2:
-                this.phighCount++;
-                break;
-              case 3:
-                this.pmediumCount++;
-                break;
-              case 4:
-                this.plowCount++;
-                break;
-              default:
-                break;
-            }
-          });
+    this.projects.forEach(project => {
+      switch (project.priority.id) {
+        case 1:
+          this.patRiskCount++;
+          break;
+        case 2:
+          this.phighCount++;
+          break;
+        case 3:
+          this.pmediumCount++;
+          break;
+        case 4:
+          this.plowCount++;
+          break;
+        default:
+          break;
+      }
+    });
 
           const daysOfWeek = ['At risk', 'High', 'Medium', 'Low'];
     
@@ -101,10 +102,21 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
             indexAxis: 'y',
             scales: {
               x: {
-                stacked: false
+                title: {
+                  display: true,
+                  text: 'Quantity'
+                },
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1
+                }
               },
               y: {
-                stacked: false
+                title: {
+                  display: true,
+                  text: 'Priority name'
+                },
+                beginAtZero: true,
               }
             }
           }
