@@ -11,11 +11,11 @@
             <p-multiSelect [options]="users" placeholder="Select Members" optionLabel="fulname" [(ngModel)]="selectedUsers"/>
             <button class="create" (click)="createTeamRequest()">Create</button>
         </div>
-        <div class="tabela">
-            <table style="border-radius: 15px;">
+        <div >
+            <table>
                 <tr>
-                    <th><h3>Name</h3></th>
-                    <th><h3>Members</h3></th>
+                    <th><h3 style="border-bottom:1px solid darkgray;">Name</h3></th>
+                    <th class="users"><h3 style="border-bottom:1px solid darkgray;">Members</h3></th>
                 </tr>
                 <tr *ngFor="let team of teams">
                     <td class="team">
