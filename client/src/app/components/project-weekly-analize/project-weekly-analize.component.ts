@@ -78,8 +78,8 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
           data: {
             labels: daysOfWeek,
             datasets: [
-              { label: "Projects", data: [this.patRiskCount,this.phighCount,this.pmediumCount,this.plowCount], backgroundColor: 'rgba(0, 128, 128)' },
-              { label: "Tasks", data: [this.atRiskCount,this.highCount,this.mediumCount,this.lowCount], backgroundColor: 'rgba(255, 127, 80)' }
+              { label: "Projects", data: [this.patRiskCount,this.phighCount,this.pmediumCount,this.plowCount], backgroundColor: '#ECEE81' },
+              { label: "Tasks", data: [this.atRiskCount,this.highCount,this.mediumCount,this.lowCount], backgroundColor: '#8DDFCB' }
             ]
           },
           options: {

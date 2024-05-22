@@ -14,12 +14,12 @@
 }
 
 #search-field {
-    width: 100%;
-    height: 100%;
-    background: #FEFEFE;
-    border: 1px solid #9A93B3;
-    border-radius: 5px;
-    text-indent: 10%;
+  width: 30vw;
+  height: 100%;
+  background: #FEFEFE;
+  border: 1px solid #9A93B3;
+  border-radius: 5px;
+  text-indent: 10%;
 }
 
 input#search-field {
@@ -41,9 +41,10 @@ input#search-field {
 #registerButton, #membersButton {
     height: 80%;
     width: 15%;
+    font: normal 500 18px 20px 'Poppins';
+    color: #FFFFFF;
+    background: #001B47;
     border-radius: 10px;
-    border: 0px;
-    background-color: #001B47;
 }
 
 .hide input {
@@ -52,8 +53,8 @@ input#search-field {
 }
 
 .members {
-    width: 100%;
-    height: 37vw;
+    width: calc(100vw - 380px);
+    height: calc(100vh - 80px);
     display: flex;
     gap: 8%;
 }
@@ -77,8 +78,9 @@ odavde na dole prekopirano iz member bivse komponente
 
   
 #users {
-    margin-left: 25%;
-    max-height: 700px;
+    /* margin-left: 25%; */
+    width: calc(100% - 150px);
+    max-height: calc(100vh - 200px);
     overflow-y: scroll;
   }
   #profile-picture {
@@ -146,25 +148,25 @@ odavde na dole prekopirano iz member bivse komponente
   text-align: center;  
 }
 
+h1{
+  font-size: 26px;
+  font-family: 'Poppins', sans-serif;
+}
+
 .update button {
-  width: 100%;
-  height: 40px;
-  margin-top: 20px;
-  font-family: 'Inter';
+  width: 60%;
+  height: 80%;
   font-size: 16px;
   font-family: 'Poppins', sans-serif;
-  line-height: 40px;
-  color: #EBEBEC;
-  background: #001B47;
-  border: none;
+  color: darkgray;
+  background: white;
+  border: 1px solid darkgray;
   border-radius: 10px;
   cursor: pointer;
-  text-align: center;
 }
 
 #pfp {
-  width: 50px;
-  height: 50px;
+  height: 80%;
   border-radius: 100px;
   object-fit: cover;
   border: 1px solid black;
@@ -175,25 +177,46 @@ table {
   font-family: 'Poppins', sans-serif;
   border-collapse: collapse;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 15px;
+  border-radius: .5rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 5px;
 }
 
 td, th {
-  border: 1px solid #dddddd;
+  width: 20%;
   text-align: left;
-  padding: 8px;
+  padding: 5px;
 }
 
 tr:nth-child(even) {
   background-color: #dddddd;
 }
 
-.default-role {
-  font-weight: bolder;
-  color: blue;
+.default-role, .default-activation  {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: darkblue;
 }
 
-.default-activation {
-  font-weight: bolder;
-  color: blue;
-}
+
+  /* scroll  */
+  #users::-webkit-scrollbar {
+    width: 12px;               /* width of the entire scrollbar */
+  }
+  
+  #users::-webkit-scrollbar-track {
+    background: none;    
+
+  }
+  
+  #users::-webkit-scrollbar-thumb {
+    background-color: darkgray;    
+    border-radius: 20px;       
+    border: 3px solid rgb(37, 37, 37); 
+  }
+
+
+
+  /* scroll end */
