@@ -236,3 +236,21 @@
     height: 20px;
     font-weight: bold;
 }
+
+
+.slidecontainer {
+    width: 100%;
+  }
+
+  table {
+    font-family: 'Poppins', sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-left: 10px;
+  }
+  
+  td, th {
+    border: 0.1px solid #fafafa;
+    text-align: left;
+    padding: 8px;
+  }

@@ -59,7 +59,7 @@ export class ProfileDetailsComponent {
 
     this.userService.updateUser(this.user).subscribe(response => {
       this.userProfileService.setUserProfile(this.user);
-      alert('Profile edited successfully!');
+      // alert('Profile edited successfully!');
       this.originalUser = { ...this.user };
     });
   }
@@ -85,8 +85,8 @@ export class ProfileDetailsComponent {
 
       reader.readAsDataURL(file);
     } else {
-      alert('Please select a valid image file.');
-      this.fileInput.nativeElement.value = ''; // Reset the file input element
+      // alert('Please select a valid image file.');
+      this.fileInput.nativeElement.value = '';
       this.uploadingPicture = false;
     }
   }

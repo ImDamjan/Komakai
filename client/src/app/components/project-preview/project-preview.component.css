@@ -12,6 +12,7 @@
   /* overflow: auto; */
   height: calc(100vh - 250px);
   width: 70%;
+  margin-top: 25px;
 }
 
 .card {

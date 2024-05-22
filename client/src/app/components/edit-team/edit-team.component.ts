@@ -45,7 +45,7 @@ export class EditTeamComponent implements OnInit{
     if(this.selectedUsers.length <= 0)
     {
       this.spinner.hide();
-      alert("Team does not have any memebers selected!");
+      // alert("Team does not have any memebers selected!");
       return;
     }
     if(this.updateTeamObj.name==="")

@@ -72,66 +72,56 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
       }
     });
 
-    const priorityLabels = ['At Risk', 'High', 'Medium', 'Low'];
+          const daysOfWeek = ['At risk', 'High', 'Medium', 'Low'];
+    
+        this.chart = new Chart("MyChart", {
+          type: 'bar',
+          data: {
+            labels: daysOfWeek,
+            datasets: [
+              { label: "Projects", data: [this.patRiskCount,this.phighCount,this.pmediumCount,this.plowCount], backgroundColor: '#ECEE81' },
+              { label: "Tasks", data: [this.atRiskCount,this.highCount,this.mediumCount,this.lowCount], backgroundColor: '#8DDFCB' }
+            ]
+          },
+          options: {
+            aspectRatio: 2.5,
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                onClick: function() {} 
+              },
+              title: {
+                display: true,
+                text: 'Priority Overview',
+                font: {
+                  size: 18
+                }
+              }
+            },
+            indexAxis: 'y',
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Quantity'
+                },
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1
+                }
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: 'Priority name'
+                },
+                beginAtZero: true,
+              }
+            }
+          }
+        });
 
-    this.chart = new Chart("MyChart", {
-      type: 'bar',
-      data: {
-        labels: priorityLabels,
-        datasets: [
-          {
-            label: "Projects",
-            data: [this.patRiskCount, this.phighCount, this.pmediumCount, this.plowCount],
-            backgroundColor: 'rgba(0, 128, 128, 0.8)',
-            borderColor: 'rgba(0, 128, 128, 0.2)',
-            borderWidth: 2
-          },
-          {
-            label: "Tasks",
-            data: [this.atRiskCount, this.highCount, this.mediumCount, this.lowCount],
-            backgroundColor: 'rgba(255, 127, 80, 0.8)',
-            borderColor: 'rgba(255, 127, 80, 0.2)',
-            borderWidth: 2
-          }
-        ]
-      },
-      options: {
-        aspectRatio: 2.5,
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            onClick: function() {} 
-          },
-          title: {
-            display: true,
-            text: 'Priority Overview',
-            font: {
-              size: 18
-            }
-          }
-        },
-        indexAxis: 'y',
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Quantity'
-            },
-            beginAtZero: true,
-            ticks: {
-              stepSize: 1
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Priority name'
-            },
-            beginAtZero: true,
-          }
-        }
-      }
-    });
+    
   }
 }

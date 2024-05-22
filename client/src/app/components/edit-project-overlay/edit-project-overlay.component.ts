@@ -265,7 +265,7 @@ export class EditProjectOverlayComponent {
     }
 
     this.projectService.updateProject(projectId, updateProjectData).subscribe(response => {
-      alert('Project edited successfully!');
+      // alert('Project edited successfully!');
       this.submitted = false;
 
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

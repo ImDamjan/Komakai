@@ -58,19 +58,19 @@ export class TaskTrackComponent implements AfterViewInit {
             datasets: [{
               data: [this.notStartedCount,this.readyCount, this.inProgressCount, this.blockedCount, this.doneCount, this.cancelledCount],
               backgroundColor: [
-                '#3b1d4a',
                 '#fd0363',
                 '#cc095d',
-                '#6b1650',
                 '#9c1057',
+                '#3b1d4a',
+                '#6b1650',
                 '#0a2344'
               ],
               borderColor: [
-                '#3b1d4a',
                 '#fd0363',
                 '#cc095d',
-                '#6b1650',
                 '#9c1057',
+                '#3b1d4a',
+                '#6b1650',
                 '#0a2344'
               ],
               borderWidth: 2
