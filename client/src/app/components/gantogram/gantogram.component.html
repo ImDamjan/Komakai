@@ -41,7 +41,7 @@
       
     </thy-header>
     <thy-content>
-    <ngx-gantt id="gantt_id"
+    <ngx-gantt id="gantt_id" *ngIf="userProjectRole!=undefined"
     #gantt
     [items]="items"
     
