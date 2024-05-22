@@ -43,8 +43,8 @@ export class TaskTagsComponent implements AfterViewInit{
           labels: topIncompleteProjects.map(project => project.name),
           datasets: [{
             data: topIncompleteProjects.map(project => project.percentage),
-            backgroundColor: 'rgb(116, 226, 145, 0.8)',
-            borderColor: 'rgb(116, 226, 145, 0.2)',
+            backgroundColor: '#FF9551',
+            borderColor: '#FF9551',
             borderWidth: 2
           }]
         },

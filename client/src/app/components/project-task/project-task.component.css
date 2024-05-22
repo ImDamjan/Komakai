@@ -65,27 +65,28 @@ th{
 }
 
 .not-started {
-  background-color: #3b1d4a;
-}
-
-.ready{
   background-color: #fd0363;
 }
 
-.in-progress {
+.ready{
   background-color: #cc095d;
 }
 
-.done {
+.in-progress {
   background-color: #9c1057;
 }
-.blocked {
+
+.done {
   background-color: #6b1650;
+}
+.blocked {
+  background-color: #3b1d4a;
 }
 
 .cancelled {
   background-color: #0a2344;
 }
+
 
 .name{
   font-family: 'Poppins', sans-serif;
