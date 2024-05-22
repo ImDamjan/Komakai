@@ -40,6 +40,7 @@ import { AssignmentService } from '../../services/assignment.service';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
 import { TaskFilter } from '../../models/task/task-filter';
+import { Notify } from '../../models/notifications/notify';
 
 
 
@@ -65,7 +66,11 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
   private ganttService = inject(GantogramService)
   private assignmentService = inject(AssignmentService)
   private itemsOldState: GanttItem[] = [];
-
+  private notify : Notify
+  
+  isDragable:boolean = false;
+  isLinkable:boolean = false;
+  
   task!: Task;
   taskFilter : TaskFilter = {}
   private dialog = inject(MatDialog);
@@ -114,7 +119,7 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
       viewType: GanttViewType.day
   };
   
-
+  
   viewOptions = {
       dateFormat: {
         week: "w", // 第w周
@@ -150,13 +155,16 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
 
   constructor(private printService: GanttPrintService,private toast : NgToastService,private datePipe: DatePipe,private sanitizer: DomSanitizer) {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+    this.notify = new Notify(toast);
+    // this.spinner.show();
+    
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.taskFilter.searchTitle = this.searchText;
     this.getGanttItemsByProjectId();
   }
-  public isDragable:boolean = false;
-  public isLinkable:boolean = false;
+
+ 
 
   ngOnInit(): void {
       // init items children
@@ -170,18 +178,18 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
         this.roleService.getUserProjectRole(this.userId,this.projectId).subscribe({
           next: (role:Role)=>{
             this.userProjectRole = role;
-            // console.log(role.name);
-            if(role.name!=="Project Manager")
-            {
-              // console.log("uslo je");
-              this.isDragable = false;
-              this.isLinkable = false;
+            
+            if(role.name=="Project Manager"){
+              this.isDragable = true;
+              this.isLinkable = true;              
             }
+            this.getGanttItemsByProjectId();
+            // this.spinner.hide();
           }
         });
       }
 
-      this.getGanttItemsByProjectId();
+      
       // this.spinner.show();
       // this.items.forEach((item, index) => {
       //     if (index % 5 === 0) {
@@ -297,37 +305,10 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
           this.emitUpdateSuccess(success)
           this.itemsOldState = this.copyItems(this.items)
         },
-      error:(error: any)=> this.showError("Update error",error)
+      error:(error: any)=> this.notify.showError("Update error",error)
     });
 
   }
-
-
-
-
-
-  //show Toast on top center position
-  showSuccess(topic:string,message:string) {
-    this.toast.success({detail:topic, summary:message, duration:5000, sticky:false, position:'bottomRight'});
-  }
-
-  //show Toast on bottom center position
-  showError(topic:string,message:string) {
-    const mess = `<b>${message}\n\n</b>`;
-    this.toast.error({detail:topic, summary:"poruke \n poruka ", duration:5000, sticky:false, position:'bottomRight'});
-  }
-
-  //show Toast on top left position
-  showInfo(topic:string,message:string) {
-    this.toast.info({detail:topic,summary:message, duration:5000, sticky:false, position: 'bottomRight',});
-}
-
-//show Toast on bottom left position
-showWarn(topic:string,message:string) {
-      this.toast.warning({detail:topic,summary:message, duration:5000, sticky:false, position: 'bottomRight'});
-}
-
- 
 
 
   ngAfterViewInit() {
@@ -352,11 +333,11 @@ showWarn(topic:string,message:string) {
         this.updateGantItemById(parseInt(event.source.id),update);
         this.getUpdateSuccessObservable().subscribe((success: boolean) => {
           if (success) {
-            this.showSuccess("Uspesno obrisana zavisnost",`Uspešno obrisana zavisnost. [${event.source.title}]->[${event.target?.title}]`)
+            this.notify.showSuccess("Uspesno obrisana zavisnost",`Uspešno obrisana zavisnost. [${event.source.title}]->[${event.target?.title}]`)
             this.getGanttItemsByProjectId();
             
           } else {
-            this.showError("Greška",`Greška pri brisanju zavisnosti taska  ${event.source.title}`);
+            this.notify.showError("Greška",`Greška pri brisanju zavisnosti taska  ${event.source.title}`);
             this.getGanttItemsByProjectId();
           }
         });
@@ -369,7 +350,7 @@ showWarn(topic:string,message:string) {
 //    kada se uhvati bar da se pomera
   dragMoved(event: GanttDragEvent) {
     // ovde treba pozvati update start end date 
-    this.showInfo("Izmena trajanja taska",`Da biste promenili vreme na gantogramu, pratite ove korake: \n\n
+    this.notify.showInfo("Izmena trajanja taska",`Da biste promenili vreme na gantogramu, pratite ove korake: \n\n
 
     Pomeranje granica: Kliknite na levu ili desnu granicu vremenskog okvira koji želite da promenite. Držite taster miša pritisnutim i pomerajte miša levo ili desno kako biste pomerili granicu na odgovarajuće mesto. \n\n
     
@@ -390,9 +371,9 @@ showWarn(topic:string,message:string) {
         let end  = new Date(update.endTs*1000 );
         const formattedStart = this.datePipe.transform(start, 'medium');
         const formattedEnd = this.datePipe.transform(end, 'medium');
-        this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
+        this.notify.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
       }else{
-        this.showError("Greška","Greška pri izmeni vremena trajanja taska - "+event.item.title)
+        this.notify.showError("Greška","Greška pri izmeni vremena trajanja taska - "+event.item.title)
         this.getGanttItemsByProjectId()
       }
     });    
@@ -405,7 +386,7 @@ showWarn(topic:string,message:string) {
               this.ganttComponent.scrollToDate(startDate);
           }
       }
-      this.showInfo("SelectedChange",`Selektovao sam task ${event.current?.title}`)
+      this.notify.showInfo("SelectedChange",`Selektovao sam task ${event.current?.title}`)
   }
   
 
@@ -413,7 +394,7 @@ showWarn(topic:string,message:string) {
     if(event.target !== undefined ){
       // console.log(this.itemsOldState.find(item => item.id === event.source.id));
       if(GanttMapper.checkIfNumberExists(event.source.id,parseInt(event.target.id),this.itemsOldState)){
-        this.showWarn("Zavisnost već postoji", `Zavisnost između taska [${event.source.title}] i taska [${event.target.title}] već postoji.`);
+        this.notify.showWarn("Zavisnost već postoji", `Zavisnost između taska [${event.source.title}] i taska [${event.target.title}] već postoji.`);
         // log(this.items.find(item => item.id == event.source.id))
         return;
       }else{
@@ -423,7 +404,7 @@ showWarn(topic:string,message:string) {
               this.updateGantItemById(parseInt(event.source.id),update);
               this.getUpdateSuccessObservable().subscribe((success: boolean) => {
                 if(success){
-                    this.showSuccess("Uspesno dodata zavisnost",`Uspešno dodata zavisnost. [${event.source.title}]->[${event.target?.title}] \n\n Klikom na vezu(liniju) možete obrisati zavisnost.`)
+                    this.notify.showSuccess("Uspesno dodata zavisnost",`Uspešno dodata zavisnost. [${event.source.title}]->[${event.target?.title}] \n\n Klikom na vezu(liniju) možete obrisati zavisnost.`)
 
           
                 //   let start = new Date(update.startTs*1000);
@@ -432,12 +413,12 @@ showWarn(topic:string,message:string) {
                 //   const formattedEnd = this.datePipe.transform(end, 'medium');
                 //   this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
                 }else{
-                  this.showError("Greška",`Greška pri kreiranju zavisnosti taska  ${event.source.title}`);
+                  this.notify.showError("Greška",`Greška pri kreiranju zavisnosti taska  ${event.source.title}`);
                   this.getGanttItemsByProjectId();
                 }
               }
             );
-        this.showSuccess("USPESNA VEZA", `Zavisnost je kreirana izmedju taska [${event.source.title}] i taska [${event.target.title}].`);
+        this.notify.showSuccess("USPESNA VEZA", `Zavisnost je kreirana izmedju taska [${event.source.title}] i taska [${event.target.title}].`);
       }
     }
 
