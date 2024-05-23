@@ -31,7 +31,6 @@
     font-style: normal;
     font-weight: 500;
     font-size: 10px;
-    background-color: #dc3545;
     border-radius: .5rem;
     color: white;
   }
@@ -40,13 +39,13 @@
     background-color: #ef476f;
   }
   
-  .high-priority{
+  .high{
     background-color: #ffd166;
   }
-  .medium-priority{
+  .medium{
     background-color: #118ab2;
   }
-  .low-priority{
+  .low{
     background-color: #06d6a0;
   }
   
