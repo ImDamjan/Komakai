@@ -796,6 +796,13 @@ namespace server.Data
                                 ParentTaskGroupId = null
                             };
                             _context.TaskGroups.Add(group);
+                            var subGroup = new TaskGroup
+                            {
+                                Title = "Podgrupa",
+                                ProjectId = i,
+                                ParentTaskGroupId = group.Id
+                            };
+                            _context.TaskGroups.Add(subGroup);
                         }
                         _context.Projects.AddRange(projects);
                         _context.SaveChanges();
