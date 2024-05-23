@@ -858,15 +858,15 @@ namespace server.Data
                                 //project 2 rok (2023, 2, 10) do (2023, 6, 30), members:2,5,6,8
                                 new Assignment{
                                     Id = 4,
-                                    Title = "Neki task 4",
+                                    Title = "Perform Data Analysis",
                                     Owner = 2,
-                                    Description = "Neki opis",
+                                    Description = "Analyze company data to provide insights",
                                     Start = new DateTime(2023, 3, 1),
                                     End = new DateTime(2023, 3, 15),
                                     StateId = 2,
                                     Percentage = 20,
                                     PriorityId = 4,
-                                    Type = "Neki tip",
+                                    Type = "Tip 1",
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
