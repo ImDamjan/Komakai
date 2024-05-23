@@ -46,6 +46,13 @@ export class TasksComponent {
     pageNumber: 1
   };
 
+  public filterbezpag: TaskFilter = {
+    propertyName : "Last Updated",
+    sortFlag : -1
+  }
+
+  public brojStrana: number=0;
+
   private jwtDecoder = inject(JwtDecoderService);
   remainingTimeSubscriptions: Subscription[] = [];
 
@@ -56,22 +63,6 @@ export class TasksComponent {
   }
 
   ngOnInit(): void {
-    // let token = this.jwtDecoder.getToken();
-    // let id = 0;
-    // if(token!=null)
-    // {
-    //   let decode = this.jwtDecoder.decodeToken(token);
-    //   id = decode.user_id;
-    // }
-    // this.filter.pageNumber = 1;
-    // this.filter.pageSize = 7;
-    // this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
-    //     tasks.forEach(task => {
-    //       this.task_date_service.setDateParametersForTask(task);
-    //     });
-    //     this.filteredTasks = tasks;
-    // });
-
     let token = this.jwtDecoder.getToken();
     let id = 0;
     if(token!=null)
@@ -83,9 +74,10 @@ export class TasksComponent {
         this.task_date_service.setDateParametersForTask(task);
       });
       this.tasks = tasks;
+      // console.log(this.tasks)
     })};
 
-    this.filter.pageSize=6;
+    this.filter.pageSize = 6;
 
     this.activatedRoute.paramMap.subscribe(params => {
       if (params.has('pageNumber')) {
@@ -100,6 +92,7 @@ export class TasksComponent {
   ngAfterViewInit() {
     this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
       this.filter.searchTitle = searchValue.searchText;
+      this.filterbezpag.searchTitle = searchValue.searchText;
       this.loadTasks();
     });
     this.taskFilterComponent?.filterEmiter.subscribe(filter=>{
@@ -108,6 +101,8 @@ export class TasksComponent {
         text = this.filter.searchTitle
       this.filter = filter;
       this.filter.searchTitle = text;
+      this.filterbezpag = filter;
+      this.filterbezpag.searchTitle = text;
       this.loadTasks();
     });
   }
@@ -127,19 +122,35 @@ export class TasksComponent {
       });
       this.filteredTasks = tasks;
     });
-  }}
-
-  filterTasks(filter: TaskFilter){
-
-    let collectedTasks: Task[] = [];
-
-    this.filter.pageNumber = this.currentPage;
-    this.filter.pageSize = 6;
-
-    if(filter.projects){
-      this.filter.projects=filter.projects;
     }
+
+    // if(token!=null)
+    // {
+    //   let decode = this.jwtDecoder.decodeToken(token);
+    //   id = decode.user_id;
+    //   this.filterbezpag.pageNumber = undefined;
+    //   this.filterbezpag.pageSize = undefined;
+    //   this.taskService.getAllUserAssignments(id,this.filterbezpag).subscribe(tasks => {
+    //   tasks.forEach(task => {
+    //     this.task_date_service.setDateParametersForTask(task);
+    //   });
+    //   this.tasks = tasks;
+    //   console.log(tasks)
+    // });
+    // }
   }
+
+  // filterTasks(filter: TaskFilter){
+
+  //   let collectedTasks: Task[] = [];
+
+  //   this.filter.pageNumber = this.currentPage;
+  //   this.filter.pageSize = 6;
+
+  //   if(filter.projects){
+  //     this.filter.projects=filter.projects;
+  //   }
+  // }
 
   previousPage() {
     if (this.currentPage > 1) {
