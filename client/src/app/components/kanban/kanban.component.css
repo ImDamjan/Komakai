@@ -37,7 +37,7 @@
     border-radius: .5rem;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     background: #113a7c;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
   }
   
   .board-column:not(:first-child) {
@@ -54,6 +54,7 @@
   
   
   .tasks-container {
+    overflow-y: scroll;
     flex-grow: 1;
     /* overflow-y: auto; */
   }
@@ -112,20 +113,19 @@
 
 
   /* scroll  */
-  .board-column::-webkit-scrollbar {
-    width: 0;               /* width of the entire scrollbar */
+  .tasks-container::-webkit-scrollbar {
+    width: 10px;               /* width of the entire scrollbar */
   }
   
-  /* .board-column::-webkit-scrollbar-track {
-    background: none;    
-
+  .tasks-container::-webkit-scrollbar-track {
+    background: none;  
   }
   
-  .board-column::-webkit-scrollbar-thumb {
+  .tasks-container::-webkit-scrollbar-thumb {
     background-color: #113a7c;    
     border-radius: 20px;       
-    border: 3px solid #113a7c; 
-  } */
+    border: 3px solid #4CB9E7; 
+  }
 
 
 
