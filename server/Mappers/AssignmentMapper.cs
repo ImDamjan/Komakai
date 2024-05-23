@@ -43,7 +43,8 @@ namespace server.Mappers
                 Priority = priority,
                 Type = a.Type,
                 Assignees = asignees,
-                TaskGroup =  group
+                TaskGroup =  group,
+                IsClosed = a.IsClosed
             };
         }
         public static DependentAssignmentDto toDependentAssignmentDto(this Assignment a, TaskGroupDto group)
@@ -54,7 +55,9 @@ namespace server.Mappers
                 Description = a.Description,
                 Start = a.Start,
                 End = a.End,
-                TaskGroup =  group
+                TaskGroup =  group,
+                Percentage = a.Percentage,
+                IsClosed = a.IsClosed
             };
         }
         public static TaskGroup fromCreateTaskGroupDtoToTaskGroup(this CreateTaskGroupDto dto)

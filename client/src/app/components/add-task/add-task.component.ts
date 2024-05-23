@@ -125,7 +125,7 @@ export class AddTaskComponent implements OnInit {
         this.users = [];
         users.forEach(element => {
           element.fulname = element.name + " "+ element.lastname;
-          if(element.isActivated && element.role.name==="Project Worker")
+          if(element.isActivated)
             this.users.push(element);
         });
       }

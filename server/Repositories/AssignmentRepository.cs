@@ -55,7 +55,7 @@ namespace server.Repositories
             .Include(a=>a.TaskGroup)
             .Include(a=>a.User)
             .Include(a=>a.Priority)
-            .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged).AsQueryable();
+            .Include(a=>a.State).Where(a=>!a.IsClosed).OrderByDescending(a=>a.LastTimeChanged).AsQueryable();
 
             if (projects != null && projects.Count > 0)
             {
@@ -86,6 +86,7 @@ namespace server.Repositories
             assignment.Assignments = dependentOn;
             assignment.Title = a.Title;
             assignment.Users = users;
+            assignment.IsClosed = a.IsClosed;
             assignment.TaskGroupId = a.TaskGroupId;
             assignment.Start = a.Start;
             assignment.End = a.End;
@@ -194,7 +195,15 @@ namespace server.Repositories
                 else
                    assignments =assignments.OrderByDescending(p=>p.LastTimeChanged);
             }
-            return await assignments.ToListAsync();
+            //stavlja closed na kraju
+            var filtered = await assignments.ToListAsync();
+            var completed = filtered.Where(a=>a.IsClosed).ToList();
+            var notCompleted = filtered.Where(a=>!a.IsClosed).ToList();
+            // System.Console.WriteLine("IDEMOOOOOOOOOOOOMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+            // System.Console.WriteLine(completed.Count);
+            // System.Console.WriteLine(notCompleted.Count);
+            notCompleted.AddRange(completed);
+            return notCompleted;
         }
 
         public async Task<Assignment?> DeleteAssignmentByIdAsync(int asign_id)
