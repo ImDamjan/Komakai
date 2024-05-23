@@ -1,4 +1,4 @@
-import { AfterViewInit, EventEmitter,Component, ElementRef, HostBinding, Input, OnInit, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, EventEmitter,Component, ElementRef, HostBinding, Input, OnInit, Output, TemplateRef, ViewChild, inject, OnChanges, SimpleChanges } from '@angular/core';
 import {srLatn} from 'date-fns/locale'
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
@@ -23,7 +23,7 @@ import {
   GanttViewType,
   NgxGanttComponent 
 } from '@worktile/gantt';
-import { Observable, Subject, finalize, of } from 'rxjs';
+import { Observable, Subject, filter, finalize, of } from 'rxjs';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { Task } from '../../models/task/task';
 import { ActivatedRoute } from '@angular/router';
@@ -39,6 +39,8 @@ import { TaskDetailsComponent } from '../../pages/task-details/task-details.comp
 import { AssignmentService } from '../../services/assignment.service';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
+import { TaskFilter } from '../../models/task/task-filter';
+import { Notify } from '../../models/notifications/notify';
 
 
 
@@ -51,8 +53,9 @@ import { RoleService } from '../../services/role.service';
   template: ``,
   providers: [GanttPrintService,  DatePipe],
 })
-export class GantogramComponent implements OnInit, AfterViewInit{
+export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
   
+  @Input() searchText!: string;
   private  modalService = inject(NgbModal);
   private decoder = inject(JwtDecoderService);
   private userId : number = 0;
@@ -63,8 +66,13 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   private ganttService = inject(GantogramService)
   private assignmentService = inject(AssignmentService)
   private itemsOldState: GanttItem[] = [];
-
+  private notify : Notify
+  
+  isDragable:boolean = false;
+  isLinkable:boolean = false;
+  
   task!: Task;
+  taskFilter : TaskFilter = {}
   private dialog = inject(MatDialog);
   @Output() newItemEvent = new EventEmitter<{previous_state : number, task: Task}>();
 
@@ -111,7 +119,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
       viewType: GanttViewType.day
   };
   
-
+  
   viewOptions = {
       dateFormat: {
         week: "w", // 第w周
@@ -147,12 +155,21 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   constructor(private printService: GanttPrintService,private toast : NgToastService,private datePipe: DatePipe,private sanitizer: DomSanitizer) {
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+    this.notify = new Notify(toast);
+    // this.spinner.show();
+    
   }
-  public isDragable:boolean = false;
-  public isLinkable:boolean = false;
+  ngOnChanges(changes: SimpleChanges): void {
+    this.taskFilter.searchTitle = this.searchText;
+    this.getGanttItemsByProjectId();
+  }
+
+ 
 
   ngOnInit(): void {
       // init items children
+      this.isDragable = true;
+      this.isLinkable = true;
       let token = this.decoder.getToken();
       if(token!=null)
       {
@@ -161,16 +178,18 @@ export class GantogramComponent implements OnInit, AfterViewInit{
         this.roleService.getUserProjectRole(this.userId,this.projectId).subscribe({
           next: (role:Role)=>{
             this.userProjectRole = role;
-            if(role.name==="Project Manager")
-            {
+            
+            if(role.name=="Project Manager"){
               this.isDragable = true;
-              this.isLinkable = true;
+              this.isLinkable = true;              
             }
+            this.getGanttItemsByProjectId();
+            // this.spinner.hide();
           }
         });
       }
 
-      this.getGanttItemsByProjectId();
+      
       // this.spinner.show();
       // this.items.forEach((item, index) => {
       //     if (index % 5 === 0) {
@@ -193,15 +212,15 @@ export class GantogramComponent implements OnInit, AfterViewInit{
   }
 
   openShowTaskOverlay(task : Task): void {
-    console.log(task);
+    // console.log(task);
     const dialogRef = this.dialog.open(TaskDetailsComponent, {
       data:[task,0,this.userProjectRole]
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.newItemEvent.emit({previous_state : task.state.id,task:result});
-      console.log(this.task);
-      console.log(result);
+      // console.log(this.task);
+      // console.log(result);
       this.task = result;
     });
   }
@@ -216,10 +235,10 @@ export class GantogramComponent implements OnInit, AfterViewInit{
               this.openShowTaskOverlay(task);
 
             } else {
-                console.log("No tasks found or tasks[0] is undefined.");
+                // console.log("No tasks found or tasks[0] is undefined.");
             }
           },
-        error:(error: any)=> console.log(error)
+        // error:(error: any)=> console.log(error)
       });
   }
   
@@ -231,12 +250,12 @@ export class GantogramComponent implements OnInit, AfterViewInit{
       modalRef = this.modalService.open(content, { centered: true });
   
       modalRef.result.then((result) => {
-        console.log('Modal zatvoren:', result);
+        // console.log('Modal zatvoren:', result);
         // Ovde možemo obraditi povratnu vrednost i izvršiti potrebne akcije
         this.selectedAction = result;
         resolve(this.selectedAction);
       }, (reason) => {
-        console.log('Modal zatvoren bez akcije:', reason);
+        // console.log('Modal zatvoren bez akcije:', reason);
         reject(reason);
       });
     });
@@ -249,7 +268,7 @@ export class GantogramComponent implements OnInit, AfterViewInit{
 
   getGanttItemsByProjectId(){
     this.loading = true;
-    this.ganttService.GetAssignemntsByProjectId(this.projectId).subscribe({
+    this.assignmentService.getAllProjectAssignments(this.projectId,this.taskFilter).subscribe({
       next : (tasks: Task[])=> 
         {
           if (tasks && tasks.length > 0){
@@ -258,10 +277,10 @@ export class GantogramComponent implements OnInit, AfterViewInit{
             this.itemsOldState = this.copyItems(this.items)
             this.loading = false;
           } else {
-              console.log("No tasks found or tasks[0] is undefined.");
+              // console.log("No tasks found or tasks[0] is undefined.");
           }
         },
-      error:(error: any)=> console.log(error)
+      // error:(error: any)=> console.log(error)
     });
   }
   private updateSuccessSubject = new Subject<boolean>();
@@ -286,37 +305,10 @@ export class GantogramComponent implements OnInit, AfterViewInit{
           this.emitUpdateSuccess(success)
           this.itemsOldState = this.copyItems(this.items)
         },
-      error:(error: any)=> this.showError("Update error",error)
+      error:(error: any)=> this.notify.showError("Update error",error)
     });
 
   }
-
-
-
-
-
-  //show Toast on top center position
-  showSuccess(topic:string,message:string) {
-    this.toast.success({detail:topic, summary:message, duration:5000, sticky:false, position:'bottomRight'});
-  }
-
-  //show Toast on bottom center position
-  showError(topic:string,message:string) {
-    const mess = `<b>${message}\n\n</b>`;
-    this.toast.error({detail:topic, summary:"poruke \n poruka ", duration:5000, sticky:false, position:'bottomRight'});
-  }
-
-  //show Toast on top left position
-  showInfo(topic:string,message:string) {
-    this.toast.info({detail:topic,summary:message, duration:5000, sticky:false, position: 'bottomRight',});
-}
-
-//show Toast on bottom left position
-showWarn(topic:string,message:string) {
-      this.toast.warning({detail:topic,summary:message, duration:5000, sticky:false, position: 'bottomRight'});
-}
-
- 
 
 
   ngAfterViewInit() {
@@ -341,11 +333,11 @@ showWarn(topic:string,message:string) {
         this.updateGantItemById(parseInt(event.source.id),update);
         this.getUpdateSuccessObservable().subscribe((success: boolean) => {
           if (success) {
-            this.showSuccess("Uspesno obrisana zavisnost",`Uspešno obrisana zavisnost. [${event.source.title}]->[${event.target?.title}]`)
+            this.notify.showSuccess("Uspesno obrisana zavisnost",`Uspešno obrisana zavisnost. [${event.source.title}]->[${event.target?.title}]`)
             this.getGanttItemsByProjectId();
             
           } else {
-            this.showError("Greška",`Greška pri brisanju zavisnosti taska  ${event.source.title}`);
+            this.notify.showError("Greška",`Greška pri brisanju zavisnosti taska  ${event.source.title}`);
             this.getGanttItemsByProjectId();
           }
         });
@@ -358,7 +350,7 @@ showWarn(topic:string,message:string) {
 //    kada se uhvati bar da se pomera
   dragMoved(event: GanttDragEvent) {
     // ovde treba pozvati update start end date 
-    this.showInfo("Izmena trajanja taska",`Da biste promenili vreme na gantogramu, pratite ove korake: \n\n
+    this.notify.showInfo("Izmena trajanja taska",`Da biste promenili vreme na gantogramu, pratite ove korake: \n\n
 
     Pomeranje granica: Kliknite na levu ili desnu granicu vremenskog okvira koji želite da promenite. Držite taster miša pritisnutim i pomerajte miša levo ili desno kako biste pomerili granicu na odgovarajuće mesto. \n\n
     
@@ -379,9 +371,9 @@ showWarn(topic:string,message:string) {
         let end  = new Date(update.endTs*1000 );
         const formattedStart = this.datePipe.transform(start, 'medium');
         const formattedEnd = this.datePipe.transform(end, 'medium');
-        this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
+        this.notify.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
       }else{
-        this.showError("Greška","Greška pri izmeni vremena trajanja taska - "+event.item.title)
+        this.notify.showError("Greška","Greška pri izmeni vremena trajanja taska - "+event.item.title)
         this.getGanttItemsByProjectId()
       }
     });    
@@ -394,15 +386,15 @@ showWarn(topic:string,message:string) {
               this.ganttComponent.scrollToDate(startDate);
           }
       }
-      this.showInfo("SelectedChange",`Selektovao sam task ${event.current?.title}`)
+      this.notify.showInfo("SelectedChange",`Selektovao sam task ${event.current?.title}`)
   }
   
 
   linkDragEnded(event: GanttLinkDragEvent) {
     if(event.target !== undefined ){
-      console.log(this.itemsOldState.find(item => item.id === event.source.id));
+      // console.log(this.itemsOldState.find(item => item.id === event.source.id));
       if(GanttMapper.checkIfNumberExists(event.source.id,parseInt(event.target.id),this.itemsOldState)){
-        this.showWarn("Zavisnost već postoji", `Zavisnost između taska [${event.source.title}] i taska [${event.target.title}] već postoji.`);
+        this.notify.showWarn("Zavisnost već postoji", `Zavisnost između taska [${event.source.title}] i taska [${event.target.title}] već postoji.`);
         // log(this.items.find(item => item.id == event.source.id))
         return;
       }else{
@@ -412,7 +404,7 @@ showWarn(topic:string,message:string) {
               this.updateGantItemById(parseInt(event.source.id),update);
               this.getUpdateSuccessObservable().subscribe((success: boolean) => {
                 if(success){
-                    this.showSuccess("Uspesno dodata zavisnost",`Uspešno dodata zavisnost. [${event.source.title}]->[${event.target?.title}] \n\n Klikom na vezu(liniju) možete obrisati zavisnost.`)
+                    this.notify.showSuccess("Uspesno dodata zavisnost",`Uspešno dodata zavisnost. [${event.source.title}]->[${event.target?.title}] \n\n Klikom na vezu(liniju) možete obrisati zavisnost.`)
 
           
                 //   let start = new Date(update.startTs*1000);
@@ -421,12 +413,12 @@ showWarn(topic:string,message:string) {
                 //   const formattedEnd = this.datePipe.transform(end, 'medium');
                 //   this.showSuccess("Uspesno izmenjeno vreme","Promenjeno vreme trajanja taska. \n Pocetak-["+ formattedStart +"]\nKraj-["+ formattedEnd + "]" )
                 }else{
-                  this.showError("Greška",`Greška pri kreiranju zavisnosti taska  ${event.source.title}`);
+                  this.notify.showError("Greška",`Greška pri kreiranju zavisnosti taska  ${event.source.title}`);
                   this.getGanttItemsByProjectId();
                 }
               }
             );
-        this.showSuccess("USPESNA VEZA", `Zavisnost je kreirana izmedju taska [${event.source.title}] i taska [${event.target.title}].`);
+        this.notify.showSuccess("USPESNA VEZA", `Zavisnost je kreirana izmedju taska [${event.source.title}] i taska [${event.target.title}].`);
       }
     }
 
@@ -438,12 +430,12 @@ showWarn(topic:string,message:string) {
 
 // Ovo je kada se leva strana pomera na primer listu taskova menjam jedan da dodje iznad drtugog i tako dalje Ovo je kada kliknem
 onDragStarted(event: GanttTableDragStartedEvent) {
-    console.log('onDragStarted log', event);
+    // console.log('onDragStarted log', event);
 }
 
 // Ovo je kada se leva strana pomera na primer listu taskova menjam jedan da dodje iznad drtugog i tako dalje  ovo je kada pustim klik
 onDragEnded(event: GanttTableDragEndedEvent) {
-    console.log('onDragEnded log', event);
+    // console.log('onDragEnded log', event);
 }
 
   print(name: string) {
@@ -476,7 +468,7 @@ onDragEnded(event: GanttTableDragEndedEvent) {
   }
 
   viewChange(event: GanttView) {
-      console.log(event.viewType);
+      // console.log(event.viewType);
       this.selectedViewType = event.viewType;
   }
 

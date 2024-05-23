@@ -18,20 +18,17 @@ app-project-preview {
     overflow-x: hidden;
 }
 
-app-task-header {
+app-task-header, app-project-header {
     width: 100%;
 }
 
-app-project-header {
-    width: 100%;
-}
 app-member {
     width: 60%;
     height: 37vw;
     overflow-y: scroll;
     padding-left: 10vw;
 }
-app-tasks, app-admin {
+app-tasks, app-admin, app-resetpassword {
     width: 100vw;
     height: 100%;
 }

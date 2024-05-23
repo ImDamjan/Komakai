@@ -65,7 +65,6 @@ namespace server.Repositories
                 if(team.Users.Any(u=>u.Id==userid))
                     user_teams.Add(team);
             }
-            
             return user_teams;
 
         }

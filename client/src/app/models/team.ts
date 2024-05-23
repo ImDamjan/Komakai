@@ -6,4 +6,5 @@ export interface Team {
     type : string,
     members : User[],
     createdBy: number,
+    reducedTeam:string
 }

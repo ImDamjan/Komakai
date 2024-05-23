@@ -90,7 +90,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   public selectedPriority!:Priority;
   public selectedState! :State;
   
-
+  public hasCompletedDependentTasks:boolean = false;
   constructor() {
 
   }
@@ -104,6 +104,9 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.assignment = this.data[0];
     this.userProjectRole = this.data[2];
 
+    console.log(this.assignment);
+    if(this.assignment.depndentOn.length > 0)
+      this.hasDependent = false;
 
     // console.log(this.assignment);
     // let user = this.jwt_service.getLoggedUser();
@@ -114,19 +117,26 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       else if(this.userProjectRole.name==="User")
         this.isUser = true;
       else if(this.userProjectRole.name==="Project Worker")
-        this.isWorker = true;
+      {
+        if(this.assignment.assignees.find(a=>a.id==this.userId)!==undefined)
+          this.isWorker = true;
+        else
+          this.isUser = true;
+
+      }
     }
 
     this.profilePicture(this.assignment.owner.id);
 
     this.assignment_service.getDependentAssignmentsFor(this.assignment.id).subscribe({
       next : (tasks : Task[]) => {
-        if(tasks.length > 0)
-            this.hasDependent = false;
         this.dependentTasks = tasks;
-
+        if(tasks.find(a=>!a.isClosed)!==undefined)
+          this.hasCompletedDependentTasks = false;
+        else
+          this.hasCompletedDependentTasks = true;
         this.spinner.hide();
-        console.log(tasks);
+        // console.log(tasks);
       }
     })
     this.comment_service.getAllComentsByTask(this.assignment.id).subscribe({
@@ -152,7 +162,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
             ans.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
         });
           this.comments = comments;
-          console.log(comments);
+          // console.log(comments);
         });
       }
     });
@@ -233,12 +243,12 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.updateObj.end = new Date(this.updateObj.end.toDateString());
     this.updateObj.start = new Date(this.updateObj.start.toDateString());
     //provera da li je end pre starta
-    console.log(this.updateObj.end);
-    console.log(this.updateObj.start);
+    // console.log(this.updateObj.end);
+    // console.log(this.updateObj.start);
     if(this.updateObj.end <= this.updateObj.start)
     {
       this.spinner.hide();
-      alert("End date comes before start date.");
+      // alert("End date comes before start date.");
       return;
     }
     // todayTime.setHours(12, 12, 12, 12);
@@ -280,14 +290,14 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           },
           error :(error)=>
           {
-              alert("Task update failed!");
-              console.log(error);
+              // alert("Task update failed!");
+              // console.log(error);
           }
       });
     }
     else
     {
-      alert("There must be at least one person that is assigned to this task");
+      // /alert("There must be at least one person that is assigned to this task");
     }
   }
 
@@ -345,7 +355,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       this.selectedAssignees = this.selectedAssignees.filter(id=>id!==user_id);
     else
       this.selectedAssignees.push(user_id);
-    console.log(this.selectedAssignees);
+    // console.log(this.selectedAssignees);
   }
 
   isSelected(userid: number) {
@@ -488,5 +498,55 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       comment.replyOpened = false;
     else
       comment.replyOpened = true;
+  }
+  sendCloseRequest(state: boolean)
+  {
+    this.updateObj.userIds = [];
+    this.updateObj.percentage = this.assignment.percentage;
+    this.updateObj.type = this.assignment.type;
+    this.updateObj.description = this.assignment.description;
+    this.updateObj.priorityId = this.assignment.priority.id;
+    this.updateObj.stateId = this.assignment.state.id;
+    this.updateObj.start = this.assignment.start;
+    this.updateObj.end = this.assignment.end;
+    this.updateObj.end = new Date(this.updateObj.end.toDateString());
+    this.updateObj.start = new Date(this.updateObj.start.toDateString());
+    this.updateObj.title = this.assignment.title;
+    this.updateObj.taskGroupId = this.assignment.taskGroup.id;
+    this.updateObj.dependentOn = this.assignment.depndentOn;
+
+    this.assignment.assignees.forEach(element => {
+      this.updateObj.userIds.push(element.id);
+    });
+    this.updateObj.isClosed = state;
+
+    this.assignment_service.updateAssignmentById(this.updateObj,this.assignment.id).subscribe
+    ({
+      next : (updatedTask :Task) =>
+        {
+          this.assignment = updatedTask;
+          this.assignment.dummyTitle = this.assignment.title;
+          if(this.assignment.title.length > 20)
+          {
+            let new_title = "";
+            for (let i = 0; i < 20; i++) {
+              const element = this.assignment.title[i];
+              new_title+=element;
+            }
+            new_title+="...";
+            this.assignment.dummyTitle = new_title;
+          }
+          this.date_task_service.setDateParametersForTask(this.assignment);
+          // confirm("Task successfully updated!");
+          this.showUpdate = false;
+          // this.closeOverlay();
+          this.spinner.hide();
+        },
+        error :(error)=>
+        {
+            // alert("Task update failed!");
+            // console.log(error);
+        }
+    });
   }
 }

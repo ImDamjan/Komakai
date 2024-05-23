@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, inject, Input } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
@@ -11,34 +11,29 @@ import { Project } from '../../models/project/project';
 export class TaskTagsComponent implements AfterViewInit{
   @ViewChild('myChart') myChart!: ElementRef;
 
-  private projectService = inject(ProjectService);
-  projects!: Project[];
-  
+  @Input() projects!: Project[];
+
   ngAfterViewInit() {
     this.createChart();
   }
 
   createChart() {
-    this.projectService.getProjectsData().subscribe(projects => {
-      this.projects = projects;
+    const projectNames: string[] = [];
+    const completionPercentages: number[] = [];
+    this.projects.forEach(project => {
+      projectNames.push(project.title);
+      completionPercentages.push(project.percentage);
+    });
 
-      const projectNames: string[] = [];
-      const completionPercentages: number[] = [];
-      this.projects.forEach(project => {
-          projectNames.push(project.title);
-          completionPercentages.push(project.percentage);
-      });
-      
-
-      const incompleteProjects = [];
-      for (let i = 0; i < projectNames.length; i++) {
-        if (completionPercentages[i] < 100) {
-          incompleteProjects.push({ name: projectNames[i], percentage: completionPercentages[i] });
-        }
+    const incompleteProjects = [];
+    for (let i = 0; i < projectNames.length; i++) {
+      if (completionPercentages[i] < 100) {
+        incompleteProjects.push({ name: projectNames[i], percentage: completionPercentages[i] });
       }
+    }
 
-      incompleteProjects.sort((a, b) => b.percentage - a.percentage);
-      const topIncompleteProjects = incompleteProjects.slice(0, 5);
+    incompleteProjects.sort((a, b) => b.percentage - a.percentage);
+    const topIncompleteProjects = incompleteProjects.slice(0, 5);
 
       const ctx = this.myChart.nativeElement.getContext('2d');
       new Chart(ctx, {
@@ -47,8 +42,8 @@ export class TaskTagsComponent implements AfterViewInit{
           labels: topIncompleteProjects.map(project => project.name),
           datasets: [{
             data: topIncompleteProjects.map(project => project.percentage),
-            backgroundColor: 'rgb(116, 226, 145, 0.8)',
-            borderColor: 'rgb(116, 226, 145, 0.2)',
+            backgroundColor: '#FF9551',
+            borderColor: '#FF9551',
             borderWidth: 2
           }]
         },
@@ -57,11 +52,22 @@ export class TaskTagsComponent implements AfterViewInit{
           scales: {
             x: {
               beginAtZero: true,
-              max: 100
+              max: 100,
+              title: {
+                display: true,
+                text: 'Completion Percentage'
+              },
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
             },
             y: {
-              beginAtZero: true,
-              max: 100
+              title: {
+                display: true,
+                text: 'Project Names'
+              }
             }
           },
           responsive: true,
@@ -76,11 +82,17 @@ export class TaskTagsComponent implements AfterViewInit{
             },
             legend: {
               display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.raw + '%';
+                }
+              }
             }
           }
         }
       });
-    });
 
     
   }

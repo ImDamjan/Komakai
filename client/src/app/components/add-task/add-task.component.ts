@@ -119,12 +119,14 @@ export class AddTaskComponent implements OnInit {
           this.selectedState = a;
       }
     });
-    console.log(this.data);
+    // console.log(this.data);
     this.userService.getProjectUsers(Number(this.data[1])).subscribe({
       next : (users: User[])=>{
-        this.users = users
-        this.users.forEach(element => {
+        this.users = [];
+        users.forEach(element => {
           element.fulname = element.name + " "+ element.lastname;
+          if(element.isActivated)
+            this.users.push(element);
         });
       }
     });
@@ -142,7 +144,7 @@ export class AddTaskComponent implements OnInit {
         } 
         this.spinner.hide();
       },
-      error:(error: any)=> console.log(error)
+      // error:(error: any)=> console.log(error)
     });
 
     
@@ -173,7 +175,7 @@ export class AddTaskComponent implements OnInit {
       this.createTaskObj.dependentOn.push(element.id);
     });
 
-    console.log(this.createTaskObj);
+    // console.log(this.createTaskObj);
     if(this.createTaskObj.assignees.length == 0 || this.createTaskObj.title==="")
     {
       this.message = "Form is not filled properly, check if you entered everything correctly.";
@@ -201,15 +203,15 @@ export class AddTaskComponent implements OnInit {
     //   return;
 
     // }
-    console.log(this.createTaskObj);
+    // console.log(this.createTaskObj);
     this.assignmentService.createAssignment(this.createTaskObj).subscribe({
       next : (asign : Task) => {
-        console.log("Creation succesful");
+        // console.log("Creation succesful");
         // confirm("Task created successfully!");
         this.spinner.hide();
         this.dialogRef.close(1);
       },
-      error: (error)=> console.log(error)
+      // error: (error)=> console.log(error)
     });
 
      

@@ -29,22 +29,22 @@ export class AddTaskGroupComponent implements OnInit{
     this.createTaskGroup.parentTaskGroupId = this.data[1].id;
     if(this.data[2]!==undefined)
     {
-      console.log("edit je")
+      // console.log("edit je")
       this.createTaskGroup.id = this.data[1].id;
       this.createTaskGroup.parentTaskGroupId = this.data[1].parentTaskGroupId;
       this.createTaskGroup.title = this.data[1].title;
       this.title = this.data[1].title;
       this.IsEdit = true;
-      console.log(this.createTaskGroup);
+      // console.log(this.createTaskGroup);
     }
   }
   editGroup(){
     if(this.title!=="")
       {
-        console.log("kliknuo edit");
+        // console.log("kliknuo edit");
         this.spinner.show();
         this.createTaskGroup.title = this.title;
-        console.log(this.createTaskGroup);
+        // console.log(this.createTaskGroup);
         this.task_group_service.updateTaskGroup(this.createTaskGroup).subscribe({
           next : (group:any)=>{
             this.spinner.hide();
@@ -52,8 +52,8 @@ export class AddTaskGroupComponent implements OnInit{
           }
         });
       }
-      else
-        alert("Please enter the new name");
+      // else
+        // alert("Please enter the new name");
   }
   createGroup()
   {
@@ -68,8 +68,8 @@ export class AddTaskGroupComponent implements OnInit{
         }
       });
     }
-    else
-      alert("Please enter the name");
+    // else
+    //   alert("Please enter the name");
   }
 
 }

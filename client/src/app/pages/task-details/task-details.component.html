@@ -2,7 +2,9 @@
     <div class="header">
         <h1 *ngIf="!showUpdate || !isManager">{{assignment.title}}</h1>
         <input type="text" class="task-title" *ngIf="showUpdate && isManager" [(ngModel)]="updateObj.title">
-        <button class="update" (click)="updateTask()" *ngIf="!showUpdate && (isManager || isWorker)">Update</button>
+        <button class="update" (click)="updateTask()" *ngIf="!showUpdate && (isManager || (isWorker && hasCompletedDependentTasks)) && !assignment.isClosed">Update</button>
+        <button *ngIf="!assignment.isClosed && assignment.percentage===100 && isManager" class="closed" (click)="sendCloseRequest(true)">Close Task</button>
+        <button *ngIf="assignment.isClosed && isManager" class="closed" (click)="sendCloseRequest(false)">Reopen Task</button>
         <br>
     </div>
 
@@ -93,8 +95,8 @@
     <table>
         <tr>
             <th>Dependencies</th>
-            <th><p *ngIf="hasDependent && !showUpdate || !isManager">There are no dependecies for this task !</p>
-                <div *ngIf="!hasDependent && !showUpdate || !isManager">
+            <th><p *ngIf="hasDependent && (!showUpdate || !isManager)">There are no dependecies for this task !</p>
+                <div *ngIf="!hasDependent && (!showUpdate || !isManager)">
                     <div class = "dependecy" *ngFor="let dependent of dependentTasks">
                         {{dependent.title}}
                     </div>
@@ -155,7 +157,7 @@
                         <p style="color: gray;"> <img id="pfp" [src]="comment.user.profilePicturePath" alt="slika_korinsika"> {{comment.user.name}} {{comment.user.lastname}} &commat;{{comment.user.username}}</p>
                         <p style="width: 100%; border: 1px solid; padding: 10px; color: black;">{{comment.content}}<button *ngIf="comment.user.id==userId" class="edit" (click)="showEditBox(comment)">Edit</button></p>
                         <p style="color: gray;">{{ comment.editedTime.toLocaleString().split(',')[0] }}     {{ comment.editedTime.toLocaleString().split(',')[1] }}
-                            <button *ngIf="isUser || isManager || isWorker" (click)="showBox(comment)">
+                            <button class="show-hide" *ngIf="isUser || isManager || isWorker" (click)="showBox(comment)">
                                 <span *ngIf="!comment.replyOpened">Show Reply box</span>
                                 <span *ngIf="comment.replyOpened">Hide Reply box</span>
                             </button>

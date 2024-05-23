@@ -15,6 +15,7 @@
   
   
   input[type="text"],
+  input[type="email"],
   input[type="password"] {
     width: 90%; 
     height: 40px; 
@@ -63,8 +64,31 @@
   #lozinka{
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
   }
 
   #lozinka > img{
     margin-left: 10px;
+  }
+
+  #fp {
+    color: #648efc;
+    cursor: pointer;
+  }
+
+  #fp:hover {
+    color: darkblue;
+  }
+
+  #fptext {
+    padding-bottom: 20px;
+  }
+
+  #emailsentimg {
+    width: 20%;
+    height: 20%;
+  }
+
+  #pimg {
+    text-align: center;
   }

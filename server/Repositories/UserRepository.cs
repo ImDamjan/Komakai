@@ -193,7 +193,7 @@ namespace server.Repositories
             if (asign == null)
                 return new List<User>();
             
-            return asign.Users.ToList();
+            return asign.Users.Where(u=>u.IsActivated).ToList();
         }
     }
 }

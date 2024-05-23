@@ -38,7 +38,6 @@ import { TaskHeaderComponent } from './components/task-header/task-header.compon
 import { ProjectHeaderComponent } from './components/project-header/project-header.component';
 import { GantogramComponent } from './components/gantogram/gantogram.component';
 import { AdminComponent } from './pages/admin/admin.component';
-import { MemberComponent } from './components/member/member.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
@@ -85,8 +84,10 @@ import { TaskListTaskComponent } from './components/task-list-task/task-list-tas
 import { AddTaskGroupComponent } from './components/add-task-group/add-task-group.component';
 import { EditTeamComponent } from './components/edit-team/edit-team.component';
 import { FilterUserComponent } from './components/filter-user/filter-user.component';
+import { ResetpasswordComponent } from './pages/resetpassword/resetpassword/resetpassword.component';
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { BadgeModule} from 'primeng/badge';
 
 @NgModule({
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -122,7 +123,6 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     LogoutComponent,
     TaskDetailsComponent,
     AdminComponent,
-    MemberComponent,
     EditProjectOverlayComponent,
     ProfileDetailsComponent,
     FilterDetailsComponent,
@@ -136,11 +136,13 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     AddTaskGroupComponent,
     EditTeamComponent,
     FilterUserComponent,
+    ResetpasswordComponent,
   ],
   imports: [
     FormsModule,
     BrowserModule,
     SliderModule,
+    BadgeModule,
     CalendarModule,
     ProgressSpinnerModule,
     MultiSelectModule,

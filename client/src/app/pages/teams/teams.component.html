@@ -1,4 +1,5 @@
 <div class="teams">
+    <h1>Teams</h1> 
     <div class="search">
         <input id="search-field" type="text" placeholder="Search team..." [(ngModel)]="searchText" (keyup)="loadTeams()">
     </div>
@@ -8,21 +9,21 @@
             <h2>New Team</h2>
             <input type="text" class="teamName" placeholder="Team name" [(ngModel)]="createTeam.name">
             <p-multiSelect [options]="users" placeholder="Select Members" optionLabel="fulname" [(ngModel)]="selectedUsers"/>
-            <button (click)="createTeamRequest()">Create</button>
+            <button class="create" (click)="createTeamRequest()">Create</button>
         </div>
-        <div class="tabela">
+        <div >
             <table>
                 <tr>
-                    <th>Name</th>
-                    <th>Members</th>
+                    <th><h3 style="border-bottom:1px solid darkgray;">Name</h3></th>
+                    <th class="users"><h3 style="border-bottom:1px solid darkgray;">Members</h3></th>
                 </tr>
                 <tr *ngFor="let team of teams">
                     <td class="team">
-                        <span>{{team.name}}</span>
-                        <button (click)="openEditOverlay(team)">Edit Team</button>
+                        <span class="nameTeam">{{team.name}}</span>
+                        <button class="edit" (click)="openEditOverlay(team)">Edit Team</button>
                     </td>
                     <td class="users">
-                        <span *ngFor="let user of team.members">{{user.name + " " + user.lastname}}</span>
+                        <span >{{team.reducedTeam}}</span>
                     </td>
                 </tr>
             </table>

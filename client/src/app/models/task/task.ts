@@ -35,4 +35,5 @@ export interface Task{
     startMonth: number,
     startDate: number,
     depndentOn: number[],
+    isClosed : boolean
 }

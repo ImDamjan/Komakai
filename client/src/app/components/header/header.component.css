@@ -18,10 +18,13 @@
 }
 .info p {
     margin-bottom: 5px;
+    cursor: context-menu;
+    user-select: none;
 }
 #name_logout p {
     padding: 0px;
     margin: 0px 0px 0px auto;
+    cursor: context-menu;
 }
 #name_logout{
     display: flex;
@@ -29,6 +32,7 @@
 
 .picture{
     margin-right: 20px;
+    cursor: pointer;
 }
 
 .pfp {
@@ -36,6 +40,7 @@
     height: 50px;
     border-radius: 30px;
     object-fit: cover;
+    cursor: pointer;
 }
 
 .menu {

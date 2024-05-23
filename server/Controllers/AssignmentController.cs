@@ -226,7 +226,7 @@ namespace server.Controllers
             var groupdto = task.TaskGroup.toTaskGroupDto();
             var prioDto = task.Priority.toPrioDto();
 
-            var dep = task.DependentOnAssignments.Select(u=>u.Id).ToList();
+            var dep = task.Assignments.Select(u=>u.Id).ToList();
             
             var dtoAs = task.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto);
             dtoAs.DepndentOn = dep;

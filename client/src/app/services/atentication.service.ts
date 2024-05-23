@@ -41,7 +41,7 @@ export class AuthenticationService {
     if(typeof window !== 'undefined' && window.localStorage)
     {
       localStorage = window.localStorage;
-      console.log("Postavio sam token")
+      // console.log("Postavio sam token")
       localStorage.setItem("token", token);
     }
     
@@ -60,5 +60,15 @@ export class AuthenticationService {
       }
     }
     return false
-  }  
+  }
+
+  forgotPassword(email: string) : Observable<any> {
+    const url = `${this.baseUrl}/Auth/forgotpassword?email=${email}`;
+    return this.httpClient.post<any>(url, {});
+  }
+
+  resetPassword(payload: { resetToken: string , newPassword: string }): Observable<any> {
+    const url = `${this.baseUrl}/Auth/resetpassword`;
+    return this.httpClient.post(url, payload);
+  }
 }

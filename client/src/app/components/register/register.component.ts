@@ -24,12 +24,11 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       Name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
       Lastname: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
-      Email: ['', [Validators.required, Validators.email]],
-      Username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_.-]*')]],
+      Email: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}')]],
+      Username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_\\-\\.]*')]],
       Password: ['', [Validators.required, Validators.minLength(8)]],
       ConfirmPassword: ['', Validators.required],
-      Role : [0
-      ]
+      Role : [0]
     }, { validators: this.passwordMatchValidator });
     this.spinner.hide();
   }
@@ -56,7 +55,7 @@ export class RegisterComponent implements OnInit {
       this.reg.register(register)
         .subscribe({
           next: (res) => {
-            alert("User " + register.name + " " + register.lastname + " added successfully!");
+            // alert("User " + register.name + " " + register.lastname + " added successfully!");
             this.registerForm.reset();
             this.spinner.hide();
           },
@@ -66,7 +65,7 @@ export class RegisterComponent implements OnInit {
         });
     } else {
       this.validateAllFormFields(this.registerForm);
-      alert("Your form is invalid");
+      // alert("Your form is invalid");
       this.spinner.hide();
     }
   }

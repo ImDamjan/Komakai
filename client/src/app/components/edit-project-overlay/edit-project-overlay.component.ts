@@ -83,6 +83,7 @@ export class EditProjectOverlayComponent {
     this.spinner.show();
     this.userService.getUsers().subscribe(users => {
       this.spinner.hide();
+      users = users.filter(u=>u.isActivated);
       this.users = users;
 
       this.users.forEach(user => {
@@ -264,7 +265,7 @@ export class EditProjectOverlayComponent {
     }
 
     this.projectService.updateProject(projectId, updateProjectData).subscribe(response => {
-      alert('Project edited successfully!');
+      // alert('Project edited successfully!');
       this.submitted = false;
 
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

@@ -20,6 +20,8 @@ namespace server.Data
         public virtual DbSet<Priority> Priorities { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectUser> ProjectUsers {get; set;}
+        public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<NotificationUser> NotificationUsers { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<Team> Teams { get; set; }

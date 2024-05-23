@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, inject } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
@@ -13,12 +13,8 @@ import { Task } from '../../models/task/task';
 })
 export class ProjectWeeklyAnalizeComponent implements OnInit{
 
-  private projectService = inject(ProjectService);
-  private jwtService = inject(JwtDecoderService);
-  private assignmentService = inject(AssignmentService);
-  userid!: number;
-  projects!: Project[];
-  tasks!: Task[];
+  @Input() projects!: Project[];
+  @Input() tasks!: Task[];
   atRiskCount = 0;
   highCount = 0;
   mediumCount = 0;
@@ -30,62 +26,51 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
   plowCount = 0;
 
   constructor() { }
+
   ngOnInit(): void {
     this.createChart();
   }
+
   public chart: any;
 
   createChart() {
-    let token = this.jwtService.getToken();
-    if(token!=null)
-    {
-      let decode = this.jwtService.decodeToken(token);
-      this.userid = decode.user_id;
+    this.tasks.forEach(task => {
+      switch (task.priority.id) {
+        case 1:
+          this.atRiskCount++;
+          break;
+        case 2:
+          this.highCount++;
+          break;
+        case 3:
+          this.mediumCount++;
+          break;
+        case 4:
+          this.lowCount++;
+          break;
+        default:
+          break;
+      }
+    });
 
-
-      this.projectService.getProjectsData().subscribe(projects => {
-        this.projects = projects;
-
-        this.assignmentService.getAllUserAssignments(this.userid).subscribe(tasks => {
-          this.tasks = tasks;
-          
-          this.tasks.forEach(task => {
-            switch (task.priority.id) {
-              case 1:
-                this.atRiskCount++;
-                break;
-              case 2:
-                this.highCount++;
-                break;
-              case 3:
-                this.mediumCount++;
-                break;
-              case 4:
-                this.lowCount++;
-                break;
-              default:
-                break;
-            }
-          });
-
-          this.projects.forEach(project => {
-            switch (project.priority.id) {
-              case 1:
-                this.patRiskCount++;
-                break;
-              case 2:
-                this.phighCount++;
-                break;
-              case 3:
-                this.pmediumCount++;
-                break;
-              case 4:
-                this.plowCount++;
-                break;
-              default:
-                break;
-            }
-          });
+    this.projects.forEach(project => {
+      switch (project.priority.id) {
+        case 1:
+          this.patRiskCount++;
+          break;
+        case 2:
+          this.phighCount++;
+          break;
+        case 3:
+          this.pmediumCount++;
+          break;
+        case 4:
+          this.plowCount++;
+          break;
+        default:
+          break;
+      }
+    });
 
           const daysOfWeek = ['At risk', 'High', 'Medium', 'Low'];
     
@@ -94,8 +79,8 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
           data: {
             labels: daysOfWeek,
             datasets: [
-              { label: "Projects", data: [this.patRiskCount,this.phighCount,this.pmediumCount,this.plowCount], backgroundColor: 'rgba(0, 128, 128)' },
-              { label: "Tasks", data: [this.atRiskCount,this.highCount,this.mediumCount,this.lowCount], backgroundColor: 'rgba(255, 127, 80)' }
+              { label: "Projects", data: [this.patRiskCount,this.phighCount,this.pmediumCount,this.plowCount], backgroundColor: '#ECEE81' },
+              { label: "Tasks", data: [this.atRiskCount,this.highCount,this.mediumCount,this.lowCount], backgroundColor: '#8DDFCB' }
             ]
           },
           options: {
@@ -117,16 +102,26 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
             indexAxis: 'y',
             scales: {
               x: {
-                stacked: false
+                title: {
+                  display: true,
+                  text: 'Quantity'
+                },
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1
+                }
               },
               y: {
-                stacked: false
+                title: {
+                  display: true,
+                  text: 'Priority name'
+                },
+                beginAtZero: true,
               }
             }
           }
         });
-        });
-      });
-    }
+
+    
   }
 }

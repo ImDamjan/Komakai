@@ -26,6 +26,12 @@ export class TasksComponent {
   @ViewChild('taskFilter') taskFilterComponent: TaskFilterComponent | undefined;
   filteredTasks: Task[] = [];
 
+  tasks: Task[] = [];
+
+  public desiredPage: number = 1;
+
+  isLastPage: boolean = false;
+
   private task_date_service = inject(DateConverterService);
 
   public currentPage: number = 1;
@@ -37,14 +43,13 @@ export class TasksComponent {
   public filter: TaskFilter = {
     propertyName : "Last Updated",
     sortFlag : -1,
-    pageNumber: 1,
-    pageSize: 6
+    pageNumber: 1
   };
 
   private jwtDecoder = inject(JwtDecoderService);
   remainingTimeSubscriptions: Subscription[] = [];
 
-  constructor(private taskService: AssignmentService) { }
+  constructor(private taskService: AssignmentService, private route: ActivatedRoute) { }
 
   ngOnDestroy(): void {
     this.remainingTimeSubscriptions.forEach(sub => sub.unsubscribe());
@@ -66,8 +71,25 @@ export class TasksComponent {
     //     });
     //     this.filteredTasks = tasks;
     // });
+
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+      this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
+      tasks.forEach(task => {
+        this.task_date_service.setDateParametersForTask(task);
+      });
+      this.tasks = tasks;
+    })};
+
+    this.filter.pageSize=6;
+
     this.activatedRoute.paramMap.subscribe(params => {
       if (params.has('pageNumber')) {
+        // console.log(params.get('pageNumber'))
         this.currentPage = parseInt(params.get('pageNumber')!);
         this.filter.pageNumber = this.currentPage;
       }
@@ -129,10 +151,17 @@ export class TasksComponent {
   }
   
   nextPage() {
-    this.currentPage++;
-    this.filter.pageNumber = this.currentPage;
-    this.router.navigate(['/tasks', this.currentPage]);
-    this.fetchTasksForCurrentPage();
+    if(this.currentPage < this.getTotalPages()){
+      this.currentPage++;
+      this.filter.pageNumber = this.currentPage;
+      this.router.navigate(['/tasks', this.currentPage]);
+      this.fetchTasksForCurrentPage();
+    }
+    this.updateIsLastPage();
+  }
+
+  updateIsLastPage() {
+    this.isLastPage = this.currentPage === this.getTotalPages();
   }
 
   fetchTasksForCurrentPage() {
@@ -150,24 +179,39 @@ export class TasksComponent {
     }
   }
 
-  // getTotalPages(): number {
-  //   if(this.filter.pageSize){
-  //     console.log(this.filter.pageSize)
-  //     return Math.ceil(this.tasks.length / this.filter.pageSize);
-  //   }
-  //   else
-  //     return 0;
-  // }
+  getTotalPages(): number {
+    if (this.filter.pageSize) {
+      return Math.ceil(this.tasks.length / this.filter.pageSize);
+    } else {
+      return 0;
+    }
+  }
 
-  constructFilterQueryString(): any {
-    let queryString: TaskFilter = {};
-    if (this.filter.searchTitle) {
-      queryString['searchTitle'] = this.filter.searchTitle;
+  navigateToPage(pageNumber: number) {
+    this.currentPage = pageNumber;
+    this.filter.pageNumber = pageNumber;
+    this.router.navigate(['/tasks', pageNumber]);
+    this.fetchTasksForCurrentPage();
+  }
+
+  getDisplayedPageRange(currentPage: number, totalPages: number): number[] {
+    const maxDisplayedPages = 3;
+    let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
+    const endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
+    startPage = Math.max(1, Math.min(startPage, endPage - maxDisplayedPages + 1));
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  }
+
+  goToInputPage() {
+    const pageNumber = Math.min(Math.max(this.desiredPage, 1), this.getTotalPages());
+    this.currentPage = pageNumber;
+    this.filter.pageNumber = pageNumber;
+    if (pageNumber > this.getTotalPages()) {
+      this.router.navigate(['/tasks', this.getTotalPages()]);
+    } else {
+      this.router.navigate(['/tasks', pageNumber]);
     }
-    if(this.filter.stateFilter){
-      queryString['stateFilter'] = this.filter.stateFilter;
-    }
-    return queryString;
+    this.fetchTasksForCurrentPage();
   }
 
 }

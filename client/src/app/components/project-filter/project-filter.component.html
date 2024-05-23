@@ -1,7 +1,7 @@
 <div class = 'project-filter'>
     <div class="header-filter">
         <h2>Filters</h2>
-        <button class="filter-button" (click)="sendFilter()" ><img src="assets\task-header\filter.svg" alt="img-filter" width="20" height="20"></button>
+        
     </div>
     <div class = 'priority'>
         <h4>Priorities</h4>
@@ -42,4 +42,5 @@
         Ascending <input type="radio" name="sort-mode" [value]="1" (click)="sendSortFilter(1)">
         Descending <input type="radio" name="sort-mode" [value]="-1" cl (click)="sendSortFilter(-1)" checked>
     </div>
+    <button class="filter-button" (click)="sendFilter()" >Apply</button>
 </div>

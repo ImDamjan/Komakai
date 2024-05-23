@@ -28,12 +28,12 @@ export class EditTeamComponent implements OnInit{
   ngOnInit(): void {
     this.team = this.data[1];
     this.users = this.data[0];
-    console.log(this.team.members);
+    // console.log(this.team.members);
     this.team.members.forEach(element => {
       element.fulname = element.name + " " + element.lastname;
     });
     this.selectedUsers = this.team.members;
-    console.log(this.selectedUsers);
+    // console.log(this.selectedUsers);
     this.updateTeamObj.name=this.team.name;
     this.updateTeamObj.type = this.team.type;
     this.updateTeamObj.createdBy = this.team.createdBy;
@@ -45,7 +45,7 @@ export class EditTeamComponent implements OnInit{
     if(this.selectedUsers.length <= 0)
     {
       this.spinner.hide();
-      alert("Team does not have any memebers selected!");
+      // alert("Team does not have any memebers selected!");
       return;
     }
     if(this.updateTeamObj.name==="")

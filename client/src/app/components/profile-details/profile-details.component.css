@@ -3,7 +3,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 20%;
+    width: 25%;
     height: auto;
     background-color: white;
     z-index: 9999;
@@ -15,6 +15,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: context-menu;
+    user-select: none;
 }
 
 .centered-content {
@@ -32,12 +34,29 @@
     margin-left: 10px;
 }
 
-.contact-info {
-    width: 100%;
-    margin-top: 10px;
-    text-align: left;
-    margin: 10px 0px 10px 20%;
+#description span {
+    cursor: context-menu;
+    user-select: none;
 }
+
+span{
+    margin-top: 10px;
+    padding: 5px;
+}
+
+table {
+    font-family: 'Poppins', sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  td{
+    border: 0.1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+  }
  
 .title {
     font-weight: bold;
@@ -51,6 +70,14 @@
     background-color: #001B47;
     border-radius: 100px;
     object-fit: cover;
+}
+
+.form-control{
+    margin-top: 10px;
+    width: 100%;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    border: 0px;
 }
 
 .editdetails {
@@ -120,9 +147,14 @@
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
+    margin-top: 15px;
 }
 
-.input-field {
+.contact-info{
+    width: 80%;
+}
+
+.input-field{
     width: 70%;
     height: 40px;
     background: #FFFFFF;
@@ -137,4 +169,31 @@
     margin: 0px;
     font-size: x-small;
     width: 70%;
+}
+
+.input-field[disabled] {
+    background-color: #f2f2f2;
+    border: 1px solid #d3d3d3;
+    cursor: not-allowed;
+    color: #888888; 
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #00bfff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.input-field, #nametitle, #emailtitle, #organisationtitle, #departmenttitle{
+    width: 100%;
+    margin-top: 10px;
 }

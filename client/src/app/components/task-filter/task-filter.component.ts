@@ -46,7 +46,7 @@ export class TaskFilterComponent implements OnInit {
     "Progress"
   ];
 
-  notProjectDetails : boolean = true;
+  notProjectDetails : boolean = false;
 
   selectedPrios : Priority[] = [];
   selectedStates : State[] = [];
@@ -55,7 +55,7 @@ export class TaskFilterComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.show();
     if(this.router.url!=="/tasks")
-      this.notProjectDetails = false;
+      this.notProjectDetails = true;
     if(this.notProjectDetails)
     {
       this.projectService.getUserFilterProjects().subscribe({
@@ -139,7 +139,7 @@ export class TaskFilterComponent implements OnInit {
         this.filter.stateFilter?.push(state.id);
       });
     }
-    console.log(this.filter);
+    // console.log(this.filter);
 
     this.filterEmiter.emit(this.filter);
   }

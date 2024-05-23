@@ -76,7 +76,7 @@ export class ProjectFilterComponent implements OnInit {
   {
     // console.log(this.selectedPrios);
     // console.log(this.selectedStates);
-    console.log(this.EndRange);
+    // console.log(this.EndRange);
     this.filter.priorityFilter = []
     this.filter.stateFilter = [];
     this.filter.budgetFilterFrom = this.budgetValues[0];
@@ -120,7 +120,7 @@ export class ProjectFilterComponent implements OnInit {
         this.filter.stateFilter?.push(state.id);
       });
     }
-    console.log(this.filter);
+    // console.log(this.filter);
 
     this.searchFilterProjectChanged.emit({filter:this.filter});
   }
