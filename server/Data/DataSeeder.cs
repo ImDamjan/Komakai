@@ -784,80 +784,7 @@ namespace server.Data
                                     },
                                 }
                             },
-                            new Project
-                            {
-                                Id = 11,
-                                Title = "Non-email Campaign",
-                                StateId = 2,
-                                Percentage = 80,
-                                Start = new DateTime(2023, 2, 10),
-                                End = new DateTime(2023, 6, 30),
-                                Description = "Plan and execute a targeted marketing campaign for new product launch.",
-                                LastStateChangedTime = DateTime.Now,
-                                Budget = 12000,
-                                Spent = 10000,
-                                Type = "Marketing",
-                                PriorityId = 1, // High Priority
-                                ProjectUsers = new List<ProjectUser>{
-                                    new ProjectUser{
-                                        ProjectId = 2,
-                                        User = users[1],
-                                        Role = users[1].Role
-                                    },
-                                    new ProjectUser{
-                                        ProjectId = 2,
-                                        User = users[5],
-                                        Role = users[5].Role
-                                    },
-                                    new ProjectUser{
-                                        ProjectId = 2,
-                                        User = users[4],
-                                        Role = users[4].Role
-                                    },
-                                    new ProjectUser{
-                                        ProjectId = 2,
-                                        User = users[7],
-                                        Role = users[7].Role
-                                    },
-                                }
-                            },
-                            new Project
-                            {
-                                Id = 12,
-                                Title = "DataHarbor",
-                                StateId = 2,
-                                Percentage = 80,
-                                Start = new DateTime(2024, 5, 18),
-                                End = new DateTime(2024, 7, 12),
-                                Description = "A cutting-edge data management platform designed to securely store, process, and analyze large volumes of diverse data types, offering advanced analytics and insights for informed decision-making.",
-                                LastStateChangedTime = DateTime.Now,
-                                Budget = 12000,
-                                Spent = 10000,
-                                Type = "Marketing",
-                                PriorityId = 1, // High Priority
-                                ProjectUsers = new List<ProjectUser>{
-                                    new ProjectUser{
-                                        ProjectId = 2,
-                                        User = users[1],
-                                        Role = users[1].Role
-                                    },
-                                    new ProjectUser{
-                                        ProjectId = 2,
-                                        User = users[5],
-                                        Role = users[5].Role
-                                    },
-                                    new ProjectUser{
-                                        ProjectId = 2,
-                                        User = users[4],
-                                        Role = users[4].Role
-                                    },
-                                    new ProjectUser{
-                                        ProjectId = 2,
-                                        User = users[7],
-                                        Role = users[7].Role
-                                    },
-                                }
-                            },
+
                         };
                         //TO-DO uraditi initial task-grupe za projekte
                         for(int i = 1;i<=10;i++)
@@ -879,16 +806,16 @@ namespace server.Data
                                 //project 1 rok (2023, 1, 15) do (2023, 5, 30),members:1,3,4,7
                                 new Assignment{
                                     Id = 1,
-                                    Title = "Neki task",
+                                    Title = "Develop Software Features",
                                     Owner = 1,
-                                    Description = "Neki opis",
-                                    Start = new DateTime(2023, 1, 25),
-                                    End = new DateTime(2023, 2, 14),
+                                    Description = "Implement new functionalities in the company`s software products",
+                                    Start = new DateTime(2023, 3, 25),
+                                    End = new DateTime(2023, 6, 14),
                                     StateId = 2,
-                                    Percentage = 20,
-                                    PriorityId = 4,
+                                    Percentage = 35,
+                                    PriorityId = 3,
                                     Type = "Neki tip",
-                                    TaskGroupId = 1,
+                                    TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
                                     Users = new List<User>{users[0],users[2]},
@@ -896,7 +823,7 @@ namespace server.Data
                                 },
                                 new Assignment{
                                     Id = 2,
-                                    Title = "Neki task 2",
+                                    Title = "Conduct Market Research",
                                     Owner = 1,
                                     Description = "Neki opis",
                                     Start = new DateTime(2023, 1, 25),
