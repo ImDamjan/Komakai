@@ -832,7 +832,7 @@ namespace server.Data
                                     Percentage = 30,
                                     PriorityId = 2,
                                     Type = "Tip 2",
-                                    TaskGroupId = 1,
+                                    TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
                                     Users = new List<User>{users[6],users[3]},
