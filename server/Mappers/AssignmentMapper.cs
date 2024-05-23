@@ -24,7 +24,7 @@ namespace server.Mappers
                 Description = dto.Description,
                 Users = users,
                 TaskGroup = group,
-                DependentOnAssignments = dependencies,
+                Assignments = dependencies,
                 PriorityId = dto.PriorityId
             };
         }
