@@ -35,7 +35,7 @@ namespace server.Repositories
             .Include(a=>a.TaskGroup)
             .Include(a=>a.User).ThenInclude(u=>u.Role)
             .Include(a=>a.Priority)
-            .Include(a=>a.DependentOnAssignments)
+            .Include(a=>a.Assignments)
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged)
             .AsQueryable();
 
@@ -55,7 +55,7 @@ namespace server.Repositories
             .Include(a=>a.TaskGroup)
             .Include(a=>a.User)
             .Include(a=>a.Priority)
-            .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged).AsQueryable();
+            .Include(a=>a.State).Where(a=>!a.IsClosed).OrderByDescending(a=>a.LastTimeChanged).AsQueryable();
 
             if (projects != null && projects.Count > 0)
             {
@@ -74,7 +74,7 @@ namespace server.Repositories
             .Include(a=>a.User)
             .Include(a=>a.Priority)
             .Include(a=>a.State)
-            .Include(a=>a.DependentOnAssignments)
+            .Include(a=>a.Assignments)
             .FirstOrDefaultAsync(a=>a.Id==id);
         }
 
@@ -83,9 +83,10 @@ namespace server.Repositories
             var assignment = await GetAssignmentByidAsync(id);
             if(assignment==null)
                 return null;
-            assignment.DependentOnAssignments = dependentOn;
+            assignment.Assignments = dependentOn;
             assignment.Title = a.Title;
             assignment.Users = users;
+            assignment.IsClosed = a.IsClosed;
             assignment.TaskGroupId = a.TaskGroupId;
             assignment.Start = a.Start;
             assignment.End = a.End;
@@ -194,7 +195,15 @@ namespace server.Repositories
                 else
                    assignments =assignments.OrderByDescending(p=>p.LastTimeChanged);
             }
-            return await assignments.ToListAsync();
+            //stavlja closed na kraju
+            var filtered = await assignments.ToListAsync();
+            var completed = filtered.Where(a=>a.IsClosed).ToList();
+            var notCompleted = filtered.Where(a=>!a.IsClosed).ToList();
+            // System.Console.WriteLine("IDEMOOOOOOOOOOOOMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+            // System.Console.WriteLine(completed.Count);
+            // System.Console.WriteLine(notCompleted.Count);
+            notCompleted.AddRange(completed);
+            return notCompleted;
         }
 
         public async Task<Assignment?> DeleteAssignmentByIdAsync(int asign_id)
@@ -211,14 +220,14 @@ namespace server.Repositories
 
         public async Task<List<Assignment>> getDependentAssignments(int asign_id)
         {
-            var asignment = await _context.Assignments.Include(a=>a.DependentOnAssignments).ThenInclude(a=>a.TaskGroup).FirstOrDefaultAsync(a=>a.Id==asign_id);
+            var asignment = await _context.Assignments.Include(a=>a.Assignments).ThenInclude(a=>a.TaskGroup).FirstOrDefaultAsync(a=>a.Id==asign_id);
             if(asignment==null)
             {
                 return new List<Assignment>();
             }
 
 
-            return asignment.DependentOnAssignments.ToList();
+            return asignment.Assignments.ToList();
             
         }
 
@@ -229,8 +238,8 @@ namespace server.Repositories
                 foreach (var taskId in dto.AddDependentOn)
                 {
                     var task = await GetAssignmentByidAsync(taskId);
-                    if(task!=null && assignment.DependentOnAssignments.FirstOrDefault(t=>t.Id==task.Id)==null)
-                        assignment.DependentOnAssignments.Add(task);
+                    if(task!=null && assignment.Assignments.FirstOrDefault(t=>t.Id==task.Id)==null)
+                        assignment.Assignments.Add(task);
                 }
             }
             if(dto.RemoveDependentOn.Count > 0)
@@ -239,7 +248,7 @@ namespace server.Repositories
                 {
                     var task = await GetAssignmentByidAsync(taskId);
                     if(task!=null)
-                        assignment.DependentOnAssignments.Remove(task);
+                        assignment.Assignments.Remove(task);
                 }
             }
             if(dto.EndTs!=0)

@@ -87,6 +87,7 @@ import { FilterUserComponent } from './components/filter-user/filter-user.compon
 import { ResetpasswordComponent } from './pages/resetpassword/resetpassword/resetpassword.component';
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { BadgeModule} from 'primeng/badge';
 
 @NgModule({
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -141,6 +142,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     FormsModule,
     BrowserModule,
     SliderModule,
+    BadgeModule,
     CalendarModule,
     ProgressSpinnerModule,
     MultiSelectModule,
