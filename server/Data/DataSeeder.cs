@@ -798,7 +798,7 @@ namespace server.Data
                             _context.TaskGroups.Add(group);
                             var subGroup = new TaskGroup
                             {
-                                Title = "Podgrupa",
+                                Title = "Podgrup",
                                 ProjectId = i,
                                 ParentTaskGroupId = group.Id
                             };
