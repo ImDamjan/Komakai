@@ -94,8 +94,8 @@
 
     <table>
         <tr>
-            <th>Dependencies</th>
-            <th><p *ngIf="hasDependent && (!showUpdate || !isManager)">There are no dependecies for this task !</p>
+            <th>Tasks that depend on this task</th>
+            <th><p *ngIf="hasDependent && (!showUpdate || !isManager)">There are no dependecies from this task !</p>
                 <div *ngIf="!hasDependent && (!showUpdate || !isManager)">
                     <div class = "dependecy" *ngFor="let dependent of dependentTasks">
                         {{dependent.title}}

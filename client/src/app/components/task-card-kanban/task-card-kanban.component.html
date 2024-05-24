@@ -1,4 +1,4 @@
-<div class="frame-4">
+<div class="frame-4" [ngClass]="'kanban_bar_' + task.state.id">
     <div class="title">
       <h2 [title]="task.title">{{task.dummyTitle}}</h2>
     </div>
