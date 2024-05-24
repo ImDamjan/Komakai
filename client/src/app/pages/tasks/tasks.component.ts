@@ -117,6 +117,7 @@ export class TasksComponent {
       let decode = this.jwtDecoder.decodeToken(token);
       id = decode.user_id;
       this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
+        console.log(this.filter)
       tasks.forEach(task => {
         this.task_date_service.setDateParametersForTask(task);
       });
@@ -131,11 +132,12 @@ export class TasksComponent {
     //   this.filterbezpag.pageNumber = undefined;
     //   this.filterbezpag.pageSize = undefined;
     //   this.taskService.getAllUserAssignments(id,this.filterbezpag).subscribe(tasks => {
+    //     console.log(this.filterbezpag);
     //   tasks.forEach(task => {
     //     this.task_date_service.setDateParametersForTask(task);
     //   });
     //   this.tasks = tasks;
-    //   console.log(tasks)
+    //   // console.log(tasks)
     // });
     // }
   }
@@ -182,6 +184,7 @@ export class TasksComponent {
       let decode = this.jwtDecoder.decodeToken(token);
       id = decode.user_id;
       this.taskService.getAllUserAssignments(id, this.filter).subscribe(tasks => {
+        // console.log(this.filter);
         tasks.forEach(task => {
           this.task_date_service.setDateParametersForTask(task);
         });
