@@ -52,24 +52,34 @@ Naša aplikacija se nalazi na sledećoj [adresi](http://softeng.pmf.kg.ac.rs:101
 # Korisnicki nalozi za testiranje:
 
 1. Administrator
-ethanmoore
-password707
+    - username:
+        + ethanmoore
+    - password:
+        + password707
 
 2. Project Manager
-aleksandra_stanic
-Boki037
+    - username:
+        + aleksandra_stanic
+    - password:
+        + Boki037
 
 3. Project Worker
-alexjohnson
-password789
+    - username:
+        + alexjohnson
+    - password:
+        + password789
 
 4. User
-jessicalee
-password404
+    - username:
+        + jessicalee
+    - password:
+        + password404
 
 5. Guest
-oliviaanderson
-password606
+    - username:
+        + oliviaanderson
+    - password:
+        + password606
 
 # Tim
 1. Aleksandra Stanić
