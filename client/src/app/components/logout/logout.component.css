@@ -1,0 +1,7 @@
+#logout {
+    margin-bottom: 5px;
+}
+#logout:hover {
+    cursor: pointer;
+    border-radius: 10px;
+}

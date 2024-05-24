@@ -1,0 +1,56 @@
+.projectlist {
+    max-width: calc(100% - 16.5625rem);
+    height: 100%;
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    padding: 50px 0px 5px 0px;
+}
+
+.create {
+    width: 110px;
+    height: 40px;
+    border-radius: 10px;
+    margin-right: 50px;
+    background-color: #001B47;
+    color: white;
+    font: 400 12px/1.2 Poppins, sans-serif;
+}
+
+.title {
+    font-family: 'Poppins',sans-serif;
+    color: #000;
+    font-size: 32px;
+    margin-top: 5px;
+}
+
+#search-field {
+    width: 30vw;
+    height: 40.8px;
+    background: #FEFEFE;
+    border: 1px solid #9A93B3;
+    border-radius: 5px;
+    text-indent: 10%;
+}
+
+input#search-field {
+    background-image: url("../../../assets/project-task-header/search.svg");
+    background-repeat: no-repeat;
+    background-position: 3% center;
+}
+
+.search {
+    width: 30vw;
+    height: 85%;
+    margin-right: 2vw;
+}
+
+.filters{
+    margin-right: 1%;
+}
+
+.sort{
+    margin-right: 2vw;
+}
