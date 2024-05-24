@@ -10,7 +10,7 @@
     overflow: hidden;
     background: #f1f1f1;
     border-radius: .5rem;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    /* box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px; */
   }
   h2{
     padding-top: 5px;
@@ -93,3 +93,35 @@
   }
 
 
+
+
+  .kanban_bar_1 {
+    border : 3px solid  #fd0363;
+    background-color: whitesmoke;
+    /* box-shadow: #fd0363 0px 13px 27px -5px, #fd0363 0px 8px 16px -8px; */
+  }
+  
+  .kanban_bar_2 {
+    border : 3px solid #cc095d;
+    background-color: whitesmoke;
+  }
+  
+  .kanban_bar_3 {
+    border : 3px solid #9c1057;
+    background-color: whitesmoke;
+  }
+  
+  .kanban_bar_4 {
+    border : 3px solid #6b1650;
+    background-color: whitesmoke;
+  }
+  
+  .kanban_bar_5 {
+    border : 3px solid #3b1d4a;
+    background-color: whitesmoke;
+  }
+  
+  .kanban_bar_6 {
+    border : 3px solid #0a2344;
+    background-color: whitesmoke;
+  }

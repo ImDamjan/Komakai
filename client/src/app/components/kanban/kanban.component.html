@@ -7,7 +7,7 @@
             (cdkDropListDropped)="dropGrid($event)">
         <div 
            cdkDragLockAxis="x" class="board-column" 
-           *ngFor="let column of board.columns" cdkDrag>
+           *ngFor="let column of board.columns" [ngClass]="'kanban_bar_' + column.id" >
           <div class="column-title" cdkDragHandle>
             {{ column.name }}
           </div>
@@ -28,7 +28,7 @@
           cdkDropList
           [cdkDropListData]="column.tasks"
           (cdkDropListDropped)="drop($event)">
-          <app-task-card-kanban (newItemEvent)="changeState($event)" class="task" *ngFor="let item of column.tasks" [userProjectRole]="userProjectRole" [task]="item"/>
+          <app-task-card-kanban (newItemEvent)="changeState($event)"  class="task " *ngFor="let item of column.tasks" [userProjectRole]="userProjectRole"  [task]="item"/>
           </div>
 
         </div>
