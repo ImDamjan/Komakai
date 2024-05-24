@@ -28,12 +28,14 @@
     - Postaviti putanju na terminala na folder server
     - Zatim pokrenuti komandu *dotnet ef migrations add ime_migracije*
     - Nakon toga treba pokrenuti komandu *dotnet ef database update*
-    - Nakon ove komande baza će biti kreirana i sa njom možemo da interagujemo preko bilo kog SQLite editora ([DB Browser](https://sqlitebrowser.org/))
+    - Nakon ove komande baza će biti kreirana
+
 2. Pokretanje bekenda
     - Otvori se terminal na računaru ili u editoru (preporuka VS code)
     - Postaviti putanju na terminala na folder server
     - Pokrenuti komandu *dotnet watch run*, može da se pokrene i komanda *dotnet watch run seed* koja će uneti već neke default podatke u bazu.
     - Nakon ovoga trebalo bi da se otvori Swagger preko kojeg možemo da komuniciramo sa bazom i on bi trebao da se nalazi na adresi http://localhost:5295
+
 3. Pokretanje frontenda
     - Otvori se terminal na računaru ili u editoru (preporuka VS code)
     - Postaviti putanju na terminala na folder client
@@ -43,12 +45,35 @@
 
 # Pokretanje produkcione verzije projekta
 Ovo podrazumeva da će se projekat pokretati na nekom serveru a ne kod nas lokalno.
-Prilikom pokretanje Angular projekta trebaju nam 2 terminala da bi se on podigao na server. U jednom terminalu umesto *ng serve* komande koristi *ng build --watch* i ovde će moći da se prati kako bi se aplikacija ponašala da je na serveru. Na drugom terminalu treba da se pokrene server, npr ako bi koristili lite-server, ukucali bi komandu *lite-server --baseDir="dist/project-name"*. Ovo je bi bio način podizanja aplikacije sa našeg diska. Za druge načine podizanja aplikacije na server možemo naći [ovde](https://angular.io/guide/deployment).
+Prilikom pokretanje Angular projekta trebaju nam 2 terminala da bi se on podigao na server. U jednom terminalu umesto *ng serve* komande koristi *ng build --watch* i ovde će moći da se prati kako bi se aplikacija ponašala da je na serveru. Na drugom terminalu treba da se pokrene server, npr ako bi koristili lite-server, ukucali bi komandu *lite-server --baseDir="dist/project-name"*. Ovo je bi bio način podizanja aplikacije sa našeg diska. 
 
+Naša aplikacija se nalazi na sledećoj [adresi](http://softeng.pmf.kg.ac.rs:10190/)
+
+# Korisnicki nalozi za testiranje:
+
+1. Administrator
+ethanmoore
+password707
+
+2. Project Manager
+aleksandra_stanic
+Boki037
+
+3. Project Worker
+alexjohnson
+password789
+
+4. User
+jessicalee
+password404
+
+5. Guest
+oliviaanderson
+password606
 
 # Tim
 1. Aleksandra Stanić
-2. Anastasija iličić
+2. Anastasija Iličić
 3. Aleksa Kosovac
 4. Damjan Pavlović
 5. Stefan Vučićević
