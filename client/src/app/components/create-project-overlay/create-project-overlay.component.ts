@@ -266,7 +266,11 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   getRolesForUser(user: User): Role[] {
-    return this.roles.filter(role => role.authority >= user.role.authority);
+    if (user.id == this.loggedInUserId) {
+      return this.roles;
+    } else {
+      return this.roles.filter(role => role.id !== 1 && role.authority >= user.role.authority);
+    }
   }
 
   get filteredUsers(): any[] {
@@ -285,4 +289,10 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== user.id);
     this.selectedUserRolesMap.delete(user.id);
   } 
+
+  getSelectedRoleId(userId: number): number | null {
+    if(this.userRoles.get(userId) == 1 && userId != this.loggedInUserId && !this.selectedUserRolesMap.get(userId))
+      this.userRoles.set(userId, 2);
+    return this.selectedUserRolesMap.get(userId) || this.userRoles.get(userId) || null;
+  }
 }
