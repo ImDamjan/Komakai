@@ -2,8 +2,9 @@
     <div class="header">
         <h1 *ngIf="!showUpdate || !isManager">{{assignment.title}}</h1>
         <input type="text" class="task-title" *ngIf="showUpdate && isManager" [(ngModel)]="updateObj.title">
-        <button class="update" (click)="updateTask()" *ngIf="!showUpdate && (isManager || isWorker)">Update</button>
-        <!-- <button class="closed" (click)="sendCloseRequest()">Close Task</button> -->
+        <button class="update" (click)="updateTask()" *ngIf="!showUpdate && (isManager || (isWorker && hasCompletedDependentTasks)) && !assignment.isClosed">Update</button>
+        <button *ngIf="!assignment.isClosed && assignment.percentage===100 && isManager" class="closed" (click)="sendCloseRequest(true)">Close Task</button>
+        <button *ngIf="assignment.isClosed && isManager" class="closed" (click)="sendCloseRequest(false)">Reopen Task</button>
         <br>
     </div>
 
@@ -93,9 +94,9 @@
 
     <table>
         <tr>
-            <th>Dependencies</th>
-            <th><p *ngIf="hasDependent && !showUpdate || !isManager">There are no dependecies for this task !</p>
-                <div *ngIf="!hasDependent && !showUpdate || !isManager">
+            <th>Tasks that depend on this task</th>
+            <th><p *ngIf="hasDependent && (!showUpdate || !isManager)">There are no dependecies from this task !</p>
+                <div *ngIf="!hasDependent && (!showUpdate || !isManager)">
                     <div class = "dependecy" *ngFor="let dependent of dependentTasks">
                         {{dependent.title}}
                     </div>

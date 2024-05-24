@@ -122,9 +122,11 @@ export class AddTaskComponent implements OnInit {
     // console.log(this.data);
     this.userService.getProjectUsers(Number(this.data[1])).subscribe({
       next : (users: User[])=>{
-        this.users = users
-        this.users.forEach(element => {
+        this.users = [];
+        users.forEach(element => {
           element.fulname = element.name + " "+ element.lastname;
+          if(element.isActivated)
+            this.users.push(element);
         });
       }
     });
