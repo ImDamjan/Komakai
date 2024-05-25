@@ -3,12 +3,13 @@ import {srLatn} from 'date-fns/locale'
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
 import {GantogramService} from '../../services/gantogram.service'
-import { GanttMapper } from '../../models/gantogram/gan_mapper';
+import { GanttMapper } from '../../models/gantogram/gantt_mapper';
 import { DomSanitizer } from '@angular/platform-browser';
 import {
   GanttBarClickEvent,
   GanttBaselineItem,
   GanttDragEvent,
+  GanttGroup,
   GanttItem,
   GanttLineClickEvent,
   GanttLinkDragEvent,
@@ -23,7 +24,7 @@ import {
   GanttViewType,
   NgxGanttComponent 
 } from '@worktile/gantt';
-import { Observable, Subject, filter, finalize, of } from 'rxjs';
+import { Observable, Subject, delay, filter, finalize, of } from 'rxjs';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { Task } from '../../models/task/task';
 import { ActivatedRoute } from '@angular/router';
@@ -33,7 +34,6 @@ import { UpdateGant } from '../../models/gantogram/update_gant_task';
 import { DatePipe } from '@angular/common';
 
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { log } from 'console';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
 import { AssignmentService } from '../../services/assignment.service';
@@ -41,6 +41,7 @@ import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
 import { TaskFilter } from '../../models/task/task-filter';
 import { Notify } from '../../models/notifications/notify';
+// import { random, randomGroupsAndItems, randomItems } from '../../helper';
 
 
 
@@ -70,6 +71,13 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
   
   isDragable:boolean = false;
   isLinkable:boolean = false;
+
+
+  // it: GanttItem[] = [];
+
+  groups: GanttGroup[] = [];
+
+  expanded = true;
   
   task!: Task;
   taskFilter : TaskFilter = {}
@@ -168,6 +176,16 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
 
   ngOnInit(): void {
       // init items children
+
+      // const { groups, items } = randomGroupsAndItems(10);
+      // this.groups_test = groups;
+      // this.items_test = items;
+
+      // console.log(groups);
+      // console.log(items);
+      
+
+
       this.isDragable = true;
       this.isLinkable = true;
       let token = this.decoder.getToken();
@@ -197,11 +215,26 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
       //     }
       // });
       // this.spinner.hide();
-
-      
-
-      
+    
   }
+  // ---------------------------------------------------------------------
+  expandAllGroups() {
+    if (this.expanded) {
+        this.expanded = false;
+        this.ganttComponent.collapseAll();
+    } else {
+        this.expanded = true;
+        this.ganttComponent.expandAll();
+    }
+  }
+
+//   childrenResolve = (item: GanttItem) => {
+//     const children = randomItems(random(1, 5), item);
+//     return of(children).pipe(delay(1000));
+// };
+
+  // ------------------------------------------------------------------------
+
 
   public getUpdateEmitter(task:Task)
   {
@@ -272,7 +305,7 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
       next : (tasks: Task[])=> 
         {
           if (tasks && tasks.length > 0){
-            var res = GanttMapper.mapTasksToGantItems(tasks)
+            var res = GanttMapper.mapTasksToGantItems(tasks,this.groups)
             this.items = res
             this.itemsOldState = this.copyItems(this.items)
             this.loading = false;

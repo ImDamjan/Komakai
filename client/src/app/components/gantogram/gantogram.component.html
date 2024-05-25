@@ -35,6 +35,7 @@
           </mat-chip-option>
           <mat-chip id="refresh_btn" color="warn" (click)="refresh()"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;Refresh</mat-chip>
           <mat-chip id="scrollToToday_btn" color="accent" (click)="scrollToToday()"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;Scroll to today</mat-chip>
+          <mat-chip id="" color="accent" (click)="expandAllGroups()"><i class="fa" [ngClass]="expanded ? 'fa-compress' : 'fa-expand'" aria-hidden="true"></i>&nbsp;{{ expanded ? 'Collapse All groups' : 'Expand All groups' }}</mat-chip>
           <mat-chip id="download_id" (click)="downloadGantt()"><span class="fa fa-download" aria-hidden="true"></span>&nbsp;<span>Download</span></mat-chip>
         </mat-chip-listbox>
       </ng-template>
@@ -43,7 +44,11 @@
     <thy-content>
     <ngx-gantt *ngIf="userProjectRole!==undefined" id="gantt_id"
     #gantt
+    
     [items]="items"
+    [groups]="groups"
+    [async]="true"
+    
     
     [baselineItems]="baselineItems"
     [viewType]="viewType"
