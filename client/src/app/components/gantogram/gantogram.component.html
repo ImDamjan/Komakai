@@ -70,13 +70,13 @@
     (linkDragEnded)="linkDragEnded($event)"
   >
     <ngx-gantt-table
-      [draggable]="userProjectRole.name==='Project Manager'"
+      
       [dropEnterPredicate]="dropEnterPredicate"
       (dragDropped)="onDragDropped($event)"
       (dragStarted)="onDragStarted($event)"
       (dragEnded)="onDragEnded($event)"
     >
-      <ngx-gantt-column name="Gantogram" width="160px" [showExpandIcon]="true">
+      <ngx-gantt-column name="Gantogram" width="160px" [showExpandIcon]="true" >
         <ng-template #cell let-item="item"> {{ item.title }} </ng-template>
       </ngx-gantt-column>
       <ngx-gantt-column name="Starting time" width="200px">
@@ -90,6 +90,9 @@
         </ng-template>
       </ngx-gantt-column>
     </ngx-gantt-table>
+    <ng-template #group let-group="group" let-items="items">
+      <span [ngClass]="{'podgrupa': group.id != '0'}" class="text-primary">{{ group.title }} 🚀 </span>
+    </ng-template>
     <ng-template #bar let-item="item" style="z-index: -1;">
       <span style=" z-index: 100;" >&nbsp;&nbsp;{{ item.title }} </span>
     </ng-template>

@@ -17,6 +17,8 @@ export class GanttMapper {
             console.log((ganttGroups));
             
         }
+        console.log(ganttItems);
+        
         return ganttItems
     }
 
@@ -33,6 +35,7 @@ export class GanttMapper {
             expandable: false, // Postavite na true ako želite omogućiti proširivanje
             expanded: false, // Postavite na true ako želite da je element početno proširen
             color: this.mapPrioprityToColor(task.priority), // Postavite boju po želji
+            
             group_id : this.addTaskGroup(task.taskGroup,groups),
             // barStyle: {color: 'red !important'}, // Postavite stil trake po želji
             origin: task, // Originalni task
@@ -43,27 +46,46 @@ export class GanttMapper {
         
     }
 
-    static addTaskGroup(group: TaskGroup, groups: GanttGroup[]): string {
-        // Provera da li već postoji grupa sa istim id-jem
-        const existingGroup = groups.find(g => g.id === group.id.toString());
-
-        if (existingGroup) {
-            // Ako postoji, vrati id
-            return existingGroup.id;
-        } else {
-            // Ako ne postoji, kreiraj novi GanttGroup objekat
-            const newGanttGroup: GanttGroup<TaskGroup> = {
-                id: group.id.toString(), // Pretvaranje broja u string
-                title: group.title,
-                origin: group
-            };
-            
-            // Dodaj novi GanttGroup objekat u niz
-            groups.push(newGanttGroup);
-            
-            // Vrati id novododate grupe
-            return newGanttGroup.id;
+    static addTaskGroup(group: TaskGroup, groups: GanttGroup[]): string{
+       
+        
+        if(!group.parentTaskGroupId){
+            const existingGroup = groups.find(g => g.id === "0");
+            if(!existingGroup){
+                const newGanttGroup: GanttGroup<TaskGroup> = {
+                    id: "0", // Pretvaranje broja u string
+                    title: group.title,
+                    // origin: group
+                };
+                groups.push(newGanttGroup);
+                return newGanttGroup.id
+            }else{
+                return existingGroup.id;
+            }
+        }else{
+            const existingGroup = groups.find(g => g.id === group.id.toString());
+    
+            if (existingGroup) {
+                // Ako postoji, vrati id
+                return existingGroup.id;
+            } else {
+                // Ako ne postoji, kreiraj novi GanttGroup objekat
+                const newGanttGroup: GanttGroup<TaskGroup> = {
+                    id: group.id.toString(), // Pretvaranje broja u string
+                    title: "Podgrupa: " + group.title,
+                    // origin: group
+                };
+                
+                // Dodaj novi GanttGroup objekat u niz
+                groups.push(newGanttGroup);
+                
+                // Vrati id novododate grupe
+                return newGanttGroup.id;
+            }
         }
+
+        
+        // Provera da li već postoji grupa sa istim id-jem
     }
 
 
