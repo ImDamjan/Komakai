@@ -94,6 +94,7 @@ export class EditProjectOverlayComponent {
       this.project.users.forEach(user => {
         const roleId = user.role.id;
         this.selectedUserRolesMap.set(user.id, roleId);
+        
       });
     });
     this.priorityService.getPriorities().subscribe(priorities => {
@@ -132,10 +133,6 @@ export class EditProjectOverlayComponent {
   }
 
   isSelected(user: User): boolean {
-    // Check if user is selected
-    if(user.id == this.roleid)
-      return true;
-    // return this.selectedUserIds.includes(user.id);
     return this.selectedUserRolesMap.has(user.id);
   }
 
@@ -277,7 +274,11 @@ export class EditProjectOverlayComponent {
   }
 
   getRolesForUser(user: User): Role[] {
-    return this.roles.filter(role => role.authority >= user.role.authority);
+    if (user.id == this.loggedInUserId) {
+      return this.roles;
+    } else {
+      return this.roles.filter(role => role.id !== 1 && role.authority >= user.role.authority);
+    }
   }
 
   get filteredUsers(): any[] {
@@ -296,4 +297,10 @@ export class EditProjectOverlayComponent {
     this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== user.id);
     this.selectedUserRolesMap.delete(user.id);
   } 
+
+  getSelectedRoleId(userId: number): number | null {
+    if(this.userRoles.get(userId) == 1 && userId != this.loggedInUserId && !this.selectedUserRolesMap.get(userId))
+      this.userRoles.set(userId, 2);
+    return this.selectedUserRolesMap.get(userId) || this.userRoles.get(userId) || null;
+  }
 }
