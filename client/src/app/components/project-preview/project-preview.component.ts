@@ -511,15 +511,14 @@ export class ProjectPreviewComponent implements OnInit {
 
   adjustCardsPerPage() {
     const screenWidth = window.innerWidth;
-    console.log(screenWidth);
-    if (screenWidth < 1800 && screenWidth > 1600) {
+    if (screenWidth <= 1920 && screenWidth > 1630) {
       this.cardsPerPage = 3;
       this.loadProjects();
-    } else if(screenWidth < 1600 && screenWidth > 820){
+    } else if(screenWidth <= 1630 && screenWidth > 1371){
       this.cardsPerPage = 2;
       this.loadProjects();
     }
-    else if(screenWidth < 820 && screenWidth > 300){
+    else if(screenWidth <= 1371){
       this.cardsPerPage = 1;
       this.loadProjects();
     }
