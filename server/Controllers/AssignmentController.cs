@@ -313,7 +313,7 @@ namespace server.Controllers
                 for (int i = 0; i< tasks.Count;i++)
                 {
                     var dep = new List<int>();
-                    var dependent = await _asign_repo.getDependentAssignments(tasks[i].Id);
+                    var dependent = tasks[i].DependentOnAssignments;
                     
                     dep = dependent.Select(d=>d.Id).ToList();
                     var ownerDto = tasks[i].User.toAssignmentUserDto();

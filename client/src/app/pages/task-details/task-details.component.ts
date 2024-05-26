@@ -131,6 +131,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.assignment_service.getDependentAssignmentsFor(this.assignment.id).subscribe({
       next : (tasks : Task[]) => {
         this.dependentTasks = tasks;
+        console.log(tasks)
         if(tasks.find(a=>!a.isClosed)!==undefined)
           this.hasCompletedDependentTasks = false;
         else
@@ -215,6 +216,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           this.projectAssignments = tasks.filter((task)=>task.id!=this.assignment.id);
 
           this.dependentTasks.forEach(task => {
+            task
             if(this.projectAssignments.find((a)=>a.id==task.id) !==undefined)
               {
                 this.selectedDependentOn.push(task.id);

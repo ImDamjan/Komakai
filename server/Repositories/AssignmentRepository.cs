@@ -36,6 +36,7 @@ namespace server.Repositories
             .Include(a=>a.User).ThenInclude(u=>u.Role)
             .Include(a=>a.Priority)
             .Include(a=>a.Assignments)
+            .Include(a=>a.DependentOnAssignments)
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged)
             .AsQueryable();
 
