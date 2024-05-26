@@ -90,10 +90,25 @@
         </ng-template>
       </ngx-gantt-column>
     </ngx-gantt-table>
-    <ng-template #group let-group="group" let-items="items">
-      <span [ngClass]="{'podgrupa': group.id != '0'}" class="text-primary">{{ group.title }} 🚀 </span>
-    </ng-template>
-    <ng-template #bar let-item="item" style="z-index: -1;">
+    
+
+    
+
+
+
+
+      <ng-template #group let-group="group" let-items="items">
+          <span [ngClass]="{'podgrupa': group.id != '0'}" class="text-primary">
+            <i *ngIf="group.id!='0'" class ='fa fa-folder-open-o' aria-hidden="true"></i>&nbsp;&nbsp;{{ group.title }} 🚀
+          </span>
+      </ng-template>
+
+    
+    
+    <!-- <ng-template #group let-group="group" let-items="items">
+      <span [ngClass]="{'podgrupa': group.id != '0'}" class="text-primary"><i *ngIf="group.id!='0'" class="fa fa-folder-open-o" aria-hidden="true"></i>&nbsp;&nbsp;{{ group.title }} 🚀 </span>
+    </ng-template> -->
+    <ng-template #bar let-item="item" style="z-index: -1;" >
       <span style=" z-index: 100;" >&nbsp;&nbsp;{{ item.title }} </span>
     </ng-template>
   </ngx-gantt>
