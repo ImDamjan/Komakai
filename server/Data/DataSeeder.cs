@@ -825,7 +825,7 @@ namespace server.Data
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[2]},
+                                    Users = new List<User>{users[1],users[4]},
                                     
                                 },
                                 new Assignment{
@@ -842,7 +842,7 @@ namespace server.Data
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[6],users[3]},
+                                    Users = new List<User>{users[5],users[7]},
                                     
                                 },
                                 new Assignment{
@@ -859,7 +859,7 @@ namespace server.Data
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[3]},
+                                    Users = new List<User>{users[1],users[4]},
                                     
                                 },
                                 //project 2 rok (2023, 2, 10) do (2023, 6, 30), members:2,5,6,8
@@ -877,7 +877,7 @@ namespace server.Data
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4]},
+                                    Users = new List<User>{users[5],users[7]},
                                     
                                 },
                                 new Assignment{
@@ -929,7 +929,7 @@ namespace server.Data
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[8],users[0]},
+                                    Users = new List<User>{users[7],users[1]},
                                     
                                 },
                                 new Assignment{
@@ -946,7 +946,7 @@ namespace server.Data
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[4]},
+                                    Users = new List<User>{users[1],users[4]},
                                     
                                 },
                                 new Assignment{
@@ -963,7 +963,7 @@ namespace server.Data
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[4]},
+                                    Users = new List<User>{users[1],users[5]},
                                     
                                 },
                                     //project 4 rok (2023, 4, 20) do (2023, 8, 31),members:2,4,5,7
@@ -981,7 +981,7 @@ namespace server.Data
                                     TaskGroupId = 2,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4],users[6]},
+                                    Users = new List<User>{users[1],users[4],users[7]},
                                     
                                 },
                                 new Assignment{
@@ -998,7 +998,7 @@ namespace server.Data
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[2]},
+                                    Users = new List<User>{users[4],users[6]},
 
                                 },
                                 new Assignment{
@@ -1015,7 +1015,7 @@ namespace server.Data
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[6],users[3]},
+                                    Users = new List<User>{users[3],users[6]},
 
                                 },
                                 new Assignment{
@@ -1032,7 +1032,7 @@ namespace server.Data
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[3]},
+                                    Users = new List<User>{users[1],users[3]},
 
                                 },
                                 //project 2 rok (2023, 2, 10) do (2023, 6, 30), members:2,5,6,8
@@ -1067,7 +1067,7 @@ namespace server.Data
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[5],users[7]},
+                                    Users = new List<User>{users[6],users[4]},
 
                                 },
                                 new Assignment{
@@ -1102,7 +1102,7 @@ namespace server.Data
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[8],users[0]},
+                                    Users = new List<User>{users[6],users[4]},
 
                                 },
                                 new Assignment{
@@ -1119,7 +1119,7 @@ namespace server.Data
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[4]},
+                                    Users = new List<User>{users[1],users[4]},
 
                                 },
                                 new Assignment{
@@ -1136,7 +1136,7 @@ namespace server.Data
                                     TaskGroupId = 4,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[4]},
+                                    Users = new List<User>{users[1],users[4]},
 
                                 },
                                     //project 4 rok (2023, 4, 20) do (2023, 8, 31),members:2,4,5,7
@@ -1171,7 +1171,7 @@ namespace server.Data
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[2]},
+                                    Users = new List<User>{users[1],users[4]},
 
                                 },
                                 new Assignment{
@@ -1188,7 +1188,7 @@ namespace server.Data
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[6],users[3]},
+                                    Users = new List<User>{users[5],users[7]},
 
                                 },
                                 new Assignment{
@@ -1205,7 +1205,7 @@ namespace server.Data
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[3]},
+                                    Users = new List<User>{users[1],users[4]},
 
                                 },
                                 //project 2 rok (2023, 2, 10) do (2023, 6, 30), members:2,5,6,8
@@ -1223,7 +1223,7 @@ namespace server.Data
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4]},
+                                    Users = new List<User>{users[5],users[7]},
 
                                 },
                                 new Assignment{
@@ -1275,7 +1275,7 @@ namespace server.Data
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[8],users[0]},
+                                    Users = new List<User>{users[7],users[4]},
 
                                 },
                                 new Assignment{
@@ -1292,7 +1292,7 @@ namespace server.Data
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[4]},
+                                    Users = new List<User>{users[1],users[5]},
 
                                 },
                                 new Assignment{
@@ -1309,7 +1309,7 @@ namespace server.Data
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[4]},
+                                    Users = new List<User>{users[4],users[5]},
 
                                 },
                                     //project 4 rok (2023, 4, 20) do (2023, 8, 31),members:2,4,5,7
@@ -1327,7 +1327,7 @@ namespace server.Data
                                     TaskGroupId = 7,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4],users[6]},
+                                    Users = new List<User>{users[1],users[4],users[7]},
 
                                 },
                                 new Assignment{
@@ -1344,7 +1344,7 @@ namespace server.Data
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[2]},
+                                    Users = new List<User>{users[3],users[4]},
 
                                 },
                                 new Assignment{
@@ -1361,7 +1361,7 @@ namespace server.Data
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[6],users[3]},
+                                    Users = new List<User>{users[4],users[3]},
 
                                 },
                                 new Assignment{
@@ -1378,7 +1378,7 @@ namespace server.Data
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[3]},
+                                    Users = new List<User>{users[3],users[4]},
 
                                 },
                                 //project 2 rok (2023, 2, 10) do (2023, 6, 30), members:2,5,6,8
@@ -1396,7 +1396,7 @@ namespace server.Data
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4]},
+                                    Users = new List<User>{users[3],users[4]},
 
                                 },
                                 new Assignment{
@@ -1413,7 +1413,7 @@ namespace server.Data
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[5],users[7]},
+                                    Users = new List<User>{users[6],users[3]},
 
                                 },
                                 new Assignment{
@@ -1448,7 +1448,7 @@ namespace server.Data
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[8],users[0]},
+                                    Users = new List<User>{users[6],users[4]},
 
                                 },
                                 new Assignment{
@@ -1465,7 +1465,7 @@ namespace server.Data
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[4]},
+                                    Users = new List<User>{users[3],users[4]},
 
                                 },
                                 new Assignment{
@@ -1482,7 +1482,7 @@ namespace server.Data
                                     TaskGroupId = 9,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[4]},
+                                    Users = new List<User>{users[3],users[4]},
 
                                 },
                                     //project 4 rok (2023, 4, 20) do (2023, 8, 31),members:2,4,5,7
@@ -1517,7 +1517,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[2]},
+                                    Users = new List<User>{users[0],users[3]},
 
                                 },
                                 new Assignment{
@@ -1534,7 +1534,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[6],users[3]},
+                                    Users = new List<User>{users[0],users[3]},
 
                                 },
                                 new Assignment{
@@ -1551,7 +1551,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[3]},
+                                    Users = new List<User>{users[0],users[3]},
 
                                 },
                                 //project 2 rok (2023, 2, 10) do (2023, 6, 30), members:2,5,6,8
@@ -1569,7 +1569,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4]},
+                                    Users = new List<User>{users[0],users[6]},
 
                                 },
                                 new Assignment{
@@ -1586,7 +1586,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[5],users[7]},
+                                    Users = new List<User>{users[0],users[3]},
 
                                 },
                                 new Assignment{
@@ -1603,7 +1603,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1]},
+                                    Users = new List<User>{users[2]},
 
                                 },
                                 //project 3 rok (2024, 3, 5) - jos traje,members:9,1,3,5
@@ -1621,7 +1621,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[8],users[0]},
+                                    Users = new List<User>{users[2],users[0]},
 
                                 },
                                 new Assignment{
@@ -1638,7 +1638,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[4]},
+                                    Users = new List<User>{users[2],users[0]},
 
                                 },
                                 new Assignment{
@@ -1655,7 +1655,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[4]},
+                                    Users = new List<User>{users[0],users[6]},
 
                                 },
                                     //project 4 rok (2023, 4, 20) do (2023, 8, 31),members:2,4,5,7
@@ -1673,7 +1673,7 @@ namespace server.Data
                                     TaskGroupId = 1,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4],users[6]},
+                                    Users = new List<User>{users[2],users[3],users[0]},
 
                                 },
                                 new Assignment{
@@ -1707,7 +1707,7 @@ namespace server.Data
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[6],users[3]},
+                                    Users = new List<User>{users[4],users[8]},
 
                                 },
                                 new Assignment{
@@ -1724,7 +1724,7 @@ namespace server.Data
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[3]},
+                                    Users = new List<User>{users[0],users[2]},
 
                                 },
                                 //project 2 rok (2023, 2, 10) do (2023, 6, 30), members:2,5,6,8
@@ -1742,7 +1742,7 @@ namespace server.Data
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4]},
+                                    Users = new List<User>{users[8],users[4]},
 
                                 },
                                 new Assignment{
@@ -1759,7 +1759,7 @@ namespace server.Data
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[5],users[7]},
+                                    Users = new List<User>{users[0],users[4]},
 
                                 },
                                 new Assignment{
@@ -1776,7 +1776,7 @@ namespace server.Data
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1]},
+                                    Users = new List<User>{users[2]},
 
                                 },
                                 //project 3 rok (2024, 3, 5) - jos traje,members:9,1,3,5
@@ -1811,7 +1811,7 @@ namespace server.Data
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[4]},
+                                    Users = new List<User>{users[0],users[4]},
 
                                 },
                                 new Assignment{
@@ -1846,7 +1846,7 @@ namespace server.Data
                                     TaskGroupId = 3,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4],users[6]},
+                                    Users = new List<User>{users[0],users[4],users[8]},
 
                                 },
                                 new Assignment{
@@ -1915,7 +1915,7 @@ namespace server.Data
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4]},
+                                    Users = new List<User>{users[0],users[3]},
 
                                 },
                                 new Assignment{
@@ -1932,7 +1932,7 @@ namespace server.Data
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[5],users[7]},
+                                    Users = new List<User>{users[3],users[6]},
 
                                 },
                                 new Assignment{
@@ -1949,7 +1949,7 @@ namespace server.Data
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1]},
+                                    Users = new List<User>{users[0]},
 
                                 },
                                 //project 3 rok (2024, 3, 5) - jos traje,members:9,1,3,5
@@ -1967,7 +1967,7 @@ namespace server.Data
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[8],users[0]},
+                                    Users = new List<User>{users[6],users[0]},
 
                                 },
                                 new Assignment{
@@ -1984,7 +1984,7 @@ namespace server.Data
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[4]},
+                                    Users = new List<User>{users[2],users[3]},
 
                                 },
                                 new Assignment{
@@ -2001,7 +2001,7 @@ namespace server.Data
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[4]},
+                                    Users = new List<User>{users[0],users[3]},
 
                                 },
                                     //project 4 rok (2023, 4, 20) do (2023, 8, 31),members:2,4,5,7
@@ -2019,7 +2019,7 @@ namespace server.Data
                                     TaskGroupId = 6,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4],users[6]},
+                                    Users = new List<User>{users[0],users[3],users[6]},
 
                                 },
                                 new Assignment{
@@ -2053,7 +2053,7 @@ namespace server.Data
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[6],users[3]},
+                                    Users = new List<User>{users[4],users[8]},
 
                                 },
                                 new Assignment{
@@ -2070,7 +2070,7 @@ namespace server.Data
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[2],users[3]},
+                                    Users = new List<User>{users[2],users[4]},
 
                                 },
                                 //project 2 rok (2023, 2, 10) do (2023, 6, 30), members:2,5,6,8
@@ -2088,7 +2088,7 @@ namespace server.Data
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4]},
+                                    Users = new List<User>{users[2],users[4]},
 
                                 },
                                 new Assignment{
@@ -2105,7 +2105,7 @@ namespace server.Data
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[5],users[7]},
+                                    Users = new List<User>{users[2],users[8]},
 
                                 },
                                 new Assignment{
@@ -2122,7 +2122,7 @@ namespace server.Data
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1]},
+                                    Users = new List<User>{users[0]},
 
                                 },
                                 //project 3 rok (2024, 3, 5) - jos traje,members:9,1,3,5
@@ -2140,7 +2140,7 @@ namespace server.Data
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[8],users[0]},
+                                    Users = new List<User>{users[8],users[2]},
 
                                 },
                                 new Assignment{
@@ -2174,7 +2174,7 @@ namespace server.Data
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[0],users[4]},
+                                    Users = new List<User>{users[2],users[4]},
 
                                 },
                                     //project 4 rok (2023, 4, 20) do (2023, 8, 31),members:2,4,5,7
@@ -2192,7 +2192,7 @@ namespace server.Data
                                     TaskGroupId = 8,
                                     LastTimeChanged = DateTime.Now,
                                     IsClosed = false,
-                                    Users = new List<User>{users[1],users[4],users[6]},
+                                    Users = new List<User>{users[0],users[4],users[8]},
 
                                 },
 

@@ -46,7 +46,7 @@ export class TaskFilterComponent implements OnInit {
     "Progress"
   ];
 
-  notProjectDetails : boolean = false;
+  public notProjectDetails : boolean = this.router.url.split("/")[1]==="tasks";
 
   selectedPrios : Priority[] = [];
   selectedStates : State[] = [];
@@ -54,8 +54,6 @@ export class TaskFilterComponent implements OnInit {
   //uzimanje podataka
   ngOnInit(): void {
     this.spinner.show();
-    if(this.router.url!=="/tasks")
-      this.notProjectDetails = true;
     if(this.notProjectDetails)
     {
       this.projectService.getUserFilterProjects().subscribe({

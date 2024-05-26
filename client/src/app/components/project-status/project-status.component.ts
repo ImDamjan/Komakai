@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { Project } from '../../models/project/project';
 import { ProjectService } from '../../services/project.service';
@@ -8,7 +8,7 @@ import { ProjectService } from '../../services/project.service';
   templateUrl: './project-status.component.html',
   styleUrl: './project-status.component.css'
 })
-export class ProjectStatusComponent implements AfterViewInit, OnInit {
+export class ProjectStatusComponent implements AfterViewInit, OnInit, OnDestroy {
   
   @Input()projects!: Project[];
   notStartedCount = 0;
@@ -25,8 +25,11 @@ export class ProjectStatusComponent implements AfterViewInit, OnInit {
   ngAfterViewInit(): void {
     this.createPieChart();
   }
-
-
+  ngOnDestroy(): void {
+    this.chart.destroy();
+  }
+  
+  
   chart: any;
 
   createPieChart(): void {

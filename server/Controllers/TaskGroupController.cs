@@ -91,9 +91,11 @@ namespace server.Controllers
             foreach (var task in tasks)
             {
                 var userDtos = task.Users.Select(x=>x.toAssignmentUserDto()).ToList();
-                
-                asignments.Add(task.toAssignmentDto(userDtos,task.Priority.toPrioDto(),
-                task.State.toStateDto(),task.User.toAssignmentUserDto(),initial.toTaskGroupDto()));
+                var dep = task.Assignments.Select(a=>a.Id).ToList();
+                var dto = task.toAssignmentDto(userDtos,task.Priority.toPrioDto(),
+                task.State.toStateDto(),task.User.toAssignmentUserDto(),initial.toTaskGroupDto());
+                dto.DepndentOn = dep;
+                asignments.Add(dto);
             }
             
             foreach (var child in task_group_children)

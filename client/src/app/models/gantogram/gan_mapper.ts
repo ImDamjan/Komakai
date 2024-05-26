@@ -38,7 +38,7 @@ export class GanttMapper {
     // Logika na osnovu role da li je korisniku dozvoljeno da menja vreme start-end draggable: (true/false)
     private static convertToGantLinks(array: number[]): GanttLink[] {
         return array.map(number => ({
-            type: 4, // Modulo operacija garantuje da se type vrednosti kreću od 1 do 4
+            type: 1, // Modulo operacija garantuje da se type vrednosti kreću od 1 do 4
             link: number.toString()
           }));
     }
