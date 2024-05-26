@@ -347,10 +347,10 @@
   }*/
 } 
 
-@media (min-width: 1300px) and (max-width: 1800px) {
+@media (min-width: 1350px) and (max-width: 1800px) {
   .grid-container {
     grid-template-columns: repeat(3, minmax(0, 1fr)); 
-    grid-gap: 40px;
+    grid-gap: 20px;
   }
 }
 

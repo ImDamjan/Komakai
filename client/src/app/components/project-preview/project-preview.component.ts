@@ -32,7 +32,6 @@ export class ProjectPreviewComponent implements OnInit {
     propertyName : "Last Updated",
     sortFlag : -1,
     pageNumber: 1,
-    pageSize: 4
   };
 
   public desiredPage: number = 1;
@@ -64,7 +63,7 @@ export class ProjectPreviewComponent implements OnInit {
   descriptionCharacterLimit: number = 0;
 
   cards: any[] = [];
-  cardsPerPage: number = 8;
+  cardsPerPage: number = 4;
 
   showProjectPreview: boolean = true;
 
@@ -216,6 +215,7 @@ export class ProjectPreviewComponent implements OnInit {
 
   loadProjects() {
     this.isLoading = true;
+    this.filter.pageSize = this.cardsPerPage;
     this.projectService.getProjectsData(this.filter).subscribe(
       (projects: Project[]) => {
         this.projectsData = projects;
@@ -511,16 +511,21 @@ export class ProjectPreviewComponent implements OnInit {
 
   adjustCardsPerPage() {
     const screenWidth = window.innerWidth;
-    if (screenWidth < 1800 && screenWidth > 1300) {
-      this.cardsPerPage = 6;
-    } else if(screenWidth < 1300 && screenWidth > 820){
-      this.cardsPerPage = 4;
+    console.log(screenWidth);
+    if (screenWidth < 1800 && screenWidth > 1600) {
+      this.cardsPerPage = 3;
+      this.loadProjects();
+    } else if(screenWidth < 1600 && screenWidth > 820){
+      this.cardsPerPage = 2;
+      this.loadProjects();
     }
     else if(screenWidth < 820 && screenWidth > 300){
-      this.cardsPerPage = 2;
+      this.cardsPerPage = 1;
+      this.loadProjects();
     }
     else
-      this.cardsPerPage = 8;
+      this.cardsPerPage = 4;
+      this.loadProjects();
   }
 
   openEditOverlay(project: Project, event: Event): void {
