@@ -328,9 +328,9 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
     this.openVerticallyCentered(this.contentRef).then((result) => {
       if (result === true) {
         let update: UpdateGant = {
-          removeDependentOn: [parseInt(event.target?.id)], 
+          removeDependentOn: [parseInt(event.source.id)], 
         };
-        this.updateGantItemById(parseInt(event.source.id),update);
+        this.updateGantItemById(parseInt(event.target.id),update);
         this.getUpdateSuccessObservable().subscribe((success: boolean) => {
           if (success) {
             this.notify.showSuccess("Uspesno obrisana zavisnost",`Uspešno obrisana zavisnost. [${event.source.title}]->[${event.target?.title}]`)
@@ -399,9 +399,12 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
         return;
       }else{
         let update: UpdateGant = {
-                addDependentOn: [parseInt(event.target?.id)], 
+                addDependentOn: [parseInt(event.source.id)], 
               };
-              this.updateGantItemById(parseInt(event.source.id),update);
+
+              console.log(event.source.id)
+              console.log(update);
+              this.updateGantItemById(parseInt(event.target.id),update);
               this.getUpdateSuccessObservable().subscribe((success: boolean) => {
                 if(success){
                     this.notify.showSuccess("Uspesno dodata zavisnost",`Uspešno dodata zavisnost. [${event.source.title}]->[${event.target?.title}] \n\n Klikom na vezu(liniju) možete obrisati zavisnost.`)

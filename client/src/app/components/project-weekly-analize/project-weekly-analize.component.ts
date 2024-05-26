@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
@@ -11,7 +11,7 @@ import { Task } from '../../models/task/task';
   templateUrl: './project-weekly-analize.component.html',
   styleUrl: './project-weekly-analize.component.css'
 })
-export class ProjectWeeklyAnalizeComponent implements OnInit{
+export class ProjectWeeklyAnalizeComponent implements OnInit, OnDestroy{
 
   @Input() projects!: Project[];
   @Input() tasks!: Task[];
@@ -26,6 +26,9 @@ export class ProjectWeeklyAnalizeComponent implements OnInit{
   plowCount = 0;
 
   constructor() { }
+  ngOnDestroy(): void {
+    this.chart.destroy();
+  }
 
   ngOnInit(): void {
     this.createChart();
