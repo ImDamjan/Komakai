@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit {
             this.notify.showSuccess("User added","User registered successfully!")
           },
           error: (err) => {
-            this.notify.showError("Failed registration","User was not successfully registered!")
+            this.notify.showWarn("Registration","Registration form not filled correctly!")
           }
         });
     } else {
