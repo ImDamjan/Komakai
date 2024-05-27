@@ -19,6 +19,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Role } from '../../models/role';
 import { Answer } from '../../models/comment/answer';
 import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
+import { Notify } from '../../models/notifications/notify';
+import { NgToastService } from 'ng-angular-popup';
+import { response } from 'express';
 
 
 @Component({
@@ -41,7 +44,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   userProjectRole!: Role;
 
 
-
+  notify : Notify;
 
   public comments : Comment[] = []
   public userId : number = 0;
@@ -91,8 +94,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   public selectedState! :State;
   
   public hasCompletedDependentTasks:boolean = false;
-  constructor() {
-
+  constructor(private toast : NgToastService) {
+    this.notify = new Notify(toast)
   }
   ngOnDestroy(): void {
     this.closeOverlay();
@@ -289,6 +292,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
             this.showUpdate = false;
             this.closeOverlay();
             this.spinner.hide();
+            this.notify.showSuccess("Task update","Task updated successfully!")
           },
           error :(error)=>
           {
@@ -325,6 +329,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
               comment.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
             this.comments.push(comment);
             this.commentText = "";
+
+            this.notify.showSuccess("Comment added","Comment added successfully!")
           }
         });
       }
@@ -387,6 +393,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   cancelUpdateRequest()
   {
     this.showUpdate=false;
+    this.notify.showWarn("Task update","You canceled this task update!")
   }
 
   profilePicture(userId: number) {
@@ -432,6 +439,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
               ans.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
             comment.answers.push(ans);
             comment.answerContent = "";
+
+            this.notify.showSuccess("Reply added","Reply added successfully!")
           }
         });
       }
@@ -479,6 +488,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           comment.postTime = new Date(com.postTime);
           comment.replyOpened = false;
           comment.editOpened = false;
+
+          this.notify.showSuccess("Comment updated","Comment updated successfully!")
         }
       })
     }
@@ -502,6 +513,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           answer.editedTime = new Date(com.editedTime);
           answer.postTime = new Date(com.postTime);
           answer.editOpened = false;
+
+          this.notify.showSuccess("Answer added","Answer added successfully!")
         }
       })
     }
@@ -563,10 +576,12 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           this.showUpdate = false;
           // this.closeOverlay();
           this.spinner.hide();
+
+          this.notify.showInfo("Taks closed","You closed this task!")
         },
         error :(error)=>
         {
-            // alert("Task update failed!");
+          this.notify.showWarn("Taks update","Taks can not be updated!")
             // console.log(error);
         }
     });
