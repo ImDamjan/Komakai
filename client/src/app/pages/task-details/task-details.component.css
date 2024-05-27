@@ -72,6 +72,8 @@ textarea{
     margin-top: 6px;
     margin-bottom: 16px;
     resize: vertical;
+    white-space: pre-line;
+    
 }
 
 .custom-dropdown {

@@ -1,6 +1,6 @@
 <div class="root">
   <div class ="board" *ngIf="showProjectDetails">
-    <div class="board-wrapper">
+    <div class="board-wrapper" #boardWrapper>
       <div class="board-columns">
         <div cdkDropList 
             cdkDropListOrientation="horizontal" class="board-columns"
@@ -15,19 +15,19 @@
           <div class="create" *ngIf="showCreateButton && isManager"><button class="task-button" (click)="openCreateOverlay(column.id)">New task</button></div>
           <!-- ovde treba da se omoguci da kada se klikne na task da se otvori task details -->
           <div *ngIf="isManager" class="tasks-container"
-          id="{{column.id}}"
-          [cdkDropListConnectedTo]="column.columnIds"
-          cdkDropList
-          [cdkDropListData]="column.tasks"
-          (cdkDropListDropped)="drop($event)">
-          <app-task-card-kanban (newItemEvent)="changeState($event)" class="task" *ngFor="let item of column.tasks"  [userProjectRole]="userProjectRole" [task]="item"  cdkDrag [cdkDragData]="item"/>
+              id="{{column.id}}"
+              [cdkDropListConnectedTo]="column.columnIds"
+              cdkDropList
+              [cdkDropListData]="column.tasks"
+              (cdkDropListDropped)="drop($event)">
+          <app-task-card-kanban (newItemEvent)="changeState($event)" class="task" *ngFor="let item of column.tasks"  [userProjectRole]="userProjectRole" [task]="item"  cdkDrag [cdkDragData]="item" (cdkDragMoved)="onDragMoved($event)"/>
           </div>
           <div *ngIf="!isManager" class="tasks-container"
-          id="{{column.id}}"
-          [cdkDropListConnectedTo]="column.columnIds"
-          cdkDropList
-          [cdkDropListData]="column.tasks"
-          (cdkDropListDropped)="drop($event)">
+              id="{{column.id}}"
+              [cdkDropListConnectedTo]="column.columnIds"
+              cdkDropList
+              [cdkDropListData]="column.tasks"
+              (cdkDropListDropped)="drop($event)">
           <app-task-card-kanban (newItemEvent)="changeState($event)"  class="task " *ngFor="let item of column.tasks" [userProjectRole]="userProjectRole"  [task]="item"/>
           </div>
 

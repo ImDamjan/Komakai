@@ -13,7 +13,7 @@ import { CommentService } from '../../services/comment.service';
 import { Comment } from '../../models/comment/comment';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UpdateTask } from '../../models/task/update-task';
-import { error } from 'console';
+import { error, log } from 'console';
 import { DateConverterService } from '../../services/date-converter.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Role } from '../../models/role';
@@ -445,6 +445,24 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       CorA.editOpened = true;
   }
 
+  //novi red kod komentara
+  onEnter(event: any) {
+      if (event.keyCode === 13) {
+      const cursorPosition = event.target.selectionStart;
+      const value = event.target.value;
+      const newValue =
+        value.substring(0, cursorPosition) +
+        '\n' +
+        value.substring(cursorPosition);
+      event.target.value = newValue;
+      event.target.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+      event.preventDefault();
+    }
+  }
+  replaceNewlines(content: string): string {
+    return content.replace(/\n/g, '<br>');
+  }
+
   updateComment(comment:Comment)
   {
     let updateData = {
@@ -492,6 +510,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       answer.editOpened = false;
     }
   }
+
+
   showBox(comment:Comment)
   {
     comment.answerContent = "";
