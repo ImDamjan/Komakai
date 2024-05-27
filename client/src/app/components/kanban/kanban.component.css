@@ -18,7 +18,9 @@
   .board-wrapper {
     display: flex;
     flex-grow: 1;
-    overflow-x: scroll;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    white-space: nowrap;
   }
   .board-columns {
     display: flex;
