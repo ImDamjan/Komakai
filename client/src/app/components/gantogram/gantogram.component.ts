@@ -6,6 +6,7 @@ import {GantogramService} from '../../services/gantogram.service'
 import { GanttMapper } from '../../models/gantogram/gantt_mapper';
 import { DomSanitizer } from '@angular/platform-browser';
 import {
+  GANTT_GLOBAL_CONFIG,
   GanttBarClickEvent,
   GanttBaselineItem,
   GanttDragEvent,
@@ -13,6 +14,7 @@ import {
   GanttItem,
   GanttLineClickEvent,
   GanttLinkDragEvent,
+  GanttLinkLineType,
   GanttPrintService,
   GanttSelectedEvent,
   GanttTableDragDroppedEvent,
@@ -52,7 +54,25 @@ import { Notify } from '../../models/notifications/notify';
   templateUrl: './gantogram.component.html',
   styleUrl: './gantogram.component.css',
   template: ``,
-  providers: [GanttPrintService,  DatePipe],
+  providers: [GanttPrintService,  DatePipe,
+    {
+      provide: GANTT_GLOBAL_CONFIG,
+      useValue: {
+        linkOptions: {
+          // dependencyTypes: 1, // fs | ff | ss | sf
+          showArrow: true, // 连接线是否显示箭头
+          lineType: GanttLinkLineType.curve, // 连接线类型（曲线或直线）
+
+        },
+        styleOptions: {
+          headerHeight: 80,
+          lineHeight: 70,
+          barHeight: 60
+      }
+      }
+    }
+  ],
+  
 })
 export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
   

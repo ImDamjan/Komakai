@@ -25,7 +25,7 @@ export class GanttMapper {
     static mapTaskToGanttItem(task: Task, groups:GanttGroup[]): GanttItem {
         const ganttItem: GanttItem = {
             id: task.id.toString(),
-            title: task.title,
+            title: task.title + " (" + task.percentage + "%)",
             start: Math.floor(new Date(task.start).getTime()/1000), // ili drugi odgovarajući atribut za početak
             end: Math.floor(new Date(task.end).getTime()/1000), // ili drugi odgovarajući atribut za kraj
             links: this.convertToGantLinks(task.depndentOn), // Možete dodati logiku za mapiranje linkova ako je potrebno
@@ -92,7 +92,7 @@ export class GanttMapper {
     // Logika na osnovu role da li je korisniku dozvoljeno da menja vreme start-end draggable: (true/false)
     private static convertToGantLinks(array: number[]): GanttLink[] {
         return array.map(number => ({
-            type: 4, // Modulo operacija garantuje da se type vrednosti kreću od 1 do 4
+            type: 1, // Modulo operacija garantuje da se type vrednosti kreću od 1 do 4
             link: number.toString()
           }));
     }
