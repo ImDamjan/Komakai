@@ -78,7 +78,7 @@ namespace server.Controllers
             return Ok(dtos);
         }
 
-        [HttpGet("byRole/{roleName}"), Authorize(Roles ="5")]
+        [HttpGet("byRole/{roleName}"), Authorize(Roles ="Admin")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsersByRole(string roleName)
         {
             var users=await _repos.GetUsersByRoleAsync(roleName);
