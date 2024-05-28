@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Permissions;
 using server.Interfaces;
@@ -21,6 +22,7 @@ namespace server.Controllers
             _role_repo = role_repo;
             _permission_repo = permission_repo;
         }
+        [Authorize]
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAllRoles()
         {
@@ -30,6 +32,7 @@ namespace server.Controllers
 
             return Ok(dtos);
         }
+        [Authorize]
         [HttpGet("{roleId}/permissions")]
         public async Task<IActionResult> GetPermissionsByRoleId(int roleId)
         {
@@ -42,7 +45,7 @@ namespace server.Controllers
 
             return Ok(permissionDtos);
         }
-
+        [Authorize]
         [HttpGet("getUserRoleOnProject/{project_id}/{user_id}")]
         public async Task<IActionResult> GetUserRoleOnProject([FromRoute]int project_id, [FromRoute]int user_id)
         {
