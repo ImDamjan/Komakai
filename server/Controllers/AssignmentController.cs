@@ -204,7 +204,7 @@ namespace server.Controllers
             return Ok(dtoAs);
         }
         
-        [HttpPut("updateAssigmentGantt/{asign_id}"),, Authorize(Roles = "Project Manager")]
+        [HttpPut("updateAssigmentGantt/{asign_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> updateAssignmentGantt([FromRoute] int asign_id,[FromBody] UpdateGanttAssignmentDto dto)
         {
             var task = await _asign_repo.GetAssignmentByidAsync(asign_id);
@@ -241,7 +241,7 @@ namespace server.Controllers
         }
 
         [HttpPut]
-        [Route("update/{asign_id}"),, Authorize(Roles = "Project Manager")]
+        [Route("update/{asign_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> UpdateAssignmentById([FromBody]UpdateAssignmentDto dto,[FromRoute] int asign_id)
         {
             //da li su datumi dobri
