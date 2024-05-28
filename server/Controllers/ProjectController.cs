@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.Authorization;
 using server.DTOs;
@@ -36,6 +37,7 @@ namespace server.Controllers
         }
 
         //treba filter
+        [Authorize]
         [HttpGet("getProjects")]
         public async Task<IActionResult> GetAll([FromQuery]ProjectFilterDto dto,[FromQuery]SortDto sort)
         {
@@ -56,6 +58,7 @@ namespace server.Controllers
             return Ok(dtos);
         }
         //ovde treba filter
+        [Authorize]
         [HttpGet("userProjects/{userId}")]
         public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId,[FromQuery] ProjectFilterDto filter,[FromQuery] SortDto sort)
         {
@@ -75,7 +78,7 @@ namespace server.Controllers
             }
             return Ok(dtos);
         }
-
+        [Authorize]
         [HttpGet("getProjectLimits/{user_id}")]
         public async Task<IActionResult> getProjectLimits(int user_id)
         {
@@ -97,6 +100,7 @@ namespace server.Controllers
                 spentMin = 0
             });
         }
+        [Authorize]
         [HttpGet("getFilterProjectsByUser/{user_id}")]
         public async Task<IActionResult> getFilterProjects([FromRoute] int user_id)
         {
@@ -116,6 +120,7 @@ namespace server.Controllers
             }
             return Ok(dtos);
         }
+        [Authorize]
         [HttpGet("getProject/{id}")]
         public async Task<IActionResult> getById([FromRoute] int id)
         {
@@ -138,7 +143,7 @@ namespace server.Controllers
             return Ok(dto);
         }
 
-        [HttpPost("create")]
+        [HttpPost("create"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto projectDto)
         {
             
@@ -201,7 +206,7 @@ namespace server.Controllers
         }
 
         [HttpPut]
-        [Route("update/{project_id}")]
+        [Route("update/{project_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> Update([FromBody] UpdateProjectDto projectDto, [FromRoute] int project_id)
         {
             //da li su datumi dobri
@@ -257,6 +262,7 @@ namespace server.Controllers
         }
 
         //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
+        [Authorize]
         [HttpGet("userProjectStates/{userId}/{period}")]
         public async Task<IActionResult> GetAllUserStatesProjects([FromRoute]int userId,[FromRoute] string period)
         {
@@ -265,7 +271,7 @@ namespace server.Controllers
         }
 
 
-        [HttpDelete("deleteProjectById/{project_id}")]
+        [HttpDelete("deleteProjectById/{project_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> DeleteProject([FromRoute] int project_id)
         {
             var project = await _repos.DeleteProjectByIdAsync(project_id);
