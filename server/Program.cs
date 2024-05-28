@@ -6,8 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using server.Authorization;
 using server.Data;
+using server.DTOs.Notification;
 using server.Repositories;
 using server.Services;
+using server.SignalR;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -50,6 +52,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             };
 
         });
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IDictionary<string, UserRoomConnection>>(opt=>new Dictionary<string, UserRoomConnection>());
 
 
 
@@ -98,11 +102,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+app.UseRouting();
+app.UseCors(policy => policy.WithOrigins("http://softeng.pmf.kg.ac.rs:10190","http://localhost:4200")
+.AllowAnyHeader()
+.AllowAnyMethod()
+.AllowCredentials());
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+app.MapHub<NotificationHub>("/api/notificationHub");
 
 app.UseStaticFiles();
 

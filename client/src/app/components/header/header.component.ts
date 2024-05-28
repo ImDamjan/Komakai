@@ -6,6 +6,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ProfileDetailsComponent } from '../profile-details/profile-details.component';
 import { UserProfileService } from '../../services/user-profile.service';
 import { UpdateUser } from '../../models/user/update-user';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +19,7 @@ export class HeaderComponent implements OnInit {
   public role : string = "";
   public roleId !: number;
   userid!: number;
+  private notification_service = inject(NotificationService);
   private jwtService = inject(JwtDecoderService);
   user!: UpdateUser;
   picture!: string;
@@ -32,8 +34,19 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     let token = this.jwtService.getToken();
     if(token!=null)
-    {
-      let decode = this.jwtService.decodeToken(token);
+      {
+        let decode = this.jwtService.decodeToken(token);
+          this.notification_service.startConnection().then(()=>{
+            this.notification_service.connection.on("ReceiveMessage",(from: string,notif:Notification) =>{
+              console.log(from);
+              console.log(notif);
+            })
+            this.notification_service.login(Number(decode.user_id)).then(()=>{
+              console.log("uspeno je logovan");
+            }).catch((err)=>{
+              console.log(err);
+            })
+          });
       this.fullname = decode.fullname;
       this.role = decode.role
       this.userid = decode.user_id;
