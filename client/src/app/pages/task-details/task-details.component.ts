@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { StateService } from '../../services/state.service';
@@ -30,6 +30,9 @@ import { response } from 'express';
   styleUrl: './task-details.component.css'
 })
 export class TaskDetailsComponent implements OnInit,OnDestroy{
+
+  @ViewChild('overlayContainer', { static: true }) overlayContainer!: ElementRef;
+
   private assignment_service = inject(AssignmentService);
   private jwt_service = inject(JwtDecoderService);
   private state_service =  inject(StateService);
@@ -170,9 +173,24 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         });
       }
     });
-
-    
   }
+
+  //expand overlay
+  expanded: boolean = false;
+  toggleOverlay() {
+    let elem = this.overlayContainer.nativeElement;
+    if (!document.fullscreenElement) {
+      this.expanded = true
+      elem.requestFullscreen().catch((err: { message: any; name: any; }) => {
+        console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      this.expanded = false
+      document.exitFullscreen();
+    }
+  }
+
+
   updateTask()
   {
     this.selectedAssignees = [];

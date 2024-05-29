@@ -1,5 +1,4 @@
-#task-details{
-    /* height: fit-content; */
+.overlay-container{
     padding: 30px;
     display: flexbox;
     justify-content: center;    
@@ -26,7 +25,7 @@ input[type=text]:focus {
   gap: 10px;
 }
 
-.header .btn-close {
+.header .right-buttons {
   margin-left: auto;
 }
 
@@ -61,11 +60,13 @@ button{
     margin-left: 20px;
 }
 
+
 button:hover{
     background-color:   white;
     color: #001B47;
     border: 1px solid #001B47;
 }
+
 
 
 textarea{

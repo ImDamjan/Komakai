@@ -1,11 +1,14 @@
-<div id = "task-details" class = "overlay-container">
+<div class = "overlay-container"  #overlayContainer>
     <div class="header">
         <h1 *ngIf="!showUpdate || !isManager">{{assignment.title}}</h1>
         <input type="text" class="task-title" *ngIf="showUpdate && isManager" [(ngModel)]="updateObj.title">
         <button class="update" (click)="updateTask()" *ngIf="!showUpdate && (isManager || (isWorker && hasCompletedDependentTasks)) && !assignment.isClosed">Update</button>
         <button *ngIf="!assignment.isClosed && assignment.percentage===100 && isManager" class="closed" (click)="sendCloseRequest(true)">Close Task</button>
         <button *ngIf="assignment.isClosed && isManager" class="closed" (click)="sendCloseRequest(false)">Reopen Task</button>
-        <button class="btn-close" (click)="closeOverlay()" aria-label="Close"></button>
+        <div class="right-buttons">
+            <button class="expand" (click)="toggleOverlay()"><i [ngClass]="expanded ? 'fa fa-compress' : 'fa fa-expand'"></i></button>
+            <button class="btn-close" (click)="closeOverlay()" aria-label="Close"></button>
+        </div>
         <br>
     </div>
 
