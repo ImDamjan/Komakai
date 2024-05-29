@@ -6,15 +6,46 @@
     flex-direction: column;
     justify-content: center;
 }
-.createTeam{
+
+
+.teams_content {
     display: flex;
+    justify-content: space-between; 
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.content {
+    flex: 2; /* Povećava širinu tabele */
+    max-width: 70%; /* Ograničava maksimalnu širinu tabele */
+}
+
+.createTeam{
+    flex: 1; /* Širina forme za kreiranje tima */
+    max-width: 20%; /* Ograničava maksimalnu širinu forme */
+    display: flex;
+    padding: 0.5%;
     flex-direction: column;
-    padding: 20px 60px 0px 60px;
-    height: 250px;
-    width: 15%;
+    align-items: flex-start;
     border-radius: .5rem;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
+
+
+.createTeam button {
+    width: 100%; 
+    margin-top: 10px;
+}
+
+.createTeam input{
+    width: 100%;
+    margin-bottom: 10px; 
+}
+
+:host::ng-deep.p-multiselect-label{
+    width: 100%;
+}
+
 
 h2{
     font-family: 'Poppins', sans-serif;
@@ -27,15 +58,12 @@ h3{
     font-size: 22px;
 }
 
-:host::ng-deep.p-multiselect-label{
-    width: 100%;
-}
 
 table {
     font-family: 'Poppins', sans-serif;
     border-collapse: collapse;
     height: 40%;
-    width: 70%;
+    width: 100%;
     margin-top: 10px;
     border-radius: .5rem;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -51,10 +79,6 @@ td, th {
     padding: 5px;
 }
 
-
-p-multiSelect{
-    margin: 20px 0px;
-}
 #search-field {
     width: 15vw;
     height: 40px;
@@ -68,17 +92,17 @@ input#search-field {
     background-image: url("../../../assets/project-task-header/search.svg");
     background-repeat: no-repeat;
     background-position: 3% center;
-}
-
-.search {
     width: 30vw;
     height: 40px;
     margin-right: 1%;
 }
 
-.createTeam{
-    float: right;
+.search {
+    display: flex;
+    align-items: center; 
+    gap: 10px;
 }
+
 
 .users{
     flex-direction: column;
@@ -111,6 +135,7 @@ input#search-field {
     border: 1px solid #001B47;
     border-radius: 25px;
 }
+
 .create:hover{
     background-color:   #17315D;
     color: white;
@@ -145,4 +170,13 @@ input{
 
 ::ng-deep .p-multiselect-filter-icon {
     display: none !important;
+  }
+
+
+  #title {
+    font-family: 'Poppins',sans-serif;
+    color: #000;
+    font-size: 32px;
+    margin-top: 5px;
+    width: 20%;
   }

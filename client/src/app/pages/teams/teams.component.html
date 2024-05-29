@@ -1,17 +1,11 @@
 <div class="teams">
-    <h1>Teams</h1> 
     <div class="search">
-        <input id="search-field" type="text" placeholder="Search team..." [(ngModel)]="searchText" (keyup)="loadTeams()">
+        <h1 id="title">Teams</h1> 
+        <input id="search-field" type="text" placeholder="Search for team..." [(ngModel)]="searchText" (keyup)="loadTeams()">
     </div>
     <br>
     <div class="teams_content">
-        <div class="createTeam">
-            <h2>New Team</h2>
-            <input type="text" class="teamName" placeholder="Team name" [(ngModel)]="createTeam.name">
-            <p-multiSelect [options]="users" placeholder="Select Members" optionLabel="fulname" [(ngModel)]="selectedUsers"/>
-            <button class="create" (click)="createTeamRequest()">Create</button>
-        </div>
-        <div >
+        <div class="content">
             <table>
                 <tr>
                     <th><h3 style="border-bottom:1px solid darkgray;">Name</h3></th>
@@ -27,6 +21,12 @@
                     </td>
                 </tr>
             </table>
+        </div>
+        <div class="createTeam">
+            <h2>New Team</h2>
+            <input type="text" class="teamName" placeholder="Team name" [(ngModel)]="createTeam.name">
+            <p-multiSelect [options]="users" placeholder="Select Members" optionLabel="fulname" [(ngModel)]="selectedUsers"/>
+            <button class="create" (click)="createTeamRequest()">Create</button>
         </div>
     </div>
 </div>
