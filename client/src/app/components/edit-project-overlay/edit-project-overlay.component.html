@@ -1,7 +1,6 @@
 <div class="overlay-container">
     <div class="error" *ngIf="submissionError">{{ submissionError }}</div>
     <div class="overlay-content">
-        
         <div class="left">
             <div class="project-title">
                 <span class="name">Project title</span>
@@ -68,7 +67,6 @@
 
                 </table>
             </div> </div>
-        
         <div class="right">
             <div class="description">
                 <span class="name">Project Description</span>
@@ -125,6 +123,7 @@
                 <div class="link-save-cancel">
                     <!-- <button id="related-button">Link project</button> --><p></p>
                     <div class="save-cancel">
+                        <button class="close" (click)="closeOverlay()">Close</button>
                         <button class="save" (click)="editProject(project.id)">Save changes</button>
                         <button class="cancel" (click)="closeOverlay()">Cancel</button>
                     </div>

@@ -105,11 +105,16 @@
     float: right;
 }
 
-.create, .cancel, #related-button {
+.create, .cancel, .close,  #related-button {
     padding: 10px 20px;
     border-radius: 10px;
     border: none;
     cursor: pointer;
+}
+
+.close {
+    background-color: darkgray;
+    color: white;
 }
 
 .create {

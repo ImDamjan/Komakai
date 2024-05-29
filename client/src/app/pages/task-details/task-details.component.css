@@ -21,8 +21,13 @@ input[type=text]:focus {
 }
 
 .header{
-    display: flexbox;
-    flex-direction: column;
+  display: flex;
+  align-items: center; /* Vertikalno centriranje elemenata */
+  gap: 10px;
+}
+
+.header .btn-close {
+  margin-left: auto;
 }
 
 h1 {
