@@ -1,8 +1,7 @@
 .task-filter{
     display: flex;
-    float: right;
-    width: 350px;
-    height: calc(100vh - 200px);
+    width: 100%;
+    height: calc(100vh - 250px);
     background-color: white;
     padding: 30px 100px 20px 30px;
     flex-direction: column;

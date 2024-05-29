@@ -3,13 +3,17 @@
         <h1 id="title">My tasks</h1>
         <app-task-header #taskHeader [filter]="filter"></app-task-header>
     </div>
-     <app-task-filter #taskFilter [filter]="filter"></app-task-filter>
-     <div id="task-list">
-
-         <div *ngFor="let task of filteredTasks">
-             <app-project-task [task]="task"></app-project-task>
-         </div>
-     </div>
+    <div class="task-container">
+        <div class="task-list">
+            <div *ngFor="let task of filteredTasks">
+                <app-project-task class="task" [task]="task"></app-project-task>
+            </div>
+        </div>
+        <div class="fileri">
+            <app-task-filter #taskFilter [filter]="filter"></app-task-filter>
+        </div>
+    </div>
+     
      <nav aria-label="Page navigation example">
         <ul class="pagination">
             <li class="page-item">
