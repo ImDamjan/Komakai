@@ -400,8 +400,11 @@ export class ProjectPreviewComponent implements OnInit {
       let decode = this.jwtDecoder.decodeToken(token);
       id = decode.user_id;
       this.projectService.getProjectsData(this.filter).subscribe(projects => {
+        
         this.projectsData = projects;
         this.projectsData.forEach(project => {
+          project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
+          project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
           this.users = project.users;
           this.users.forEach(user => {
             this.userService.profilePicture(user.id).subscribe({
