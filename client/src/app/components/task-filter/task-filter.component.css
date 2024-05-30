@@ -1,6 +1,6 @@
 .task-filter{
     display: flex;
-    width: 90%;
+    width: 100%;
     height: calc(100vh - 250px);
     background-color: white;
     padding: 30px 100px 20px 30px;
@@ -61,6 +61,8 @@ h4{
 }
 .sort{
     padding-top: 20px ;
+    display: flex;
+            flex-direction: column;
 }
 
 :host::ng-deep.p-multiselect{

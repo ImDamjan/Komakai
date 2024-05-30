@@ -1,7 +1,7 @@
 #tasks{
     margin-top: 35px;
     flex-grow: 1;
-    width: 93vw;
+    width: 100%;
     padding: 40px 0px 0px 40px;
   }
 
@@ -10,6 +10,7 @@
 }
 
 .task-container{
+  width: calc(100% - 80px);
   display: flex;
   justify-content: space-between; 
   align-items: flex-start;
@@ -24,7 +25,7 @@
 }
 
 .task-list .task{
-  width: 100%;
+  width: 90%;
 }
 
 .fileri{
