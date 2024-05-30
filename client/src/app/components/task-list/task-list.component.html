@@ -6,7 +6,7 @@
       <button mat-icon-button disabled></button>
       <!-- {{node.name}} -->
       <div *ngIf="isTask(node.node)" class = 'task'>
-        <app-task-list-task [userProjectRole]="userProjectRole" [task]="node.node"></app-task-list-task>
+        <app-task-list-task [userProjectRole]="userProjectRole" [task]="node.node" (isUpdated)="getIsUpdatedTask($event)"></app-task-list-task>
       </div>
       <div *ngIf="!isTask(node.node)" class = 'taskGroup'>
         <span class="text-task-group" style="color: black;"><b>{{node.node.title}} &nbsp;&nbsp;</b></span>
@@ -17,6 +17,7 @@
         </div>
       </div>
     </mat-tree-node>
+    
     <!-- This is the tree node template for expandable nodes -->
     <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
       <button mat-icon-button matTreeNodeToggle class="expand-field"
@@ -37,5 +38,5 @@
     <app-task-filter #taskFilter [filter]="filter"/>
 
   </div>
-  
+
 </div>

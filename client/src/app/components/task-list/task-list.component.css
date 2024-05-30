@@ -3,6 +3,8 @@
     padding-left: 30px;
     width: 95vw;
 }
+
+
 .task{
     color: black;
 }
@@ -29,6 +31,7 @@ mat-tree{
     color: darkgray;
     border: 1px solid darkgray;
     border-radius: 25px;
+    margin-left: 10px;
 }
 .create-buttons button:hover{
     background-color:   white;

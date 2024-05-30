@@ -105,11 +105,16 @@
     float: right;
 }
 
-.create, .cancel, #related-button {
+.create, .cancel, .close,  #related-button {
     padding: 10px 20px;
     border-radius: 10px;
     border: none;
     cursor: pointer;
+}
+
+.close {
+    background-color: darkgray;
+    color: white;
 }
 
 .create {
@@ -206,4 +211,8 @@ table {
     border: 0.1px solid #fafafa;
     text-align: left;
     padding: 8px;
+  }
+
+  ::ng-deep .p-multiselect-filter-icon {
+    display: none !important;
   }

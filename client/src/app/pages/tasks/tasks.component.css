@@ -8,11 +8,34 @@
 #task-header {
   display: flex;
 }
-#task-list{
+
+.task-container{
+  display: flex;
+  justify-content: space-between; 
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.task-list{
+  width: 80%;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 200px);
 }
+
+.task-list .task{
+  width: 100%;
+}
+
+.fileri{
+  flex: 1;
+  max-width: 20%; 
+  display: flex;
+  padding: 0.5%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 #title {
   margin-right: 25vw;
   font-family: 'Poppins',sans-serif;
@@ -51,4 +74,58 @@
   margin-left: 5px;
   text-align: center;
   color: #0D6EFD;
+}
+
+/* Media Queries */
+@media (min-width: 1630px) and (max-width: 1920px) {
+  .task-container {
+    flex-direction: row;
+    gap: 5px;
+  }
+  .task-list, .task {
+    width: 80%;
+  }
+  .fileri {
+    width: 20%;
+  }
+}
+
+@media (min-width: 1371px) and (max-width: 1630px) {
+  .task-container {
+    flex-direction: row;
+    gap: 0px;
+  }
+  .task-list, .task {
+    width: 69.5%;
+  }
+  .fileri {
+    width: 30.5%;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1370px) {
+  .task-container {
+    flex-direction: row;
+    gap: 0px;
+  }
+  .task-list, .task {
+    width: 57%;
+  }
+  .fileri {
+    width: 43%;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 1024px) {
+  .task-container {
+    flex-direction: column;
+    width: 100%;
+  }
+  .task-list, .task {
+    width: 100%;
+  }
+  .fileri {
+    width: 100%;
+    max-width: 100%;
+  }
 }

@@ -73,3 +73,59 @@
 .icon {
     margin-right: 5px;
 }
+.notification{
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #001B47;;
+    margin: 10px 10px;
+    background-color:#001B47; ;
+}
+.date_read{
+    display: flex;
+}
+.date_read button{
+    margin-left: 10px;
+    padding: 10px 15px;
+    background-color:  white;
+    color: darkgray;
+    border: 1px solid darkgray;
+    border-radius: 25px;
+    
+}
+.date_read button:hover{
+    background-color:   white;
+    color: #001B47;
+    border: 1px solid #001B47;
+
+}
+.date_read p{
+    padding-top: 15px;
+}
+.notification p {
+    margin: 0;
+}
+.notifications{
+    color: white;
+    position: absolute;
+    border-radius: 15px;
+    border: 1px solid #2765c8;
+    background: #2765c8;;
+    min-height: 100px;
+    width: 300px;
+    overflow: auto;
+}
+button{
+    padding: 10px 20px;
+    background-color:  white;
+    color: darkgray;
+    border: 1px solid darkgray;
+    border-radius: 25px;
+    margin-left: 20px;
+}
+
+
+button:hover{
+    background-color:   white;
+    color: #001B47;
+    border: 1px solid #001B47;
+}

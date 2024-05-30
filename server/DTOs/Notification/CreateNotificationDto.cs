@@ -8,7 +8,7 @@ namespace server.DTOs.Notification
     public class CreateNotificationDto
     {
         public List<int> UserIds { get; set; } = new List<int>();
-        public string Title { get; set; } = null!;
-        public string Description { get; set; } = null!;
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
     }
 }
