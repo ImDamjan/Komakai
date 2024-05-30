@@ -26,6 +26,7 @@ namespace server.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers([FromQuery]UserFilterDto dto,[FromQuery]SortDto sort)
         {
@@ -42,6 +43,7 @@ namespace server.Controllers
             return Ok(userDtos);
         }
 
+        [Authorize]
         [HttpGet("getAssignmentUsers/{asign_id}")]
         public async Task<IActionResult> getAssignmentUsers([FromRoute]int asign_id)
         {
@@ -54,7 +56,7 @@ namespace server.Controllers
             return Ok(dtos);
         }
 
-
+        [Authorize]
         [HttpGet("getUserById/{id}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
@@ -66,6 +68,7 @@ namespace server.Controllers
             var roleDto = user.Role.toRoleDto();
             return Ok(user.toUserRoleDto(roleDto));
         }
+        [Authorize]
         [HttpGet("getProjectUsers/{project_id}")]
         public async Task<IActionResult> getProjectUsers([FromRoute] int project_id)
         {
@@ -77,15 +80,15 @@ namespace server.Controllers
             });
             return Ok(dtos);
         }
-
-        [HttpGet("byRole/{roleName}"), Authorize(Roles ="Admin")]
+        [Authorize]
+        [HttpGet("byRole/{roleName}")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsersByRole(string roleName)
         {
             var users=await _repos.GetUsersByRoleAsync(roleName);
             return Ok(users);
         }
 
-
+        [Authorize]
         [HttpGet("user/resettoken/{resetToken}")]
         public async Task<ActionResult<User>> GetUserByResetToken(string resetToken)
         {
@@ -97,7 +100,7 @@ namespace server.Controllers
 
             return Ok(user);
         }
-
+        [Authorize]
         [HttpGet("user/email/{email}")]
         public async Task<ActionResult<User>> GetUserByEmail(string email)
         {
@@ -110,6 +113,7 @@ namespace server.Controllers
             return Ok(user);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -121,7 +125,7 @@ namespace server.Controllers
 
             return NoContent(); // User deleted successfully
         }
-
+        [Authorize]
         [HttpPut("updateUserInfo/{user_id}")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto,int user_id)
         {
@@ -221,7 +225,7 @@ namespace server.Controllers
 
 
         //BLOBS
-
+        [Authorize]
         [HttpPost("{userId}/uploadProfilePicture")]
         public async Task<IActionResult> UploadProfilePicture(int userId, [FromBody] UploadProfilePictureDTO picture)
         {
@@ -248,7 +252,7 @@ namespace server.Controllers
                 return StatusCode(500, $"Internal server error: {ex}");
             }
         }
-
+        [Authorize]
         [HttpGet("{userId}/profilePicture")]
         public async Task<IActionResult> GetProfilePicture(int userId)
         {
