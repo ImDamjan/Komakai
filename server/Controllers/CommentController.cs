@@ -26,7 +26,7 @@ namespace server.Controllers
             _comment_repo = comment_repo;
         }
 
-        [HttpPost("createComment")]
+        [HttpPost("createComment"), Authorize(Roles = "Project Manager,Project Worker")]
         //[HasPermission("AddComment")]
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentDto dto)
         {
@@ -40,7 +40,7 @@ namespace server.Controllers
             comment = await _comment_repo.CreateCommentAsync(comment);
             return Ok(comment.ToCommentDto(user.toUserDto(), new List<AnswerDto>()));
         }
-
+        [Authorize]
         [HttpGet("getCommentById/{comment_id}")]
         public async Task<IActionResult> GetCommentById([FromRoute] int comment_id)
         {
@@ -51,7 +51,7 @@ namespace server.Controllers
             return Ok(comment.ToCommentDto(comment.User.toUserDto(), comment.Answers.Select(a=>a.toAnswerDto(a.User.toUserDto())).ToList()));
         }
 
-        [HttpPut("updateComment")]
+        [HttpPut("updateComment"), Authorize(Roles = "Project Manager,Project Worker")]
         public async Task<IActionResult> UpdateComment([FromBody] UpdateCommentDto dto)
         {
             var comment = await _comment_repo.UpdateCommentAsync(dto);
@@ -60,6 +60,7 @@ namespace server.Controllers
 
             return Ok(comment.ToCommentDto(comment.User.toUserDto(),comment.Answers.Select(a=>a.toAnswerDto(a.User.toUserDto())).ToList()));
         }
+        [Authorize]
         [HttpGet("getAllCommentsByAssignment/{asign_id}")]
         public async Task<IActionResult> GetAllByAssignmet([FromRoute] int asign_id)
         {
@@ -69,7 +70,8 @@ namespace server.Controllers
             return Ok(dtos);
         }
 
-        [HttpDelete("deleteCommentById/{comment_id}")]
+
+        [HttpDelete("deleteCommentById/{comment_id}"), Authorize(Roles = "Project Manager,Project Worker")]
         public async Task<IActionResult> DeleteCommentById([FromRoute] int comment_id)
         {
             var comment = await _comment_repo.DeleteCommentByIdAsync(comment_id);

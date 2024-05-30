@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Answer;
 using server.Mappers;
@@ -21,7 +22,7 @@ namespace server.Controllers
             _user_repo = user_repo;
         }
 
-        [HttpPost("CreateAnswer")]
+        [HttpPost("CreateAnswer"), Authorize(Roles = "Project Manager,Project Worker,User")]
         public async Task<ActionResult<Answer>> CreateAnswer(CreateAnswerDto dto)
         {
             var comment = await _commentRepository.GetCommentByIdAsync(dto.CommentId);
@@ -40,7 +41,7 @@ namespace server.Controllers
             return Ok(answer.toAnswerDto(user.toUserDto()));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "Project Manager,Project Worker")]
         public async Task<IActionResult> DeleteAnswer(int id)
         {
             var answer = await _answerRepository.DeleteAnswerByIdAsync(id);
@@ -52,7 +53,7 @@ namespace server.Controllers
 
             return NoContent();
         }
-
+        [Authorize]
         [HttpGet("getAllAnswersByComment/{commentId}")]
         public async Task<ActionResult<IEnumerable<AnswerDto>>> GetAllAnswersByCommentId(int commentId)
         {
@@ -67,7 +68,7 @@ namespace server.Controllers
 
             return Ok(answerDtos);
         }
-        [HttpPut("updateAnswer")]
+        [HttpPut("updateAnswer"), Authorize(Roles = "Project Manager,Project Worker")]
         public async Task<IActionResult> UpdateAnswerById(UpdateAnswerDto dto)
         {
             var answer = await _answerRepository.UpdateAnswerAsync(dto);

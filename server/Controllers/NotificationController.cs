@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Notification;
 using server.Mappers;
@@ -21,6 +22,7 @@ namespace server.Controllers
             _userRepository = userRepository;
         }
 
+        [Authorize]
         [HttpPost("Create")]
         public async Task<IActionResult> CreateNotification([FromBody] CreateNotificationDto dto)
         {
@@ -38,6 +40,7 @@ namespace server.Controllers
             return Ok(notification.toNotificationDto(true));
         }
 
+        [Authorize]
         [HttpGet("getByUser/{user_id}")]
         public async Task<IActionResult> GetAllNotifications(int user_id)
         {
@@ -47,7 +50,7 @@ namespace server.Controllers
             var notifications = await _notificationRepo.GetAllNotificationsByUserAsync(user_id);
             return Ok(notifications.Select(x=>x.Notification.toNotificationDto(x.MarkAsRead)));
         }
-
+        [Authorize]
         [HttpPut("Update")]
         public async Task<IActionResult> Update([FromBody]UpdateNotificationDto dto)
         {

@@ -1,5 +1,6 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
@@ -27,7 +28,7 @@ namespace server.Controllers
             return Ok();
 
         }
-
+        [Authorize]
         [HttpPost("send-notification")]
         public async Task<IActionResult> SendCustomNotification([FromBody] NotificationDto notification)
         {

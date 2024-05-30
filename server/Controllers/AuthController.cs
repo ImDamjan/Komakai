@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,8 @@ namespace server.Controllers
         }
 
         //Registracija
-        [HttpPost("register")]
+        
+        [HttpPost("register"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<User>> Register(UserRegistrationDto request)
         {
             //hash
