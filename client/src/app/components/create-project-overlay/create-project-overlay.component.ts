@@ -32,7 +32,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   filteredRoles: Role[] = [];
   showDropdown: boolean = false;
   hoveredTeam: any;
-  submitted = false;
+  submitted = true;
   submissionError: string | null = null;
 
   projectObj!: CreateProject;
@@ -161,16 +161,16 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.spinner.show();
     this.projectObj.userIds = selected_users;
     this.projectObj.priorityId = this.selectedPriorityId;
-    this.submitted = true;
     this.submissionError = null;
 
     if (this.loggedInUserId != null) {
-      //this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
+      this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
       this.projectObj.userIds.push(this.loggedInUserId);
       this.projectObj.userProjectRoleIds.push(this.roleid);
     }
 
-    if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end) {
+    console.log(this.projectObj.start);
+    if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end || !this.projectObj.budget == null) {
       this.submissionError = 'Please fill in all necessary fields.';
       this.spinner.hide();
       return;
@@ -187,7 +187,6 @@ export class CreateProjectOverlayComponent implements OnInit {
       //   this.selectedUsers[0] = user;
       // });
       // console.log(this.selectedUsers);
-      this.submitted = false;
     }, error => {
       console.error('Error creating project:', error);
       this.spinner.hide();
@@ -294,5 +293,14 @@ export class CreateProjectOverlayComponent implements OnInit {
     if(this.userRoles.get(userId) == 1 && userId != this.loggedInUserId && !this.selectedUserRolesMap.get(userId))
       this.userRoles.set(userId, 2);
     return this.selectedUserRolesMap.get(userId) || this.userRoles.get(userId) || null;
+  }
+
+  isEndDateBeforeStartDate(): boolean {
+    if (this.projectObj.start && this.projectObj.end) {
+      const startDate = new Date(this.projectObj.start);
+      const endDate = new Date(this.projectObj.end);
+      return startDate >= endDate;
+    }
+    return false;
   }
 }
