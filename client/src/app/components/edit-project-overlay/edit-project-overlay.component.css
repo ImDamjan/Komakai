@@ -288,7 +288,3 @@
   .members-content th:nth-child(even){
     background-color: #f2f2f2;
   }
-
-  .members-content #teams-content td, th {
-    width: 40%;
-  }

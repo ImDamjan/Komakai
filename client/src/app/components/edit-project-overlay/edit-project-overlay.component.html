@@ -114,7 +114,7 @@
                                             <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
                                                 <div *ngFor="let member of team.members">
                                                     <table id="teams-content">
-                                                        <tr>
+                                                        <tr style="background-color: rgb(255, 169, 161);">
                                                             <th>
                                                                 <select [disabled]="member.id == loggedInUserId" [ngModel]="getSelectedRoleId(member.id)" (change)="onRoleChanged(member, $event)">
                                                                     <option *ngFor="let role of getRolesForUser(member)" [value]="role.id">{{role.name}}</option>
