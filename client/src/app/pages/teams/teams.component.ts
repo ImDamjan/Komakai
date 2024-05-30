@@ -99,6 +99,7 @@ export class TeamsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result=>{
       let index = this.teams.findIndex(t=>t.id==result.id);
       this.teams.splice(index,1,result);
+      this.loadTeams();
     });
   }
 
@@ -135,7 +136,6 @@ export class TeamsComponent implements OnInit {
           }
           if(team.members.length >= 4)
             assigneesString+=" +"+(team.members.length - 2);
-          // console.log(this.asigneesString);
 
           team.reducedTeam = assigneesString;
         }
