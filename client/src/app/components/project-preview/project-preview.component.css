@@ -47,9 +47,9 @@
 }
 
 .card-content {
-  border-radius: 10px;
   background-color: #fff;
-  box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.2);
+  border-radius: .5rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   margin-bottom: 15px;
   width: 100%;
   padding: 14px;
