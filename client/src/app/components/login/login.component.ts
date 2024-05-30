@@ -109,4 +109,9 @@ export class LoginComponent{
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     this.invalidEmail = !emailPattern.test(this.forgotPasswordEmail);
   }
+
+  backToLogin() {
+    this.sent = false;
+    this.forgotPassword = false;
+  }
 }

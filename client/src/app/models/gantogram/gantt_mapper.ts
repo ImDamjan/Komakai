@@ -1,39 +1,93 @@
-import { GanttItem, GanttItemType, GanttLink, GanttLinkType, } from "@worktile/gantt";
+import { GanttGroup, GanttGroupInternal, GanttItem, GanttItemType, GanttLink, GanttLinkType, } from "@worktile/gantt";
 import { TaskCardKanbanComponent } from "../../components/task-card-kanban/task-card-kanban.component";
 import { Task } from "../task/task";
 import { Priority } from "../priority/priority";
 import { GantogramService } from "../../services/gantogram.service"
 import { log } from "node:console";
+import { TaskGroup } from "./taskGroup";
+import { Id } from "ngx-tethys/types";
+import { group } from "@angular/animations";
 export class GanttMapper {
     // Normalni članovi klase
-    static mapTasksToGantItems(tasks:Task[]) : GanttItem[]{
+    static mapTasksToGantItems(tasks:Task[],ganttGroups: GanttGroup[]) : GanttItem[]{
+        // const ganttGroups : GanttGroup[] = []
         const ganttItems: GanttItem[] = []        
         for (let i = 0; i < tasks.length; i++) {         
-            ganttItems.push(this.mapTaskToGanttItem(tasks[i]));
+            ganttItems.push(this.mapTaskToGanttItem(tasks[i],ganttGroups));
+            console.log((ganttGroups));
+            
         }
+        console.log(ganttItems);
+        
         return ganttItems
     }
 
-    static mapTaskToGanttItem(task: Task): GanttItem {
+    static mapTaskToGanttItem(task: Task, groups:GanttGroup[]): GanttItem {
         const ganttItem: GanttItem = {
             id: task.id.toString(),
-            title: task.title,
+            title: task.title + " (" + task.percentage + "%)",
             start: Math.floor(new Date(task.start).getTime()/1000), // ili drugi odgovarajući atribut za početak
             end: Math.floor(new Date(task.end).getTime()/1000), // ili drugi odgovarajući atribut za kraj
             links: this.convertToGantLinks(task.depndentOn), // Možete dodati logiku za mapiranje linkova ako je potrebno
             draggable: true, // Postavite na true ako želite omogućiti povlačenje
             itemDraggable:  true, // Postavite na true ako želite omogućiti povlačenje samo na ovom elementu
             linkable: true, // Postavite na true ako želite omogućiti dodavanje linkova
-            expandable: true, // Postavite na true ako želite omogućiti proširivanje
+            expandable: false, // Postavite na true ako želite omogućiti proširivanje
             expanded: false, // Postavite na true ako želite da je element početno proširen
             color: this.mapPrioprityToColor(task.priority), // Postavite boju po želji
+            
+            group_id : this.addTaskGroup(task.taskGroup,groups),
             // barStyle: {color: 'red !important'}, // Postavite stil trake po želji
             origin: task, // Originalni task
             type: GanttItemType.bar, // Tip gant elementa
             progress: task.percentage/100, // Napredak elementa ako je dostupno u tasku
         };
         return ganttItem;
+        
     }
+
+    static addTaskGroup(group: TaskGroup, groups: GanttGroup[]): string{
+       
+        
+        if(!group.parentTaskGroupId){
+            const existingGroup = groups.find(g => g.id === "0");
+            if(!existingGroup){
+                const newGanttGroup: GanttGroup<TaskGroup> = {
+                    id: "0", // Pretvaranje broja u string
+                    title: group.title,
+                    // origin: group
+                };
+                groups.push(newGanttGroup);
+                return newGanttGroup.id
+            }else{
+                return existingGroup.id;
+            }
+        }else{
+            const existingGroup = groups.find(g => g.id === group.id.toString());
+    
+            if (existingGroup) {
+                // Ako postoji, vrati id
+                return existingGroup.id;
+            } else {
+                // Ako ne postoji, kreiraj novi GanttGroup objekat
+                const newGanttGroup: GanttGroup<TaskGroup> = {
+                    id: group.id.toString(), // Pretvaranje broja u string
+                    title: "Podgrupa: " + group.title,
+                    // origin: group
+                };
+                
+                // Dodaj novi GanttGroup objekat u niz
+                groups.push(newGanttGroup);
+                
+                // Vrati id novododate grupe
+                return newGanttGroup.id;
+            }
+        }
+
+        
+        // Provera da li već postoji grupa sa istim id-jem
+    }
+
 
     // Logika na osnovu role da li je korisniku dozvoljeno da menja vreme start-end draggable: (true/false)
     private static convertToGantLinks(array: number[]): GanttLink[] {

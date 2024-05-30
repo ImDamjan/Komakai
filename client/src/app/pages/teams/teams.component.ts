@@ -8,6 +8,9 @@ import { User } from '../../models/user/user';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTeamComponent } from '../../components/edit-team/edit-team.component';
 import { textAlign } from 'html2canvas/dist/types/css/property-descriptors/text-align';
+import { ChangeDetectorRef } from '@angular/core';
+import { Notify } from '../../models/notifications/notify';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-teams',
@@ -29,6 +32,8 @@ export class TeamsComponent implements OnInit {
   private dialog = inject(MatDialog);
   public searchText = "";
 
+  notify : Notify
+
   private loggedUser:any;
   public createTeam = {
     name : "",
@@ -39,6 +44,11 @@ export class TeamsComponent implements OnInit {
   public users: User[]= [];
   public selectedUsers: User[] =  [];
   public teams : Team[] = [];
+
+  constructor(private cdr: ChangeDetectorRef, private toast : NgToastService) {
+    this.notify = new Notify(toast)
+  }
+
   ngOnInit(): void {
     this.spinner.show();
     this.loggedUser = this.jwt_service.getLoggedUser();
@@ -63,7 +73,7 @@ export class TeamsComponent implements OnInit {
   {
     if(this.selectedUsers.length <= 0 || this.createTeam.name==="")
     {
-      // alert("Create form not filled correctly");
+      this.notify.showWarn("Create team", "Create form not filled correctly!")
       return;
     }
     this.createTeam.members = [];
@@ -75,8 +85,10 @@ export class TeamsComponent implements OnInit {
         this.teams.push(team);
         this.createTeam.name = "";
         this.selectedUsers = [];
+        this.loadTeams();
       }
     })
+    
   }
 
   openEditOverlay(team: Team)

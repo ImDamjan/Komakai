@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { StateService } from '../../services/state.service';
@@ -13,7 +13,7 @@ import { CommentService } from '../../services/comment.service';
 import { Comment } from '../../models/comment/comment';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UpdateTask } from '../../models/task/update-task';
-import { error } from 'console';
+import { error, log } from 'console';
 import { DateConverterService } from '../../services/date-converter.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Role } from '../../models/role';
@@ -21,6 +21,9 @@ import { Answer } from '../../models/comment/answer';
 import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
 import { CreateNotification } from '../../models/notifications/create-notification';
 import { NotificationService } from '../../services/notification.service';
+import { Notify } from '../../models/notifications/notify';
+import { NgToastService } from 'ng-angular-popup';
+import { response } from 'express';
 
 
 @Component({
@@ -29,6 +32,9 @@ import { NotificationService } from '../../services/notification.service';
   styleUrl: './task-details.component.css'
 })
 export class TaskDetailsComponent implements OnInit,OnDestroy{
+
+  @ViewChild('overlayContainer', { static: true }) overlayContainer!: ElementRef;
+
   private assignment_service = inject(AssignmentService);
   private jwt_service = inject(JwtDecoderService);
   private state_service =  inject(StateService);
@@ -44,7 +50,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   userProjectRole!: Role;
 
 
-
+  notify : Notify;
 
   public comments : Comment[] = []
   public userId : number = 0;
@@ -94,8 +100,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   public selectedState! :State;
   
   public hasCompletedDependentTasks:boolean = false;
-  constructor() {
-
+  constructor(private toast : NgToastService) {
+    this.notify = new Notify(toast)
   }
   ngOnDestroy(): void {
     this.closeOverlay();
@@ -170,9 +176,24 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         });
       }
     });
-
-    
   }
+
+  //expand overlay
+  expanded: boolean = false;
+  toggleOverlay() {
+    let elem = this.overlayContainer.nativeElement;
+    if (!document.fullscreenElement) {
+      this.expanded = true
+      elem.requestFullscreen().catch((err: { message: any; name: any; }) => {
+        console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      this.expanded = false
+      document.exitFullscreen();
+    }
+  }
+
+
   updateTask()
   {
     this.selectedAssignees = [];
@@ -298,6 +319,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
             this.showUpdate = false;
             this.closeOverlay();
             this.spinner.hide();
+            this.notify.showSuccess("Task update","Task updated successfully!")
           },
           error :(error)=>
           {
@@ -334,6 +356,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
               comment.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
             this.comments.push(comment);
             this.commentText = "";
+
+            this.notify.showSuccess("Comment added","Comment added successfully!")
           }
         });
       }
@@ -396,6 +420,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   cancelUpdateRequest()
   {
     this.showUpdate=false;
+    this.notify.showWarn("Task update","You canceled this task update!")
   }
 
   profilePicture(userId: number) {
@@ -441,6 +466,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
               ans.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
             comment.answers.push(ans);
             comment.answerContent = "";
+
+            this.notify.showSuccess("Reply added","Reply added successfully!")
           }
         });
       }
@@ -452,6 +479,24 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       CorA.editOpened = false;
     else
       CorA.editOpened = true;
+  }
+
+  //novi red kod komentara
+  onEnter(event: any) {
+      if (event.keyCode === 13) {
+      const cursorPosition = event.target.selectionStart;
+      const value = event.target.value;
+      const newValue =
+        value.substring(0, cursorPosition) +
+        '\n' +
+        value.substring(cursorPosition);
+      event.target.value = newValue;
+      event.target.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+      event.preventDefault();
+    }
+  }
+  replaceNewlines(content: string): string {
+    return content.replace(/\n/g, '<br>');
   }
 
   updateComment(comment:Comment)
@@ -470,6 +515,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           comment.postTime = new Date(com.postTime);
           comment.replyOpened = false;
           comment.editOpened = false;
+
+          this.notify.showSuccess("Comment updated","Comment updated successfully!")
         }
       })
     }
@@ -493,6 +540,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           answer.editedTime = new Date(com.editedTime);
           answer.postTime = new Date(com.postTime);
           answer.editOpened = false;
+
+          this.notify.showSuccess("Answer added","Answer added successfully!")
         }
       })
     }
@@ -501,6 +550,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       answer.editOpened = false;
     }
   }
+
+
   showBox(comment:Comment)
   {
     comment.answerContent = "";
@@ -552,10 +603,12 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           this.showUpdate = false;
           // this.closeOverlay();
           this.spinner.hide();
+
+          this.notify.showInfo("Taks closed","You closed this task!")
         },
         error :(error)=>
         {
-            // alert("Task update failed!");
+          this.notify.showWarn("Taks update","Taks can not be updated!")
             // console.log(error);
         }
     });
