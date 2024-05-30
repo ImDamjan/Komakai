@@ -164,13 +164,13 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.submissionError = null;
 
     if (this.loggedInUserId != null) {
-      this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
+      //this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
       this.projectObj.userIds.push(this.loggedInUserId);
       this.projectObj.userProjectRoleIds.push(this.roleid);
     }
 
     console.log(this.projectObj.start);
-    if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end || !this.projectObj.budget == null) {
+    if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end || (this.projectObj.end == this.projectObj.start) || (this.projectObj.end < this.projectObj.start) || (this.projectObj.budget === null || this.projectObj.budget === undefined || this.projectObj.budget < 0)) {
       this.submissionError = 'Please fill in all necessary fields.';
       this.spinner.hide();
       return;

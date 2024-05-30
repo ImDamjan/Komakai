@@ -28,7 +28,7 @@
                     </tr>
 
                     <tr>
-                        <div class="error-message" *ngIf="!projectObj.priorityId && submitted">* Priority is required</div>
+                        <div class="error-message" *ngIf="!selectedPriorityId && submitted">* Priority is required</div>
                     </tr>
 
                     <tr>
@@ -59,7 +59,8 @@
                     <tr>
                         <th>
                             <p><span class="name" id="budget">Budget: </span></p>
-                            <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget">
+                            <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget" min="0">
+                            <div class="error-message" *ngIf="projectObj.budget < 0 && submitted">* Budget cannot be less than 0</div>
                             <div class="error-message" *ngIf="projectObj.budget === null || projectObj.budget === undefined && submitted">* Budget is required</div>
                         </th>
                         <th>
