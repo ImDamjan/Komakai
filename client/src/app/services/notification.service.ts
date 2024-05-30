@@ -3,6 +3,8 @@ import * as signalr from '@microsoft/signalr'
 import { environment } from '../environments/environment';
 import { CreateNotification } from '../models/notifications/create-notification';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Notification } from '../models/notifications/notification';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +22,12 @@ export class NotificationService {
   constructor() {
     // this.startConnection();
    }
+
+  public updateNotification(user_id:number, notif_id:number):Observable<Notification>
+  {
+    const url = this.baseUrl + "/Notification/Update";
+    return this.http.put<Notification>(url,{userId:user_id,notificationId:notif_id});
+  }
 
   //konektovanje na hub
 

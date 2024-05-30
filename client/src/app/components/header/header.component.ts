@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit {
             this.notification_service.connection.on("ReceiveMessage",(from: string,notif:Notification) =>{
               // console.log(from);
               // console.log(notif);
+              notif.dateSent = new Date(notif.dateSent);
               this.notifications.push(notif);
             })
             this.notification_service.login(Number(decode.user_id)).then(()=>{
@@ -75,6 +76,21 @@ export class HeaderComponent implements OnInit {
           this.profilePicture(this.userid);
       });
     }
+  }
+  public notificationsOpened = false;
+
+  updateNotification(notif: Notification)
+  {
+    let ind = this.notifications.findIndex(n=>n.id===notif.id);
+    this.notifications.splice(ind,1);
+    this.notification_service.updateNotification(this.userid,notif.id).subscribe({
+      next: (n: Notification)=>{}
+    })
+  }
+
+  toggleNotifications()
+  {
+    this.notificationsOpened = !this.notificationsOpened;
   }
 
   toggleMenu() {

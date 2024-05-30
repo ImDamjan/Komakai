@@ -59,7 +59,7 @@ namespace server.SignalR
                     if(user!=null)
                     {
                         System.Console.WriteLine("Usao sam na send");
-                        await Clients.Client(conn.Key).SendAsync("ReceiveMessage",conn.Value.UserId,notification.toNotificationDto(true));
+                        await Clients.Client(conn.Key).SendAsync("ReceiveMessage",conn.Value.UserId,notification.toNotificationDto(false));
                     }
                     System.Console.WriteLine("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");                 
                 }
