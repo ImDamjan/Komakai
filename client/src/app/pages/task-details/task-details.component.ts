@@ -302,6 +302,18 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
                 console.log("message sent");
               }).catch((err)=>{console.log(err)})
             }
+            if(updatedTask.percentage===100)
+            {
+              let create :CreateNotification = {
+                userIds: [updatedTask.owner.id],
+                title: 'Task closeure',
+                description: `Task '${updatedTask.title}' is completed`
+              }
+              this.notification_service.sendNotifcation(create).then(()=>{
+                // console.log("message sent");
+              }).catch((err)=>{console.log(err)})
+
+            }
             this.assignment = updatedTask;
             this.assignment.dummyTitle = this.assignment.title;
             if(this.assignment.title.length > 20)
