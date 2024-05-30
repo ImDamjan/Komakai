@@ -75,7 +75,7 @@
         </div>
         <div class="issue-details">
           <img src="assets\project-preview\issues.svg" alt=""/> 
-           {{ getAssignmentCount(project.id) === 0 ? ' No issues' : (getAssignmentCount(project.id) === 1 ? ' 1 issue' :  getAssignmentCount(project.id) + ' issues') }}
+           {{ project.assignmentCount === 0 ? ' No issues' : project.assignmentCount === 1 ? ' 1 issue' :  project.assignmentCount + ' issues' }}
         </div>
       </div>
 

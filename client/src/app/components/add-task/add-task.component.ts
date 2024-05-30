@@ -214,11 +214,11 @@ export class AddTaskComponent implements OnInit {
         // confirm("Task created successfully!");
         let create :CreateNotification = {
           userIds: this.createTaskObj.assignees,
-          title: 'Task Created',
-          description: 'You have a new task created'
+          title: 'New task has been assigned to you',
+          description: `You have been assigned to task '${asign.title}'`
         }
         this.notification_service.sendNotifcation(create).then(()=>{
-          console.log("message sent");
+          // console.log("message sent");
         }).catch((err)=>{console.log(err)})
         this.spinner.hide();
         this.dialogRef.close(1);

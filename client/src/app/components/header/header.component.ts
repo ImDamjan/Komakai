@@ -7,6 +7,7 @@ import { ProfileDetailsComponent } from '../profile-details/profile-details.comp
 import { UserProfileService } from '../../services/user-profile.service';
 import { UpdateUser } from '../../models/user/update-user';
 import { NotificationService } from '../../services/notification.service';
+import { Notification } from '../../models/notifications/notification';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,7 @@ export class HeaderComponent implements OnInit {
   private jwtService = inject(JwtDecoderService);
   user!: UpdateUser;
   picture!: string;
+  public notifications: Notification[] = [];
 
   firstname: string = "";
   lastname: string = "";
@@ -38,11 +40,12 @@ export class HeaderComponent implements OnInit {
         let decode = this.jwtService.decodeToken(token);
           this.notification_service.startConnection().then(()=>{
             this.notification_service.connection.on("ReceiveMessage",(from: string,notif:Notification) =>{
-              console.log(from);
-              console.log(notif);
+              // console.log(from);
+              // console.log(notif);
+              this.notifications.push(notif);
             })
             this.notification_service.login(Number(decode.user_id)).then(()=>{
-              console.log("uspeno je logovan");
+              // console.log("uspeno je logovan");
             }).catch((err)=>{
               console.log(err);
             })

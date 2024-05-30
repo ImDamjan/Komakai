@@ -51,7 +51,8 @@ namespace server.Controllers
                 {
                     userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
                 }
-                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
+                int asignCount = _repos.getAssignemntForProjectCount(project);
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount));
             }
             return Ok(dtos);
         }
@@ -71,7 +72,8 @@ namespace server.Controllers
                 {
                     userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
                 }
-                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
+                int asignCount = _repos.getAssignemntForProjectCount(project);
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount));
             }
             return Ok(dtos);
         }
@@ -112,7 +114,8 @@ namespace server.Controllers
                 {
                     userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
                 }
-                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
+                int asignCount = _repos.getAssignemntForProjectCount(project);
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount));
             }
             return Ok(dtos);
         }
@@ -133,7 +136,8 @@ namespace server.Controllers
             {
                 userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
             }
-            dto = project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto());
+            int asignCount = _repos.getAssignemntForProjectCount(project);
+            dto = project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount);
     
             return Ok(dto);
         }
@@ -197,7 +201,7 @@ namespace server.Controllers
             
             await _group_repo.CreateAsync(group);
 
-            return Ok(response.ToProjectDto(userDtos,state.toStateDto(),prio.toPrioDto()));
+            return Ok(response.ToProjectDto(userDtos,state.toStateDto(),prio.toPrioDto(),0));
         }
 
         [HttpPut]
@@ -251,7 +255,8 @@ namespace server.Controllers
             {
                 userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
             }
-            dto = project.ToProjectDto(userDtos, state.toStateDto(),prio.toPrioDto());
+            int asignCount = _repos.getAssignemntForProjectCount(project);
+            dto = project.ToProjectDto(userDtos, state.toStateDto(),prio.toPrioDto(),asignCount);
     
             return Ok(dto);
         }
