@@ -23,7 +23,9 @@ namespace server.SignalR
         }
         public async Task Login(UserRoomConnection userRoomConnection){
             // await Groups.AddToGroupAsync(Context.ConnectionId,"App");
-            _connections[Context.ConnectionId] = userRoomConnection;
+            var con = _connections.FirstOrDefault(x => x.Value.UserId == userRoomConnection.UserId);
+            if (con.Key == null)
+                _connections[Context.ConnectionId] = userRoomConnection;
             //ime na koju ce da se osluskuje sa fronta, ostalo su parametri, ovde getuj sve notifikacije iz baze i posalji na front
             //prilikom uspostavljanja konekcije posalji sve notifikacije za ovog usera
             var notifications = await _note_repo.GetAllNotificationsByUserAsync(userRoomConnection.UserId);
@@ -41,7 +43,7 @@ namespace server.SignalR
             // {
                 var notification = createNotification.fromCreateDtoToNotificationDto();
                 List<User> users = new List<User>();
-                System.Console.WriteLine("Ovo je send ");
+                System.Console.WriteLine("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                 foreach (var userId in createNotification.UserIds)
                 {
                     var user = await _user_repo.GetUserByIdAsync(userId);
@@ -50,12 +52,16 @@ namespace server.SignalR
                     users.Add(user);
                 }
                 notification = await _note_repo.CreateNotification(notification,users);
-
-                foreach (var user in users)
+                foreach (var conn in _connections)
                 {
-                    var con =_connections.FirstOrDefault(conn=>conn.Value.UserId==user.Id);
-                    if(con.Key != null)
-                        await Clients.Client(con.Key).SendAsync("ReceiveMessage",con.Value.UserId,notification.toNotificationDto(true));                 
+                    System.Console.WriteLine(_connections.Count+" "+users.Count);
+                    var user = users.FirstOrDefault(u=>u.Id == conn.Value.UserId);
+                    if(user!=null)
+                    {
+                        System.Console.WriteLine("Usao sam na send");
+                        await Clients.Client(conn.Key).SendAsync("ReceiveMessage",conn.Value.UserId,notification.toNotificationDto(true));
+                    }
+                    System.Console.WriteLine("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");                 
                 }
                 // await Clients.Group("App").SendAsync("ReceieveMessage",userRoomConnection.UserId, notification);
 
@@ -72,6 +78,8 @@ namespace server.SignalR
             // }
             // Clients.Client(Context.ConnectionId).SendAsync("ReceieveMessage","Server",$"{userRoomConnection.UserId} has loggedOut");
             // SendConnectedUser("App");
+
+            _connections.Remove(Context.ConnectionId);
             return base.OnDisconnectedAsync(exp);
         }
 

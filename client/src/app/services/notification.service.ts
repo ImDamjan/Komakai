@@ -56,6 +56,8 @@ export class NotificationService {
   //odjava sa huba
   public async logout()
   {
+    //odjava sa listenera
+    this.connection.off("ReceiveMessage");
     return this.connection.stop();
   }
 }
