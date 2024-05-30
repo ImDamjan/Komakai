@@ -7,7 +7,14 @@
     justify-content: center;
 }
 
+.title{
+    margin-right: auto;
+}
 
+.search-field{
+    margin-left: auto;
+    margin-right: auto;
+}
 .teams_content {
     display: flex;
     justify-content: space-between; 
@@ -80,7 +87,7 @@ td, th {
 }
 
 #search-field {
-    width: 15vw;
+    width: 60%;
     height: 40px;
     background: #FEFEFE;
     border: 1px solid #9A93B3;
@@ -92,7 +99,7 @@ input#search-field {
     background-image: url("../../../assets/project-task-header/search.svg");
     background-repeat: no-repeat;
     background-position: 3% center;
-    width: 30vw;
+    width: 40%;
     height: 40px;
     margin-right: 1%;
 }
