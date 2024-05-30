@@ -13,6 +13,7 @@
 }
 
 .item {
+  background-color: white;
   border-radius: .5rem;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   padding: 10px;
