@@ -48,10 +48,10 @@ namespace server.Controllers
             return Ok(notifications.Select(x=>x.Notification.toNotificationDto(x.MarkAsRead)));
         }
 
-        [HttpPut("Update/{user_id}/{notification_id}")]
-        public async Task<IActionResult> Update(int user_id, int notification_id)
+        [HttpPut("Update")]
+        public async Task<IActionResult> Update([FromBody]UpdateNotificationDto dto)
         {
-            var notification = await _notificationRepo.UpdateNotificationState(user_id,notification_id);
+            var notification = await _notificationRepo.UpdateNotificationState(dto.UserId,dto.NotificationId);
             if(notification==null)
                 return NotFound("Notification or user not found");
             

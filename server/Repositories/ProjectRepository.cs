@@ -58,7 +58,7 @@ namespace server.Repositories
             var projects_query = _context.Projects
             .Include(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
             .Include(p=>p.ProjectUsers).ThenInclude(u=>u.User)
-            .Include(p=>p.TaskGroups)
+            .Include(p=>p.TaskGroups).ThenInclude(p=>p.Assignments)
             .Include(p=>p.State)
             .Include(p=>p.Priority).OrderByDescending(p=>p.LastStateChangedTime).AsQueryable();
 
@@ -70,7 +70,7 @@ namespace server.Repositories
         public async Task<Project?> GetProjectByIdAsync(int id)
         {
             return await _context.Projects
-            .Include(p=>p.TaskGroups)
+            .Include(p=>p.TaskGroups).ThenInclude(p=>p.Assignments)
             .Include(p=>p.State)
             .Include(p=>p.Priority)
             .Include(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
@@ -311,6 +311,16 @@ namespace server.Repositories
             var res = projects.Where(p=>p.TaskGroups.Any(tg=>tg.Assignments.Any(a=>a.Users.Any(u=>u.Id==user_id)))).ToList();
             return res;
             
+        }
+
+        public int getAssignemntForProjectCount(Project project)
+        {
+            int count = 0;
+            foreach (var item in project.TaskGroups)
+            {
+                count+=item.Assignments.Count;
+            }
+            return count;
         }
     }
 }
