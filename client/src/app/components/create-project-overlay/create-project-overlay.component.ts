@@ -165,7 +165,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.submissionError = null;
 
     if (this.loggedInUserId != null) {
-      this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
+      //this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
       this.projectObj.userIds.push(this.loggedInUserId);
       this.projectObj.userProjectRoleIds.push(this.roleid);
     }
