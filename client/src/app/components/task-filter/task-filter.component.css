@@ -61,6 +61,8 @@ h4{
 }
 .sort{
     padding-top: 20px ;
+    display: flex;
+            flex-direction: column;
 }
 
 :host::ng-deep.p-multiselect{
@@ -98,3 +100,25 @@ h4{
   }
 
 /*scroll*/
+
+
+/*toggle*/
+
+.mat-button-toggle-group {
+    background-color: white;
+    color: black;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.mat-button-toggle {
+    background-color: white;
+    color: black;
+}
+
+.mat-button-toggle-checked {
+    background-color: lightgray; /* Ovo je opcionalno, možete koristiti bilo koju boju za označene dugmiće */
+    color: black;
+}
+
+/*toggle*/
