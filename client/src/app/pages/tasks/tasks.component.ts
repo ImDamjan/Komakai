@@ -75,9 +75,11 @@ export class TasksComponent implements OnInit{
     this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
       this.filter.searchTitle = searchValue.searchText;
       // this.filterbezpag.searchTitle = searchValue.searchText;
+      this.navigateToPage(1);
       this.loadTasks();
     });
     this.taskFilterComponent?.filterEmiter.subscribe(filter=>{
+      this.navigateToPage(1);
       let text = "";
       if(this.filter.searchTitle)
         text = this.filter.searchTitle
@@ -136,10 +138,6 @@ export class TasksComponent implements OnInit{
     this.isLastPage = this.currentPage === this.MaxPages;
   }
 
-  // getTotalPages(): number {
-  //   // console.log(this.filteredTasks.length,this.filter.pageSize!);
-  //     return Math.ceil(this.paginatedObject.maxAssignments / this.filter.pageSize!);
-  // }
 
   navigateToPage(pageNumber: number) {
     this.currentPage = pageNumber;

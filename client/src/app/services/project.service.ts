@@ -8,6 +8,7 @@ import { JwtDecoderService } from './jwt-decoder.service';
 import { ProjectFilter } from '../models/project/project-filter';
 import { UpdateProject } from '../models/project/update-project';
 import { ProjectFilterLimit } from '../models/project/project-filter-limit';
+import { ProjectPaginatedObject } from '../models/pagination/project-paginated-object';
 
 @Injectable({
   providedIn: 'root'
@@ -47,16 +48,6 @@ export class ProjectService implements OnInit{
 
   }
   getProjectsData(params: ProjectFilter = {}): Observable<Project[]> {
-  
-  //uzimanje id-a iz tokena
-  // const token = localStorage.getItem('token');
-  // if (token) {
-  //   const decodedToken: any = jwtDecode(token);
-  //   this.userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-  // } else {
-  //   console.error('JWT token not found in local storage');
-  // }
-
     let token = this.jwtDecoder.getToken();
     let id = 0;
     if(token!=null)
@@ -69,6 +60,58 @@ export class ProjectService implements OnInit{
       return of([]);
     }
 
+    let httpParams = this.bindProjectParams(params);
+
+    const apiUrl = `${this.baseUrl}/Project/userProjects/${id}`;
+    return this.http.get<Project[]>(apiUrl,{ params: httpParams });
+  }
+  getProjectsPaginatedData(params: ProjectFilter = {}): Observable<ProjectPaginatedObject> {
+    let token = this.jwtDecoder.getToken();
+    let id = 0;
+    if(token!=null)
+    {
+      let decode = this.jwtDecoder.decodeToken(token);
+      id = decode.user_id;
+    }
+    //deo za uzimanje projekata
+    if (id===0) {
+      return of();
+    }
+
+    let httpParams = this.bindProjectParams(params);
+
+    const apiUrl = `${this.baseUrl}/Project/paginatedUserProjects/${id}`;
+    return this.http.get<ProjectPaginatedObject>(apiUrl,{ params: httpParams });
+  }
+
+  //pravljenje projekta
+  createProject(project: any): Observable<Project> {
+    const url = this.baseUrl + "/Project/create";
+    const body = {
+      userIds : project.userIds,
+      priorityId : project.priorityId,
+      title : project.title,
+      start : project.start,
+      end : project.end,
+      budget : project.budget,
+      description : project.description,
+      type : project.type,
+        userProjectRoleIds : project.userProjectRoleIds
+    }
+    return this.http.post<Project>(url,body);
+  }
+
+  getProjectById(projectId: number): Observable<Project> {
+    const url = `${this.baseUrl}/Project/getProject/${projectId}`; 
+    return this.http.get<Project>(url);
+  }
+
+  updateProject(projectId: number, updateProjectData: UpdateProject): Observable<Project> {
+    const url = `${this.baseUrl}/Project/update/${projectId}`;
+    return this.http.put<Project>(url, updateProjectData);
+  }
+  bindProjectParams(params: ProjectFilter)
+  {
     let httpParams = new HttpParams();
     
     if (params.propertyName) {
@@ -138,35 +181,6 @@ export class ProjectService implements OnInit{
     if(params.pageSize){
       httpParams = httpParams.set('PageSize',params.pageSize.toString());
     }
-
-    const apiUrl = `${this.baseUrl}/Project/userProjects/${id}`;
-    return this.http.get<Project[]>(apiUrl,{ params: httpParams });
+    return httpParams;
   }
-
-  //pravljenje projekta
-  createProject(project: any): Observable<Project> {
-    const url = this.baseUrl + "/Project/create";
-    const body = {
-      userIds : project.userIds,
-      priorityId : project.priorityId,
-      title : project.title,
-      start : project.start,
-      end : project.end,
-      budget : project.budget,
-      description : project.description,
-      type : project.type,
-        userProjectRoleIds : project.userProjectRoleIds
-    }
-    return this.http.post<Project>(url,body);
-  }
-
-  getProjectById(projectId: number): Observable<Project> {
-    const url = `${this.baseUrl}/Project/getProject/${projectId}`; 
-    return this.http.get<Project>(url);
-  }
-
-  updateProject(projectId: number, updateProjectData: UpdateProject): Observable<Project> {
-    const url = `${this.baseUrl}/Project/update/${projectId}`;
-    return this.http.put<Project>(url, updateProjectData);
-}
 }

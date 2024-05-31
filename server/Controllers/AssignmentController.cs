@@ -166,6 +166,11 @@ namespace server.Controllers
             if (user == null)
                 return NotFound("User " + user_id + " does not exist");
             var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter, sort, projects);
+            if (filter.PageNumber > 0 && filter.PageSize > 0)
+            {
+                int skip = (filter.PageNumber - 1) * filter.PageSize;
+                tasks = tasks.Skip(skip).Take(filter.PageSize).ToList();
+            }
             List<AssignmentDto> res = new List<AssignmentDto>();
 
             for (int i = 0; i < tasks.Count; i++)
@@ -191,6 +196,13 @@ namespace server.Controllers
                 return NotFound("User " + user_id + " does not exist");
             var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter, sort, projects);
             List<AssignmentDto> res = new List<AssignmentDto>();
+            PaginationAssignmentsDto paginationAssignmentsDto = new PaginationAssignmentsDto();
+            paginationAssignmentsDto.MaxAssignments = tasks.Count;
+            if (filter.PageNumber > 0 && filter.PageSize > 0)
+            {
+                int skip = (filter.PageNumber - 1) * filter.PageSize;
+                tasks = tasks.Skip(skip).Take(filter.PageSize).ToList();
+            }
 
             for (int i = 0; i < tasks.Count; i++)
             {
@@ -201,9 +213,7 @@ namespace server.Controllers
                 var prioDto = tasks[i].Priority.toPrioDto();
                 res.Add(tasks[i].toAssignmentDto(teamDto, prioDto, stateDto, ownerDto, groupdto));
             }
-            PaginationAssignmentsDto paginationAssignmentsDto = new PaginationAssignmentsDto();
             paginationAssignmentsDto.Assignments = res;
-            paginationAssignmentsDto.MaxAssignments = _asign_repo.AssignmentCount;
             return Ok(paginationAssignmentsDto);
         }
 

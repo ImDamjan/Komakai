@@ -10,8 +10,6 @@ namespace server.Interfaces
 {
     public interface IAssignmentRepository
     {
-        //za paginaciju
-        public int AssignmentCount { get; set; }
         // uzmi taskove od koga zavisi zadat task
         Task<List<Assignment>> getDependentAssignments(int asign_id);
         // Uzima task po id-ju
