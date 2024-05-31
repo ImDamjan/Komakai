@@ -18,6 +18,7 @@ import { UpdateProject } from '../../models/project/update-project';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CreateNotification } from '../../models/notifications/create-notification';
 import { NotificationService } from '../../services/notification.service';
+import { end } from '@popperjs/core';
 
 @Component({
   selector: 'app-edit-project-overlay',
@@ -220,27 +221,6 @@ export class EditProjectOverlayComponent {
       }
       return false;
   }
-
-  formatDate(date: Date | string): string {
-    console.log("pozvan");
-    if (!date)
-      { 
-        console.log("prazno");
-        return '';
-      }
-    if (typeof date === 'string') 
-      {
-        console.log("string");
-        console.log(date.split('T')[0]);
-
-        return date.split('T')[0];
-      }
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const day = ('0' + date.getDate()).slice(-2);
-    console.log(`${year}-${month}-${day}`);
-    return `${year}-${month}-${day}`;
-  }
   
   editProject(projectId: number): void {
     let selected_users : number[] = [];
@@ -266,7 +246,7 @@ export class EditProjectOverlayComponent {
     this.submitted = true;
     this.submissionError = null;
 
-    if (!this.project.title.trim() || !this.project.priority || !this.project.start || !this.project.end) {
+    if (!this.project.title.trim() || !this.project.priority || !this.project.start || !this.project.end || (this.project.start > this.project.end || this.project.start == this.project.end)) {
       this.submissionError = 'Please fill in all necessary fields.';
       return;
     }

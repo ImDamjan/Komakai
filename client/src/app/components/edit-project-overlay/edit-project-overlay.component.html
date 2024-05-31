@@ -38,6 +38,7 @@
                         <th> 
                             <p-calendar placeholder="Select date" id="enddate" [ngModel]="project.end" (ngModelChange)="project.end = $event" dateFormat="dd.mm.yy"/> 
                             <div class="error-message" *ngIf="!project.end && submitted">*End Date is required</div>
+                            <div class="error-message" *ngIf="project.start && project.end && (project.start >= project.end)">*End Date must be after Start Date</div>
                         </th>
                     </tr>
 
