@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { StateService } from '../../services/state.service';
@@ -19,6 +19,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Role } from '../../models/role';
 import { Answer } from '../../models/comment/answer';
 import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
+import { CreateNotification } from '../../models/notifications/create-notification';
+import { NotificationService } from '../../services/notification.service';
 import { Notify } from '../../models/notifications/notify';
 import { NgToastService } from 'ng-angular-popup';
 import { response } from 'express';
@@ -30,6 +32,9 @@ import { response } from 'express';
   styleUrl: './task-details.component.css'
 })
 export class TaskDetailsComponent implements OnInit,OnDestroy{
+
+  @ViewChild('overlayContainer', { static: true }) overlayContainer!: ElementRef;
+
   private assignment_service = inject(AssignmentService);
   private jwt_service = inject(JwtDecoderService);
   private state_service =  inject(StateService);
@@ -39,6 +44,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   private dialogRef = inject(MatDialogRef<TaskDetailsComponent>);
   private date_task_service = inject(DateConverterService);
   private data : any =  inject(MAT_DIALOG_DATA);
+  private notification_service = inject(NotificationService);
   private spinner = inject(NgxSpinnerService);
 
   userProjectRole!: Role;
@@ -170,9 +176,24 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         });
       }
     });
-
-    
   }
+
+  //expand overlay
+  expanded: boolean = false;
+  toggleOverlay() {
+    let elem = this.overlayContainer.nativeElement;
+    if (!document.fullscreenElement) {
+      this.expanded = true
+      elem.requestFullscreen().catch((err: { message: any; name: any; }) => {
+        console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      this.expanded = false
+      document.exitFullscreen();
+    }
+  }
+
+
   updateTask()
   {
     this.selectedAssignees = [];
@@ -256,25 +277,43 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       // alert("End date comes before start date.");
       return;
     }
-    // todayTime.setHours(12, 12, 12, 12);
-    // this.updateObj.end.setHours(12,12,12,12);
 
-    // //provera da li je start date pre danasnjeg
-    // if(this.updateObj.end < todayTime)
-    // {
-    //   alert("End date comes before today.");
-    //   this.spinner.hide();
-    //   return;
-
-    // }
-    // console.log(todayTime);
-    // console.log(this.updateObj.end);
     if(this.selectedAssignees.length > 0)
     {
       this.assignment_service.updateAssignmentById(this.updateObj,this.assignment.id).subscribe
       ({
         next : (updatedTask :Task) =>
           {
+            let usersToSendNotf: number[] = [];
+            updatedTask.assignees.forEach(newUser => {
+            let oldUser = this.assignment.assignees.find(u=>u.id==newUser.id);
+            if(oldUser===undefined)
+              usersToSendNotf.push(newUser.id);
+          });
+            if(usersToSendNotf.length > 0)
+            {
+
+              let create :CreateNotification = {
+              userIds: usersToSendNotf,
+              title: 'New task has been assigned to you',
+              description: `You have been assigned to task '${updatedTask.title}'`
+              }
+              this.notification_service.sendNotifcation(create).then(()=>{
+                console.log("message sent");
+              }).catch((err)=>{console.log(err)})
+            }
+            if(updatedTask.percentage===100)
+            {
+              let create :CreateNotification = {
+                userIds: [updatedTask.owner.id],
+                title: 'Task closeure',
+                description: `Task '${updatedTask.title}' is completed`
+              }
+              this.notification_service.sendNotifcation(create).then(()=>{
+                // console.log("message sent");
+              }).catch((err)=>{console.log(err)})
+
+            }
             this.assignment = updatedTask;
             this.assignment.dummyTitle = this.assignment.title;
             if(this.assignment.title.length > 20)

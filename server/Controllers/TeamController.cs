@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Team;
 using server.Interfaces;
@@ -22,6 +23,7 @@ namespace server.Controllers
             _team_repo = team_repo;
         }
 
+        [Authorize]
         [HttpGet("getTeams")]
         public async Task<IActionResult> GetAllTeams()
         {
@@ -37,6 +39,7 @@ namespace server.Controllers
 
             return Ok(teamDtos);
         }
+        [Authorize]
         [HttpGet("getAllCreatedTeamsByUser/{user_id}")]
         public async Task<IActionResult> GetAllCreatedTeamsByUser([FromRoute] int user_id,[FromQuery] string searchText = "")
         {
@@ -51,6 +54,7 @@ namespace server.Controllers
 
             return Ok(teamDtos);
         }
+        [Authorize]
         [HttpGet]
         [Route("getTeam/{teamId}")]
 
@@ -64,7 +68,7 @@ namespace server.Controllers
 
             return Ok(team.ToTeamDto(members));
         }
-
+        [Authorize]
         [HttpGet]
         [Route("getUserTeams/{userId}")]
         public async Task<IActionResult> getUserTeams([FromRoute] int userId)
@@ -81,7 +85,7 @@ namespace server.Controllers
             return Ok(timovi);
         }
 
-        [HttpPost("createTeam")]
+        [HttpPost("createTeam"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> CreateTeam([FromBody]CreateTeamDto dto)
         {
             if(dto.CreatedBy <= 0)
@@ -106,7 +110,7 @@ namespace server.Controllers
             
         }
 
-        [HttpPut("update/{team_id}")]
+        [HttpPut("update/{team_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> UpdateTeam([FromBody] CreateTeamDto dto, [FromRoute] int team_id)
         {
             var users =  new List<User>();
@@ -126,7 +130,7 @@ namespace server.Controllers
             return Ok(response.ToTeamDto(user_dtos));
         }
 
-        [HttpDelete("delete/{team_id}")]
+        [HttpDelete("delete/{team_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> DeleteTeam([FromRoute] int team_id)
         {
             var team = await _team_repo.DeleteTeamAsync(team_id);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.Mappers;
 
@@ -16,6 +17,7 @@ namespace server.Controllers
         {
             _prio_repo = prio_repo;
         }
+        [Authorize]
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAllPriorities()
         {
@@ -25,6 +27,7 @@ namespace server.Controllers
 
             return Ok(dtos);
         }
+        [Authorize]
         [HttpGet("getById/{id}")]
         public async Task<IActionResult> GetPrioById([FromRoute] int id)
         {

@@ -12,6 +12,8 @@ import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CreateNotification } from '../../models/notifications/create-notification';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -20,6 +22,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class CreateProjectOverlayComponent implements OnInit {
   private jwtService = inject(JwtDecoderService);
+  private notification_service =  inject(NotificationService);
   loggedInUserId: number | null = null;
   fullname!: string;
   roleid!: number;
@@ -82,7 +85,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.teams = teams;
     });
     this.projectObj = {
-      userIds : [],
+      userIds : [Number(this.userid)],
       userProjectRoleIds : [],
       priorityId : this.selectedPriorityId,
       title : "",
@@ -154,7 +157,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     let selected_roles : number[] = [];
     this.selectedUserRolesMap.forEach((value,key) => {
       selected_roles.push(value);
-      selected_users.push(key);
+      selected_users.push(Number(key));
     });
     // console.log(selected_users);
     this.projectObj.userProjectRoleIds = selected_roles;
@@ -179,6 +182,25 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.projectService.createProject(this.projectObj).subscribe(response => {
       // alert('Project created successfully!');
       this.spinner.hide();
+      let asd: number[]  = []
+      response.users.forEach(user => {
+        asd.push(Number(user.id))
+      });
+      // console.log(response.users);
+      // console.log(asd);
+      if(selected_users.length > 0)
+      {
+        let create :CreateNotification = {
+          userIds: asd,
+          title: 'New project',
+          description: `You have been added on project '${response.title}'`
+        }
+        this.notification_service.sendNotifcation(create).then(()=>{
+          // console.log("message sent");
+        }).catch((err)=>{console.log(err)})
+
+      }
+
       // console.log("iz overlaya:",response);
       this.dialogRef.close(response);
       // this.resetForm();

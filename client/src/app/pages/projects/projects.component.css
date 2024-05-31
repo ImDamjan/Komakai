@@ -1,7 +1,7 @@
 .projectlist {
-    max-width: calc(100% - 16.5625rem);
+    max-width: 100%;
     height: 100%;
-    width: 70%;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -10,13 +10,14 @@
 }
 
 .create {
-    width: 110px;
-    height: 40px;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
     border-radius: 10px;
-    margin-right: 50px;
+    margin-left: auto;
     background-color: #001B47;
     color: white;
-    font: 400 12px/1.2 Poppins, sans-serif;
+    font: 400 14px/1.2 'Poppins', sans-serif;
 }
 
 .title {
@@ -24,10 +25,11 @@
     color: #000;
     font-size: 32px;
     margin-top: 5px;
+    margin-right: auto;
 }
 
 #search-field {
-    width: 30vw;
+    width: 60%;
     height: 40.8px;
     background: #FEFEFE;
     border: 1px solid #9A93B3;
@@ -42,9 +44,10 @@ input#search-field {
 }
 
 .search {
-    width: 30vw;
+    width: 50%;
     height: 85%;
-    margin-right: 2vw;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .filters{

@@ -88,7 +88,7 @@ export class ProjectPreviewComponent implements OnInit {
     });
     this.projectsData = projects;
     // console.log("Iz projekata:",createdProject);
-    window.location.reload()
+    // window.location.reload()
   }
   ngOnInit(): void {
     let user = this.jwt_service.getLoggedUser();
@@ -131,15 +131,16 @@ export class ProjectPreviewComponent implements OnInit {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
 
-          this.assignmentService.getAllProjectAssignments(project.id).subscribe(
-            (assignments: any[]) => {
-              this.assignmentCounts[project.id] = assignments.length;
+          //NOTE: da se vrati uz projekte na beku
+          // this.assignmentService.getAllProjectAssignments(project.id).subscribe(
+          //   (assignments: any[]) => {
+          //     this.assignmentCounts[project.id] = assignments.length;
               
-            },
-            (error) => {
-              console.error('An error occurred while fetching assignments for project:', project.id, error);
-            }
-          );
+          //   },
+          //   (error) => {
+          //     console.error('An error occurred while fetching assignments for project:', project.id, error);
+          //   }
+          // );
 
         });
         if (projects.length === 0) {
@@ -399,8 +400,11 @@ export class ProjectPreviewComponent implements OnInit {
       let decode = this.jwtDecoder.decodeToken(token);
       id = decode.user_id;
       this.projectService.getProjectsData(this.filter).subscribe(projects => {
+        
         this.projectsData = projects;
         this.projectsData.forEach(project => {
+          project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
+          project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
           this.users = project.users;
           this.users.forEach(user => {
             this.userService.profilePicture(user.id).subscribe({
@@ -539,6 +543,15 @@ export class ProjectPreviewComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       // When overlay is closed
+      console.log("pozvan edit projekta");
+      if(result!==undefined)
+      {
+        
+        result.truncatedTitle = this.truncate(result.title, this.titleCharacterLimit);
+        result.truncatedDescription = this.truncate(result.description, this.descriptionCharacterLimit);
+        let ind = this.projectsData.findIndex(a=>a.id==result.id);
+        this.projectsData.splice(ind,1,result);
+      }
       this.showProjectPreview = true;
     });
     

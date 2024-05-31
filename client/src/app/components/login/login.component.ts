@@ -7,6 +7,8 @@ import { environment } from '../../environments/environment';
 import { Login } from '../../models/login';
 import { AuthenticationService } from '../../services/atentication.service';
 import { NgxSpinner, NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { NotificationService } from '../../services/notification.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-login',
@@ -47,6 +49,7 @@ export class LoginComponent{
         this.spinner.hide();
         this.authService.setToken(response);
         let decoded = this.jwtDecoderService.decodeToken(response);
+
         if(decoded.role==="Admin")
           this.router.navigate(['/admin']);
         else if (decoded.role==="Project Manager")

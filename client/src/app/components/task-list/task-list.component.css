@@ -1,25 +1,42 @@
 .task-list{
-    padding-top: 150px;
-    padding-left: 30px;
-    width: 95vw;
+    width: calc(100vw - 100px);
+    margin-left: 20px;
+    max-width: 100%;
+    padding-right: 100px;
+    padding-top: 140px;
 }
 
+.list{
+    width: 100%;
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.content{
+    width: 80%;
+}
 
 .task{
     color: black;
 }
-mat-tree{
+.content mat-tree{
     overflow-y: scroll;
     background-color: white;
-    width: 70vw;
+    width: 100%;
     height: calc(100vh - 200px);
     float: left;
     border-radius: .5rem;
     box-shadow: rgb(36, 36, 36) 0px 13px 27px -5px, rgb(36, 36, 36) 0px 8px 16px -8px;
 }
 .filter{
-    float: right;
-    padding-right: 20px;
+    flex: 1;
+    max-width: 20%; 
+    display: flex;
+    padding: 0.5%;
+    flex-direction: column;
+    align-items: flex-start;
 }
 .create-buttons{
     /* padding-left: 250px; */
