@@ -32,7 +32,6 @@ export class ProjectPreviewComponent implements OnInit {
     propertyName : "Last Updated",
     sortFlag : -1,
     pageNumber: 1,
-    pageSize: 4
   };
 
   public desiredPage: number = 1;
@@ -64,7 +63,7 @@ export class ProjectPreviewComponent implements OnInit {
   descriptionCharacterLimit: number = 0;
 
   cards: any[] = [];
-  cardsPerPage: number = 8;
+  cardsPerPage: number = 4;
 
   showProjectPreview: boolean = true;
 
@@ -89,7 +88,7 @@ export class ProjectPreviewComponent implements OnInit {
     });
     this.projectsData = projects;
     // console.log("Iz projekata:",createdProject);
-    window.location.reload()
+    // window.location.reload()
   }
   ngOnInit(): void {
     let user = this.jwt_service.getLoggedUser();
@@ -132,15 +131,16 @@ export class ProjectPreviewComponent implements OnInit {
           project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
           project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
 
-          this.assignmentService.getAllProjectAssignments(project.id).subscribe(
-            (assignments: any[]) => {
-              this.assignmentCounts[project.id] = assignments.length;
+          //NOTE: da se vrati uz projekte na beku
+          // this.assignmentService.getAllProjectAssignments(project.id).subscribe(
+          //   (assignments: any[]) => {
+          //     this.assignmentCounts[project.id] = assignments.length;
               
-            },
-            (error) => {
-              console.error('An error occurred while fetching assignments for project:', project.id, error);
-            }
-          );
+          //   },
+          //   (error) => {
+          //     console.error('An error occurred while fetching assignments for project:', project.id, error);
+          //   }
+          // );
 
         });
         if (projects.length === 0) {
@@ -216,6 +216,7 @@ export class ProjectPreviewComponent implements OnInit {
 
   loadProjects() {
     this.isLoading = true;
+    this.filter.pageSize = this.cardsPerPage;
     this.projectService.getProjectsData(this.filter).subscribe(
       (projects: Project[]) => {
         this.projectsData = projects;
@@ -299,13 +300,13 @@ export class ProjectPreviewComponent implements OnInit {
   calculateCharacterLimit() {
     const screenWidth = window.innerWidth;
     if (screenWidth < 768) {
-      this.titleCharacterLimit = 13;
+      this.titleCharacterLimit = 12;
       this.descriptionCharacterLimit = 40;
     } else if (screenWidth >= 768 && screenWidth < 1025) {
-      this.titleCharacterLimit = 18;
+      this.titleCharacterLimit = 15;
       this.descriptionCharacterLimit = 120;
     } else {
-      this.titleCharacterLimit = 20;
+      this.titleCharacterLimit = 19;
       this.descriptionCharacterLimit = 210;
     }
   }
@@ -399,8 +400,11 @@ export class ProjectPreviewComponent implements OnInit {
       let decode = this.jwtDecoder.decodeToken(token);
       id = decode.user_id;
       this.projectService.getProjectsData(this.filter).subscribe(projects => {
+        
         this.projectsData = projects;
         this.projectsData.forEach(project => {
+          project.truncatedTitle = this.truncate(project.title, this.titleCharacterLimit);
+          project.truncatedDescription = this.truncate(project.description, this.descriptionCharacterLimit);
           this.users = project.users;
           this.users.forEach(user => {
             this.userService.profilePicture(user.id).subscribe({
@@ -511,16 +515,20 @@ export class ProjectPreviewComponent implements OnInit {
 
   adjustCardsPerPage() {
     const screenWidth = window.innerWidth;
-    if (screenWidth < 1800 && screenWidth > 1300) {
-      this.cardsPerPage = 6;
-    } else if(screenWidth < 1300 && screenWidth > 820){
-      this.cardsPerPage = 4;
-    }
-    else if(screenWidth < 820 && screenWidth > 300){
+    if (screenWidth <= 1920 && screenWidth > 1630) {
+      this.cardsPerPage = 3;
+      this.loadProjects();
+    } else if(screenWidth <= 1630 && screenWidth > 1371){
       this.cardsPerPage = 2;
+      this.loadProjects();
+    }
+    else if(screenWidth <= 1371){
+      this.cardsPerPage = 1;
+      this.loadProjects();
     }
     else
-      this.cardsPerPage = 8;
+      this.cardsPerPage = 4;
+      this.loadProjects();
   }
 
   openEditOverlay(project: Project, event: Event): void {
@@ -535,6 +543,15 @@ export class ProjectPreviewComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       // When overlay is closed
+      console.log("pozvan edit projekta");
+      if(result!==undefined)
+      {
+        
+        result.truncatedTitle = this.truncate(result.title, this.titleCharacterLimit);
+        result.truncatedDescription = this.truncate(result.description, this.descriptionCharacterLimit);
+        let ind = this.projectsData.findIndex(a=>a.id==result.id);
+        this.projectsData.splice(ind,1,result);
+      }
       this.showProjectPreview = true;
     });
     

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.Interfaces;
 using server.Mappers;
@@ -17,6 +18,7 @@ namespace server.Controllers
         {
             _state_repo = state_repo;
         }
+        [Authorize]
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAllStates()
         {
@@ -26,6 +28,7 @@ namespace server.Controllers
 
             return Ok(dtos);
         }
+        [Authorize]
         [HttpGet("getById{id}")]
         public async Task<IActionResult> GetStateById([FromRoute] int id)
         {

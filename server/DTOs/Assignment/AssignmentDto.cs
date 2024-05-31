@@ -24,5 +24,6 @@ namespace server.DTOs.Assignment
         public PriorityDto Priority { get; set; } = null!;
         public TaskGroupDto TaskGroup { get; set; } = null!;
         public string Type { get; set; } = null!;
+        public bool IsClosed { get; set; }
     }
 }

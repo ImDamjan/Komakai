@@ -9,5 +9,6 @@ export interface UpdateTask {
     title: string,
     type: string,
     description: string,
-    priorityId: number
+    priorityId: number,
+    isClosed?:boolean
 }

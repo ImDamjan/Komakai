@@ -20,6 +20,7 @@ namespace server.DTOs.Projects
         public double Spent { get; set; }
         public string Type { get; set; } = "";
         public double Percentage { get; set; }
+        public int AssignmentCount { get; set; }
         public string Description { get; set; } = "";
         public PriorityDto Priority { get; set; } = null!;
         public List<ProjectUserDto> Users { get; set; } = new List<ProjectUserDto>();

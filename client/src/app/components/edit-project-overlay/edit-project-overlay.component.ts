@@ -16,6 +16,8 @@ import { RoleService } from '../../services/role.service';
 import { Team } from '../../models/team';
 import { UpdateProject } from '../../models/project/update-project';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CreateNotification } from '../../models/notifications/create-notification';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-edit-project-overlay',
@@ -25,6 +27,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class EditProjectOverlayComponent {
   private jwtService = inject(JwtDecoderService);
   private roleService = inject(RoleService);
+  private notification_service = inject(NotificationService);
   loggedInUserId: number | null = null;
   fullname!: string;
   roleid!: number;
@@ -64,7 +67,7 @@ export class EditProjectOverlayComponent {
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
-    this.selectedUserIds = this.project.users;
+    // this.selectedUserIds = this.project.users;
   }
 
   ngOnInit(): void {
@@ -94,6 +97,7 @@ export class EditProjectOverlayComponent {
       this.project.users.forEach(user => {
         const roleId = user.role.id;
         this.selectedUserRolesMap.set(user.id, roleId);
+        
       });
     });
     this.priorityService.getPriorities().subscribe(priorities => {
@@ -105,7 +109,7 @@ export class EditProjectOverlayComponent {
     this.stateService.fetchAllStates().subscribe(states => {
       this.states = states;
     });
-    this.selectedUsers = this.project.users;
+    this.selectedUsers = JSON.parse(JSON.stringify(this.project.users));
   }
 
   toggleDropdown(): void {
@@ -132,10 +136,6 @@ export class EditProjectOverlayComponent {
   }
 
   isSelected(user: User): boolean {
-    // Check if user is selected
-    if(user.id == this.roleid)
-      return true;
-    // return this.selectedUserIds.includes(user.id);
     return this.selectedUserRolesMap.has(user.id);
   }
 
@@ -160,7 +160,7 @@ export class EditProjectOverlayComponent {
 
   closeOverlay(): void {
       // Close the overlay dialog
-      this.dialogRef.close();
+      this.dialogRef.close(this.project);
   }
 
   showTeamMembers(team: any): void {
@@ -267,17 +267,46 @@ export class EditProjectOverlayComponent {
     this.projectService.updateProject(projectId, updateProjectData).subscribe(response => {
       // alert('Project edited successfully!');
       this.submitted = false;
-
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/projects']);
+      // console.log("NEW:",response.users);
+      // console.log("OLD:",this.project.users);
+      let usersToSendNotf: number[] = [];
+      response.users.forEach(newUser => {
+        let oldUser = this.project.users.find(u=>u.id==newUser.id);
+        // console.log(newUser);
+        if(oldUser===undefined)
+          {
+            usersToSendNotf.push(newUser.id);
+            // console.log("spreman za notifikaciju")
+          }
       });
+      this.project = response;
+      if(usersToSendNotf.length > 0)
+      {
+
+        let create :CreateNotification = {
+          userIds: usersToSendNotf,
+          title: 'New project',
+          description: `You have been added on project '${response.title}'`
+        }
+        this.notification_service.sendNotifcation(create).then(()=>{
+          // console.log("message sent");
+        }).catch((err)=>{console.log(err)})
+      }
+      this.closeOverlay();
+      // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      //   this.router.navigate(['/projects']);
+      // });
     }, error => {
       this.submissionError = 'Error editing project. Please try again.';
     });
   }
 
   getRolesForUser(user: User): Role[] {
-    return this.roles.filter(role => role.authority >= user.role.authority);
+    if (user.id == this.loggedInUserId) {
+      return this.roles;
+    } else {
+      return this.roles.filter(role => role.id !== 1 && role.authority >= user.role.authority);
+    }
   }
 
   get filteredUsers(): any[] {
@@ -296,4 +325,10 @@ export class EditProjectOverlayComponent {
     this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== user.id);
     this.selectedUserRolesMap.delete(user.id);
   } 
+
+  getSelectedRoleId(userId: number): number | null {
+    if(this.userRoles.get(userId) == 1 && userId != this.loggedInUserId && !this.selectedUserRolesMap.get(userId))
+      this.userRoles.set(userId, 2);
+    return this.selectedUserRolesMap.get(userId) || this.userRoles.get(userId) || null;
+  }
 }

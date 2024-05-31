@@ -1,5 +1,4 @@
-#task-details{
-    /* height: fit-content; */
+.overlay-container{
     padding: 30px;
     display: flexbox;
     justify-content: center;    
@@ -21,8 +20,13 @@ input[type=text]:focus {
 }
 
 .header{
-    display: flexbox;
-    flex-direction: column;
+  display: flex;
+  align-items: center; /* Vertikalno centriranje elemenata */
+  gap: 10px;
+}
+
+.header .right-buttons {
+  margin-left: auto;
 }
 
 h1 {
@@ -44,7 +48,7 @@ h1 {
     z-index: 9999;
     box-shadow: 10px 20px 20px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 button{
@@ -56,11 +60,13 @@ button{
     margin-left: 20px;
 }
 
+
 button:hover{
     background-color:   white;
     color: #001B47;
     border: 1px solid #001B47;
 }
+
 
 
 textarea{
@@ -72,6 +78,8 @@ textarea{
     margin-top: 6px;
     margin-bottom: 16px;
     resize: vertical;
+    white-space: pre-line;
+    
 }
 
 .custom-dropdown {
@@ -175,10 +183,38 @@ table {
   #comments{
     max-height: 400px;
     overflow-wrap: break-word;
-    overflow-y: auto;
+    overflow-y: scroll;
   }
   .answer{
     margin-left: 10%;
+  }
+
+  .overlay-container::-webkit-scrollbar {
+    width: 10px;               
+  }
+  
+  .overlay-container::-webkit-scrollbar-track {
+    background: none;  
+  }
+  
+  .overlay-container::-webkit-scrollbar-thumb {
+    background-color: #e9e9e9;    
+    border-radius: 20px;       
+    border: 3px solid darkgray; 
+  }
+
+  #comments::-webkit-scrollbar {
+    width: 10px;               
+  }
+  
+  #comments::-webkit-scrollbar-track {
+    background: none;  
+  }
+  
+  #comments::-webkit-scrollbar-thumb {
+    background-color: #e9e9e9;    
+    border-radius: 20px;       
+    border: 3px solid darkgray; 
   }
 
   

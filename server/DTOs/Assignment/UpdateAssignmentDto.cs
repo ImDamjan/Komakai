@@ -18,5 +18,6 @@ namespace server.DTOs.Assignment
         public string Type { get; set; } = null!;
         public string Description { get; set; } = null!;
         public int PriorityId { get; set; }
+        public bool IsClosed { get; set; } = false;
     }
 }

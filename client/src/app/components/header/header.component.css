@@ -73,3 +73,66 @@
 .icon {
     margin-right: 5px;
 }
+.notification{
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #2765c8;;
+    margin: 10px 10px;
+    background-color:#ffffff; ;
+}
+.date_read{
+    display: flex;
+}
+.date_read button{
+    margin-left: auto;
+    padding: 5px 5px;
+    background-color:  white;
+    color: darkgray;
+    border: 1px solid darkgray;
+    border-radius: 15px;
+    font-size: 12px;
+    min-width: 80px;
+    
+}
+.date_read button:hover{
+    background-color:   white;
+    color: #001B47;
+    border: 1px solid #001B47;
+
+}
+.date_read p{
+    padding-top: 15px;
+}
+.notification p {
+    margin: 0;
+}
+.notifications{
+    color: rgb(33, 33, 33);
+    position: absolute;
+    border-radius: 15px;
+    border: 1px solid #2765c8;
+    background: #c0e7ff;;
+    min-height: 100px;
+    width: 300px;
+    overflow-y: auto;
+    /* margin-left: auto; */
+    object-fit: cover;
+    margin-top: 10px;
+}
+
+button{
+    padding: 10px 20px;
+    background-color:   #001B47;
+    color: yellow;
+    border: 1px solid white;
+    border-radius: 25px;
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+
+button:hover{
+    background-color:  white;
+    color: #001B47;
+    border: 1px solid #001B47;
+}

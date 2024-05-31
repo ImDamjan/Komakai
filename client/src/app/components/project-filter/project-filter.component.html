@@ -5,7 +5,7 @@
     </div>
     <div class = 'priority'>
         <h4>Priorities</h4>
-        <p-multiSelect [options]="priorities" placeholder="Select Priorities" optionLabel="description" [(ngModel)]="selectedPrios">
+        <p-multiSelect  [options]="priorities" placeholder="Select Priorities" optionLabel="description" [(ngModel)]="selectedPrios">
         </p-multiSelect>
     </div>
     <div class ='state'>
@@ -38,9 +38,11 @@
         [options]="sortList"
         [(ngModel)]="filter.propertyName"
         (ngModelChange)="sendFilter()"
-        /><br><br>
-        Ascending <input type="radio" name="sort-mode" [value]="1" (click)="sendSortFilter(1)">
-        Descending <input type="radio" name="sort-mode" [value]="-1" cl (click)="sendSortFilter(-1)" checked>
+        />
+        <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle name="sort-mode" [value]="1" (click)="sendSortFilter(1)">Ascending</mat-button-toggle>
+            <mat-button-toggle name="sort-mode" [value]="-1" cl (click)="sendSortFilter(-1)" checked>Descending</mat-button-toggle>
+        </mat-button-toggle-group>
     </div>
     <button class="filter-button" (click)="sendFilter()" >Apply</button>
 </div>

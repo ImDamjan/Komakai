@@ -2,6 +2,11 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { AuthenticationService } from './services/atentication.service'; 
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -87,6 +92,7 @@ import { FilterUserComponent } from './components/filter-user/filter-user.compon
 import { ResetpasswordComponent } from './pages/resetpassword/resetpassword/resetpassword.component';
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { BadgeModule} from 'primeng/badge';
 
 @NgModule({
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -141,6 +147,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     FormsModule,
     BrowserModule,
     SliderModule,
+    BadgeModule,
     CalendarModule,
     ProgressSpinnerModule,
     MultiSelectModule,
@@ -175,7 +182,13 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   ],
   providers: [
     provideClientHydration(),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    AuthenticationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

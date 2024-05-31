@@ -14,6 +14,8 @@ import { Task } from '../../models/task/task';
 import { CreateTask } from '../../models/task/create-task';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { group } from 'console';
+import { NotificationService } from '../../services/notification.service';
+import { CreateNotification } from '../../models/notifications/create-notification';
 
 @Component({
   selector: 'app-add-task',
@@ -23,6 +25,7 @@ import { group } from 'console';
 export class AddTaskComponent implements OnInit {
 
   private data : any =  inject(MAT_DIALOG_DATA)
+  private notification_service = inject(NotificationService);
   public state : State;
   public showDropdown: boolean;
   public showDropdownTask : boolean;
@@ -122,9 +125,11 @@ export class AddTaskComponent implements OnInit {
     // console.log(this.data);
     this.userService.getProjectUsers(Number(this.data[1])).subscribe({
       next : (users: User[])=>{
-        this.users = users
-        this.users.forEach(element => {
+        this.users = [];
+        users.forEach(element => {
           element.fulname = element.name + " "+ element.lastname;
+          if(element.isActivated)
+            this.users.push(element);
         });
       }
     });
@@ -180,6 +185,7 @@ export class AddTaskComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+
     let todayTime = new Date();
     this.createTaskObj.end = new Date(this.createTaskObj.end);
     this.createTaskObj.start = new Date(this.createTaskObj.start);
@@ -206,6 +212,14 @@ export class AddTaskComponent implements OnInit {
       next : (asign : Task) => {
         // console.log("Creation succesful");
         // confirm("Task created successfully!");
+        let create :CreateNotification = {
+          userIds: this.createTaskObj.assignees,
+          title: 'New task has been assigned to you',
+          description: `You have been assigned to task '${asign.title}'`
+        }
+        this.notification_service.sendNotifcation(create).then(()=>{
+          // console.log("message sent");
+        }).catch((err)=>{console.log(err)})
         this.spinner.hide();
         this.dialogRef.close(1);
       },

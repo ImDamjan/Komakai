@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, inject, Input } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, inject, Input, OnDestroy} from '@angular/core';
 import Chart from 'chart.js/auto';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
@@ -8,11 +8,15 @@ import { Project } from '../../models/project/project';
   templateUrl: './task-tags.component.html',
   styleUrl: './task-tags.component.css'
 })
-export class TaskTagsComponent implements AfterViewInit{
+export class TaskTagsComponent implements AfterViewInit, OnDestroy{
+  ngOnDestroy(): void {
+    this.chart.destroy();
+  }
   @ViewChild('myChart') myChart!: ElementRef;
 
   @Input() projects!: Project[];
 
+  chart:any;
   ngAfterViewInit() {
     this.createChart();
   }
@@ -36,7 +40,7 @@ export class TaskTagsComponent implements AfterViewInit{
     const topIncompleteProjects = incompleteProjects.slice(0, 5);
 
       const ctx = this.myChart.nativeElement.getContext('2d');
-      new Chart(ctx, {
+      this.chart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: topIncompleteProjects.map(project => project.name),

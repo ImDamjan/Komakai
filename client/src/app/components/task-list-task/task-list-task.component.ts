@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Role } from '../../models/role';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,6 +20,8 @@ export class TaskListTaskComponent {
   // private role_service = inject(RoleService);
   @Input() task!: Task;
   @Input()userProjectRole! : Role;
+
+  @Output() isUpdated = new EventEmitter<boolean>();
   private router = inject(Router);
   private dialog = inject(MatDialog);
   public asigneesString = "";
@@ -202,6 +204,7 @@ export class TaskListTaskComponent {
 
       dialogRef.afterClosed().subscribe(result => {
         this.task = result;
+        this.isUpdated.emit(true);
       });
     }else {
     this.isClick = false;

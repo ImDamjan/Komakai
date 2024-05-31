@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, SimpleChanges, VERSION, inject } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, SimpleChanges, VERSION, ViewChild, inject } from '@angular/core';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Board } from '../../models/kanban/board.model';
 import { Column } from '../../models/kanban/column.model';
 import { TaskKanban } from '../../models/kanban/kanbantask';
@@ -219,6 +219,28 @@ export class KanbanComponent implements OnInit,OnChanges{
           event.previousIndex,
           event.currentIndex);
       }
+    }
+  }
+
+  //premestanje iz kartice u karticu i scroll strane
+  @ViewChild('boardWrapper')
+  boardWrapper!: ElementRef;
+  onDragMoved(event: CdkDragMove) {
+    const scrollSensitivity = 50; 
+    const scrollSpeed = 3600; 
+    const boardWrapperElement = this.boardWrapper.nativeElement;
+    const { x } = event.pointerPosition;
+    const wrapperRect = boardWrapperElement.getBoundingClientRect();
+
+    //console.log('Drag moved', event.pointerPosition); 
+    //console.log('Wrapper rect:', wrapperRect); 
+
+    if (x < wrapperRect.left + scrollSensitivity) {
+      //console.log('Scrolling left'); 
+      boardWrapperElement.scrollLeft -= scrollSpeed;
+    } else if (x > wrapperRect.right - scrollSensitivity) {
+      //console.log('Scrolling right'); 
+      boardWrapperElement.scrollLeft += scrollSpeed;
     }
   }
 }

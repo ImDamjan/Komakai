@@ -3,15 +3,18 @@ import {srLatn} from 'date-fns/locale'
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgToastService } from 'ng-angular-popup';
 import {GantogramService} from '../../services/gantogram.service'
-import { GanttMapper } from '../../models/gantogram/gan_mapper';
+import { GanttMapper } from '../../models/gantogram/gantt_mapper';
 import { DomSanitizer } from '@angular/platform-browser';
 import {
+  GANTT_GLOBAL_CONFIG,
   GanttBarClickEvent,
   GanttBaselineItem,
   GanttDragEvent,
+  GanttGroup,
   GanttItem,
   GanttLineClickEvent,
   GanttLinkDragEvent,
+  GanttLinkLineType,
   GanttPrintService,
   GanttSelectedEvent,
   GanttTableDragDroppedEvent,
@@ -23,7 +26,7 @@ import {
   GanttViewType,
   NgxGanttComponent 
 } from '@worktile/gantt';
-import { Observable, Subject, filter, finalize, of } from 'rxjs';
+import { Observable, Subject, delay, filter, finalize, of } from 'rxjs';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { Task } from '../../models/task/task';
 import { ActivatedRoute } from '@angular/router';
@@ -33,7 +36,6 @@ import { UpdateGant } from '../../models/gantogram/update_gant_task';
 import { DatePipe } from '@angular/common';
 
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { log } from 'console';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDetailsComponent } from '../../pages/task-details/task-details.component';
 import { AssignmentService } from '../../services/assignment.service';
@@ -41,6 +43,7 @@ import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
 import { TaskFilter } from '../../models/task/task-filter';
 import { Notify } from '../../models/notifications/notify';
+// import { random, randomGroupsAndItems, randomItems } from '../../helper';
 
 
 
@@ -51,7 +54,25 @@ import { Notify } from '../../models/notifications/notify';
   templateUrl: './gantogram.component.html',
   styleUrl: './gantogram.component.css',
   template: ``,
-  providers: [GanttPrintService,  DatePipe],
+  providers: [GanttPrintService,  DatePipe,
+    {
+      provide: GANTT_GLOBAL_CONFIG,
+      useValue: {
+        linkOptions: {
+          // dependencyTypes: 1, // fs | ff | ss | sf
+          showArrow: true, // 连接线是否显示箭头
+          lineType: GanttLinkLineType.curve, // 连接线类型（曲线或直线）
+
+        },
+        styleOptions: {
+          headerHeight: 80,
+          lineHeight: 70,
+          barHeight: 60
+      }
+      }
+    }
+  ],
+  
 })
 export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
   
@@ -70,6 +91,13 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
   
   isDragable:boolean = false;
   isLinkable:boolean = false;
+
+
+  // it: GanttItem[] = [];
+
+  groups: GanttGroup[] = [];
+
+  expanded = true;
   
   task!: Task;
   taskFilter : TaskFilter = {}
@@ -168,6 +196,16 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
 
   ngOnInit(): void {
       // init items children
+
+      // const { groups, items } = randomGroupsAndItems(10);
+      // this.groups_test = groups;
+      // this.items_test = items;
+
+      // console.log(groups);
+      // console.log(items);
+      
+
+
       this.isDragable = true;
       this.isLinkable = true;
       let token = this.decoder.getToken();
@@ -197,11 +235,26 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
       //     }
       // });
       // this.spinner.hide();
-
-      
-
-      
+    
   }
+  // ---------------------------------------------------------------------
+  expandAllGroups() {
+    if (this.expanded) {
+        this.expanded = false;
+        this.ganttComponent.collapseAll();
+    } else {
+        this.expanded = true;
+        this.ganttComponent.expandAll();
+    }
+  }
+
+//   childrenResolve = (item: GanttItem) => {
+//     const children = randomItems(random(1, 5), item);
+//     return of(children).pipe(delay(1000));
+// };
+
+  // ------------------------------------------------------------------------
+
 
   public getUpdateEmitter(task:Task)
   {
@@ -272,7 +325,7 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
       next : (tasks: Task[])=> 
         {
           if (tasks && tasks.length > 0){
-            var res = GanttMapper.mapTasksToGantItems(tasks)
+            var res = GanttMapper.mapTasksToGantItems(tasks,this.groups)
             this.items = res
             this.itemsOldState = this.copyItems(this.items)
             this.loading = false;
@@ -328,9 +381,9 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
     this.openVerticallyCentered(this.contentRef).then((result) => {
       if (result === true) {
         let update: UpdateGant = {
-          removeDependentOn: [parseInt(event.target?.id)], 
+          removeDependentOn: [parseInt(event.source.id)], 
         };
-        this.updateGantItemById(parseInt(event.source.id),update);
+        this.updateGantItemById(parseInt(event.target.id),update);
         this.getUpdateSuccessObservable().subscribe((success: boolean) => {
           if (success) {
             this.notify.showSuccess("Uspesno obrisana zavisnost",`Uspešno obrisana zavisnost. [${event.source.title}]->[${event.target?.title}]`)
@@ -399,9 +452,12 @@ export class GantogramComponent implements OnInit, AfterViewInit,OnChanges{
         return;
       }else{
         let update: UpdateGant = {
-                addDependentOn: [parseInt(event.target?.id)], 
+                addDependentOn: [parseInt(event.source.id)], 
               };
-              this.updateGantItemById(parseInt(event.source.id),update);
+
+              console.log(event.source.id)
+              console.log(update);
+              this.updateGantItemById(parseInt(event.target.id),update);
               this.getUpdateSuccessObservable().subscribe((success: boolean) => {
                 if(success){
                     this.notify.showSuccess("Uspesno dodata zavisnost",`Uspešno dodata zavisnost. [${event.source.title}]->[${event.target?.title}] \n\n Klikom na vezu(liniju) možete obrisati zavisnost.`)

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, inject, OnInit, Input } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, inject, OnInit, Input, OnDestroy } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { AssignmentService } from '../../services/assignment.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
@@ -9,7 +9,10 @@ import { Task } from '../../models/task/task';
   templateUrl: './task-track.component.html',
   styleUrl: './task-track.component.css'
 })
-export class TaskTrackComponent implements AfterViewInit {
+export class TaskTrackComponent implements AfterViewInit,OnDestroy {
+  ngOnDestroy(): void {
+    this.chart.destroy();
+  }
   
   @Input()tasks!: Task[];
   notStartedCount = 0;
@@ -23,6 +26,8 @@ export class TaskTrackComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.createChart();
   }
+
+  chart:any;
 	
   createChart() {
         this.tasks.forEach(task => {
@@ -51,7 +56,7 @@ export class TaskTrackComponent implements AfterViewInit {
         });
 
         const ctx = this.myChart.nativeElement.getContext('2d');
-        new Chart(ctx, {
+        this.chart = new Chart(ctx, {
           type: 'bar',
           data: {
             labels: ['Not started', 'Ready', 'In progress', 'Blocked', 'Done', 'Cancelled'],

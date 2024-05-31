@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.Extensions.DependencyModel;
@@ -38,7 +39,7 @@ namespace server.Controllers
         }
         //Mozda ce morati da se ubaci i project ID u dto ?
         [HttpPost]
-        [Route("create")]
+        [Route("create"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> CreateAssignment([FromBody]CreateAssignmentDto dto)
         {
             //da li su datumi dobri
@@ -95,7 +96,7 @@ namespace server.Controllers
             var a = await _asign_repo.CreateAssignmentAsync(dto.fromCreateDtoToAssignment(users,dependencies,group));
             return Ok(a.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
         }
-
+        [Authorize]
         [HttpGet("getDependentOnAssignments/{asing_id}")]
         public async Task<IActionResult> GetDependentAssignments([FromRoute] int asing_id)
         {
@@ -135,7 +136,7 @@ namespace server.Controllers
         }
 
 
-
+        [Authorize]
         [HttpGet]
         [Route("getByGroup/{group_id}")]
 
@@ -156,7 +157,7 @@ namespace server.Controllers
 
             return Ok(res);
         }
-
+        [Authorize]
         [HttpGet]
         [Route("getByUser/{user_id}")]
         public async Task<IActionResult> GetAllAssignmentsByUser([FromRoute] int user_id, [FromQuery] List<int> projects, [FromQuery] SortDto sort, [FromQuery] AssignmentFilterDto filter)
@@ -180,6 +181,7 @@ namespace server.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("getById/{asign_id}")]
         public async Task<IActionResult> GetAssignmentById([FromRoute] int asign_id)
@@ -194,11 +196,15 @@ namespace server.Controllers
                 var groupdto = task.TaskGroup.toTaskGroupDto();
                 var prioDto = task.Priority.toPrioDto();
             
+            var dep = task.Assignments.Select(u=>u.Id).ToList();
+            
+            var dtoAs = task.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto);
+            dtoAs.DepndentOn = dep;
 
-            return Ok(task.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto));
+            return Ok(dtoAs);
         }
-
-        [HttpPut("updateAssigmentGantt/{asign_id}")]
+        
+        [HttpPut("updateAssigmentGantt/{asign_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> updateAssignmentGantt([FromRoute] int asign_id,[FromBody] UpdateGanttAssignmentDto dto)
         {
             var task = await _asign_repo.GetAssignmentByidAsync(asign_id);
@@ -226,7 +232,7 @@ namespace server.Controllers
             var groupdto = task.TaskGroup.toTaskGroupDto();
             var prioDto = task.Priority.toPrioDto();
 
-            var dep = task.DependentOnAssignments.Select(u=>u.Id).ToList();
+            var dep = task.Assignments.Select(u=>u.Id).ToList();
             
             var dtoAs = task.toAssignmentDto(teamDto,prioDto,stateDto,ownerDto,groupdto);
             dtoAs.DepndentOn = dep;
@@ -235,7 +241,7 @@ namespace server.Controllers
         }
 
         [HttpPut]
-        [Route("update/{asign_id}")]
+        [Route("update/{asign_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> UpdateAssignmentById([FromBody]UpdateAssignmentDto dto,[FromRoute] int asign_id)
         {
             //da li su datumi dobri
@@ -292,7 +298,7 @@ namespace server.Controllers
             Rdto.DepndentOn = dep;
             return Ok(Rdto);
         }
-
+        [Authorize]
         [HttpGet("getAssignmentsByProject/{project_id}")]
         public async Task<IActionResult> GetAllAssignmentsByProject([FromRoute] int project_id,[FromQuery] int user_id,[FromQuery] SortDto sort,[FromQuery] AssignmentFilterDto filter)
         {
@@ -309,7 +315,7 @@ namespace server.Controllers
                 for (int i = 0; i< tasks.Count;i++)
                 {
                     var dep = new List<int>();
-                    var dependent = await _asign_repo.getDependentAssignments(tasks[i].Id);
+                    var dependent = tasks[i].DependentOnAssignments;
                     
                     dep = dependent.Select(d=>d.Id).ToList();
                     var ownerDto = tasks[i].User.toAssignmentUserDto();
@@ -326,7 +332,7 @@ namespace server.Controllers
             return Ok(res);
         }
 
-        [HttpDelete("deleteAssignmentById/{asign_id}")]
+        [HttpDelete("deleteAssignmentById/{asign_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> DeleteAssignment([FromRoute] int asign_id)
         {
             var asignment = await _asign_repo.DeleteAssignmentByIdAsync(asign_id);
