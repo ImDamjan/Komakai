@@ -14,6 +14,8 @@ namespace server.Repositories
     public class AssignmentRepository : IAssignmentRepository
     {
         private readonly ProjectManagmentDbContext _context;
+
+        public int AssignmentCount { get; set; }
         public AssignmentRepository(ProjectManagmentDbContext context)
         {
             _context = context;
@@ -128,6 +130,8 @@ namespace server.Repositories
                 {
                     assignments = assignments.Where(p=>p.Percentage <= dto.PercentageFilterTo && p.Percentage >=dto.PercentageFilterFrom);
                 }
+
+                AssignmentCount = assignments.Count();
                 if (dto.PageNumber > 0 && dto.PageSize > 0)
                 {
                     int skip = (dto.PageNumber - 1) * dto.PageSize;

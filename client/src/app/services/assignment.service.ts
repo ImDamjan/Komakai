@@ -6,6 +6,7 @@ import { Task } from '../models/task/task';
 import { jwtDecode } from 'jwt-decode';
 import { UpdateTask } from '../models/task/update-task';
 import { TaskFilter } from '../models/task/task-filter';
+import { TaskPaginatedObject } from '../models/pagination/task-paginated-object';
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +77,13 @@ export class AssignmentService {
           httpParams = httpParams.append("PriorityFilter",element.toString());
       });
     }
+    if(params.pageNumber){
+      httpParams = httpParams.set('PageNumber',params.pageNumber.toString());
+    }
+
+    if(params.pageSize){
+      httpParams = httpParams.set('PageSize',params.pageSize.toString());
+    }
     return httpParams;
   }
 
@@ -106,15 +114,15 @@ export class AssignmentService {
 
     let httpParams = this.setUpParams(params);
 
-    if(params.pageNumber){
-      httpParams = httpParams.set('PageNumber',params.pageNumber.toString());
-    }
-
-    if(params.pageSize){
-      httpParams = httpParams.set('PageSize',params.pageSize.toString());
-    }
-
     return this.http.get<Task[]>(url, { params: httpParams });
+  }
+
+  getPaginatedObjectAssignmentsByUser(user_id: number,params: TaskFilter = {}): Observable<TaskPaginatedObject> {
+    const url = this.baseUrl + `/Assignment/getPaginatedAssignmentsByUser/${user_id}`;
+
+    let httpParams = this.setUpParams(params);
+
+    return this.http.get<TaskPaginatedObject>(url, { params: httpParams });
   }
 
   createAssignment(createAssignmentData : any) : Observable<Task>

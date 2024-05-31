@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Output, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, Injector, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { Task } from '../../models/task/task';
 import { Subscription, filter, forkJoin, interval, map, switchMap, takeUntil } from 'rxjs';
 import { AssignmentService } from '../../services/assignment.service';
@@ -10,25 +10,27 @@ import { DateConverterService } from '../../services/date-converter.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { TaskFilterComponent } from '../../components/task-filter/task-filter.component';
+import { TaskPaginatedObject } from '../../models/pagination/task-paginated-object';
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'
 })
-export class TasksComponent {
+export class TasksComponent implements OnInit{
   
-  @Output() searchValueChanged = new EventEmitter<string>();
-  @Output() searchFilterChanged = new EventEmitter<TaskFilter>();
-  @Output() searchSortChanged = new EventEmitter<TaskFilter>();
+  // @Output() searchValueChanged = new EventEmitter<string>();
+  // @Output() searchFilterChanged = new EventEmitter<TaskFilter>();
+  // @Output() searchSortChanged = new EventEmitter<TaskFilter>();
 
   @ViewChild('taskHeader', { static: false }) taskHeaderComponent: TaskHeaderComponent | undefined;
   @ViewChild('taskFilter') taskFilterComponent: TaskFilterComponent | undefined;
   filteredTasks: Task[] = [];
 
-  tasks: Task[] = [];
 
-  public desiredPage: number = 1;
+  public MaxPages: number = 0;
+
+  paginatedObject!: TaskPaginatedObject;
 
   isLastPage: boolean = false;
 
@@ -43,41 +45,22 @@ export class TasksComponent {
   public filter: TaskFilter = {
     propertyName : "Last Updated",
     sortFlag : -1,
-    pageNumber: 1
+    pageNumber: 1,
+    pageSize: 6
   };
 
-  public filterbezpag: TaskFilter = {
-    propertyName : "Last Updated",
-    sortFlag : -1
-  }
-
-  public brojStrana: number=0;
-
   private jwtDecoder = inject(JwtDecoderService);
-  remainingTimeSubscriptions: Subscription[] = [];
+  // remainingTimeSubscriptions: Subscription[] = [];
 
   constructor(private taskService: AssignmentService, private route: ActivatedRoute) { }
 
-  ngOnDestroy(): void {
-    this.remainingTimeSubscriptions.forEach(sub => sub.unsubscribe());
-  }
+  // ngOnDestroy(): void {
+  //   this.remainingTimeSubscriptions.forEach(sub => sub.unsubscribe());
+  // }
 
   ngOnInit(): void {
-    let token = this.jwtDecoder.getToken();
-    let id = 0;
-    if(token!=null)
-    {
-      let decode = this.jwtDecoder.decodeToken(token);
-      id = decode.user_id;
-      this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
-      tasks.forEach(task => {
-        this.task_date_service.setDateParametersForTask(task);
-      });
-      this.tasks = tasks;
-      // console.log(this.tasks)
-    })};
 
-    this.filter.pageSize = 6;
+    this.loadTasks();
 
     this.activatedRoute.paramMap.subscribe(params => {
       if (params.has('pageNumber')) {
@@ -85,14 +68,13 @@ export class TasksComponent {
         this.currentPage = parseInt(params.get('pageNumber')!);
         this.filter.pageNumber = this.currentPage;
       }
-      this.fetchTasksForCurrentPage();
     });
   }
 
   ngAfterViewInit() {
     this.taskHeaderComponent?.searchValueChanged.subscribe(searchValue => {
       this.filter.searchTitle = searchValue.searchText;
-      this.filterbezpag.searchTitle = searchValue.searchText;
+      // this.filterbezpag.searchTitle = searchValue.searchText;
       this.loadTasks();
     });
     this.taskFilterComponent?.filterEmiter.subscribe(filter=>{
@@ -101,8 +83,6 @@ export class TasksComponent {
         text = this.filter.searchTitle
       this.filter = filter;
       this.filter.searchTitle = text;
-      this.filterbezpag = filter;
-      this.filterbezpag.searchTitle = text;
       this.loadTasks();
     });
   }
@@ -116,96 +96,56 @@ export class TasksComponent {
     {
       let decode = this.jwtDecoder.decodeToken(token);
       id = decode.user_id;
-      this.taskService.getAllUserAssignments(id,this.filter).subscribe(tasks => {
-        console.log(this.filter)
-      tasks.forEach(task => {
-        this.task_date_service.setDateParametersForTask(task);
-      });
-      this.filteredTasks = tasks;
-    });
-    }
 
-    // if(token!=null)
-    // {
-    //   let decode = this.jwtDecoder.decodeToken(token);
-    //   id = decode.user_id;
-    //   this.filterbezpag.pageNumber = undefined;
-    //   this.filterbezpag.pageSize = undefined;
-    //   this.taskService.getAllUserAssignments(id,this.filterbezpag).subscribe(tasks => {
-    //     console.log(this.filterbezpag);
-    //   tasks.forEach(task => {
-    //     this.task_date_service.setDateParametersForTask(task);
-    //   });
-    //   this.tasks = tasks;
-    //   // console.log(tasks)
-    // });
-    // }
+      this.taskService.getPaginatedObjectAssignmentsByUser(id, this.filter).subscribe({
+        next:(pag: TaskPaginatedObject)=>{
+          this.paginatedObject = pag;
+          this.filteredTasks = pag.assignments;
+          this.MaxPages = Math.ceil(this.paginatedObject.maxAssignments / this.filter.pageSize!);
+          this.filteredTasks.forEach(task => {
+            this.task_date_service.setDateParametersForTask(task);
+          });
+        }
+      });
+    }
   }
 
-  // filterTasks(filter: TaskFilter){
-
-  //   let collectedTasks: Task[] = [];
-
-  //   this.filter.pageNumber = this.currentPage;
-  //   this.filter.pageSize = 6;
-
-  //   if(filter.projects){
-  //     this.filter.projects=filter.projects;
-  //   }
-  // }
 
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.filter.pageNumber = this.currentPage;
       this.router.navigate(['/tasks', this.currentPage]);
-      this.fetchTasksForCurrentPage();
+      this.loadTasks();
     }
+    // console.log(this.getTotalPages());
   }
   
   nextPage() {
-    if(this.currentPage < this.getTotalPages()){
+    if(this.currentPage < this.MaxPages){
       this.currentPage++;
       this.filter.pageNumber = this.currentPage;
       this.router.navigate(['/tasks', this.currentPage]);
-      this.fetchTasksForCurrentPage();
+      this.loadTasks();
     }
     this.updateIsLastPage();
+    // console.log(this.getTotalPages());
   }
 
   updateIsLastPage() {
-    this.isLastPage = this.currentPage === this.getTotalPages();
+    this.isLastPage = this.currentPage === this.MaxPages;
   }
 
-  fetchTasksForCurrentPage() {
-    let token = this.jwtDecoder.getToken();
-    let id = 0;
-    if (token != null) {
-      let decode = this.jwtDecoder.decodeToken(token);
-      id = decode.user_id;
-      this.taskService.getAllUserAssignments(id, this.filter).subscribe(tasks => {
-        // console.log(this.filter);
-        tasks.forEach(task => {
-          this.task_date_service.setDateParametersForTask(task);
-        });
-        this.filteredTasks = tasks;
-      });
-    }
-  }
-
-  getTotalPages(): number {
-    if (this.filter.pageSize) {
-      return Math.ceil(this.tasks.length / this.filter.pageSize);
-    } else {
-      return 0;
-    }
-  }
+  // getTotalPages(): number {
+  //   // console.log(this.filteredTasks.length,this.filter.pageSize!);
+  //     return Math.ceil(this.paginatedObject.maxAssignments / this.filter.pageSize!);
+  // }
 
   navigateToPage(pageNumber: number) {
     this.currentPage = pageNumber;
     this.filter.pageNumber = pageNumber;
     this.router.navigate(['/tasks', pageNumber]);
-    this.fetchTasksForCurrentPage();
+    this.loadTasks();
   }
 
   getDisplayedPageRange(currentPage: number, totalPages: number): number[] {
@@ -215,17 +155,4 @@ export class TasksComponent {
     startPage = Math.max(1, Math.min(startPage, endPage - maxDisplayedPages + 1));
     return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   }
-
-  goToInputPage() {
-    const pageNumber = Math.min(Math.max(this.desiredPage, 1), this.getTotalPages());
-    this.currentPage = pageNumber;
-    this.filter.pageNumber = pageNumber;
-    if (pageNumber > this.getTotalPages()) {
-      this.router.navigate(['/tasks', this.getTotalPages()]);
-    } else {
-      this.router.navigate(['/tasks', pageNumber]);
-    }
-    this.fetchTasksForCurrentPage();
-  }
-
 }

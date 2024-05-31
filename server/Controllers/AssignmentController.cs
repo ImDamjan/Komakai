@@ -180,6 +180,32 @@ namespace server.Controllers
 
             return Ok(res);
         }
+        
+        [Authorize]
+        [HttpGet]
+        [Route("getPaginatedAssignmentsByUser/{user_id}")]
+        public async Task<IActionResult> GetAllPaginatedAssignmentsByUser([FromRoute] int user_id, [FromQuery] List<int> projects, [FromQuery] SortDto sort, [FromQuery] AssignmentFilterDto filter)
+        {
+            var user = await _user_repo.GetUserByIdAsync(user_id);
+            if (user == null)
+                return NotFound("User " + user_id + " does not exist");
+            var tasks = await _asign_repo.GetAllUserAssignmentsAsync(user_id, filter, sort, projects);
+            List<AssignmentDto> res = new List<AssignmentDto>();
+
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                var ownerDto = tasks[i].User.toAssignmentUserDto();
+                var stateDto = tasks[i].State.toStateDto();
+                var teamDto = tasks[i].Users.Select(u => u.toAssignmentUserDto()).ToList();
+                var groupdto = tasks[i].TaskGroup.toTaskGroupDto();
+                var prioDto = tasks[i].Priority.toPrioDto();
+                res.Add(tasks[i].toAssignmentDto(teamDto, prioDto, stateDto, ownerDto, groupdto));
+            }
+            PaginationAssignmentsDto paginationAssignmentsDto = new PaginationAssignmentsDto();
+            paginationAssignmentsDto.Assignments = res;
+            paginationAssignmentsDto.MaxAssignments = _asign_repo.AssignmentCount;
+            return Ok(paginationAssignmentsDto);
+        }
 
         [Authorize]
         [HttpGet]
