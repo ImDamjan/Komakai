@@ -183,11 +183,6 @@ namespace server.Repositories
         public async Task<List<Project>> GetAllFilteredProjectsAsync(IQueryable<Project> projects, ProjectFilterDto? dto,SortDto? sort = null)
         {   if(dto!=null)
             {
-                if(dto.PageNumber!= 0 && dto.PageSize!= 0)
-                {
-                    projects = projects.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
-                }
-
                 if(dto.StateFilter.Count > 0)
                     projects = projects.Where(p=>dto.StateFilter.Contains(p.StateId));
                 if(dto.PriorityFilter.Count > 0)
@@ -205,12 +200,6 @@ namespace server.Repositories
                 {
                     projects = projects.Where(p=>p.Spent <= dto.SpentFilterTo && p.Spent >= dto.SpentFilterFrom);
                 }
-                // Console.WriteLine("Ovo je danasnji datum" + DateTime.Now.Date);
-                // System.Console.WriteLine("SADA IDU DRUGI DATUMI");
-                // foreach (var item in projects.ToList())
-                // {
-                //     System.Console.WriteLine(item.Start > DateTime.Now.Date);
-                // }
                 //datumi
                 if(dto.StartFrom!=null && dto.StartTo!=null)
                 {
