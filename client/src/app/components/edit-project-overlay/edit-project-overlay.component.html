@@ -32,11 +32,11 @@
 
                     <tr>
                         <th> 
-                            <p-calendar placeholder="Select date" [ngModel]="formatDate(project.start)" (ngModelChange)="project.start = $event" /> 
+                            <p-calendar placeholder="Select date" [ngModel]="project.start" (ngModelChange)="project.start = $event" dateFormat="dd.mm.yy"/> 
                             <div class="error-message" *ngIf="!project.start && submitted">*Start Date is required</div>
                         </th>
                         <th> 
-                            <p-calendar placeholder="Select date" id="enddate" [ngModel]="formatDate(project.end)" (ngModelChange)="project.end = $event"/> 
+                            <p-calendar placeholder="Select date" id="enddate" [ngModel]="project.end" (ngModelChange)="project.end = $event" dateFormat="dd.mm.yy"/> 
                             <div class="error-message" *ngIf="!project.end && submitted">*End Date is required</div>
                         </th>
                     </tr>

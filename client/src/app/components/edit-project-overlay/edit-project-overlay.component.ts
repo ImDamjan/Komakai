@@ -67,6 +67,8 @@ export class EditProjectOverlayComponent {
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
+    this.project.start = new Date(this.project.start);
+    this.project.end = new Date(this.project.end);
     // this.selectedUserIds = this.project.users;
   }
 
@@ -220,13 +222,23 @@ export class EditProjectOverlayComponent {
   }
 
   formatDate(date: Date | string): string {
-    if (!date) return '';
-  
-    if (typeof date === 'string') return date.split('T')[0];
-  
+    console.log("pozvan");
+    if (!date)
+      { 
+        console.log("prazno");
+        return '';
+      }
+    if (typeof date === 'string') 
+      {
+        console.log("string");
+        console.log(date.split('T')[0]);
+
+        return date.split('T')[0];
+      }
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
+    console.log(`${year}-${month}-${day}`);
     return `${year}-${month}-${day}`;
   }
   
