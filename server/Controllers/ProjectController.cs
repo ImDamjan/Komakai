@@ -58,12 +58,16 @@ namespace server.Controllers
             }
             return Ok(dtos);
         }
-        //ovde treba filter
+        
         [Authorize]
         [HttpGet("userProjects/{userId}")]
         public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId,[FromQuery] ProjectFilterDto filter,[FromQuery] SortDto sort)
         {
             var projects = await _repos.GetAllUserProjectsAsync(userId,filter,sort);
+            if(filter.PageNumber!= 0 && filter.PageSize!= 0)
+            {
+                projects = projects.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
+            }
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
@@ -79,6 +83,34 @@ namespace server.Controllers
                 dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount));
             }
             return Ok(dtos);
+        }
+        [Authorize]
+        [HttpGet("paginatedUserProjects/{userId}")]
+        public async Task<IActionResult> GetAllPaginatedUserProjects([FromRoute]int userId,[FromQuery] ProjectFilterDto filter,[FromQuery] SortDto sort)
+        {
+            var projects = await _repos.GetAllUserProjectsAsync(userId,filter,sort);
+            PaginationProjectsDto pag = new PaginationProjectsDto();
+            pag.MaxProjects = projects.Count;
+            var dtos = new List<ProjectDto>();
+            if(filter.PageNumber!= 0 && filter.PageSize!= 0)
+            {
+                projects = projects.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
+            }
+            foreach (var project in projects)
+            {
+                var users =  project.ProjectUsers.Select(u=>u.User).ToList();
+                var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
+
+                var userDtos = new List<ProjectUserDto>();
+                for(int i =0;i<users.Count;i++)
+                {
+                    userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+                }
+                int asignCount = _repos.getAssignemntForProjectCount(project);
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount));
+            }
+            pag.Projects = dtos;
+            return Ok(pag);
         }
         [Authorize]
         [HttpGet("getProjectLimits/{user_id}")]

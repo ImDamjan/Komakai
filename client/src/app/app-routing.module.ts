@@ -27,6 +27,7 @@ const routes: Routes = [
   {path: 'projects/:pageNumber',component: ProjectPreviewComponent,canActivate: [AuthGuard]},
   {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
   {path: 'tasks', redirectTo: '/tasks/1', pathMatch: 'full'},
+  {path: 'tasks/0', redirectTo: '/tasks/1', pathMatch: 'full'},
   {path: 'tasks/:pageNumber', component: TasksComponent,canActivate: [AuthGuard]},
   {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
   
