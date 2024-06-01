@@ -47,7 +47,6 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
 import { MatSliderModule } from '@angular/material/slider';
-import { FilterDetailsComponent } from './components/filter-details/filter-details.component';
 import {NgxSpinnerModule} from 'ngx-spinner'
 
 import { ThyLayoutModule } from 'ngx-tethys/layout';
@@ -71,7 +70,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { ProfileDetailsComponent } from './components/profile-details/profile-details.component';
 import { SortDetailsComponent } from './components/sort-details/sort-details.component';
-import { FilterProjectComponent } from './components/filter-project/filter-project.component';
 import { SortProjectComponent } from './components/sort-project/sort-project.component';
 
 
@@ -130,9 +128,7 @@ import { BadgeModule} from 'primeng/badge';
     AdminComponent,
     EditProjectOverlayComponent,
     ProfileDetailsComponent,
-    FilterDetailsComponent,
     SortDetailsComponent,
-    FilterProjectComponent,
     SortProjectComponent,
     ProjectFilterComponent,
     TaskFilterComponent,

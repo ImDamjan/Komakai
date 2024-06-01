@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, ViewChild, inject } from '@angu
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project/project';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { FilterDetailsComponent } from '../filter-details/filter-details.component';
 import { TaskFilter } from '../../models/task/task-filter';
 import { SortDetailsComponent } from '../sort-details/sort-details.component';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -54,47 +53,6 @@ export class TaskHeaderComponent implements OnInit {
 
   }
 
-  openFilterDialog() {
-    const dialogConfig = new MatDialogConfig();
-
-    const dialogRef = this.overlay.open(FilterDetailsComponent, {
-      data:[this.filter]
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(result){
-      //   // this.filter = result;
-      //   if(result.project_id){
-      //     this.filter.project_id=result.project_id;
-      //   }
-      //   if(result.stateFilter){
-      //     this.filter.stateFilter=result.stateFilter;
-      //   }
-      //   if(result.priorityFilter){
-      //     this.filter.priorityFilter=result.priorityFilter;
-      //   }
-      //   if(result.dateStartFlag){
-      //     this.filter.dateStartFlag=result.dateStartFlag;
-      //   }
-      //   if(result.dateEndFlag){
-      //     this.filter.dateEndFlag=result.dateEndFlag;
-      //   }
-      //   if(result.start){
-      //     this.filter.start=result.start;
-      //   }
-      //   if(result.end){
-      //     this.filter.end=result.end;
-      //   }
-      //   if(result.percentageFlag){
-      //     this.filter.percentageFlag=result.percentageFlag;
-      //   }
-      //   if(result.percentageFilter){
-      //     this.filter.percentageFilter=result.percentageFilter;
-      //   }
-      //   this.searchFilterChanged.emit({filter: this.filter})
-      }
-    });
-  }
 
   openSortDialog(){
     const dialogRef = this.overlay2.open(SortDetailsComponent,{
