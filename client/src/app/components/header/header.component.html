@@ -1,7 +1,7 @@
 <div class="wrapper">
     <div class="notifications_wrapper">
         <button (click)="toggleNotifications()">
-            <i class="fa fa-bell" pBadge [value]="notifications.length" severity="info"></i>
+            <i class="fa fa-bell" pBadge pBadge [badgeDisabled]="notifications.length < 1" [value]="notifications.length" severity="info"></i>
         </button>
         <div class="notifications" *ngIf="notificationsOpened">
             <div *ngIf="notifications.length > 0" >
@@ -30,8 +30,8 @@
     <div class="picture" (click)="toggleMenu()">
         <img class="pfp" [src]="picture" />
         <div class="menu" *ngIf="isMenuVisible">
-            <p id="pfdetails"  (click)="openProfileOverlay(user.id,$event)"><img class="icon" src="../../../assets/profile-settings/pfsettings.svg"  (click)="openProfileOverlay(user.id,$event)"> Profile Details</p>
-            <app-logout></app-logout>
+            <p id="pfdetails" class="menu-item"  (click)="openProfileOverlay(user.id,$event)"><img class="icon" src="../../../assets/profile-settings/pfsettings.svg"  (click)="openProfileOverlay(user.id,$event)"> Profile Details</p>
+            <app-logout class="menu_item"></app-logout>
         </div>
     </div>
 </div>

@@ -113,7 +113,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.assignment = this.data[0];
     this.userProjectRole = this.data[2];
 
-    console.log(this.assignment);
+    // console.log(this.assignment);
     if(this.assignment.depndentOn.length > 0)
       this.hasDependent = false;
 
@@ -140,7 +140,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.assignment_service.getDependentAssignmentsFor(this.assignment.id).subscribe({
       next : (tasks : Task[]) => {
         this.dependentTasks = tasks;
-        console.log(tasks)
+        // console.log(tasks)
         if(tasks.find(a=>!a.isClosed)!==undefined)
           this.hasCompletedDependentTasks = false;
         else

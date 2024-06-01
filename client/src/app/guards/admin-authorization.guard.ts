@@ -7,7 +7,8 @@ export const adminAuthorizationGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   let token = jwt_Service.getToken();
   if(token!==null)
-  {  console.log("nesto");
+  {
+  //   console.log("nesto");
     let decode = jwt_Service.decodeToken(token);
     if(decode.role==="Admin")
       return true;
