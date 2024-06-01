@@ -65,6 +65,25 @@ export class EditProjectOverlayComponent {
   searchQuery: string = '';
   selectedUsers: User[] = [];
 
+  selectedCurrency: string = 'USD';
+  currencies: string[] = ['AUD', 'BAM', 'CAD', 'CHF', 'CNY', 'EUR', 'GBP', 'JPY', 'MKD', 'RON', 'RSD', 'RUB', 'USD'];
+
+  currencyRates: { [key: string]: number } = {
+    USD: 1,
+    RSD: 0.0093,
+    EUR: 1.09,
+    GBP: 1.27,
+    JPY: 0.0064,
+    CAD: 0.73,
+    AUD: 0.67,
+    CHF: 1.11,
+    CNY: 0.14,
+    BAM: 0.56,
+    MKD: 0.018,
+    RON: 0.22,
+    RUB: 0.011
+  };
+
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
     this.project = data.project;
@@ -223,6 +242,12 @@ export class EditProjectOverlayComponent {
   }
   
   editProject(projectId: number): void {
+    this.project.spent = this.convertToDollars(this.project.spent, this.selectedCurrency);
+    if(this.project.spent > this.project.budget)
+    {
+      this.submissionError = "Spent value is bigger then the budget value. Please enter another number.";
+      return;
+    }
     let selected_users : number[] = [];
     let selected_roles : number[] = [];
     this.selectedUserRolesMap.forEach((value,key) => {
@@ -245,7 +270,7 @@ export class EditProjectOverlayComponent {
     
     this.submissionError = null;
 
-    if (!this.project.title.trim() || !this.project.priority || !this.project.start || !this.project.end || (this.project.start > this.project.end || this.project.start == this.project.end) || (this.project.spent === null || this.project.spent === undefined || this.project.spent < 0)) {
+    if (!this.project.title.trim() || !this.project.priority || !this.project.start || !this.project.end || (this.project.start > this.project.end || this.project.start == this.project.end) || (this.project.spent == null || this.project.spent == undefined || this.project.spent < 0)) {
       this.submissionError = 'Please fill in all necessary fields.';
       return;
     }
@@ -320,5 +345,9 @@ export class EditProjectOverlayComponent {
     if(this.userRoles.get(userId) == 1 && userId != this.loggedInUserId && !this.selectedUserRolesMap.get(userId))
       this.userRoles.set(userId, 2);
     return this.selectedUserRolesMap.get(userId) || this.userRoles.get(userId) || null;
+  }
+
+  convertToDollars(amount: number, currency: string): number {
+    return parseFloat((amount * this.currencyRates[currency]).toFixed(2));
   }
 }

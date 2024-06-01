@@ -81,8 +81,10 @@
                 <div class="inputs">
                     <div class="spent">
                         <input class="input-field" id="budget-input" type="number" placeholder="  Spent"  [(ngModel)]="project.spent" min="0">
+                        <select [(ngModel)]="selectedCurrency" class="input-field2">
+                            <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+                        </select>
                         <div class="error-message" *ngIf="project.spent < 0 && submitted">* Spent field cannot be less than 0</div>
-                        <div class="error-message" *ngIf="project.spent === null || project.spent === undefined && submitted">* Spent field is required</div>
                     </div>
                         <div class="custom-dropdown">
                         <div class="selected-users">
