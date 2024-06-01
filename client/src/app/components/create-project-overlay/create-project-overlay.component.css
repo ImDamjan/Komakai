@@ -54,6 +54,17 @@
     padding-left: 5px;
 }
 
+.input-field2 {
+    width: 20%;
+    height: 40px;
+    background: #FFFFFF;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    border: 0px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+
 .labels {
     display: flex;
     justify-content: space-between;
@@ -82,7 +93,7 @@
 }
 
 #budget, #budget-input {
-    width: 100%;
+    width: 70%;
 }
 
 #team, #team-select {
@@ -200,6 +211,7 @@
 }
 
 .error-message {
+    padding-left: 5px;
     color: red;
 }
 .error {

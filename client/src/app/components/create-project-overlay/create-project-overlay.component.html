@@ -6,7 +6,7 @@
                     <tr>
                         <th colspan="2">
                             <span class="name">Project title</span>
-                            <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="projectObj.title">
+                            <input class="input-field" id="title" type="text" placeholder="  Enter project title" [(ngModel)]="projectObj.title" #title="ngModel">
                             <div *ngIf="!projectObj.title.trim() && submitted" class="error-message">* Please enter a project title.</div>
                         </th>
                     </tr>
@@ -28,7 +28,7 @@
                     </tr>
 
                     <tr>
-                        <div class="error-message" *ngIf="!projectObj.priorityId && submitted">* Priority is required</div>
+                        <div class="error-message" *ngIf="!selectedPriorityId && submitted">* Priority is required</div>
                     </tr>
 
                     <tr>
@@ -53,13 +53,18 @@
                     <tr>
                         <div class="error-message" *ngIf="!projectObj.start && submitted">* Start Date is required</div>
                         <div class="error-message" *ngIf="!projectObj.end && submitted">* End Date is required</div>
-                        <div class="error-message" *ngIf="projectObj.start && projectObj.end && (projectObj.start > projectObj.end) && (projectObj.start == projectObj.end)">* End Date must be after Start Date</div>
+                        <div class="error-message" *ngIf="projectObj.start && projectObj.end && isEndDateBeforeStartDate()">* End Date must be after Start Date</div>
                     </tr>
 
                     <tr>
                         <th>
                             <p><span class="name" id="budget">Budget: </span></p>
-                            <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget">
+                            <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget" min="0">
+                            <select [(ngModel)]="selectedCurrency" class="input-field2">
+                                <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+                            </select>
+                            <div class="error-message" *ngIf="projectObj.budget < 0 && submitted">* Budget cannot be less than 0</div>
+                            <div class="error-message" *ngIf="projectObj.budget === null || projectObj.budget === undefined && submitted">* Budget is required</div>
                         </th>
                         <th>
                             <p><span class="name" id="team">Members: </span></p>
