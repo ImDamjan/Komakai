@@ -60,6 +60,9 @@
                         <th>
                             <p><span class="name" id="budget">Budget: </span></p>
                             <input class="input-field" id="budget-input" type="number" placeholder="  Budget"  [(ngModel)]="projectObj.budget" min="0">
+                            <select [(ngModel)]="selectedCurrency" class="input-field2">
+                                <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+                            </select>
                             <div class="error-message" *ngIf="projectObj.budget < 0 && submitted">* Budget cannot be less than 0</div>
                             <div class="error-message" *ngIf="projectObj.budget === null || projectObj.budget === undefined && submitted">* Budget is required</div>
                         </th>

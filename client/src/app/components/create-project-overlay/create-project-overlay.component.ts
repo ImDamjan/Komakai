@@ -53,6 +53,24 @@ export class CreateProjectOverlayComponent implements OnInit {
   searchQuery: string = '';
   selectedUsers: User[] = [];
 
+  selectedCurrency: string = 'USD';
+  currencies: string[] = ['AUD', 'BAM', 'CAD', 'CHF', 'CNY', 'EUR', 'GBP', 'JPY', 'MKD', 'RON', 'RSD', 'RUB', 'USD'];
+
+  currencyRates: { [key: string]: number } = {
+    USD: 1,
+    RSD: 0.0093,
+    EUR: 1.09,
+    GBP: 1.27,
+    JPY: 0.0064,
+    CAD: 0.73,
+    AUD: 0.67,
+    CHF: 1.11,
+    CNY: 0.14,
+    BAM: 0.56,
+    MKD: 0.018,
+    RON: 0.22,
+    RUB: 0.011
+  };
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
   ngOnInit(): void {
@@ -153,6 +171,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   createProject(): void {
+    this.projectObj.budget = this.convertToDollars(this.projectObj.budget, this.selectedCurrency);
     let selected_users : number[] = [];
     let selected_roles : number[] = [];
     this.selectedUserRolesMap.forEach((value,key) => {
@@ -324,5 +343,9 @@ export class CreateProjectOverlayComponent implements OnInit {
       return startDate >= endDate;
     }
     return false;
+  }
+
+  convertToDollars(amount: number, currency: string): number {
+    return parseFloat((amount * this.currencyRates[currency]).toFixed(2));
   }
 }
