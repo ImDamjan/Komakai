@@ -64,6 +64,13 @@
     align-items: center;
 }
 
+.spent {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 #type-input, #enddate,#type,#status-select,#startdate {
     width: 45%;
 }
@@ -81,7 +88,7 @@
 }
 
 #budget, #budget-input {
-    width: 25%;
+    width: 50%;
 }
 
 #team, #team-select {

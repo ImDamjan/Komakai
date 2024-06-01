@@ -40,7 +40,7 @@ export class EditProjectOverlayComponent {
 
   showDropdown: boolean = false;
   hoveredTeam: any;
-  submitted = false;
+  submitted = true;
   submissionError: string | null = null;
 
   project!: Project;
@@ -243,10 +243,9 @@ export class EditProjectOverlayComponent {
       percentage: this.project.percentage
     };
     
-    this.submitted = true;
     this.submissionError = null;
 
-    if (!this.project.title.trim() || !this.project.priority || !this.project.start || !this.project.end || (this.project.start > this.project.end || this.project.start == this.project.end)) {
+    if (!this.project.title.trim() || !this.project.priority || !this.project.start || !this.project.end || (this.project.start > this.project.end || this.project.start == this.project.end) || (this.project.spent === null || this.project.spent === undefined || this.project.spent < 0)) {
       this.submissionError = 'Please fill in all necessary fields.';
       return;
     }
@@ -258,7 +257,6 @@ export class EditProjectOverlayComponent {
 
     this.projectService.updateProject(projectId, updateProjectData).subscribe(response => {
       // alert('Project edited successfully!');
-      this.submitted = false;
       // console.log("NEW:",response.users);
       // console.log("OLD:",this.project.users);
       let usersToSendNotf: number[] = [];
