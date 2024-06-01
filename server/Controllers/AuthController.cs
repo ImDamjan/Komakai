@@ -24,12 +24,14 @@ namespace server.Controllers
         private readonly IUserRepository _repos;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
+        private readonly IProjectRepository _project_repo;
         private readonly IRoleRepository _role_repo;
 
-        public AuthController(IUserRepository userRepository, IConfiguration configuration,IEmailService emailService, IRoleRepository role_repo)
+        public AuthController(IUserRepository userRepository,IProjectRepository project_repository, IConfiguration configuration,IEmailService emailService, IRoleRepository role_repo)
         {
             _emailService = emailService;
             _repos = userRepository;
+            _project_repo = project_repository;
             _configuration = configuration;
             _role_repo = role_repo;
         }
@@ -110,6 +112,12 @@ namespace server.Controllers
             var role = await _role_repo.GetRoleByIdAsync(user.RoleId);
             if(role==null)
                 return null;
+            string projects = string.Empty;
+            var user_projects = await _project_repo.GetAllUserProjectsAsync(user.Id);
+            foreach (var project in user_projects)
+            {
+                projects+=project.Id + ",";
+            }
             //postavi username kao claim
             List<Claim> claims = new List<Claim>
             {
@@ -117,7 +125,8 @@ namespace server.Controllers
                 new Claim("user_id",user.Id.ToString()),
                 new Claim("fullname",user.Name + " "+user.Lastname),
                 new Claim("role_id", user.RoleId.ToString()),
-                new Claim("role", role.Name.ToString())
+                new Claim("role", role.Name.ToString()),
+                new Claim("projects", projects)
             };
 
             //kreiraj i verifikuj json token
