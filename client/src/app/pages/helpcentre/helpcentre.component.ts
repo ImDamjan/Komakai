@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { JwtDecoderService } from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-helpcentre',
@@ -7,4 +8,16 @@ import { Component } from '@angular/core';
 })
 export class HelpcentreComponent {
 
+  private jwtService = inject(JwtDecoderService);
+
+  public role : string = "";
+
+  ngOnInit(): void {
+    let token = this.jwtService.getToken();
+    if(token!=null)
+    {
+      let decode = this.jwtService.decodeToken(token);
+      this.role = decode.role;
+    }
+  }
 }
