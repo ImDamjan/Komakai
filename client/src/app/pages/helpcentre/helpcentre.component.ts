@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { ChangeDetectionStrategy, Pipe, PipeTransform } from '@angular/core';
 import { Component, inject } from '@angular/core';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -10,7 +10,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-helpcentre',
   templateUrl: './helpcentre.component.html',
-  styleUrl: './helpcentre.component.css'
+  styleUrl: './helpcentre.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HelpcentreComponent {
 
@@ -43,6 +44,7 @@ export class HelpcentreComponent {
 
   public getPdfUrl(role: string){
     if (this.pdfUrls[role]) {
+      console.log("A");
       return this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrls[role]);
     }
     return null;
