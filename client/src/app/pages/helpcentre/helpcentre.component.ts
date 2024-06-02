@@ -18,6 +18,8 @@ export class HelpcentreComponent {
 
   public role : string = "";
 
+  public role2: string = "";
+
   public pdfUrls: { [role: string]: string } = {
     // Guest: 'assets/help-documents/guest-guide.pdf',
     // Developer: 'assets/help-documents/developer-guide.pdf',
@@ -34,7 +36,7 @@ export class HelpcentreComponent {
       let decode = this.jwtService.decodeToken(token);
       this.role = decode.role;
       if(this.role = "Project Manager"){
-        this.role = "ProjectManager";
+        this.role2 = "ProjectManager";
       }
     }
   }
