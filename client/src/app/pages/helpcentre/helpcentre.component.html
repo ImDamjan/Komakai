@@ -4,7 +4,7 @@
   
     <div *ngIf="role === 'Guest'">Guest content</div>
     <div *ngIf="role === 'Developer'">Developer content</div>
-    <div *ngIf="role === 'Project Manager'">Project Manager content</div>
+    <div *ngIf="role === 'ProjectManager'"><iframe *ngIf="role" [src]="getPdfUrl(role)" width="100%" height="600px"></iframe></div>
     <div *ngIf="role === 'Admin'">Admin content</div>
     <div *ngIf="role === 'User'">User content</div>
   
