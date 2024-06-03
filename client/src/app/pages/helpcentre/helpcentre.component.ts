@@ -23,7 +23,7 @@ export class HelpcentreComponent {
 
   public pdfUrls: { [role: string]: string } = {
     // Guest: 'assets/help-documents/guest-guide.pdf',
-    // Developer: 'assets/help-documents/developer-guide.pdf',
+    Developer: 'assets/help-documents/developer-guide.pdf',
     ProjectManager: 'assets/help-documents/project-manager-guide.pdf',
     Admin: 'assets/help-documents/admin-guide.pdf'
   };
@@ -36,15 +36,18 @@ export class HelpcentreComponent {
     {
       let decode = this.jwtService.decodeToken(token);
       this.role = decode.role;
-      if(this.role = "Project Manager"){
+      if(this.role === "Project Manager"){
         this.role2 = "ProjectManager";
       }
+      if(this.role === "Project Worker"){
+        this.role2 = "Developer"
+      }
+      console.log(this.role)
     }
   }
 
   public getPdfUrl(role: string){
     if (this.pdfUrls[role]) {
-      console.log("A");
       return this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrls[role]);
     }
     return null;

@@ -29,7 +29,7 @@ const routes: Routes = [
   {path: 'tasks', redirectTo: '/tasks/1', pathMatch: 'full'},
   {path: 'tasks/0', redirectTo: '/tasks/1', pathMatch: 'full'},
   {path: 'tasks/:pageNumber', component: TasksComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
-  {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
+  {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]},
   
   {path: 'projects/project-details/:projectId', component: ProjectDetailsComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
   {path: 'admin', component: AdminComponent,canActivate: [AuthGuard,adminAuthorizationGuard]}
