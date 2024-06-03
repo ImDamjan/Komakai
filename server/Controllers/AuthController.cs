@@ -59,7 +59,9 @@ namespace server.Controllers
                 Name = request.Name,
                 Lastname = request.Lastname,
                 RoleId = request.RoleId,
-                IsActivated = true
+                IsActivated = true,
+                Department = request.Department,
+                Organisation = request.Organisation
             };
 
             var role = await _role_repo.GetRoleByIdAsync(request.RoleId);

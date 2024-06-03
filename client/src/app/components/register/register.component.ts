@@ -34,6 +34,8 @@ export class RegisterComponent implements OnInit {
       Username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_\\-\\.]*')]],
       Password: ['', [Validators.required, Validators.minLength(8)]],
       ConfirmPassword: ['', Validators.required],
+      Department: [''],
+      Organisation: [''],
       Role : [0]
     }, { validators: this.passwordMatchValidator });
     this.spinner.hide();
@@ -49,7 +51,9 @@ export class RegisterComponent implements OnInit {
         lastname: formData.Lastname,
         password: formData.Password,
         email: formData.Email,
-        roleId: formData.Role
+        roleId: formData.Role,
+        department: formData.Department,
+        organisation: formData.Organisation
       }
       if(register.roleId <= 0)
       {
