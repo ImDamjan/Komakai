@@ -143,7 +143,6 @@ namespace server.Repositories
             var user = await GetUserByIdAsync(userId);
             if(user == null)
                 return null;
-            user.Email = dto.Email;
             user.Organisation =dto.Organisation;
             user.Department = dto.Department;
             user.IsActivated = dto.IsActivated;

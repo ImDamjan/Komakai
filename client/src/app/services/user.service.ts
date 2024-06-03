@@ -59,10 +59,20 @@ export class UserService {
     return  this.http.get<User[]>(url);
   }
 
-  updateUser(body: UpdateUser) : Observable<User>
+  updateUser(user: UpdateUser) : Observable<User>
   {
-    const url = this.baseUrl + "/User/updateUserInfo/"+body.id;
-
+    const url = this.baseUrl + "/User/updateUserInfo/"+user.id;
+    const body = {
+      user_id : user.id,
+      name : user.name,
+      lastname : user.lastname,
+      username : user.username,
+      jobTitle : user.jobTitle,
+      organisation : user.organisation,
+      department: user.department,
+      roleId: user.roleId,
+      isActivated: user.isActivated
+    }
     return this.http.put<User>(url,body);
   }
 
