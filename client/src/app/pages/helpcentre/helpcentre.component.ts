@@ -43,7 +43,7 @@ export class HelpcentreComponent {
       if(this.role === "Project Worker"){
         this.role2 = "Developer"
       }
-      console.log(this.role)
+      console.log(this.role);
     }
   }
 
