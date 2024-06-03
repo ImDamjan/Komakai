@@ -40,44 +40,45 @@
             <br><br>
             <p class="description" [title]="project.description">{{ project.truncatedDescription }}</p>
             <br>
-      
-        <div class="details">
-          <table>
-            <tr>
-              <th>Budget</th>
-              <th>{{project.budget}}$</th>
-            </tr>
-            <tr>
-              <th>Spent:</th>
-              <th>{{project.spent}}$</th>
-            </tr>
-            <tr>
-              <th>Percentage:</th>
-              <th>{{project.percentage}}</th>
-            </tr>
-          </table>
+
+        <div class="bottom">
+          <div class="details">
+            <table>
+              <tr>
+                <th>Budget</th>
+                <th>{{project.budget}},00 $</th>
+              </tr>
+              <!-- <tr>
+                <th>Spent:</th>
+                <th>{{project.spent}}$</th>
+              </tr> -->
+              <tr>
+                <th>Percentage:</th>
+                <th>{{project.percentage}} %</th>
+              </tr>
+            </table>
+          </div>
+        
+          <hr class="divider" />
+              <div class="issue-section">
+                <div class="date-section">
+                  <table>
+                    <tr>
+                      <th>Start date:</th>
+                      <th><time *ngIf="project.start">{{ project.start | date: 'dd MMMM yyyy' }}</time></th>
+                    </tr>
+                    <tr>
+                      <th>End date:</th>
+                      <th><time *ngIf="project.end">{{ project.end | date: 'dd MMMM yyyy' }}</time></th>
+                    </tr>
+                  </table>
+                </div>
+                <div class="issue-details">
+                  <img src="assets\project-preview\issues.svg" alt=""/> 
+                   &nbsp; {{ project.assignmentCount === 0 ? ' No issues' : (project.assignmentCount === 1 ? ' 1 issue' : project.assignmentCount + ' issues') }}
+                </div>
+              </div>
         </div>
-      
-        <hr class="divider" />
-            <div class="issue-section">
-              <div class="date-section">
-                <table>
-                  <tr>
-                    <th>Start date:</th>
-                    <th><time *ngIf="project.start">{{ project.start | date: 'dd MMMM yyyy' }}</time></th>
-                  </tr>
-                  <tr>
-                    <th>End date:</th>
-                    <th><time *ngIf="project.end">{{ project.end | date: 'dd MMMM yyyy' }}</time></th>
-                  </tr>
-                </table>
-              </div>
-              <div class="issue-details">
-                <img src="assets\project-preview\issues.svg" alt=""/> 
-                 {{ project.assignmentCount === 0 ? ' No issues' : (project.assignmentCount === 1 ? ' 1 issue' : project.assignmentCount + ' issues') }}
-              </div>
-            </div>
-      
           </section>
         </article>
       </p-table>

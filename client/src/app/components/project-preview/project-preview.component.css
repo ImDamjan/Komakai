@@ -41,17 +41,19 @@
   align-items: center;
   width: 320px;
   margin: 0;
-  height: 200px;
+  height: 75%;
   margin-bottom: 250px;
+  border-radius: .5rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .card-content {
+  flex: 1;
   background-color: #fff;
-  border-radius: .5rem;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   width: 100%;
   padding: 14px;
+  height: 100%;
   box-sizing: border-box;
 }
 
@@ -171,8 +173,8 @@
 }
 
 .description {
-  width: 297px;
-  height: 40px;
+  width: 90%;
+  height: 25%;
   color: #424242;
   text-align: justify;
   font: 400 12px/1.4 'Poppins', sans-serif;
@@ -193,6 +195,11 @@
   width: 100%;
   margin-top: 10px;
   margin-left: 5px;
+}
+
+.bottom{
+  margin-top: auto;
+  width: 100%;
 }
 
 .details table {
