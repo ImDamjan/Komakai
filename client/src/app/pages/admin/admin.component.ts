@@ -101,7 +101,6 @@ export class AdminComponent implements OnInit {
   }
 
   sendUpdateRequest(user: User){
-    console.log(user);
     this.spinner.show();
     let body : UpdateUser = {
       id: user.id,
