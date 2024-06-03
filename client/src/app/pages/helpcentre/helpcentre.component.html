@@ -1,1 +1,11 @@
+<div id="help" *ngIf="role">
+    <h1 id="title">{{role}}</h1>
+  
+    <div *ngIf="role === 'Guest'">Guest content</div>
+    <div *ngIf="role === 'Developer'">Developer content</div>
+    <div *ngIf="role === 'Project Manager'"><iframe *ngIf="role" [src]="getPdfUrl(role2)" width="1500px" height="750px"></iframe></div>
+    <div *ngIf="role === 'Admin'">Admin content</div>
+    <div *ngIf="role === 'User'">User content</div>
 
+    <div *ngIf="!role">You are not currently logged in or your role cannot be determined.</div>
+</div>
