@@ -25,7 +25,8 @@ export class HelpcentreComponent {
     // Guest: 'assets/help-documents/guest-guide.pdf',
     Developer: 'assets/help-documents/developer-guide.pdf',
     ProjectManager: 'assets/help-documents/project-manager-guide.pdf',
-    Admin: 'assets/help-documents/admin-guide.pdf'
+    Admin: 'assets/help-documents/admin-guide.pdf',
+    // User: 'assets/help-documents/user-guide.pdf'
   };
 
   constructor(private sanitizer: DomSanitizer) {}

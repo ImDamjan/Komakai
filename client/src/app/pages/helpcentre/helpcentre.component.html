@@ -1,8 +1,9 @@
 <div id="help" *ngIf="role">
-    <h1 id="title">{{role}}</h1>
+    <h1 *ngIf="role === 'Project Worker'" id="title">{{role2}}</h1>
+    <h1 *ngIf="role !== 'Project Worker'" id="title">{{role}}</h1>
   
     <div *ngIf="role === 'Guest'">Guest content</div>
-    <div *ngIf="role2 === 'Developer'"><iframe *ngIf="role" [src]="getPdfUrl(role2)" width="1500px" height="750px"></iframe></div>
+    <div *ngIf="role === 'Project Worker'"><iframe *ngIf="role" [src]="getPdfUrl(role2)" width="1500px" height="750px"></iframe></div>
     <div *ngIf="role === 'Project Manager'"><iframe *ngIf="role" [src]="getPdfUrl(role2)" width="1500px" height="750px"></iframe></div>
     <div *ngIf="role === 'Admin'"><iframe *ngIf="role" [src]="getPdfUrl(role)" width="1500px" height="750px"></iframe></div>
     <div *ngIf="role === 'User'">User content</div>
