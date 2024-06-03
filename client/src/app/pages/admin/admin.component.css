@@ -106,6 +106,8 @@ odavde na dole prekopirano iz member bivse komponente
     overflow-y: scroll;
   }
   #profile-picture {
+    height: 20px;
+    width: 20px;
     text-align: center;
   }
 
@@ -188,7 +190,7 @@ h1{
 }
 
 #pfp {
-  height: 80%;
+  height: 50px;
   border-radius: 100px;
   object-fit: cover;
   border: 1px solid black;
