@@ -41,6 +41,11 @@ namespace server.Controllers
         [HttpPost("register"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<User>> Register(UserRegistrationDto request)
         {
+            var existingUser = await _repos.GetUserByEmailAsync(request.Email);
+                if (existingUser != null)
+                {
+                    return Ok(new { message = "This email already exists in the database." });
+                }
             //hash
             string passwordHash
                 = BCrypt.Net.BCrypt.HashPassword(request.Password);

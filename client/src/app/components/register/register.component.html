@@ -17,6 +17,7 @@
   <div><input formControlName="Email" type="text" name="email" placeholder="Email" required></div>
   <small *ngIf="registerForm.controls['Email'].dirty && registerForm.hasError('required','Email')" style="color:red;">*Email is required</small>
   <small *ngIf="registerForm.controls['Email'].dirty && registerForm.hasError('pattern','Email')" style="color:red;">*Please enter a valid email address.</small><br>
+  <small *ngIf="registerForm.get('Email')?.hasError('emailExists')" style="color:red;">*This email already exists in the database.</small>
   
   <div><input formControlName="Username" type="text" name="username" placeholder="Username" required minlength="3" maxlength="31"></div>
   <small *ngIf="registerForm.controls['Username'].dirty && registerForm.hasError('required', 'Username')" style="color:red;">*Username is required </small>
