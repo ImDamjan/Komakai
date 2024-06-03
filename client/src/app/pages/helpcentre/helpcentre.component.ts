@@ -26,7 +26,7 @@ export class HelpcentreComponent {
     Developer: 'assets/help-documents/developer-guide.pdf',
     ProjectManager: 'assets/help-documents/project-manager-guide.pdf',
     Admin: 'assets/help-documents/admin-guide.pdf',
-    // User: 'assets/help-documents/user-guide.pdf'
+    User: 'assets/help-documents/user-guide.pdf'
   };
 
   constructor(private sanitizer: DomSanitizer) {}
@@ -42,6 +42,9 @@ export class HelpcentreComponent {
       }
       if(this.role === "Project Worker"){
         this.role2 = "Developer"
+      }
+      if(this.role === "Member"){
+        this.role2 = "User";
       }
       console.log(this.role);
     }
