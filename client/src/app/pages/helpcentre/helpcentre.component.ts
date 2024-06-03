@@ -22,7 +22,7 @@ export class HelpcentreComponent {
   public role2: string = "";
 
   public pdfUrls: { [role: string]: string } = {
-    // Guest: 'assets/help-documents/guest-guide.pdf',
+    Guest: 'assets/help-documents/guest-guide.pdf',
     Developer: 'assets/help-documents/developer-guide.pdf',
     ProjectManager: 'assets/help-documents/project-manager-guide.pdf',
     Admin: 'assets/help-documents/admin-guide.pdf',
