@@ -41,6 +41,12 @@ namespace server.Controllers
         [HttpPost("register"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<User>> Register(UserRegistrationDto request)
         {
+            var existingUserByUsername = await _repos.GetUserByUsernameAsync(request.Username);
+            if (existingUserByUsername != null)
+            {
+                return Ok(new { message = "This username already exists in the database." });
+            }
+            
             var existingUser = await _repos.GetUserByEmailAsync(request.Email);
                 if (existingUser != null)
                 {

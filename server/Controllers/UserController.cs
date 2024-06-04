@@ -69,6 +69,18 @@ namespace server.Controllers
             return Ok(user.toUserRoleDto(roleDto));
         }
         [Authorize]
+        [HttpGet("getUserByUsername/{username}")]
+        public async Task<ActionResult<User>> GetUserByUsername(string username)
+        {
+            var user = await _repos.GetUserByUsernameAsync(username);
+            if (user == null)
+            {
+                return NotFound("User not found for the provided username.");
+            }
+
+            return Ok(user);
+        }
+        [Authorize]
         [HttpGet("getProjectUsers/{project_id}")]
         public async Task<IActionResult> getProjectUsers([FromRoute] int project_id)
         {
@@ -129,6 +141,12 @@ namespace server.Controllers
         [HttpPut("updateUserInfo/{user_id}")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto,int user_id)
         {
+            var existingUserByUsername = await _repos.GetUserByUsernameAsync(dto.Username);
+            if (existingUserByUsername != null && existingUserByUsername.Id != user_id)
+            {
+                return Ok(new { message = "This username already exists in the database." });
+            }
+            
             var user =  await _repos.UpdateUserAsync(dto,user_id);
             if(user==null)
                 return NotFound("user not found");
