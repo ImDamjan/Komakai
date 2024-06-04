@@ -73,6 +73,7 @@
                     <p *ngIf="!username.errors?.['required'] && username.errors?.['minlength'] && (username.dirty || username.touched)" class="error-message" style="color:red;">*Username must be at least 3 characters long.</p>
                     <p *ngIf="!username.errors?.['required'] && username.value?.length > 30 && (username.dirty || username.touched)" class="error-message" style="color:red;">*Username cannot be more than 30 characters long.</p>
                     <p *ngIf="!username.errors?.['required'] && !username.errors?.['maxlength'] && username.errors?.['pattern'] && (username.dirty || username.touched)" class="error-message" style="color:red;">*Username can contain only letters, numbers, underscores, hyphens, and periods.</p>
+                    <p class="error-message" style="color:red;">{{usernameError}}</p>
                     <br>
                     
                     <span id="emailtitle" class="title">

@@ -83,12 +83,6 @@ export class RegisterComponent implements OnInit {
             this.notify.showSuccess("User added","User registered successfully!")
           },
           error: (err) => {
-            if (err.Message == "This email already exists in the database.") {
-              console.log("greska");
-              this.registerForm.get('Email')?.setErrors({ 'emailExists': true });
-              this.notify.showWarn("Registration","Registration form not filled correctly!")
-              this.spinner.hide();
-            }
             this.notify.showWarn("Registration","Registration form not filled correctly!")
             this.spinner.hide();
           }

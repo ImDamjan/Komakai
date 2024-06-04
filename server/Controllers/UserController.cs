@@ -141,6 +141,12 @@ namespace server.Controllers
         [HttpPut("updateUserInfo/{user_id}")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto,int user_id)
         {
+            var existingUserByUsername = await _repos.GetUserByUsernameAsync(dto.Username);
+            if (existingUserByUsername != null && existingUserByUsername.Id != user_id)
+            {
+                return Ok(new { message = "This username already exists in the database." });
+            }
+            
             var user =  await _repos.UpdateUserAsync(dto,user_id);
             if(user==null)
                 return NotFound("user not found");
