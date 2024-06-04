@@ -81,7 +81,7 @@ export class SidenavComponent implements OnInit {
       }
       else if(user.role==="Admin")
       {
-        this.navData = [nav[0]];
+        this.navData = [nav[0],nav[5]];
       }
       else
         this.navData = [nav[2],nav[3],nav[5]];
