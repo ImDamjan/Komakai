@@ -71,6 +71,12 @@ export class RegisterComponent implements OnInit {
               this.spinner.hide();
               return;
             }
+            if(res.message == "This username already exists in the database.") {
+              this.registerForm.get('Username')?.setErrors({ 'usernameExists': true });
+              this.notify.showWarn("Registration","Registration form not filled correctly!");
+              this.spinner.hide();
+              return;
+            }
             // alert("User " + register.name + " " + register.lastname + " added successfully!");
             this.registerForm.reset();
             this.spinner.hide();
