@@ -69,6 +69,18 @@ namespace server.Controllers
             return Ok(user.toUserRoleDto(roleDto));
         }
         [Authorize]
+        [HttpGet("getUserByUsername/{username}")]
+        public async Task<ActionResult<User>> GetUserByUsername(string username)
+        {
+            var user = await _repos.GetUserByUsernameAsync(username);
+            if (user == null)
+            {
+                return NotFound("User not found for the provided username.");
+            }
+
+            return Ok(user);
+        }
+        [Authorize]
         [HttpGet("getProjectUsers/{project_id}")]
         public async Task<IActionResult> getProjectUsers([FromRoute] int project_id)
         {
