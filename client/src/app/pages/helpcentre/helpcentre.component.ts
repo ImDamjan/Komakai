@@ -22,10 +22,11 @@ export class HelpcentreComponent {
   public role2: string = "";
 
   public pdfUrls: { [role: string]: string } = {
-    // Guest: 'assets/help-documents/guest-guide.pdf',
-    // Developer: 'assets/help-documents/developer-guide.pdf',
+    Guest: 'assets/help-documents/guest-guide.pdf',
+    Developer: 'assets/help-documents/developer-guide.pdf',
     ProjectManager: 'assets/help-documents/project-manager-guide.pdf',
-    Admin: 'assets/help-documents/admin-guide.pdf'
+    Admin: 'assets/help-documents/admin-guide.pdf',
+    User: 'assets/help-documents/user-guide.pdf'
   };
 
   constructor(private sanitizer: DomSanitizer) {}
@@ -36,15 +37,21 @@ export class HelpcentreComponent {
     {
       let decode = this.jwtService.decodeToken(token);
       this.role = decode.role;
-      if(this.role = "Project Manager"){
+      if(this.role === "Project Manager"){
         this.role2 = "ProjectManager";
       }
+      if(this.role === "Project Worker"){
+        this.role2 = "Developer"
+      }
+      if(this.role === "Member"){
+        this.role2 = "User";
+      }
+      console.log(this.role);
     }
   }
 
   public getPdfUrl(role: string){
     if (this.pdfUrls[role]) {
-      console.log("A");
       return this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrls[role]);
     }
     return null;

@@ -25,6 +25,7 @@ export class ProfileDetailsComponent {
   picture!: string;
   uploadingPicture: boolean = false;
   notify : Notify;
+  usernameError: string = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roleService: RoleService, private userService: UserService, private router: Router, private userProfileService: UserProfileService,private toast : NgToastService,) {
     this.user = data.user;
@@ -32,7 +33,8 @@ export class ProfileDetailsComponent {
     this.roleId = data.role;
     this.user.roleId = this.roleId;
     this.profilePicture(this.user.id);
-    this.notify = new Notify(toast)
+    this.notify = new Notify(toast);
+    this.usernameError = '';
   }
 
   ngOnInit(): void {
@@ -61,13 +63,24 @@ export class ProfileDetailsComponent {
       return;
     }
 
-    this.userService.updateUser(this.user).subscribe(response => {
-      this.userProfileService.setUserProfile(this.user);
-      this.notify.showSuccess("Profile edited","Profile edited successfully!")
-
-      // alert('Profile edited successfully!');
-      this.originalUser = { ...this.user };
+    this.userService.updateUser(this.user).subscribe({
+      next: (res) => {
+        const response = res as any as { message: string };
+        if(response.message == "This username already exists in the database.") {
+          this.usernameError = "*This username already exists.";
+          this.notify.showWarn("Profile edited", "Profile form not filled correctly!");
+          return;
+        }
+        
+        this.userProfileService.setUserProfile(this.user);
+        this.notify.showSuccess("Profile edited","Profile edited successfully!")
+        this.originalUser = { ...this.user };
+      },
+      error: (err) => {
+        this.notify.showWarn("Profile edited", "Profile form not filled correctly!");
+      }
     });
+    this.usernameError = "";
   }
 
   onFileSelected(event: any) {

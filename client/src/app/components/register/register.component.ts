@@ -34,6 +34,8 @@ export class RegisterComponent implements OnInit {
       Username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_\\-\\.]*')]],
       Password: ['', [Validators.required, Validators.minLength(8)]],
       ConfirmPassword: ['', Validators.required],
+      Department: [''],
+      Organisation: [''],
       Role : [0]
     }, { validators: this.passwordMatchValidator });
     this.spinner.hide();
@@ -49,7 +51,9 @@ export class RegisterComponent implements OnInit {
         lastname: formData.Lastname,
         password: formData.Password,
         email: formData.Email,
-        roleId: formData.Role
+        roleId: formData.Role,
+        department: formData.Department,
+        organisation: formData.Organisation
       }
       if(register.roleId <= 0)
       {
@@ -67,18 +71,18 @@ export class RegisterComponent implements OnInit {
               this.spinner.hide();
               return;
             }
+            if(res.message == "This username already exists in the database.") {
+              this.registerForm.get('Username')?.setErrors({ 'usernameExists': true });
+              this.notify.showWarn("Registration","Registration form not filled correctly!");
+              this.spinner.hide();
+              return;
+            }
             // alert("User " + register.name + " " + register.lastname + " added successfully!");
             this.registerForm.reset();
             this.spinner.hide();
             this.notify.showSuccess("User added","User registered successfully!")
           },
           error: (err) => {
-            if (err.Message == "This email already exists in the database.") {
-              console.log("greska");
-              this.registerForm.get('Email')?.setErrors({ 'emailExists': true });
-              this.notify.showWarn("Registration","Registration form not filled correctly!")
-              this.spinner.hide();
-            }
             this.notify.showWarn("Registration","Registration form not filled correctly!")
             this.spinner.hide();
           }

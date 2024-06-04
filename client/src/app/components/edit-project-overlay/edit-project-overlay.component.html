@@ -75,17 +75,17 @@
             </div>
             <div class="budget-team">
                 <div class="labels">
-                    <span class="name" id="budget">Spent</span>
+                    <!-- <span class="name" id="budget">Spent</span> -->
                     <span class="name" id="team">Members</span>
                 </div>
                 <div class="inputs">
-                    <div class="spent">
+                    <!-- <div class="spent">
                         <input class="input-field" id="budget-input" type="number" placeholder="  Spent"  [(ngModel)]="project.spent" min="0">
                         <select [(ngModel)]="selectedCurrency" class="input-field2">
                             <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
                         </select>
                         <div class="error-message" *ngIf="project.spent < 0 && submitted">* Spent field cannot be less than 0</div>
-                    </div>
+                    </div> -->
                         <div class="custom-dropdown">
                         <div class="selected-users">
                             <span *ngFor="let selectedUser of selectedUsers" class="selected-user">
