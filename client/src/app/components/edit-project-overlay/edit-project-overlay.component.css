@@ -153,15 +153,16 @@
     margin-bottom: 20px;
 }
 
-.custom-dropdown {
+.custom-dropdown, .members-content{
     position: relative;
     min-width: 160px;
     width: 100%;
     padding: 12px 16px;
     z-index: 1;
-}
+    height: 100%;
+  }
 
-.selected-option {
+  .selected-option, .team-option {
     display: block;
     width: 100%;
     height: 40px;
@@ -170,13 +171,18 @@
     border-radius: 10px;
     padding: 10px;
     cursor: pointer;
-}
+  }
 
-.selected-option:hover {
+  .selected-option:hover {
+    background-color: #f0f0f0;
+  }
+
+  .team-option:hover{
+    
     background-color: #f0f0f0;
 }
-
-.options {
+  
+  .options {
     position: absolute;
     top: 100%;
     left: 0;
@@ -185,9 +191,23 @@
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.12);
     border-radius: 10px;
     z-index: 999;
+    max-height: calc(200% - 50px);
+    overflow-y: scroll;
+  }
+
+  .team-members{
+    min-width: 160px;
+    position: absolute;
+    bottom: 100%; /* Postavlja dropdown iznad input polja */
+    left: 0;
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    z-index: 10000;
     max-height: 300px;
     overflow-y: scroll;
-}
+  }
 
 .options::-webkit-scrollbar {
     width: 10px;               
@@ -304,4 +324,22 @@
 
   .members-content th:nth-child(even){
     background-color: #f2f2f2;
+  }
+
+  #teams-content{
+    width: 90%;
+  }
+
+  .team-members::-webkit-scrollbar {
+    width: 10px;               
+  }
+  
+  .team-members::-webkit-scrollbar-track {
+    background: none;  
+  }
+  
+  .team-members::-webkit-scrollbar-thumb {
+    background-color: #e9e9e9;    
+    border-radius: 20px;       
+    border: 3px solid darkgray; 
   }

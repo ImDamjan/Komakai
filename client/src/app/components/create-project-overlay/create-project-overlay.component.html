@@ -65,30 +65,54 @@
                                 <input type="text" class="selected-option" (click)="toggleDropdown()" [(ngModel)]="searchQuery" placeholder="Select Members" [readonly]="!showDropdown">
                                 <div class="options" *ngIf="showDropdown">
                                     <div class="member-option" *ngFor="let user of filteredUsers">
-                                        
-                                        <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user)" [disabled]="user.id == loggedInUserId">
-        
-                                        <select [ngModel]="getSelectedRoleId(user.id)" (change)="onRoleChanged(user, $event)" [disabled]="user.id == loggedInUserId">
-                                            <option *ngFor="let role of getRolesForUser(user)" [value]="role.id">{{role.name}}</option>
-                                        </select>
-        
-                                        {{ user.name }} {{ user.lastname }}
+                                        <table class="members-content">
+                                            <tr>
+                                                <th>
+                                                    <select [ngModel]="getSelectedRoleId(user.id)" (change)="onRoleChanged(user, $event)" [disabled]="user.id == loggedInUserId">
+                                                        <option *ngFor="let role of getRolesForUser(user)" [value]="role.id">{{role.name}}</option>
+                                                    </select>
+                                                </th>
+                                                <th>
+                                                    {{ user.name }} {{ user.lastname }}
+                                                </th>
+                                                <th>
+                                                    <input type="checkbox" [checked]="isSelected(user)" (click)="toggleUserSelection(user)" [disabled]="user.id == loggedInUserId">
+                                                </th>
+                                            </tr>
+                                        </table>
                                     </div>
         
                                     <div class="team-option" *ngFor="let team of filteredTeams" (mouseover)="showTeamMembers(team)" (mouseout)="hideTeamMembers($event)">
-                                        <input type="checkbox" [checked]="isSelectedTeam(team.id)" (change)="onTeamSelected(team)">
-                                        {{ team.name }}
-                                        <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
-                                            <div *ngFor="let member of team.members">
-                                                <input type="checkbox" [checked]="isSelected(member)" (change)="toggleUserSelection(member)" [disabled]="member.id == loggedInUserId">
-                                                {{ getUserName(member.id) }}
-        
-                                                <select [ngModel]="getSelectedRoleId(member.id)" (change)="onRoleChanged(member, $event)" [disabled]="member.id == loggedInUserId">
-                                                    <option *ngFor="let role of getRolesForUser(member)" [value]="role.id">{{role.name}}</option>
-                                                </select>
-                                                
-                                            </div>
-                                        </div>
+                                        <table class="members-option">
+                                            <tr>
+                                                <th>
+                                                    <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
+                                                        <div *ngFor="let member of team.members">
+                                                            <table id="teams-content">
+                                                                <tr style="background-color: rgb(184, 244, 252);">
+                                                                    <th>
+                                                                        <select [ngModel]="getSelectedRoleId(member.id)" (change)="onRoleChanged(member, $event)" [disabled]="member.id == loggedInUserId">
+                                                                            <option *ngFor="let role of getRolesForUser(member)" [value]="role.id">{{role.name}}</option>
+                                                                        </select>
+                                                                    </th>
+                                                                    <th>
+                                                                        <input type="checkbox" [checked]="isSelected(member)" (change)="toggleUserSelection(member)" [disabled]="member.id == loggedInUserId">
+                                                                        {{ getUserName(member.id) }}
+                                                                    </th>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    {{ team.name }}
+                                                </th>
+                                                <th>
+                                                    <input type="checkbox" [checked]="isSelectedTeam(team.id)" (change)="onTeamSelected(team)">
+                                                </th>
+                                            </tr>
+                                        </table>
+
                                     </div>
                                 </div>
                             </div>

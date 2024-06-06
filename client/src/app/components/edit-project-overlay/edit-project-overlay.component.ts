@@ -39,6 +39,7 @@ export class EditProjectOverlayComponent {
   states: State[] = [];
 
   showDropdown: boolean = false;
+  openDropdownUpwards: boolean = false;
   hoveredTeam: any;
   submitted = true;
   submissionError: string | null = null;
@@ -83,6 +84,7 @@ export class EditProjectOverlayComponent {
     RON: 0.22,
     RUB: 0.011
   };
+
 
   constructor(private dialogRef: MatDialogRef<EditProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private stateService: StateService) 
   {
@@ -136,10 +138,35 @@ export class EditProjectOverlayComponent {
 
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
-    if (!this.showDropdown) {
+    if (this.showDropdown) {
+      setTimeout(() => {
+        const dropdown = document.querySelector('.options') as HTMLElement;
+        if (dropdown) {
+          const rect = dropdown.getBoundingClientRect();
+          const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+          this.openDropdownUpwards = (rect.bottom > viewportHeight);
+        }
+      }, 0);
+    } else {
       this.searchQuery = '';
     }
   }
+
+  // toggleTeamsDropdown(): void {
+  //   this.showDropdown = !this.showDropdown;
+  //   if (this.showDropdown) {
+  //     setTimeout(() => {
+  //       const dropdown = document.querySelector('.options') as HTMLElement;
+  //       if (dropdown) {
+  //         const rect = dropdown.getBoundingClientRect();
+  //         const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  //         this.openDropdownUpwards = (rect.bottom > viewportHeight);
+  //       }
+  //     }, 0);
+  //   } else {
+  //     this.searchQuery = '';
+  //   }
+  // }
 
   onUserSelected(user: User, event: any): void {
     event.stopPropagation();
