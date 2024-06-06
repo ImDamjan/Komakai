@@ -212,7 +212,12 @@
 
 .error-message {
     padding-left: 5px;
-    color: red;
+    color: rgb(254, 98, 98);
+}
+
+.info-message{
+    padding-left: 5px;
+    color: rgb(0, 84, 0);
 }
 .error {
     margin-left: 20px;

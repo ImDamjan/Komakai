@@ -111,13 +111,23 @@ export class CreateProjectOverlayComponent implements OnInit {
       end : new Date(),
       budget : 0,
       description : "",
-      type : ""
+      type : "neki tip"
     };
 
     this.userService.getUserById(this.userid).subscribe(user =>{
       this.selectedUsers[0] = user;
     });
   }
+
+  //-----------------
+
+  titleTouched: boolean = false;
+  budgetTouched: boolean = false;
+  priorityTouched: boolean = false;
+  startDateTouched: boolean = false;
+  endDateTouched: boolean = false;
+
+  //----------------
 
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
