@@ -152,22 +152,6 @@ export class EditProjectOverlayComponent {
     }
   }
 
-  // toggleTeamsDropdown(): void {
-  //   this.showDropdown = !this.showDropdown;
-  //   if (this.showDropdown) {
-  //     setTimeout(() => {
-  //       const dropdown = document.querySelector('.options') as HTMLElement;
-  //       if (dropdown) {
-  //         const rect = dropdown.getBoundingClientRect();
-  //         const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  //         this.openDropdownUpwards = (rect.bottom > viewportHeight);
-  //       }
-  //     }, 0);
-  //   } else {
-  //     this.searchQuery = '';
-  //   }
-  // }
-
   onUserSelected(user: User, event: any): void {
     event.stopPropagation();
     const target = event.target;

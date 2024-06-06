@@ -52,8 +52,16 @@
                         </td>
                     </tr>
 
-                    <tr>
-                        <td colspan="2">
+                </table>
+            </div>
+
+            <div class="right">
+                <div class="description">
+                    <p><span class="name">Project description: </span></p>
+                    <textarea class="input-field" id="description" placeholder="  Write your description"  [(ngModel)]="projectObj.description"></textarea>
+                </div>
+                <!-- ovde -->
+                <div class="budget-team">
                             <p><span class="name" id="team">Members: </span></p>
                             <div class="custom-dropdown">
                                 <div class="selected-users">
@@ -83,7 +91,7 @@
                                     </div>
         
                                     <div class="team-option" *ngFor="let team of filteredTeams" (mouseover)="showTeamMembers(team)" (mouseout)="hideTeamMembers($event)">
-                                        <table class="members-option">
+                                        <table class="members-content" [ngClass]="{'show': showDropdown, 'upwards': openDropdownUpwards}">
                                             <tr>
                                                 <th>
                                                     <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
@@ -116,24 +124,16 @@
                                     </div>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-
-                </table>
-            </div>
-
-            <div class="right">
-                <div class="description">
-                    <p><span class="name">Project description: </span></p>
-                    <textarea class="input-field" id="description" placeholder="  Write your description"  [(ngModel)]="projectObj.description"></textarea>
-                </div>
-            
-                <div class="create-cancel">
-                    <button class="close" (click)="closeOverlay()">Close</button>
-                    <button class="create" (click)="createProject()">Create</button>
-                    <button class="cancel" (click)="closeOverlay()">Cancel</button>
+                        </div>
+                <div class="related">
+                    <div class="link-create-cancel">
+                        <div class="create-cancel">
+                            <button class="close" (click)="closeOverlay()">Close</button>
+                            <button class="create" (click)="createProject()">Create</button>
+                            <button class="cancel" (click)="closeOverlay()">Cancel</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
 </div>
