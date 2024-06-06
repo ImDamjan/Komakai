@@ -22,8 +22,12 @@
                         placeholder="Select a State" />
                     </th>
                     <th>
-                        <p><span class="name" id="type">Type: </span></p>
-                        <input class="input-field" id="type-input" type="text" placeholder=" Type" [(ngModel)] = "createTaskObj.type">
+                        <p><span class='name'>Priority: </span></p>
+                        <p-dropdown 
+                        [options]="priorities" 
+                        [(ngModel)]="selectedPriority" 
+                        optionLabel="description" 
+                        placeholder="Select a Priority" />
                     </th>
                 </tr>
 
@@ -48,13 +52,13 @@
                     
                 <tr>
                     <th>
-                        <p><span class="name">Assignee: </span></p>
+                        <p><span class="name" id="relatedproject">Related tasks</span><br></p>
+                        
                         <p-multiSelect 
-                        [options]="users" 
-                        [(ngModel)]="selectedAssignees" 
-                        optionLabel="fulname" 
-                        placeholder="Select Assignees" 
-                        [displaySelectedLabel]="false" />
+                        [options]="assignments" 
+                        [(ngModel)]="selectedDependentOn" 
+                        optionLabel="title" 
+                        placeholder="Select Dependent Tasks" />
                     </th>
                     <th>
                         <p><span class='name'>Task Group: </span></p>
@@ -67,23 +71,15 @@
                 </tr>
 
                 <tr>
-                    <th>
-                        <p><span class='name'>Priority: </span></p>
-                        <p-dropdown 
-                        [options]="priorities" 
-                        [(ngModel)]="selectedPriority" 
-                        optionLabel="description" 
-                        placeholder="Select a Priority" />
-                    </th>
-                    <th>
-                        <p><span class="name" id="relatedproject">Related tasks</span><br></p>
-                        
+                    <td colspan="2">
+                        <p style="font-weight: bold;"><span class='name'>Assignee: </span></p>
                         <p-multiSelect 
-                        [options]="assignments" 
-                        [(ngModel)]="selectedDependentOn" 
-                        optionLabel="title" 
-                        placeholder="Select Dependent Tasks" />
-                    </th>
+                        [options]="users" 
+                        [(ngModel)]="selectedAssignees" 
+                        optionLabel="fulname" 
+                        placeholder="Select Assignees" 
+                        [displaySelectedLabel]="true" />
+                    </td>
                 </tr>
             </table>
         </div>
