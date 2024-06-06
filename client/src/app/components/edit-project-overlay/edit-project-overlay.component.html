@@ -11,59 +11,47 @@
             <div class="tabela">
                 <table>
                     <tr>
-                        <th><span class="name">Priority</span></th>
-                        <th><span class="name" id="type">Type</span></th>
-                    </tr>
-
-                    <tr>
                         <th>
+                            <p><span class="name">Priority</span></p>
                             <select id="status-select" class="input-field" required [(ngModel)]="project.priority.id">
-                            <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
+                                <option *ngFor="let priority of priorities" [value]="priority.id">{{ priority.description }}</option>
                             </select>
                             <div class="error-message" *ngIf="!project.priority && submitted">*Priority is required</div>
                         </th>
-                        <th><input class="input-field" id="type-input" type="text" placeholder="  Type"  [(ngModel)]="project.type"></th>
-                    </tr>
-
-                    <tr>
-                        <th> <span class="name" id="startdate">Start Date</span> </th>
-                        <th> <span class="name" id="enddate">End Date</span> </th>
-                    </tr>
-
-                    <tr>
-                        <th> 
-                            <p-calendar placeholder="Select date" [ngModel]="project.start" (ngModelChange)="project.start = $event" dateFormat="dd.mm.yy"/> 
-                            <div class="error-message" *ngIf="!project.start && submitted">*Start Date is required</div>
-                        </th>
-                        <th> 
-                            <p-calendar placeholder="Select date" id="enddate" [ngModel]="project.end" (ngModelChange)="project.end = $event" dateFormat="dd.mm.yy"/> 
-                            <div class="error-message" *ngIf="!project.end && submitted">*End Date is required</div>
-                            <div class="error-message" *ngIf="project.start && project.end && (project.start >= project.end)">*End Date must be after Start Date</div>
-                        </th>
-                    </tr>
-
-                    <tr>
-                        <div class="error-message" *ngIf="project.start && project.end && (project.start > project.end) && (project.start == project.end)">*End Date must be after Start Date</div>
-                    </tr>
-
-                    <tr>
-                        <th> <span class="name" id="startdate">Percentage</span> </th>
-                        <th> <span class="name" id="enddate">State</span> </th>
-                    </tr>
                         <th>
-                            <div class="slidecontainer">
-                                <p-slider [(ngModel)]="project.percentage" [min]="0" [step]="5" [max]="100"></p-slider>
-                                    {{ project.percentage }}%
-                            </div>
-                        </th>
-
-                        <th>
+                            <p><span class="name" id="enddate">State</span> </p>
                             <select id="status-select" class="input-field" required [(ngModel)]="project.state.id">
                                 <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
                             </select>
                         </th>
-                    <tr>
+                    </tr>
 
+                    <tr>
+                        <th> 
+                            <p><span class="name" id="startdate">Start Date</span> </p>
+                            <p-calendar placeholder="Select date" [ngModel]="project.start" (ngModelChange)="project.start = $event" dateFormat="dd.mm.yy"/> 
+                            <div class="error-message" *ngIf="!project.start && submitted">*Start Date is required</div>
+                        </th>
+                        <th> 
+                            <p><span class="name" id="enddate">End Date</span></p> <p-calendar placeholder="Select date" id="enddate" [ngModel]="project.end" (ngModelChange)="project.end = $event" dateFormat="dd.mm.yy"/> 
+                            <div class="error-message" *ngIf="!project.end && submitted">*End Date is required</div>
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="error-message" *ngIf="project.start && project.end && (project.start >= project.end)">*End Date must be after Start Date</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <p><span class="name" id="startdate">Percentage</span> </p>
+                            <div class="slidecontainer">
+                                <p-slider [(ngModel)]="project.percentage" [min]="0" [step]="5" [max]="100"></p-slider>
+                                    {{ project.percentage }}%
+                            </div>
+                        </td>
                     </tr>
 
                 </table>
@@ -75,17 +63,9 @@
             </div>
             <div class="budget-team">
                 <div class="labels">
-                    <!-- <span class="name" id="budget">Spent</span> -->
                     <span class="name" id="team">Members</span>
                 </div>
                 <div class="inputs">
-                    <!-- <div class="spent">
-                        <input class="input-field" id="budget-input" type="number" placeholder="  Spent"  [(ngModel)]="project.spent" min="0">
-                        <select [(ngModel)]="selectedCurrency" class="input-field2">
-                            <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
-                        </select>
-                        <div class="error-message" *ngIf="project.spent < 0 && submitted">* Spent field cannot be less than 0</div>
-                    </div> -->
                         <div class="custom-dropdown">
                         <div class="selected-users">
                             <span *ngFor="let selectedUser of selectedUsers" class="selected-user">
@@ -115,13 +95,13 @@
                             </div>
 
                             <div class="team-option" *ngFor="let team of filteredTeams" (mouseover)="showTeamMembers(team)" (mouseout)="hideTeamMembers($event)">
-                                <table class="members-content">
+                                <table class="members-content" [ngClass]="{'show': showDropdown, 'upwards': openDropdownUpwards}">
                                     <tr>
                                         <th>
                                             <div class="team-members" *ngIf="hoveredTeam && hoveredTeam.id === team.id">
                                                 <div *ngFor="let member of team.members">
                                                     <table id="teams-content">
-                                                        <tr style="background-color: rgb(255, 169, 161);">
+                                                        <tr style="background-color: rgb(184, 244, 252);">
                                                             <th>
                                                                 <select [disabled]="member.id == loggedInUserId" [ngModel]="getSelectedRoleId(member.id)" (change)="onRoleChanged(member, $event)">
                                                                     <option *ngFor="let role of getRolesForUser(member)" [value]="role.id">{{role.name}}</option>
@@ -152,9 +132,7 @@
                 </div>
             </div>
             <div class="related">
-                <!-- <span class="name" id="relatedproject">Related projects</span> -->
-                <div class="link-save-cancel">
-                    <!-- <button id="related-button">Link project</button> --><p></p>
+                <div class="link-save-cancel"><p></p>
                     <div class="save-cancel">
                         <button class="close" (click)="closeOverlay()">Close</button>
                         <button class="save" (click)="editProject(project.id)">Save changes</button>

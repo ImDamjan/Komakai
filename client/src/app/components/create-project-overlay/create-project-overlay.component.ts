@@ -34,6 +34,7 @@ export class CreateProjectOverlayComponent implements OnInit {
   roles: Role[] = [];
   filteredRoles: Role[] = [];
   showDropdown: boolean = false;
+  openDropdownUpwards: boolean = false;
   hoveredTeam: any;
   submitted = true;
   submissionError: string | null = null;
@@ -111,7 +112,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       end : new Date(),
       budget : 0,
       description : "",
-      type : ""
+      type : "neki tip"
     };
 
     this.userService.getUserById(this.userid).subscribe(user =>{
@@ -119,9 +120,28 @@ export class CreateProjectOverlayComponent implements OnInit {
     });
   }
 
+  //-----------------
+
+  titleTouched: boolean = false;
+  budgetTouched: boolean = false;
+  priorityTouched: boolean = false;
+  startDateTouched: boolean = false;
+  endDateTouched: boolean = false;
+
+  //----------------
+
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
-    if (!this.showDropdown) {
+    if (this.showDropdown) {
+      setTimeout(() => {
+        const dropdown = document.querySelector('.options') as HTMLElement;
+        if (dropdown) {
+          const rect = dropdown.getBoundingClientRect();
+          const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+          this.openDropdownUpwards = (rect.bottom > viewportHeight);
+        }
+      }, 0);
+    } else {
       this.searchQuery = '';
     }
   }
