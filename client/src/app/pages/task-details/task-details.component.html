@@ -146,8 +146,9 @@
                 <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture"> Leave your comment
             </ng-container>
             <div class = 'comment-box'>
-                <textarea class="textarea" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText" (keydown.enter)="onEnter($event)">
-                </textarea><br>
+                <!-- <textarea class="textarea" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "commentText" (keydown.enter)="onEnter($event)">
+                </textarea><br> -->
+                <quill-editor [(ngModel)]="commentText" [modules]="moduls" placeholder="Write a comment" style="width:70%;"></quill-editor><br>
                 <button id = 'comment-button' (click)="createComment()">Comment</button>
             </div>
         </div>
@@ -156,27 +157,23 @@
         
             <div class="comment" *ngFor="let comment of comments">
                 <div class = 'comment-box'>
-                    <div *ngIf="!comment.editOpened">
+                    <!-- <div *ngIf="!comment.editOpened"> -->
 
                         <p style="color: gray;"> <img id="pfp" [src]="comment.user.profilePicturePath" alt="slika_korinsika"> {{comment.user.name}} {{comment.user.lastname}} &commat;{{comment.user.username}}</p>
-                        <p style="width: 100%; border: 1px solid; padding: 10px; color: black;" [innerHTML]="replaceNewlines(comment.content)">{{comment.content}}<button *ngIf="comment.user.id==userId" class="edit" (click)="showEditBox(comment)">Edit</button></p>
+                        <!-- <p style="width: 100%; border: 1px solid; padding: 10px; color: black;" [innerHTML]="replaceNewlines(comment.content)">{{comment.content}}</p> -->
+                        
+                        <quill-editor *ngIf="!comment.editOpened" [(ngModel)]="comment.content"  [readOnly]="true" [modules]="{toolbar:false}" placeholder="Write a comment" style="width:100%;"></quill-editor>
+                        <quill-editor *ngIf="comment.editOpened" [(ngModel)]="comment.content"  [readOnly]="false" [modules]="moduls" placeholder="Write a comment" style="width:70%;"></quill-editor>
+                        <button *ngIf="comment.user.id==userId && !comment.editOpened" class="edit" (click)="showEditBox(comment)">Edit</button>
                         <p style="color: gray;">{{ comment.editedTime.toLocaleString().split(',')[0] }}     {{ comment.editedTime.toLocaleString().split(',')[1] }}
-                            <button class="show-hide" *ngIf="isUser || isManager || isWorker" (click)="showBox(comment)">
+                            <button class="show-hide" *ngIf="!comment.editOpened &&(isUser || isManager || isWorker)" (click)="showBox(comment)">
                                 <span *ngIf="!comment.replyOpened">Show Reply box</span>
                                 <span *ngIf="comment.replyOpened">Hide Reply box</span>
                             </button>
+                            <button *ngIf="comment.editOpened" id = 'comment-button' (click)="updateComment(comment)">Edit</button><button *ngIf="comment.editOpened" class="cancel" (click)="showEditBox(comment)">Cancle</button>
                         </p>
-                    </div>
-                    <div *ngIf="comment.editOpened">
-                        <ng-container *ngIf="!pictureLoading">
-                            <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture"> Leave your comment
-                        </ng-container>
-                        <div *ngIf="isManager || isUser || isWorker" class = 'comment-box'>
-                            <textarea class="textarea" id="commentTextarea" cols="30" rows="10" placeholder="Write a comment..." [(ngModel)] = "comment.content" (keydown)="onEnter($event)">
-                            </textarea><br>
-                            <button id = 'comment-button' (click)="updateComment(comment)">Edit</button><button class="cancel" (click)="showEditBox(comment)">Cancle</button>
-                        </div>
-                    </div>
+                        
+                    
                     <br>
                     <div *ngIf="comment.replyOpened" class="answer">
                         <div class="comment" id="add-comment">
@@ -184,21 +181,28 @@
                                 <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture"> Leave your Reply
                             </ng-container>
                             <div *ngIf="isManager || isUser || isWorker" class = 'comment-box'>
-                                <textarea class="textarea" cols="30" rows="10" placeholder="Write a reply..." [(ngModel)] = "comment.answerContent" (keydown)="onEnter($event)">
-                                </textarea><br>
-                                <button id = 'comment-button' (click)="createAnswer(comment)">Finish Reply</button>
+                                <!-- <textarea class="textarea" cols="30" rows="10" placeholder="Write a reply..." [(ngModel)] = "comment.answerContent" (keydown)="onEnter($event)">
+                                </textarea><br> -->
+                                <quill-editor [(ngModel)]="comment.answerContent"  [readOnly]="false" [modules]="moduls" placeholder="Write a reply" style="width:70%;"></quill-editor>
+                                <br><button id = 'comment-button' (click)="createAnswer(comment)">Finish Reply</button>
                             </div>
                         </div>
                     </div>
                     <div class="answers">
                         <div class="answer" *ngFor="let answer of comment.answers">
-                            <div *ngIf="!answer.editOpened">
+                            <!-- <div *ngIf="!answer.editOpened"> -->
                                 <p style="color: gray; width: 90%;"> <img id="pfp" [src]="answer.user.profilePicturePath" alt="slika_korinsika"> {{answer.user.name}} {{answer.user.lastname}} &commat;{{answer.user.username}}</p>
-                                <p style="width: 90%; border: 1px solid; padding: 10px; color: black;" [innerHTML]="replaceNewlines(answer.content)">{{answer.content}} <button *ngIf="answer.user.id==userId" (click)="showEditBox(answer)" class="edit">Edit</button></p>
+                                <!-- <p style="width: 90%; border: 1px solid; padding: 10px; color: black;" [innerHTML]="replaceNewlines(answer.content)">{{answer.content}}</p> -->
+                                
+                                <quill-editor *ngIf="!answer.editOpened" [(ngModel)]="answer.content"  [readOnly]="true" [modules]="{toolbar:false}" placeholder="Write a reply" style="width:100%;"></quill-editor>
+                                <quill-editor *ngIf="answer.editOpened" [(ngModel)]="answer.content"  [readOnly]="false" [modules]="moduls" placeholder="Write a reply" style="width:70%;"></quill-editor>
+                                
+                                <button *ngIf="!answer.editOpened && answer.user.id==userId" (click)="showEditBox(answer)" class="edit">Edit</button>
                                 <p style="color: gray; width: 90%;">{{ answer.editedTime.toLocaleString().split(',')[0] }}     {{ answer.editedTime.toLocaleString().split(',')[1] }}</p>
-                            </div>
+                                <button *ngIf="answer.editOpened" id = 'comment-button' (click)="updateAnswer(answer)">Edit</button><button *ngIf="answer.editOpened" class="cancel" (click)="showEditBox(answer)">Cancle</button>
+                            <!-- </div> -->
                             
-                            <div *ngIf="answer.editOpened" class="answer">
+                            <!-- <div *ngIf="answer.editOpened" class="answer">
                                 <div class="comment" id="add-comment">
                                     <ng-container *ngIf="!pictureLoading">
                                         <img id="pfp" *ngIf="picture" [src]="picture" alt="Profile Picture"> Leave your comment
@@ -206,10 +210,10 @@
                                     <div *ngIf="isManager || isUser || isWorker" class = 'comment-box'>
                                         <textarea class="textarea" id="commentTextarea" cols="30" rows="10" placeholder="Write a comment..."  [(ngModel)] = "answer.content" (keydown)="onEnter($event)">
                                         </textarea><br>
-                                        <button id = 'comment-button' (click)="updateAnswer(answer)">Edit</button><button class="cancel" (click)="showEditBox(answer)">Cancle</button>
+                                        
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
             </div>
         </div>
