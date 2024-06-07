@@ -22,7 +22,7 @@ namespace server.Controllers
             _user_repo = user_repo;
         }
 
-        [HttpPost("CreateAnswer"), Authorize(Roles = "Project Manager,Project Worker,User")]
+        [HttpPost("CreateAnswer"), Authorize(Roles = "Project Manager,Project Worker,Member")]
         public async Task<ActionResult<Answer>> CreateAnswer(CreateAnswerDto dto)
         {
             var comment = await _commentRepository.GetCommentByIdAsync(dto.CommentId);
@@ -41,7 +41,7 @@ namespace server.Controllers
             return Ok(answer.toAnswerDto(user.toUserDto()));
         }
 
-        [HttpDelete("{id}"), Authorize(Roles = "Project Manager,Project Worker")]
+        [HttpDelete("{id}"), Authorize(Roles = "Project Manager,Project Worker,Member")]
         public async Task<IActionResult> DeleteAnswer(int id)
         {
             var answer = await _answerRepository.DeleteAnswerByIdAsync(id);
@@ -68,7 +68,7 @@ namespace server.Controllers
 
             return Ok(answerDtos);
         }
-        [HttpPut("updateAnswer"), Authorize(Roles = "Project Manager,Project Worker")]
+        [HttpPut("updateAnswer"), Authorize(Roles = "Project Manager,Project Worker,Member")]
         public async Task<IActionResult> UpdateAnswerById(UpdateAnswerDto dto)
         {
             var answer = await _answerRepository.UpdateAnswerAsync(dto);

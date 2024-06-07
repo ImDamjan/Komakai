@@ -2,7 +2,7 @@ export const navbarData = [
     {
         routeLink: 'admin',
         icon: '/assets/sidenavigation/admin.svg',
-        label: 'Admin'
+        label: 'Members'
     },
     {
         routeLink: 'dashboard',
