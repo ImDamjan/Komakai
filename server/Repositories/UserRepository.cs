@@ -115,11 +115,6 @@ namespace server.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<User?> GetUserByUsernameAsync(string username)
-        {
-            return await _context.Users.SingleOrDefaultAsync(user => user.Username == username);
-        }
-
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
