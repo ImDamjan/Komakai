@@ -111,7 +111,8 @@ export class CreateProjectOverlayComponent implements OnInit {
       end : new Date(),
       budget : 0,
       description : "",
-      type : ""
+      type : "",
+      ownerId : 0,
     };
 
     this.userService.getUserById(this.userid).subscribe(user =>{
@@ -183,6 +184,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.spinner.show();
     this.projectObj.userIds = selected_users;
     this.projectObj.priorityId = this.selectedPriorityId;
+    this.projectObj.ownerId = this.userid;
     this.submissionError = null;
 
     if (this.loggedInUserId != null) {
@@ -197,7 +199,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-
+    this.projectObj.ownerId = this.userid;
     this.projectService.createProject(this.projectObj).subscribe(response => {
       // alert('Project created successfully!');
       this.spinner.hide();
@@ -241,6 +243,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.projectObj.start = new Date();
     this.projectObj.end = new Date();
     this.projectObj.userIds = [];
+    this.projectObj.ownerId = 0;
     this.projectObj.userProjectRoleIds = [];
     this.selectedUserIds = [];
     this.selectedUserRolesMap.clear();

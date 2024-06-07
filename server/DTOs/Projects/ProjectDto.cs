@@ -18,6 +18,7 @@ namespace server.DTOs.Projects
         public StateDto State { get; set; } = null!;
         public double Budget { get; set; }
         public double Spent { get; set; }
+        public int OwnerId { get; set; }
         public string Type { get; set; } = "";
         public double Percentage { get; set; }
         public int AssignmentCount { get; set; }

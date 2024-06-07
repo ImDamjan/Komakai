@@ -15,6 +15,7 @@ export interface Project {
     description : string,
     priority : Priority,
     users : User[],
+    ownerId: number,
     assignmentCount : number,
     truncatedTitle : string,
     truncatedDescription : string

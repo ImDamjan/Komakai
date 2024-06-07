@@ -22,6 +22,8 @@ namespace server.Models
 
         [Column("end", TypeName = "datetime")]
         public DateTime End { get; set; }
+        [Column("owner_id")]
+        public int OwnerId { get; set; }
 
         [Column("description")]
         public string Description { get; set; } = null!;
@@ -71,5 +73,9 @@ namespace server.Models
         
         [InverseProperty("Project")]
         public virtual ICollection<UserProjectPermission> ProjectPermissions { get; set; } = new List<UserProjectPermission>();
+
+        [ForeignKey("OwnerId")]
+        [InverseProperty("Projects")]
+        public virtual User Owner { get; set; } = null!;
     }
 }
