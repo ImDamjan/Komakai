@@ -124,7 +124,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     {
       if(this.userProjectRole.name==="Project Manager")
         this.isManager = true;
-      else if(this.userProjectRole.name==="User")
+      else if(this.userProjectRole.name==="Member")
         this.isUser = true;
       else if(this.userProjectRole.name==="Project Worker")
       {
@@ -565,6 +565,40 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     else{
       answer.content = answer.oldContent;
       answer.editOpened = false;
+    }
+  }
+  deleteAnswer(answer:Answer, comment:Comment)
+  {
+    let res = confirm("Are you sure you want to delete this reply?");
+    if(res)
+    {
+      let index = comment.answers.findIndex(a=>a.id===answer.id);
+      comment.answers.splice(index,1);
+      this.comment_service.deleteAnswer(answer.id).subscribe({
+        next: (res)=>{
+          console.log("deleted successfully");
+        },
+        error: (err)=>{
+          console.log(err);
+        }
+      });
+    }
+  }
+  deleteComment(comment:Comment)
+  {
+    let res = confirm("This comment will be deleted permanently? Are you sure you want to proceed?");
+    if(res)
+    {
+      let index = this.comments.findIndex(c=>c.id===comment.id);
+      this.comments.splice(index,1);
+      this.comment_service.deleteComment(comment.id).subscribe({
+        next: (res)=>{
+          console.log("deleted successfully");
+        },
+        error: (err)=>{
+          console.log(err);
+        }
+      });
     }
   }
 

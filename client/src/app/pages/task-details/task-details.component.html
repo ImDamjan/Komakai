@@ -164,6 +164,7 @@
                         
                         <quill-editor *ngIf="!comment.editOpened" [(ngModel)]="comment.content"  [readOnly]="true" [modules]="{toolbar:false}" placeholder="Write a comment" style="width:100%;"></quill-editor>
                         <quill-editor *ngIf="comment.editOpened" [(ngModel)]="comment.content"  [readOnly]="false" [modules]="moduls" placeholder="Write a comment" style="width:70%;"></quill-editor>
+                        <button *ngIf="comment.user.id==userId && !comment.editOpened" class="edit" (click)="deleteComment(comment)">Delete</button>
                         <button *ngIf="comment.user.id==userId && !comment.editOpened" class="edit" (click)="showEditBox(comment)">Edit</button>
                         <p style="color: gray;">{{ comment.editedTime.toLocaleString().split(',')[0] }}     {{ comment.editedTime.toLocaleString().split(',')[1] }}
                             <button class="show-hide" *ngIf="!comment.editOpened &&(isUser || isManager || isWorker)" (click)="showBox(comment)">
@@ -197,6 +198,7 @@
                                 <quill-editor *ngIf="!answer.editOpened" [(ngModel)]="answer.content"  [readOnly]="true" [modules]="{toolbar:false}" placeholder="Write a reply" style="width:100%;"></quill-editor>
                                 <quill-editor *ngIf="answer.editOpened" [(ngModel)]="answer.content"  [readOnly]="false" [modules]="moduls" placeholder="Write a reply" style="width:70%;"></quill-editor>
                                 
+                                <button *ngIf="!answer.editOpened && answer.user.id==userId" (click)="deleteAnswer(answer,comment)" class="edit">Delete</button>
                                 <button *ngIf="!answer.editOpened && answer.user.id==userId" (click)="showEditBox(answer)" class="edit">Edit</button>
                                 <p style="color: gray; width: 90%;">{{ answer.editedTime.toLocaleString().split(',')[0] }}     {{ answer.editedTime.toLocaleString().split(',')[1] }}</p>
                                 <button *ngIf="answer.editOpened" id = 'comment-button' (click)="updateAnswer(answer)">Edit</button><button *ngIf="answer.editOpened" class="cancel" (click)="showEditBox(answer)">Cancle</button>

@@ -26,7 +26,7 @@ namespace server.Controllers
             _comment_repo = comment_repo;
         }
 
-        [HttpPost("createComment"), Authorize(Roles = "Project Manager,Project Worker")]
+        [HttpPost("createComment"), Authorize(Roles = "Project Manager,Project Worker,Member")]
         //[HasPermission("AddComment")]
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentDto dto)
         {
@@ -51,7 +51,7 @@ namespace server.Controllers
             return Ok(comment.ToCommentDto(comment.User.toUserDto(), comment.Answers.Select(a=>a.toAnswerDto(a.User.toUserDto())).ToList()));
         }
 
-        [HttpPut("updateComment"), Authorize(Roles = "Project Manager,Project Worker")]
+        [HttpPut("updateComment"), Authorize(Roles = "Project Manager,Project Worker,Member")]
         public async Task<IActionResult> UpdateComment([FromBody] UpdateCommentDto dto)
         {
             var comment = await _comment_repo.UpdateCommentAsync(dto);
@@ -71,14 +71,14 @@ namespace server.Controllers
         }
 
 
-        [HttpDelete("deleteCommentById/{comment_id}"), Authorize(Roles = "Project Manager,Project Worker")]
+        [HttpDelete("deleteCommentById/{comment_id}"), Authorize(Roles = "Project Manager,Project Worker,Member")]
         public async Task<IActionResult> DeleteCommentById([FromRoute] int comment_id)
         {
             var comment = await _comment_repo.DeleteCommentByIdAsync(comment_id);
             if(comment==null)
                 return NotFound("Comment not found.ID:" + comment_id);
             
-            return Ok("Comment deleted successfully");
+            return NoContent();
         }
         
     }
