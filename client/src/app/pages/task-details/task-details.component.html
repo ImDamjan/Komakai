@@ -87,10 +87,6 @@
                     </span>
                 </th>
             </tr>
-            <tr>
-                <th>Type</th>
-                <th><span *ngIf="!showUpdate || !isManager">{{assignment.type}}</span><span><input type="text" class="task-title" *ngIf="showUpdate && isManager" [(ngModel)]="updateObj.type"></span></th>
-            </tr>
         </table>
     </div>
 

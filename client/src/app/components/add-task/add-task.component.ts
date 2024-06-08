@@ -34,7 +34,7 @@ export class AddTaskComponent implements OnInit {
   public message : string = "";
   public createTaskObj : CreateTask = {
     title: "",
-    type: "",
+    type: "neki tip",
     description: "",
     start: 0,
     end: 0,
@@ -160,7 +160,7 @@ export class AddTaskComponent implements OnInit {
     this.createTaskObj.stateId = this.selectedState.id;
     this.createTaskObj.priorityId = this.selectedPriority.id;
     this.createTaskObj.taskGroupId = this.selectedTaskGroup.id;
-    this.createTaskObj.type = "";
+    this.createTaskObj.type = "neki tip";
     if(this.EndDate===undefined || this.StartDate===undefined)
     {
       this.message = "Form is not filled properly, check if you entered everything correctly.";

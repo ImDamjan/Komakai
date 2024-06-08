@@ -119,7 +119,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       this.hasDependent = false;
 
     // console.log(this.assignment);
-    // let user = this.jwt_service.getLoggedUser();
+    let user = this.jwt_service.getLoggedUser();
     if(this.userProjectRole!==undefined)
     {
       if(this.userProjectRole.name==="Project Manager")
@@ -135,6 +135,10 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
 
       }
     }
+    console.log(this.isManager);.0
+    console.log(this.isWorker);
+    console.log(this.isUser);
+    console.log(user);
 
     this.profilePicture(this.assignment.owner.id);
 
@@ -358,6 +362,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       {
         this.comment_service.createComment(obj).subscribe({
           next: (comment : Comment)=>{
+            console.log(comment);
+            console.log(this.userId==comment.user.id);
             comment.editedTime = new Date(comment.editedTime);
             comment.postTime = new Date(comment.postTime);
             comment.oldContent = comment.content;
