@@ -35,7 +35,7 @@ export class ProjectPreviewComponent implements OnInit {
     pageNumber: 1,
     pageSize: 4//broj kartica na strani
   };
-
+  public loggedUser!:any;
   public maxPages: number = 0;
 
   public currentPage: number = 1;
@@ -87,6 +87,7 @@ export class ProjectPreviewComponent implements OnInit {
     let user = this.jwt_service.getLoggedUser();
     if(user!==null)
     {
+      this.loggedUser = user;
       if(user.role==="Project Manager")
         this.isManager = true;
       else if(user.role==="User")

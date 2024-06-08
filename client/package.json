@@ -43,6 +43,7 @@
     "material-icons": "^1.13.12",
     "ng-angular-popup": "^0.5.2",
     "ng-apexcharts": "^1.10.0",
+    "ngx-quill": "^25.3.2",
     "ngx-spinner": "^16.0.2",
     "ngx-tethys": "^17.0.6",
     "primeng": "^17.16.0",

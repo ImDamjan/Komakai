@@ -89,5 +89,8 @@ namespace server.Models
         [InverseProperty("User")]
         public virtual ICollection<NotificationUser> NotificationUsers { get; set; } = new List<NotificationUser>();
 
+        [InverseProperty("Owner")]
+        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
     }
 }

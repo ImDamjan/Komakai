@@ -91,6 +91,7 @@ import { ResetpasswordComponent } from './pages/resetpassword/resetpassword/rese
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BadgeModule} from 'primeng/badge';
+import { QuillModule } from 'ngx-quill'
 
 @NgModule({
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -141,6 +142,7 @@ import { BadgeModule} from 'primeng/badge';
   ],
   imports: [
     FormsModule,
+    QuillModule.forRoot(),
     BrowserModule,
     SliderModule,
     BadgeModule,

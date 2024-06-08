@@ -13,17 +13,17 @@ import { CommentService } from '../../services/comment.service';
 import { Comment } from '../../models/comment/comment';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UpdateTask } from '../../models/task/update-task';
-import { error, log } from 'console';
+
 import { DateConverterService } from '../../services/date-converter.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Role } from '../../models/role';
 import { Answer } from '../../models/comment/answer';
-import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
+
 import { CreateNotification } from '../../models/notifications/create-notification';
 import { NotificationService } from '../../services/notification.service';
 import { Notify } from '../../models/notifications/notify';
 import { NgToastService } from 'ng-angular-popup';
-import { response } from 'express';
+import {modules} from '..//../services/quillToolbar-data'
 
 
 @Component({
@@ -49,6 +49,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
 
   userProjectRole!: Role;
 
+  moduls = modules;
 
   notify : Notify;
 
@@ -134,10 +135,6 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
 
       }
     }
-    console.log(this.isManager);.0
-    console.log(this.isWorker);
-    console.log(this.isUser);
-    console.log(user);
 
     this.profilePicture(this.assignment.owner.id);
 
@@ -158,7 +155,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         comments.forEach(comment => {
           comment.editedTime = new Date(comment.editedTime);
           comment.postTime = new Date(comment.postTime);
-          comment.oldCommentContent = comment.content;
+          comment.oldContent = comment.content;
           if(comment.user.profilePicture)
             comment.user.profilePicturePath = `data:${comment.user.pictureType};base64,${comment.user.profilePicture}`;
           else
@@ -168,7 +165,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           comment.answers.forEach(ans => {
             ans.editedTime = new Date(ans.editedTime);
             ans.editOpened = false;
-            ans.answerOldContent = ans.content;
+            ans.oldContent = ans.content;
             ans.postTime = new Date(ans.postTime);
             if(ans.user.profilePicture)
               ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
@@ -361,11 +358,11 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       {
         this.comment_service.createComment(obj).subscribe({
           next: (comment : Comment)=>{
-            console.log(comment);
-            console.log(this.userId==comment.user.id);
+            // console.log(comment);
+            // console.log(this.userId==comment.user.id);
             comment.editedTime = new Date(comment.editedTime);
             comment.postTime = new Date(comment.postTime);
-            comment.oldCommentContent = comment.content;
+            comment.oldContent = comment.content;
             comment.replyOpened = false;
             comment.editOpened = false;
             if(comment.user.profilePicture)
@@ -476,7 +473,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           next: (ans : Answer)=>{
             ans.editedTime = new Date(ans.editedTime);
             ans.postTime = new Date(ans.postTime);
-            ans.answerOldContent = ans.content;
+            ans.oldContent = ans.content;
             ans.editOpened = false;
             if(ans.user.profilePicture)
               ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
@@ -494,7 +491,11 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   showEditBox(CorA:Comment | Answer)
   {
     if(CorA.editOpened)
+    {
       CorA.editOpened = false;
+      CorA.content = CorA.oldContent;
+      
+    }
     else
       CorA.editOpened = true;
   }
@@ -528,7 +529,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       this.comment_service.updateComment(updateData).subscribe({
         next: (com: Comment)=>{
           comment.content = com.content;
-          comment.oldCommentContent = com.content;
+          comment.oldContent = com.content;
           comment.editedTime = new Date(com.editedTime);
           comment.postTime = new Date(com.postTime);
           comment.replyOpened = false;
@@ -540,7 +541,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     }
     else{
       comment.editOpened = false;
-      comment.content = comment.oldCommentContent;
+      comment.content = comment.oldContent;
     }
   }
   updateAnswer(answer:Answer)
@@ -554,7 +555,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       this.comment_service.updateAnswer(updateData).subscribe({
         next: (com: Answer)=>{
           answer.content = com.content;
-          answer.answerOldContent = com.content;
+          answer.oldContent = com.content;
           answer.editedTime = new Date(com.editedTime);
           answer.postTime = new Date(com.postTime);
           answer.editOpened = false;
@@ -564,8 +565,42 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       })
     }
     else{
-      answer.content = answer.answerOldContent;
+      answer.content = answer.oldContent;
       answer.editOpened = false;
+    }
+  }
+  deleteAnswer(answer:Answer, comment:Comment)
+  {
+    let res = confirm("This reply will be deleted permanently. Are you sure you wish to proceed?");
+    if(res)
+    {
+      let index = comment.answers.findIndex(a=>a.id===answer.id);
+      comment.answers.splice(index,1);
+      this.comment_service.deleteAnswer(answer.id).subscribe({
+        next: (res)=>{
+          // console.log("deleted successfully");
+        },
+        error: (err)=>{
+          console.log(err);
+        }
+      });
+    }
+  }
+  deleteComment(comment:Comment)
+  {
+    let res = confirm("This comment will be deleted permanently? Are you sure you wish to proceed?");
+    if(res)
+    {
+      let index = this.comments.findIndex(c=>c.id===comment.id);
+      this.comments.splice(index,1);
+      this.comment_service.deleteComment(comment.id).subscribe({
+        next: (res)=>{
+          // console.log("deleted successfully");
+        },
+        error: (err)=>{
+          console.log(err);
+        }
+      });
     }
   }
 

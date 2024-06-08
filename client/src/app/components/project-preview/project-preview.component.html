@@ -14,10 +14,9 @@
               <header class="title-wrapper">
                 <h1 [title]="project.title">{{ project.truncatedTitle }}</h1>
               </header>
-              <img *ngIf="isManager" class="cursor" src="assets\project-preview\edit.svg" alt="" (click)="openEditOverlay(project,$event)" />
+              <img *ngIf="isManager && project.ownerId==loggedUser.user_id" class="cursor" src="assets\project-preview\edit.svg" alt="" (click)="openEditOverlay(project,$event)" />
             </div>
             <hr class="divider" />
-      
             <div class="elements">
               <span class="status-label" [ngClass]="{
                 'ready': project.state.id === 2,

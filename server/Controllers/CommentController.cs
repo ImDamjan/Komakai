@@ -78,7 +78,7 @@ namespace server.Controllers
             if(comment==null)
                 return NotFound("Comment not found.ID:" + comment_id);
             
-            return Ok("Comment deleted successfully");
+            return NoContent();
         }
         
     }

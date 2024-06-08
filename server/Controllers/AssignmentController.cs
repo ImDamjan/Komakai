@@ -277,7 +277,7 @@ namespace server.Controllers
         }
 
         [HttpPut]
-        [Route("update/{asign_id}"), Authorize(Roles = "Project Manager")]
+        [Route("update/{asign_id}"), Authorize(Roles = "Project Manager,Project Worker")]
         public async Task<IActionResult> UpdateAssignmentById([FromBody]UpdateAssignmentDto dto,[FromRoute] int asign_id)
         {
             //da li su datumi dobri

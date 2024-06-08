@@ -7,5 +7,6 @@ export interface CreateProject {
     end : Date,
     budget : number,
     description : string,
-    type : string
+    type : string,
+    ownerId : number
 }

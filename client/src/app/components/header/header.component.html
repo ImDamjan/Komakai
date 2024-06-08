@@ -1,5 +1,5 @@
 <div class="wrapper">
-    <div class="notifications_wrapper">
+    <div *ngIf="role!=='Admin'" class="notifications_wrapper">
         <button (click)="toggleNotifications()">
             <i class="fa fa-bell" pBadge pBadge [badgeDisabled]="notifications.length < 1" [value]="notifications.length" severity="info"></i>
         </button>

@@ -10,23 +10,23 @@ export const pmAuthorizationGuard: CanActivateFn = (route, state) => {
   {
 
     let decode = jwt_Service.decodeToken(token);
-    if(route.url[1]!==undefined && route.url[1].path === 'project-details' && decode.role!=="Admin")
-    {
-      // console.log("jesu detalji");
-      let projectsString = "" + decode.projects;
-      let projects = projectsString.split(",");
-      for(let i = 0; i< projects.length;i++)
-      {
-        const project = projects[i];
-        // console.log(project===route.url[2].path);
-        if(project===route.url[2].path)
-          return true;
+    // if(route.url[1]!==undefined && route.url[1].path === 'project-details' && decode.role!=="Admin")
+    // {
+    //   console.log("jesu detalji");
+    //   let projectsString = "" + decode.projects;
+    //   let projects = projectsString.split(",");
+    //   for(let i = 0; i< projects.length;i++)
+    //   {
+    //     const project = projects[i];
+    //     // console.log(project===route.url[2].path);
+    //     if(project===route.url[2].path)
+    //       return true;
 
-      }
-      router.navigate(['/projects']);
+    //   }
+    //   router.navigate(['/projects']);
 
-      return false;
-    }
+    //   return false;
+    // }
     
     if(decode.role==="Project Manager")
       return true;
