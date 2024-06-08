@@ -76,6 +76,7 @@ export class TeamsComponent implements OnInit {
       this.notify.showWarn("Create team", "Create form not filled correctly!")
       return;
     }
+    this.spinner.show();
     this.createTeam.members = [];
     this.selectedUsers.forEach(element => {
       this.createTeam.members.push(element.id);
@@ -85,6 +86,7 @@ export class TeamsComponent implements OnInit {
         this.teams.push(team);
         this.createTeam.name = "";
         this.selectedUsers = [];
+        this.notify.showSuccess("Create team", "Team created successfuly!")
         this.loadTeams();
       }
     })
@@ -111,8 +113,26 @@ export class TeamsComponent implements OnInit {
       next :(teams: Team[]) =>{
         this.teams = teams;
         this.reduceTeamMembers();
+        this.spinner.hide();
       }
     });
+  }
+  deleteTeam(team:Team)
+  {
+    let response = confirm(`Team ${team.name} will be deleted permanently.Do you wish to proceed?`);
+    if(response)
+    {
+
+      let index = this.teams.findIndex(t=>t.id===team.id);
+      this.teams.splice(index,1);
+      this.team_service.deleteTeam(team.id).subscribe({
+        next: (res)=>{
+          this.notify.showSuccess("Delete team", "Team deleted successfuly!")
+        },
+        error: (err)=>{console.log(err);}
+      });
+
+  }
   }
   
 

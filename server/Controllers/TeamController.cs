@@ -137,7 +137,7 @@ namespace server.Controllers
             if(team==null)
                 return NotFound("team not found");
 
-            return Ok("team deleted successfully");
+            return NoContent();
         }
         
 

@@ -33,4 +33,9 @@ export class TeamService {
     const url = this.apiUrl + "/Team/update/" + team_id;
     return this.http.put<Team>(url,body);
   }
+  deleteTeam(team_id: number)
+  {
+    const url = this.apiUrl + "/Team/delete/"+team_id;
+    return this.http.delete(url);
+  }
 }

@@ -579,6 +579,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       this.comment_service.deleteAnswer(answer.id).subscribe({
         next: (res)=>{
           // console.log("deleted successfully");
+          this.notify.showSuccess("Delete comment reply", "Comment reply deleted successfuly!")
         },
         error: (err)=>{
           console.log(err);
@@ -596,6 +597,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       this.comment_service.deleteComment(comment.id).subscribe({
         next: (res)=>{
           // console.log("deleted successfully");
+          this.notify.showSuccess("Delete comment", "Comment deleted successfuly!")
         },
         error: (err)=>{
           console.log(err);
@@ -657,11 +659,11 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           // this.closeOverlay();
           this.spinner.hide();
 
-          this.notify.showInfo("Taks closed","You closed this task!")
+          this.notify.showInfo("Task closed","You closed this task!")
         },
         error :(error)=>
         {
-          this.notify.showWarn("Taks update","Taks can not be updated!")
+          this.notify.showWarn("Task update","Task can not be updated!")
             // console.log(error);
         }
     });
