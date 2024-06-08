@@ -135,10 +135,6 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
 
       }
     }
-    console.log(this.isManager);.0
-    console.log(this.isWorker);
-    console.log(this.isUser);
-    console.log(user);
 
     this.profilePicture(this.assignment.owner.id);
 
@@ -362,8 +358,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       {
         this.comment_service.createComment(obj).subscribe({
           next: (comment : Comment)=>{
-            console.log(comment);
-            console.log(this.userId==comment.user.id);
+            // console.log(comment);
+            // console.log(this.userId==comment.user.id);
             comment.editedTime = new Date(comment.editedTime);
             comment.postTime = new Date(comment.postTime);
             comment.oldContent = comment.content;
@@ -575,14 +571,14 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   }
   deleteAnswer(answer:Answer, comment:Comment)
   {
-    let res = confirm("Are you sure you want to delete this reply?");
+    let res = confirm("This reply will be deleted permanently. Are you sure you wish to proceed?");
     if(res)
     {
       let index = comment.answers.findIndex(a=>a.id===answer.id);
       comment.answers.splice(index,1);
       this.comment_service.deleteAnswer(answer.id).subscribe({
         next: (res)=>{
-          console.log("deleted successfully");
+          // console.log("deleted successfully");
         },
         error: (err)=>{
           console.log(err);
@@ -592,14 +588,14 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   }
   deleteComment(comment:Comment)
   {
-    let res = confirm("This comment will be deleted permanently? Are you sure you want to proceed?");
+    let res = confirm("This comment will be deleted permanently? Are you sure you wish to proceed?");
     if(res)
     {
       let index = this.comments.findIndex(c=>c.id===comment.id);
       this.comments.splice(index,1);
       this.comment_service.deleteComment(comment.id).subscribe({
         next: (res)=>{
-          console.log("deleted successfully");
+          // console.log("deleted successfully");
         },
         error: (err)=>{
           console.log(err);
