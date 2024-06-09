@@ -33,7 +33,6 @@ export class ProjectPreviewComponent implements OnInit {
     propertyName : "Last Updated",
     sortFlag : -1,
     pageNumber: 1,
-    pageSize: 4//broj kartica na strani
   };
   public loggedUser!:any;
   public maxPages: number = 0;
@@ -84,6 +83,7 @@ export class ProjectPreviewComponent implements OnInit {
     this.navigateToPage(1);
   }
   ngOnInit(): void {
+    this.adjustCardsPerPage();
     let user = this.jwt_service.getLoggedUser();
     if(user!==null)
     {
@@ -95,6 +95,7 @@ export class ProjectPreviewComponent implements OnInit {
       else if(user.role==="Project Worker")
         this.isWorker = true;
     }
+    window.addEventListener('resize', this.onWindowResize.bind(this));
     this.loadProjects();
   }
 
@@ -117,7 +118,9 @@ export class ProjectPreviewComponent implements OnInit {
     //   this.sortProjects(filter.filter);
     // });
   }
-
+  onWindowResize() {
+    this.adjustCardsPerPage();
+  }
   loadProjects() {
     this.isLoading = true;
     this.spinner.show();
