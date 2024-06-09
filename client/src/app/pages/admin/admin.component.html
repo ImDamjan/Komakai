@@ -1,9 +1,10 @@
 <div class="wrapper">
   <div id="header">
+    <h1>Members</h1>
     <div class="search" [class.hide]="!members">
       <input type="text" pInputText id="search-field" placeholder="Search for a user..." (keyup)="loadUsers()" [(ngModel)]="filter.searchUser">
     </div>
-    <button id="registerButton" pButton type="button" (click)="showRegister()" label="Add a new user"></button>
+    <button id="registerButton" pButton type="button" (click)="showRegister()" label="Add new user"></button>
     <button id="membersButton" pButton type="button" (click)="showMembers()" label="Show all users"></button>
   </div>
 
@@ -13,7 +14,6 @@
     </div>
     <div class="members" *ngIf="members">
       <div id="users">
-        <h1>Members</h1>
         <table class="tabela">
           <thead>
               <tr *ngFor="let user of users">

@@ -2,6 +2,11 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { AuthenticationService } from './services/atentication.service'; 
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -42,7 +47,6 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { EditProjectOverlayComponent } from './components/edit-project-overlay/edit-project-overlay.component';
 import { MatSliderModule } from '@angular/material/slider';
-import { FilterDetailsComponent } from './components/filter-details/filter-details.component';
 import {NgxSpinnerModule} from 'ngx-spinner'
 
 import { ThyLayoutModule } from 'ngx-tethys/layout';
@@ -66,7 +70,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { ProfileDetailsComponent } from './components/profile-details/profile-details.component';
 import { SortDetailsComponent } from './components/sort-details/sort-details.component';
-import { FilterProjectComponent } from './components/filter-project/filter-project.component';
 import { SortProjectComponent } from './components/sort-project/sort-project.component';
 
 
@@ -88,6 +91,7 @@ import { ResetpasswordComponent } from './pages/resetpassword/resetpassword/rese
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BadgeModule} from 'primeng/badge';
+import { QuillModule } from 'ngx-quill'
 
 @NgModule({
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -125,9 +129,7 @@ import { BadgeModule} from 'primeng/badge';
     AdminComponent,
     EditProjectOverlayComponent,
     ProfileDetailsComponent,
-    FilterDetailsComponent,
     SortDetailsComponent,
-    FilterProjectComponent,
     SortProjectComponent,
     ProjectFilterComponent,
     TaskFilterComponent,
@@ -140,6 +142,7 @@ import { BadgeModule} from 'primeng/badge';
   ],
   imports: [
     FormsModule,
+    QuillModule.forRoot(),
     BrowserModule,
     SliderModule,
     BadgeModule,
@@ -177,7 +180,13 @@ import { BadgeModule} from 'primeng/badge';
   ],
   providers: [
     provideClientHydration(),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    AuthenticationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

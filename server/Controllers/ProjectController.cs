@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.Authorization;
 using server.DTOs;
@@ -36,6 +37,7 @@ namespace server.Controllers
         }
 
         //treba filter
+        [Authorize]
         [HttpGet("getProjects")]
         public async Task<IActionResult> GetAll([FromQuery]ProjectFilterDto dto,[FromQuery]SortDto sort)
         {
@@ -51,15 +53,21 @@ namespace server.Controllers
                 {
                     userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
                 }
-                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
+                int asignCount = _repos.getAssignemntForProjectCount(project);
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount));
             }
             return Ok(dtos);
         }
-        //ovde treba filter
+        
+        [Authorize]
         [HttpGet("userProjects/{userId}")]
         public async Task<IActionResult> GetAllUserProjects([FromRoute]int userId,[FromQuery] ProjectFilterDto filter,[FromQuery] SortDto sort)
         {
             var projects = await _repos.GetAllUserProjectsAsync(userId,filter,sort);
+            if(filter.PageNumber!= 0 && filter.PageSize!= 0)
+            {
+                projects = projects.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
+            }
             var dtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
@@ -71,11 +79,40 @@ namespace server.Controllers
                 {
                     userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
                 }
-                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
+                int asignCount = _repos.getAssignemntForProjectCount(project);
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount));
             }
             return Ok(dtos);
         }
+        [Authorize]
+        [HttpGet("paginatedUserProjects/{userId}")]
+        public async Task<IActionResult> GetAllPaginatedUserProjects([FromRoute]int userId,[FromQuery] ProjectFilterDto filter,[FromQuery] SortDto sort)
+        {
+            var projects = await _repos.GetAllUserProjectsAsync(userId,filter,sort);
+            PaginationProjectsDto pag = new PaginationProjectsDto();
+            pag.MaxProjects = projects.Count;
+            var dtos = new List<ProjectDto>();
+            if(filter.PageNumber!= 0 && filter.PageSize!= 0)
+            {
+                projects = projects.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
+            }
+            foreach (var project in projects)
+            {
+                var users =  project.ProjectUsers.Select(u=>u.User).ToList();
+                var project_roles = project.ProjectUsers.Select(u=>u.Role).ToList();
 
+                var userDtos = new List<ProjectUserDto>();
+                for(int i =0;i<users.Count;i++)
+                {
+                    userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
+                }
+                int asignCount = _repos.getAssignemntForProjectCount(project);
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount));
+            }
+            pag.Projects = dtos;
+            return Ok(pag);
+        }
+        [Authorize]
         [HttpGet("getProjectLimits/{user_id}")]
         public async Task<IActionResult> getProjectLimits(int user_id)
         {
@@ -97,6 +134,7 @@ namespace server.Controllers
                 spentMin = 0
             });
         }
+        [Authorize]
         [HttpGet("getFilterProjectsByUser/{user_id}")]
         public async Task<IActionResult> getFilterProjects([FromRoute] int user_id)
         {
@@ -112,10 +150,12 @@ namespace server.Controllers
                 {
                     userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
                 }
-                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto()));
+                int asignCount = _repos.getAssignemntForProjectCount(project);
+                dtos.Add(project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount));
             }
             return Ok(dtos);
         }
+        [Authorize]
         [HttpGet("getProject/{id}")]
         public async Task<IActionResult> getById([FromRoute] int id)
         {
@@ -133,12 +173,13 @@ namespace server.Controllers
             {
                 userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
             }
-            dto = project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto());
+            int asignCount = _repos.getAssignemntForProjectCount(project);
+            dto = project.ToProjectDto(userDtos,project.State.toStateDto(),project.Priority.toPrioDto(),asignCount);
     
             return Ok(dto);
         }
 
-        [HttpPost("create")]
+        [HttpPost("create"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto projectDto)
         {
             
@@ -197,11 +238,11 @@ namespace server.Controllers
             
             await _group_repo.CreateAsync(group);
 
-            return Ok(response.ToProjectDto(userDtos,state.toStateDto(),prio.toPrioDto()));
+            return Ok(response.ToProjectDto(userDtos,state.toStateDto(),prio.toPrioDto(),0));
         }
 
         [HttpPut]
-        [Route("update/{project_id}")]
+        [Route("update/{project_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> Update([FromBody] UpdateProjectDto projectDto, [FromRoute] int project_id)
         {
             //da li su datumi dobri
@@ -251,12 +292,14 @@ namespace server.Controllers
             {
                 userDtos.Add(users[i].toProjectUserDto(project_roles[i].toRoleDto()));
             }
-            dto = project.ToProjectDto(userDtos, state.toStateDto(),prio.toPrioDto());
+            int asignCount = _repos.getAssignemntForProjectCount(project);
+            dto = project.ToProjectDto(userDtos, state.toStateDto(),prio.toPrioDto(),asignCount);
     
             return Ok(dto);
         }
 
         //Salje se id project_managera za kojeg hocemo plus se salje period string vrednost (week,month)
+        [Authorize]
         [HttpGet("userProjectStates/{userId}/{period}")]
         public async Task<IActionResult> GetAllUserStatesProjects([FromRoute]int userId,[FromRoute] string period)
         {
@@ -265,7 +308,7 @@ namespace server.Controllers
         }
 
 
-        [HttpDelete("deleteProjectById/{project_id}")]
+        [HttpDelete("deleteProjectById/{project_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> DeleteProject([FromRoute] int project_id)
         {
             var project = await _repos.DeleteProjectByIdAsync(project_id);

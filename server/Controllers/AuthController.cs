@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,20 +24,34 @@ namespace server.Controllers
         private readonly IUserRepository _repos;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
+        private readonly IProjectRepository _project_repo;
         private readonly IRoleRepository _role_repo;
 
-        public AuthController(IUserRepository userRepository, IConfiguration configuration,IEmailService emailService, IRoleRepository role_repo)
+        public AuthController(IUserRepository userRepository,IProjectRepository project_repository, IConfiguration configuration,IEmailService emailService, IRoleRepository role_repo)
         {
             _emailService = emailService;
             _repos = userRepository;
+            _project_repo = project_repository;
             _configuration = configuration;
             _role_repo = role_repo;
         }
 
         //Registracija
-        [HttpPost("register")]
+        
+        [HttpPost("register"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<User>> Register(UserRegistrationDto request)
         {
+            var existingUserByUsername = await _repos.GetUserByUsernameAsync(request.Username);
+            if (existingUserByUsername != null)
+            {
+                return Ok(new { message = "This username already exists in the database." });
+            }
+            
+            var existingUser = await _repos.GetUserByEmailAsync(request.Email);
+                if (existingUser != null)
+                {
+                    return Ok(new { message = "This email already exists in the database." });
+                }
             //hash
             string passwordHash
                 = BCrypt.Net.BCrypt.HashPassword(request.Password);
@@ -50,7 +65,9 @@ namespace server.Controllers
                 Name = request.Name,
                 Lastname = request.Lastname,
                 RoleId = request.RoleId,
-                IsActivated = true
+                IsActivated = true,
+                Department = request.Department,
+                Organisation = request.Organisation
             };
 
             var role = await _role_repo.GetRoleByIdAsync(request.RoleId);
@@ -108,6 +125,12 @@ namespace server.Controllers
             var role = await _role_repo.GetRoleByIdAsync(user.RoleId);
             if(role==null)
                 return null;
+            string projects = string.Empty;
+            var user_projects = await _project_repo.GetAllUserProjectsAsync(user.Id);
+            foreach (var project in user_projects)
+            {
+                projects+=project.Id + ",";
+            }
             //postavi username kao claim
             List<Claim> claims = new List<Claim>
             {
@@ -115,7 +138,8 @@ namespace server.Controllers
                 new Claim("user_id",user.Id.ToString()),
                 new Claim("fullname",user.Name + " "+user.Lastname),
                 new Claim("role_id", user.RoleId.ToString()),
-                new Claim("role", role.Name.ToString())
+                new Claim("role", role.Name.ToString()),
+                new Claim("projects", projects)
             };
 
             //kreiraj i verifikuj json token

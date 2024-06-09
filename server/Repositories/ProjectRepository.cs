@@ -58,7 +58,7 @@ namespace server.Repositories
             var projects_query = _context.Projects
             .Include(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
             .Include(p=>p.ProjectUsers).ThenInclude(u=>u.User)
-            .Include(p=>p.TaskGroups)
+            .Include(p=>p.TaskGroups).ThenInclude(p=>p.Assignments)
             .Include(p=>p.State)
             .Include(p=>p.Priority).OrderByDescending(p=>p.LastStateChangedTime).AsQueryable();
 
@@ -70,7 +70,7 @@ namespace server.Repositories
         public async Task<Project?> GetProjectByIdAsync(int id)
         {
             return await _context.Projects
-            .Include(p=>p.TaskGroups)
+            .Include(p=>p.TaskGroups).ThenInclude(p=>p.Assignments)
             .Include(p=>p.State)
             .Include(p=>p.Priority)
             .Include(p=>p.ProjectUsers).ThenInclude(u=>u.Role)
@@ -183,11 +183,6 @@ namespace server.Repositories
         public async Task<List<Project>> GetAllFilteredProjectsAsync(IQueryable<Project> projects, ProjectFilterDto? dto,SortDto? sort = null)
         {   if(dto!=null)
             {
-                if(dto.PageNumber!= 0 && dto.PageSize!= 0)
-                {
-                    projects = projects.Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize);
-                }
-
                 if(dto.StateFilter.Count > 0)
                     projects = projects.Where(p=>dto.StateFilter.Contains(p.StateId));
                 if(dto.PriorityFilter.Count > 0)
@@ -205,12 +200,6 @@ namespace server.Repositories
                 {
                     projects = projects.Where(p=>p.Spent <= dto.SpentFilterTo && p.Spent >= dto.SpentFilterFrom);
                 }
-                // Console.WriteLine("Ovo je danasnji datum" + DateTime.Now.Date);
-                // System.Console.WriteLine("SADA IDU DRUGI DATUMI");
-                // foreach (var item in projects.ToList())
-                // {
-                //     System.Console.WriteLine(item.Start > DateTime.Now.Date);
-                // }
                 //datumi
                 if(dto.StartFrom!=null && dto.StartTo!=null)
                 {
@@ -311,6 +300,16 @@ namespace server.Repositories
             var res = projects.Where(p=>p.TaskGroups.Any(tg=>tg.Assignments.Any(a=>a.Users.Any(u=>u.Id==user_id)))).ToList();
             return res;
             
+        }
+
+        public int getAssignemntForProjectCount(Project project)
+        {
+            int count = 0;
+            foreach (var item in project.TaskGroups)
+            {
+                count+=item.Assignments.Count;
+            }
+            return count;
         }
     }
 }

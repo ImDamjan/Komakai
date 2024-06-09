@@ -5,6 +5,8 @@ import { RegisterService } from '../../services/register.service';
 import { Role } from '../../models/role';
 import { Register } from '../../models/register';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Notify } from '../../models/notifications/notify';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-register',
@@ -13,11 +15,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class RegisterComponent implements OnInit {
 
+  notify : Notify;
+
   registerForm!: FormGroup;
   private spinner = inject(NgxSpinnerService);
   public validRole : boolean = false;
   @Input() public roles : Role[] = [];
-  constructor(private fb: FormBuilder, private reg: RegisterService, private router: Router) {}
+  constructor(private fb: FormBuilder, private reg: RegisterService, private router: Router,private toast : NgToastService) {
+    this.notify = new Notify(toast)
+  }
 
   ngOnInit(): void {
     this.spinner.show();
@@ -28,6 +34,8 @@ export class RegisterComponent implements OnInit {
       Username: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_\\-\\.]*')]],
       Password: ['', [Validators.required, Validators.minLength(8)]],
       ConfirmPassword: ['', Validators.required],
+      Department: [''],
+      Organisation: [''],
       Role : [0]
     }, { validators: this.passwordMatchValidator });
     this.spinner.hide();
@@ -43,7 +51,9 @@ export class RegisterComponent implements OnInit {
         lastname: formData.Lastname,
         password: formData.Password,
         email: formData.Email,
-        roleId: formData.Role
+        roleId: formData.Role,
+        department: formData.Department,
+        organisation: formData.Organisation
       }
       if(register.roleId <= 0)
       {
@@ -55,12 +65,26 @@ export class RegisterComponent implements OnInit {
       this.reg.register(register)
         .subscribe({
           next: (res) => {
+            if(res.message == "This email already exists in the database.") {
+              this.registerForm.get('Email')?.setErrors({ 'emailExists': true });
+              this.notify.showWarn("Registration","Registration form not filled correctly!");
+              this.spinner.hide();
+              return;
+            }
+            if(res.message == "This username already exists in the database.") {
+              this.registerForm.get('Username')?.setErrors({ 'usernameExists': true });
+              this.notify.showWarn("Registration","Registration form not filled correctly!");
+              this.spinner.hide();
+              return;
+            }
             // alert("User " + register.name + " " + register.lastname + " added successfully!");
             this.registerForm.reset();
             this.spinner.hide();
+            this.notify.showSuccess("User added","User registered successfully!")
           },
           error: (err) => {
-            alert(err?.error.message);
+            this.notify.showWarn("Registration","Registration form not filled correctly!")
+            this.spinner.hide();
           }
         });
     } else {

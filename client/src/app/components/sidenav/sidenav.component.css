@@ -2,7 +2,7 @@
     background: #001B47;
     transition: all .5s ease;
     position: sticky;
-    z-index: 50000;
+    z-index: 10;
     top: 0;
     width: 5rem;
     height: 100vh;

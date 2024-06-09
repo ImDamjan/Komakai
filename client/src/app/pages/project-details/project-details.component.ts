@@ -39,6 +39,11 @@ export class ProjectDetailsComponent implements OnInit{
       this.fetchProjectName(projectId);
       this.spinner.hide();
     });
+
+    const savedView = localStorage.getItem('currentView');
+    if (savedView) {
+      this.currentView = savedView;
+    }
   }
 
 
@@ -50,23 +55,10 @@ export class ProjectDetailsComponent implements OnInit{
     });
   }
 
-  // openCreateOverlay(): void {
-  //   const dialogRef = this.dialog.open(AddTaskComponent, {
-  //   });
-
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     this.showProjectDetails = true;
-  //     this.showCreateButton = true;
-  //     this.projectText = 'Project details';
-  //   });
-    
-  //   this.showProjectDetails = false;
-  //   this.showCreateButton = false;
-  //   this.projectText = 'Project details/Create task';
-  // }
-
   changeView(view: string): void {
     this.currentView = view;
+    localStorage.setItem('currentView', view);
+    
   }
   getSearchText(text: string)
   {

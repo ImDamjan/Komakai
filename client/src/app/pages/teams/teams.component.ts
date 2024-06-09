@@ -8,6 +8,9 @@ import { User } from '../../models/user/user';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTeamComponent } from '../../components/edit-team/edit-team.component';
 import { textAlign } from 'html2canvas/dist/types/css/property-descriptors/text-align';
+import { ChangeDetectorRef } from '@angular/core';
+import { Notify } from '../../models/notifications/notify';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-teams',
@@ -29,6 +32,8 @@ export class TeamsComponent implements OnInit {
   private dialog = inject(MatDialog);
   public searchText = "";
 
+  notify : Notify
+
   private loggedUser:any;
   public createTeam = {
     name : "",
@@ -39,6 +44,11 @@ export class TeamsComponent implements OnInit {
   public users: User[]= [];
   public selectedUsers: User[] =  [];
   public teams : Team[] = [];
+
+  constructor(private cdr: ChangeDetectorRef, private toast : NgToastService) {
+    this.notify = new Notify(toast)
+  }
+
   ngOnInit(): void {
     this.spinner.show();
     this.loggedUser = this.jwt_service.getLoggedUser();
@@ -63,9 +73,10 @@ export class TeamsComponent implements OnInit {
   {
     if(this.selectedUsers.length <= 0 || this.createTeam.name==="")
     {
-      // alert("Create form not filled correctly");
+      this.notify.showWarn("Create team", "Create form not filled correctly!")
       return;
     }
+    this.spinner.show();
     this.createTeam.members = [];
     this.selectedUsers.forEach(element => {
       this.createTeam.members.push(element.id);
@@ -75,8 +86,11 @@ export class TeamsComponent implements OnInit {
         this.teams.push(team);
         this.createTeam.name = "";
         this.selectedUsers = [];
+        this.notify.showSuccess("Create team", "Team created successfuly!")
+        this.loadTeams();
       }
     })
+    
   }
 
   openEditOverlay(team: Team)
@@ -87,6 +101,7 @@ export class TeamsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result=>{
       let index = this.teams.findIndex(t=>t.id==result.id);
       this.teams.splice(index,1,result);
+      this.loadTeams();
     });
   }
 
@@ -98,8 +113,26 @@ export class TeamsComponent implements OnInit {
       next :(teams: Team[]) =>{
         this.teams = teams;
         this.reduceTeamMembers();
+        this.spinner.hide();
       }
     });
+  }
+  deleteTeam(team:Team)
+  {
+    let response = confirm(`Team ${team.name} will be deleted permanently.Do you wish to proceed?`);
+    if(response)
+    {
+
+      let index = this.teams.findIndex(t=>t.id===team.id);
+      this.teams.splice(index,1);
+      this.team_service.deleteTeam(team.id).subscribe({
+        next: (res)=>{
+          this.notify.showSuccess("Delete team", "Team deleted successfuly!")
+        },
+        error: (err)=>{console.log(err);}
+      });
+
+  }
   }
   
 
@@ -123,7 +156,6 @@ export class TeamsComponent implements OnInit {
           }
           if(team.members.length >= 4)
             assigneesString+=" +"+(team.members.length - 2);
-          // console.log(this.asigneesString);
 
           team.reducedTeam = assigneesString;
         }

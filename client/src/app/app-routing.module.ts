@@ -24,11 +24,12 @@ const routes: Routes = [
   {path: 'reset-password/:token', component: ResetpasswordComponent},
   {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard]},
   {path: 'projects', redirectTo: '/projects/1', pathMatch: 'full'},
-  {path: 'projects/:pageNumber',component: ProjectPreviewComponent,canActivate: [AuthGuard]},
-  {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard]},
+  {path: 'projects/:pageNumber',component: ProjectPreviewComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
+  {path: 'teams', component: TeamsComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
   {path: 'tasks', redirectTo: '/tasks/1', pathMatch: 'full'},
-  {path: 'tasks/:pageNumber', component: TasksComponent,canActivate: [AuthGuard]},
-  {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
+  {path: 'tasks/0', redirectTo: '/tasks/1', pathMatch: 'full'},
+  {path: 'tasks/:pageNumber', component: TasksComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
+  {path: 'help', component: HelpcentreComponent,canActivate: [AuthGuard]},
   
   {path: 'projects/project-details/:projectId', component: ProjectDetailsComponent,canActivate: [AuthGuard,pmAuthorizationGuard]},
   {path: 'admin', component: AdminComponent,canActivate: [AuthGuard,adminAuthorizationGuard]}

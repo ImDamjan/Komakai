@@ -12,6 +12,8 @@ import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CreateNotification } from '../../models/notifications/create-notification';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-create-project-overlay',
@@ -20,6 +22,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class CreateProjectOverlayComponent implements OnInit {
   private jwtService = inject(JwtDecoderService);
+  private notification_service =  inject(NotificationService);
   loggedInUserId: number | null = null;
   fullname!: string;
   roleid!: number;
@@ -31,8 +34,9 @@ export class CreateProjectOverlayComponent implements OnInit {
   roles: Role[] = [];
   filteredRoles: Role[] = [];
   showDropdown: boolean = false;
+  openDropdownUpwards: boolean = false;
   hoveredTeam: any;
-  submitted = false;
+  submitted = true;
   submissionError: string | null = null;
 
   projectObj!: CreateProject;
@@ -50,6 +54,24 @@ export class CreateProjectOverlayComponent implements OnInit {
   searchQuery: string = '';
   selectedUsers: User[] = [];
 
+  selectedCurrency: string = 'USD';
+  currencies: string[] = ['AUD', 'BAM', 'CAD', 'CHF', 'CNY', 'EUR', 'GBP', 'JPY', 'MKD', 'RON', 'RSD', 'RUB', 'USD'];
+
+  currencyRates: { [key: string]: number } = {
+    USD: 1,
+    RSD: 0.0093,
+    EUR: 1.09,
+    GBP: 1.27,
+    JPY: 0.0064,
+    CAD: 0.73,
+    AUD: 0.67,
+    CHF: 1.11,
+    CNY: 0.14,
+    BAM: 0.56,
+    MKD: 0.018,
+    RON: 0.22,
+    RUB: 0.011
+  };
   constructor(private dialogRef: MatDialogRef<CreateProjectOverlayComponent>, private userService: UserService, private projectService: ProjectService, private priorityService: PriorityService, private teamService: TeamService, private roleService: RoleService) { }
 
   ngOnInit(): void {
@@ -82,7 +104,7 @@ export class CreateProjectOverlayComponent implements OnInit {
       this.teams = teams;
     });
     this.projectObj = {
-      userIds : [],
+      userIds : [Number(this.userid)],
       userProjectRoleIds : [],
       priorityId : this.selectedPriorityId,
       title : "",
@@ -90,7 +112,8 @@ export class CreateProjectOverlayComponent implements OnInit {
       end : new Date(),
       budget : 0,
       description : "",
-      type : ""
+      type : "neki tip",
+      ownerId : 0,
     };
 
     this.userService.getUserById(this.userid).subscribe(user =>{
@@ -98,9 +121,28 @@ export class CreateProjectOverlayComponent implements OnInit {
     });
   }
 
+  //-----------------
+
+  titleTouched: boolean = false;
+  budgetTouched: boolean = false;
+  priorityTouched: boolean = false;
+  startDateTouched: boolean = false;
+  endDateTouched: boolean = false;
+
+  //----------------
+
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
-    if (!this.showDropdown) {
+    if (this.showDropdown) {
+      setTimeout(() => {
+        const dropdown = document.querySelector('.options') as HTMLElement;
+        if (dropdown) {
+          const rect = dropdown.getBoundingClientRect();
+          const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+          this.openDropdownUpwards = (rect.bottom > viewportHeight);
+        }
+      }, 0);
+    } else {
       this.searchQuery = '';
     }
   }
@@ -150,35 +192,56 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   createProject(): void {
+    this.projectObj.budget = this.convertToDollars(this.projectObj.budget, this.selectedCurrency);
     let selected_users : number[] = [];
     let selected_roles : number[] = [];
     this.selectedUserRolesMap.forEach((value,key) => {
       selected_roles.push(value);
-      selected_users.push(key);
+      selected_users.push(Number(key));
     });
     // console.log(selected_users);
     this.projectObj.userProjectRoleIds = selected_roles;
     this.spinner.show();
     this.projectObj.userIds = selected_users;
     this.projectObj.priorityId = this.selectedPriorityId;
-    this.submitted = true;
+    this.projectObj.ownerId = this.userid;
     this.submissionError = null;
 
     if (this.loggedInUserId != null) {
-      this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
+      //this.selectedUserRolesMap.set(this.loggedInUserId, this.roleid);
       this.projectObj.userIds.push(this.loggedInUserId);
       this.projectObj.userProjectRoleIds.push(this.roleid);
     }
 
-    if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end) {
+    console.log(this.projectObj.start);
+    if (!this.projectObj.title.trim() || !this.projectObj.priorityId || !this.projectObj.start || !this.projectObj.end || (this.projectObj.end == this.projectObj.start) || (this.projectObj.end < this.projectObj.start) || (this.projectObj.budget === null || this.projectObj.budget === undefined || this.projectObj.budget < 0)) {
       this.submissionError = 'Please fill in all necessary fields.';
       this.spinner.hide();
       return;
     }
-
+    this.projectObj.ownerId = this.userid;
     this.projectService.createProject(this.projectObj).subscribe(response => {
       // alert('Project created successfully!');
       this.spinner.hide();
+      let asd: number[]  = []
+      response.users.forEach(user => {
+        asd.push(Number(user.id))
+      });
+      // console.log(response.users);
+      // console.log(asd);
+      if(selected_users.length > 0)
+      {
+        let create :CreateNotification = {
+          userIds: asd,
+          title: 'New project',
+          description: `You have been added on project '${response.title}'`
+        }
+        this.notification_service.sendNotifcation(create).then(()=>{
+          // console.log("message sent");
+        }).catch((err)=>{console.log(err)})
+
+      }
+
       // console.log("iz overlaya:",response);
       this.dialogRef.close(response);
       // this.resetForm();
@@ -187,7 +250,6 @@ export class CreateProjectOverlayComponent implements OnInit {
       //   this.selectedUsers[0] = user;
       // });
       // console.log(this.selectedUsers);
-      this.submitted = false;
     }, error => {
       console.error('Error creating project:', error);
       this.spinner.hide();
@@ -201,6 +263,7 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.projectObj.start = new Date();
     this.projectObj.end = new Date();
     this.projectObj.userIds = [];
+    this.projectObj.ownerId = 0;
     this.projectObj.userProjectRoleIds = [];
     this.selectedUserIds = [];
     this.selectedUserRolesMap.clear();
@@ -266,7 +329,11 @@ export class CreateProjectOverlayComponent implements OnInit {
   }
 
   getRolesForUser(user: User): Role[] {
-    return this.roles.filter(role => role.authority >= user.role.authority);
+    if (user.id == this.loggedInUserId) {
+      return this.roles;
+    } else {
+      return this.roles.filter(role => role.id !== 1 && role.authority >= user.role.authority);
+    }
   }
 
   get filteredUsers(): any[] {
@@ -285,4 +352,23 @@ export class CreateProjectOverlayComponent implements OnInit {
     this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser.id !== user.id);
     this.selectedUserRolesMap.delete(user.id);
   } 
+
+  getSelectedRoleId(userId: number): number | null {
+    if(this.userRoles.get(userId) == 1 && userId != this.loggedInUserId && !this.selectedUserRolesMap.get(userId))
+      this.userRoles.set(userId, 2);
+    return this.selectedUserRolesMap.get(userId) || this.userRoles.get(userId) || null;
+  }
+
+  isEndDateBeforeStartDate(): boolean {
+    if (this.projectObj.start && this.projectObj.end) {
+      const startDate = new Date(this.projectObj.start);
+      const endDate = new Date(this.projectObj.end);
+      return startDate >= endDate;
+    }
+    return false;
+  }
+
+  convertToDollars(amount: number, currency: string): number {
+    return parseFloat((amount * this.currencyRates[currency]).toFixed(2));
+  }
 }

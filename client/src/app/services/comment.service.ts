@@ -41,4 +41,14 @@ export class CommentService {
     const url = this.baseUrl + "/Answer/updateAnswer";
     return this.http.put<Answer>(url,data);
   }
+  deleteComment(comment_id:number)
+  {
+    const url =  this.baseUrl + "/Comment/deleteCommentById/"+comment_id;
+    return this.http.delete(url);
+  }
+  deleteAnswer(answer_id:number)
+  {
+    const url = this.baseUrl + "/Answer/"+answer_id;
+    return this.http.delete(url);
+  }
 }

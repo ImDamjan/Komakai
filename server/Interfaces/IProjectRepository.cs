@@ -27,5 +27,6 @@ namespace server.Interfaces
         //brisanje
         Task<Project?> DeleteProjectByIdAsync(int project_id);
         Task<List<Project>> getFilterProjectsAsync(int user_id);
+        int getAssignemntForProjectCount(Project project);
     }
 }

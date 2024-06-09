@@ -109,6 +109,11 @@ export class TaskListComponent implements OnInit,OnChanges,AfterViewInit{
       this.loadTasks();
     });
   }
+  getIsUpdatedTask(upd: boolean)
+  {
+    if(upd)
+      this.loadTasks();
+  }
 
   //za ogranicavanje napravi api na beku za uzimanje project role korisnika i sa tim poredi
   ngOnInit(): void {
@@ -137,6 +142,7 @@ export class TaskListComponent implements OnInit,OnChanges,AfterViewInit{
     this.task_service.getAllProjectTaskGroupsWithAssignments(this.projectId,this.filter).subscribe({
       next : (group: TaskGroup) => {
         this.dataSource.data = [group];
+        console.log(this.dataSource.data);
         // this.treeControl.expand(this.treeControl.dataNodes[0]);
         this.treeControl.expandAll();
         // console.log(this.dataSource.data);

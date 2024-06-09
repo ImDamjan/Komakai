@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssignmentService } from '../../services/assignment.service';
 import { StateService } from '../../services/state.service';
@@ -13,12 +13,17 @@ import { CommentService } from '../../services/comment.service';
 import { Comment } from '../../models/comment/comment';
 import { JwtDecoderService } from '../../services/jwt-decoder.service';
 import { UpdateTask } from '../../models/task/update-task';
-import { error } from 'console';
+
 import { DateConverterService } from '../../services/date-converter.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Role } from '../../models/role';
 import { Answer } from '../../models/comment/answer';
-import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
+
+import { CreateNotification } from '../../models/notifications/create-notification';
+import { NotificationService } from '../../services/notification.service';
+import { Notify } from '../../models/notifications/notify';
+import { NgToastService } from 'ng-angular-popup';
+import {modules} from '..//../services/quillToolbar-data'
 
 
 @Component({
@@ -27,6 +32,9 @@ import { content } from 'html2canvas/dist/types/css/property-descriptors/content
   styleUrl: './task-details.component.css'
 })
 export class TaskDetailsComponent implements OnInit,OnDestroy{
+
+  @ViewChild('overlayContainer', { static: true }) overlayContainer!: ElementRef;
+
   private assignment_service = inject(AssignmentService);
   private jwt_service = inject(JwtDecoderService);
   private state_service =  inject(StateService);
@@ -36,12 +44,14 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   private dialogRef = inject(MatDialogRef<TaskDetailsComponent>);
   private date_task_service = inject(DateConverterService);
   private data : any =  inject(MAT_DIALOG_DATA);
+  private notification_service = inject(NotificationService);
   private spinner = inject(NgxSpinnerService);
 
   userProjectRole!: Role;
 
+  moduls = modules;
 
-
+  notify : Notify;
 
   public comments : Comment[] = []
   public userId : number = 0;
@@ -91,8 +101,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   public selectedState! :State;
   
   public hasCompletedDependentTasks:boolean = false;
-  constructor() {
-
+  constructor(private toast : NgToastService) {
+    this.notify = new Notify(toast)
   }
   ngOnDestroy(): void {
     this.closeOverlay();
@@ -104,17 +114,17 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.assignment = this.data[0];
     this.userProjectRole = this.data[2];
 
-    console.log(this.assignment);
+    // console.log(this.assignment);
     if(this.assignment.depndentOn.length > 0)
       this.hasDependent = false;
 
     // console.log(this.assignment);
-    // let user = this.jwt_service.getLoggedUser();
+    let user = this.jwt_service.getLoggedUser();
     if(this.userProjectRole!==undefined)
     {
       if(this.userProjectRole.name==="Project Manager")
         this.isManager = true;
-      else if(this.userProjectRole.name==="User")
+      else if(this.userProjectRole.name==="Member")
         this.isUser = true;
       else if(this.userProjectRole.name==="Project Worker")
       {
@@ -131,6 +141,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
     this.assignment_service.getDependentAssignmentsFor(this.assignment.id).subscribe({
       next : (tasks : Task[]) => {
         this.dependentTasks = tasks;
+        // console.log(tasks)
         if(tasks.find(a=>!a.isClosed)!==undefined)
           this.hasCompletedDependentTasks = false;
         else
@@ -144,7 +155,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         comments.forEach(comment => {
           comment.editedTime = new Date(comment.editedTime);
           comment.postTime = new Date(comment.postTime);
-          comment.oldCommentContent = comment.content;
+          comment.oldContent = comment.content;
           if(comment.user.profilePicture)
             comment.user.profilePicturePath = `data:${comment.user.pictureType};base64,${comment.user.profilePicture}`;
           else
@@ -154,7 +165,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           comment.answers.forEach(ans => {
             ans.editedTime = new Date(ans.editedTime);
             ans.editOpened = false;
-            ans.answerOldContent = ans.content;
+            ans.oldContent = ans.content;
             ans.postTime = new Date(ans.postTime);
             if(ans.user.profilePicture)
               ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
@@ -166,9 +177,24 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
         });
       }
     });
-
-    
   }
+
+  //expand overlay
+  expanded: boolean = false;
+  toggleOverlay() {
+    let elem = this.overlayContainer.nativeElement;
+    if (!document.fullscreenElement) {
+      this.expanded = true
+      elem.requestFullscreen().catch((err: { message: any; name: any; }) => {
+        console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      this.expanded = false
+      document.exitFullscreen();
+    }
+  }
+
+
   updateTask()
   {
     this.selectedAssignees = [];
@@ -215,6 +241,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           this.projectAssignments = tasks.filter((task)=>task.id!=this.assignment.id);
 
           this.dependentTasks.forEach(task => {
+            task
             if(this.projectAssignments.find((a)=>a.id==task.id) !==undefined)
               {
                 this.selectedDependentOn.push(task.id);
@@ -251,25 +278,43 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       // alert("End date comes before start date.");
       return;
     }
-    // todayTime.setHours(12, 12, 12, 12);
-    // this.updateObj.end.setHours(12,12,12,12);
 
-    // //provera da li je start date pre danasnjeg
-    // if(this.updateObj.end < todayTime)
-    // {
-    //   alert("End date comes before today.");
-    //   this.spinner.hide();
-    //   return;
-
-    // }
-    // console.log(todayTime);
-    // console.log(this.updateObj.end);
     if(this.selectedAssignees.length > 0)
     {
       this.assignment_service.updateAssignmentById(this.updateObj,this.assignment.id).subscribe
       ({
         next : (updatedTask :Task) =>
           {
+            let usersToSendNotf: number[] = [];
+            updatedTask.assignees.forEach(newUser => {
+            let oldUser = this.assignment.assignees.find(u=>u.id==newUser.id);
+            if(oldUser===undefined)
+              usersToSendNotf.push(newUser.id);
+          });
+            if(usersToSendNotf.length > 0)
+            {
+
+              let create :CreateNotification = {
+              userIds: usersToSendNotf,
+              title: 'New task has been assigned to you',
+              description: `You have been assigned to task '${updatedTask.title}'`
+              }
+              this.notification_service.sendNotifcation(create).then(()=>{
+                console.log("message sent");
+              }).catch((err)=>{console.log(err)})
+            }
+            if(updatedTask.percentage===100)
+            {
+              let create :CreateNotification = {
+                userIds: [updatedTask.owner.id],
+                title: 'Task closeure',
+                description: `Task '${updatedTask.title}' is completed`
+              }
+              this.notification_service.sendNotifcation(create).then(()=>{
+                // console.log("message sent");
+              }).catch((err)=>{console.log(err)})
+
+            }
             this.assignment = updatedTask;
             this.assignment.dummyTitle = this.assignment.title;
             if(this.assignment.title.length > 20)
@@ -287,6 +332,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
             this.showUpdate = false;
             this.closeOverlay();
             this.spinner.hide();
+            this.notify.showSuccess("Task update","Task updated successfully!")
           },
           error :(error)=>
           {
@@ -312,9 +358,11 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       {
         this.comment_service.createComment(obj).subscribe({
           next: (comment : Comment)=>{
+            // console.log(comment);
+            // console.log(this.userId==comment.user.id);
             comment.editedTime = new Date(comment.editedTime);
             comment.postTime = new Date(comment.postTime);
-            comment.oldCommentContent = comment.content;
+            comment.oldContent = comment.content;
             comment.replyOpened = false;
             comment.editOpened = false;
             if(comment.user.profilePicture)
@@ -323,6 +371,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
               comment.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
             this.comments.push(comment);
             this.commentText = "";
+
+            this.notify.showSuccess("Comment added","Comment added successfully!")
           }
         });
       }
@@ -385,6 +435,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   cancelUpdateRequest()
   {
     this.showUpdate=false;
+    this.notify.showWarn("Task update","You canceled this task update!")
   }
 
   profilePicture(userId: number) {
@@ -422,7 +473,7 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           next: (ans : Answer)=>{
             ans.editedTime = new Date(ans.editedTime);
             ans.postTime = new Date(ans.postTime);
-            ans.answerOldContent = ans.content;
+            ans.oldContent = ans.content;
             ans.editOpened = false;
             if(ans.user.profilePicture)
               ans.user.profilePicturePath = `data:${ans.user.pictureType};base64,${ans.user.profilePicture}`;
@@ -430,6 +481,8 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
               ans.user.profilePicturePath = "../../../assets/pictures/defaultpfp.svg";
             comment.answers.push(ans);
             comment.answerContent = "";
+
+            this.notify.showSuccess("Reply added","Reply added successfully!")
           }
         });
       }
@@ -438,9 +491,31 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
   showEditBox(CorA:Comment | Answer)
   {
     if(CorA.editOpened)
+    {
       CorA.editOpened = false;
+      CorA.content = CorA.oldContent;
+      
+    }
     else
       CorA.editOpened = true;
+  }
+
+  //novi red kod komentara
+  onEnter(event: any) {
+      if (event.keyCode === 13) {
+      const cursorPosition = event.target.selectionStart;
+      const value = event.target.value;
+      const newValue =
+        value.substring(0, cursorPosition) +
+        '\n' +
+        value.substring(cursorPosition);
+      event.target.value = newValue;
+      event.target.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+      event.preventDefault();
+    }
+  }
+  replaceNewlines(content: string): string {
+    return content.replace(/\n/g, '<br>');
   }
 
   updateComment(comment:Comment)
@@ -454,17 +529,19 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       this.comment_service.updateComment(updateData).subscribe({
         next: (com: Comment)=>{
           comment.content = com.content;
-          comment.oldCommentContent = com.content;
+          comment.oldContent = com.content;
           comment.editedTime = new Date(com.editedTime);
           comment.postTime = new Date(com.postTime);
           comment.replyOpened = false;
           comment.editOpened = false;
+
+          this.notify.showSuccess("Comment updated","Comment updated successfully!")
         }
       })
     }
     else{
       comment.editOpened = false;
-      comment.content = comment.oldCommentContent;
+      comment.content = comment.oldContent;
     }
   }
   updateAnswer(answer:Answer)
@@ -478,18 +555,58 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
       this.comment_service.updateAnswer(updateData).subscribe({
         next: (com: Answer)=>{
           answer.content = com.content;
-          answer.answerOldContent = com.content;
+          answer.oldContent = com.content;
           answer.editedTime = new Date(com.editedTime);
           answer.postTime = new Date(com.postTime);
           answer.editOpened = false;
+
+          this.notify.showSuccess("Answer added","Answer added successfully!")
         }
       })
     }
     else{
-      answer.content = answer.answerOldContent;
+      answer.content = answer.oldContent;
       answer.editOpened = false;
     }
   }
+  deleteAnswer(answer:Answer, comment:Comment)
+  {
+    let res = confirm("This reply will be deleted permanently. Are you sure you wish to proceed?");
+    if(res)
+    {
+      let index = comment.answers.findIndex(a=>a.id===answer.id);
+      comment.answers.splice(index,1);
+      this.comment_service.deleteAnswer(answer.id).subscribe({
+        next: (res)=>{
+          // console.log("deleted successfully");
+          this.notify.showSuccess("Delete comment reply", "Comment reply deleted successfuly!")
+        },
+        error: (err)=>{
+          console.log(err);
+        }
+      });
+    }
+  }
+  deleteComment(comment:Comment)
+  {
+    let res = confirm("This comment will be deleted permanently? Are you sure you wish to proceed?");
+    if(res)
+    {
+      let index = this.comments.findIndex(c=>c.id===comment.id);
+      this.comments.splice(index,1);
+      this.comment_service.deleteComment(comment.id).subscribe({
+        next: (res)=>{
+          // console.log("deleted successfully");
+          this.notify.showSuccess("Delete comment", "Comment deleted successfuly!")
+        },
+        error: (err)=>{
+          console.log(err);
+        }
+      });
+    }
+  }
+
+
   showBox(comment:Comment)
   {
     comment.answerContent = "";
@@ -541,10 +658,12 @@ export class TaskDetailsComponent implements OnInit,OnDestroy{
           this.showUpdate = false;
           // this.closeOverlay();
           this.spinner.hide();
+
+          this.notify.showInfo("Task closed","You closed this task!")
         },
         error :(error)=>
         {
-            // alert("Task update failed!");
+          this.notify.showWarn("Task update","Task can not be updated!")
             // console.log(error);
         }
     });

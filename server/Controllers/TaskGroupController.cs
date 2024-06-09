@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs;
 using server.DTOs.Assignment;
@@ -25,7 +26,7 @@ namespace server.Controllers
         }
 
 
-        [HttpPost("createTaskGroup")]
+        [HttpPost("createTaskGroup"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> Create([FromBody] CreateTaskGroupDto dto)
         {
             //provera da li projekat postoji
@@ -47,6 +48,7 @@ namespace server.Controllers
             var group = await _group_repo.CreateAsync(dto.fromCreateTaskGroupDtoToTaskGroup());
             return Ok(group.toTaskGroupDto());
         }
+        [Authorize]
         [HttpGet("getTaskGroupById/{task_group_id}")]
         public async Task<IActionResult> GetById([FromRoute] int task_group_id)
         {
@@ -56,7 +58,7 @@ namespace server.Controllers
             
             return Ok(t.toTaskGroupDto());
         }
-
+        [Authorize]
         [HttpGet("getTaskGroupsByProjectWithTasks/{project_id}")]
         public async Task<IActionResult> GetByProjectId([FromRoute] int project_id, [FromQuery] SortDto sort,[FromQuery] List<int> user_ids,[FromQuery] AssignmentFilterDto filter)
         {
@@ -72,6 +74,7 @@ namespace server.Controllers
 
             return Ok(tree);
         }
+        [Authorize]
         [HttpGet("getTaskGroupsByProjectId/{project_id}")]
         public async Task<IActionResult> GetAllTaskGroupsByProjectId(int project_id)
         {
@@ -91,9 +94,11 @@ namespace server.Controllers
             foreach (var task in tasks)
             {
                 var userDtos = task.Users.Select(x=>x.toAssignmentUserDto()).ToList();
-                
-                asignments.Add(task.toAssignmentDto(userDtos,task.Priority.toPrioDto(),
-                task.State.toStateDto(),task.User.toAssignmentUserDto(),initial.toTaskGroupDto()));
+                var dep = task.Assignments.Select(a=>a.Id).ToList();
+                var dto = task.toAssignmentDto(userDtos,task.Priority.toPrioDto(),
+                task.State.toStateDto(),task.User.toAssignmentUserDto(),initial.toTaskGroupDto());
+                dto.DepndentOn = dep;
+                asignments.Add(dto);
             }
             
             foreach (var child in task_group_children)
@@ -110,7 +115,7 @@ namespace server.Controllers
             
         }
 
-        [HttpPut("updateTaskGroup")]
+        [HttpPut("updateTaskGroup"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> Update([FromBody] TaskGroupDto dto)
         {
 
@@ -126,7 +131,7 @@ namespace server.Controllers
             return Ok(group.toTaskGroupDto());
 
         }
-        [HttpDelete("delete/{group_id}")]
+        [HttpDelete("delete/{group_id}"), Authorize(Roles = "Project Manager")]
         public async Task<IActionResult> Delete([FromRoute] int group_id)
         {
             var group = await _group_repo.deleteTaskGroupAsync(group_id);

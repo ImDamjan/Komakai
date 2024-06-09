@@ -115,6 +115,11 @@ namespace server.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        // public async Task<User?> GetUserByUsernameAsync(string username)
+        // {
+        //     return await _context.Users.SingleOrDefaultAsync(user => user.Username == username);
+        // }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
@@ -143,7 +148,6 @@ namespace server.Repositories
             var user = await GetUserByIdAsync(userId);
             if(user == null)
                 return null;
-            user.Email = dto.Email;
             user.Organisation =dto.Organisation;
             user.Department = dto.Department;
             user.IsActivated = dto.IsActivated;

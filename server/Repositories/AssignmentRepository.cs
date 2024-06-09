@@ -14,6 +14,7 @@ namespace server.Repositories
     public class AssignmentRepository : IAssignmentRepository
     {
         private readonly ProjectManagmentDbContext _context;
+
         public AssignmentRepository(ProjectManagmentDbContext context)
         {
             _context = context;
@@ -36,6 +37,7 @@ namespace server.Repositories
             .Include(a=>a.User).ThenInclude(u=>u.Role)
             .Include(a=>a.Priority)
             .Include(a=>a.Assignments)
+            .Include(a=>a.DependentOnAssignments)
             .Include(a=>a.State).OrderByDescending(a=>a.LastTimeChanged)
             .AsQueryable();
 
@@ -126,11 +128,6 @@ namespace server.Repositories
                 if(dto.PercentageFilterTo >=0 && dto.PercentageFilterFrom <= dto.PercentageFilterTo)
                 {
                     assignments = assignments.Where(p=>p.Percentage <= dto.PercentageFilterTo && p.Percentage >=dto.PercentageFilterFrom);
-                }
-                if (dto.PageNumber > 0 && dto.PageSize > 0)
-                {
-                    int skip = (dto.PageNumber - 1) * dto.PageSize;
-                    assignments = assignments.Skip(skip).Take(dto.PageSize);
                 }
             }
             if(sort!=null)

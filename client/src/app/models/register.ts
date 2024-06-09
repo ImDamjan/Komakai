@@ -4,5 +4,7 @@ export interface Register {
     lastname: string,
     password: string,
     email: string,
-    roleId: number
+    roleId: number,
+    department: string,
+    organisation: string
 }

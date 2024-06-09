@@ -426,6 +426,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 10000,
                                 Spent = 8000,
+                                Owner = users[0],
                                 Type = "Web",
                                 PriorityId = 2, // Medium Priority
                                 ProjectUsers = new List<ProjectUser>{
@@ -463,6 +464,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 12000,
                                 Spent = 10000,
+                                Owner = users[1],
                                 Type = "Marketing",
                                 PriorityId = 1, // High Priority
                                 ProjectUsers = new List<ProjectUser>{
@@ -500,6 +502,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 15000,
                                 Spent = 12000,
+                                Owner = users[0],
                                 Type = "Data",
                                 PriorityId = 3, // Low Priority
                                 ProjectUsers = new List<ProjectUser>{
@@ -537,6 +540,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 18000,
                                 Spent = 15000,
+                                Owner = users[1],
                                 Type = "Product",
                                 PriorityId = 2, // Medium Priority
                                 ProjectUsers = new List<ProjectUser>{
@@ -574,6 +578,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 8000,
                                 Spent = 6000,
+                                Owner = users[0],
                                 Type = "Training",
                                 PriorityId = 1, // High Priority
                                 ProjectUsers = new List<ProjectUser>{
@@ -611,6 +616,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 8000,
                                 Spent = 6000,
+                                Owner = users[0],
                                 Type = "Mobile",
                                 PriorityId = 3, // Low Priority
                                 ProjectUsers = new List<ProjectUser>{
@@ -648,6 +654,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 10000,
                                 Spent = 9000,
+                                Owner = users[1],
                                 Type = "Software",
                                 PriorityId = 2, // Medium Priority
                                 ProjectUsers = new List<ProjectUser>{
@@ -685,6 +692,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 5000,
                                 Spent = 3500,
+                                Owner = users[0],
                                 Type = "Database",
                                 PriorityId = 1, // High Priority
                                 ProjectUsers = new List<ProjectUser>{
@@ -722,6 +730,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 12000,
                                 Spent = 10000,
+                                Owner = users[1],
                                 Type = "Security",
                                 PriorityId = 2, // Medium Priority
                                 ProjectUsers = new List<ProjectUser>{
@@ -759,6 +768,7 @@ namespace server.Data
                                 LastStateChangedTime = DateTime.Now,
                                 Budget = 15000,
                                 Spent = 8000,
+                                Owner = users[0],
                                 Type = "Support",
                                 PriorityId = 3, // Low Priority
                                 ProjectUsers = new List<ProjectUser>{

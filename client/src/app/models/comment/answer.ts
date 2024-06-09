@@ -8,5 +8,5 @@ export interface Answer {
     commentId: number,
     user: User,
     editOpened : boolean,
-    answerOldContent: string
+    oldContent: string
 }

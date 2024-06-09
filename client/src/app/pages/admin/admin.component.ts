@@ -7,6 +7,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { SearchService } from '../../services/search.service';
 import { UserFilter } from '../../models/user-filter';
 import { UpdateUser } from '../../models/user/update-user';
+import { NotificationService } from '../../services/notification.service';
+import { CreateNotification } from '../../models/notifications/create-notification';
 
 @Component({
   selector: 'app-admin',
@@ -20,6 +22,7 @@ export class AdminComponent implements OnInit {
   private role_service = inject(RoleService);
   private spinner = inject(NgxSpinnerService);
   private user_service = inject(UserService);
+  private notification_service = inject(NotificationService);
   initialRoles: Map<number, Role> = new Map<number, Role>();
   initialActivation: Map<number, boolean> = new Map<number, boolean>();
 
@@ -101,7 +104,6 @@ export class AdminComponent implements OnInit {
   }
 
   sendUpdateRequest(user: User){
-    console.log(user);
     this.spinner.show();
     let body : UpdateUser = {
       id: user.id,
@@ -119,6 +121,18 @@ export class AdminComponent implements OnInit {
 
     this.user_service.updateUser(body).subscribe({
       next: (updatedUser: User) => {
+        if(!this.isDefaultRole(updatedUser))
+        {
+
+          let create :CreateNotification = {
+            userIds: [updatedUser.id],
+            title: 'Application Role Changed',
+            description: `Your role on application has been changed to: '${updatedUser.role.name}' !`
+          }
+        this.notification_service.sendNotifcation(create).then(()=>{
+          // console.log("message sent");
+        }).catch((err)=>{console.log(err)})
+        }
         user = updatedUser;
         this.initialRoles.set(user.id, user.role);
         this.initialActivation.set(user.id,user.isActivated);

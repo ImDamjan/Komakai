@@ -13,7 +13,7 @@ namespace server.Mappers
 {
     public static class ProjectMapper
     {
-        public static ProjectDto ToProjectDto(this Project p, List<ProjectUserDto> users, StateDto state, PriorityDto priority)
+        public static ProjectDto ToProjectDto(this Project p, List<ProjectUserDto> users, StateDto state, PriorityDto priority, int assignmentCount)
         {
             return new ProjectDto{
                 Id = p.Id,
@@ -25,9 +25,11 @@ namespace server.Mappers
                 Title = p.Title,
                 Budget = p.Budget,
                 Type = p.Type,
+                OwnerId = p.OwnerId,
                 Priority = priority,
                 Description = p.Description,
-                Users = users
+                Users = users,
+                AssignmentCount = assignmentCount
 
             };
         }
@@ -42,6 +44,7 @@ namespace server.Mappers
                 Percentage = 0,
                 StateId = 1,
                 Description = dto.Description,
+                OwnerId = dto.OwnerId,
                 PriorityId = dto.PriorityId,
                 End = dto.End,
                 Budget = dto.Budget,
@@ -58,10 +61,10 @@ namespace server.Mappers
 
         public static RoleDto toRoleDto(this Role role)
         {
-            if (role == null)
-            {
-                return null;
-            }
+            // if (role == null)
+            // {
+            //     return null;
+            // }
 
             return new RoleDto
             {
