@@ -44,9 +44,39 @@
 
 
 # Pokretanje produkcione verzije projekta
-Ovo podrazumeva da će se projekat pokretati na nekom serveru a ne kod nas lokalno.
-Prilikom pokretanje Angular projekta trebaju nam 2 terminala da bi se on podigao na server. U jednom terminalu umesto *ng serve* komande koristi *ng build --watch* i ovde će moći da se prati kako bi se aplikacija ponašala da je na serveru. Na drugom terminalu treba da se pokrene server, npr ako bi koristili lite-server, ukucali bi komandu *lite-server --baseDir="dist/project-name"*. Ovo je bi bio način podizanja aplikacije sa našeg diska. 
+Kada pokrećemo produkcioni server za naš projekat, važno je da imamo na umu da će aplikacija biti hostovana na udaljenom serveru, a ne lokalno na našem računaru. Evo koraka za pokretanje projekta:
+1.	Pokretanje Angular projekta:
+    - Prvo, uverite se da imate instaliran Docker na svom računaru.
+    - Otvorite terminal i uđite u direktorijum vašeg Angular projekta.
+    - Pokrenite sledeću komandu za izgradnju slike:
+    ```
+    docker build -t aleks2001/komakai:latest .
+    ```
+    - Nakon što se slika izgradi, pokrenite Docker kontejner za Angular klijent:
+    ```
+    docker run -d -p 10190:10190 aleks2001/komakai:latest
+    ```
+2.	Pokretanje serverske aplikacije:
+    - U drugom terminalu, uđite u direktorijum vaše serverske aplikacije.
+    - Izgradite Docker sliku za serversku aplikaciju pomoću sledeće komande:
+    - docker build -t aleks2001/komakai_backend:latest .
+    - Zatim, pokrenite Docker kontejner za serversku aplikaciju:
+    ```
+    docker run -p 10189:8080 aleks2001/komakai_backend:latest
+    ```
+3.	Pristup aplikaciji:
+    - Nakon pokretanja obe komponente, vaša aplikacija će biti dostupna na adresi koju dobijete od vašeg provajdera hostinga. Uverite se da podesite odgovarajuće rute i konfiguraciju za pristupanje aplikaciji.
 
+Napomena ukoliko zelite da pokrenete aplikaciju I da ugasite terminal dodati parameter -d  prilikom izvršavanja komande docker run.
+Ovaj proces će vam omogućiti da pokrenete vašu aplikaciju u produkcioni režim i da je učinite dostupnom na udaljenom serveru. 
+
+Slike za backend I frontend već kreirane nalaze se javno na docker hub-u na linkovima [frontend](https://hub.docker.com/r/aleks2001/komakai) i [backend](https://hub.docker.com/r/aleks2001/komakai_backend)
+
+Na serveru fakulteta softeng.pmf.kg.ac.rs servisi frontend i backend su pokrenuti uz pomoć docker compose-a uz pomoć docker-compose up -d .
+
+Ukoliko se na serveru ne nalaze ažurirane verzije slika potrebno je samo izvršiti komandu docker-compose pull 
+Napomena: docker compose skripta se nalazi u direktorijumu komakai na serveru tako da prilikom izvršavanja komandi neophodno je da se nalazimo pozicionirani u tom direktorijumu.
+ 
 Naša aplikacija se nalazi na sledećoj [adresi](http://softeng.pmf.kg.ac.rs:10190/)
 
 # Korisnicki nalozi za testiranje:
