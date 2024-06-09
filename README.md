@@ -3,12 +3,12 @@
      - Proverite da li imate instaliranu podržanu verziju Node.js za Angular:
         - Pokrenite sledeću komandu iz terminala: 'node --version'.
         - Potvrdite da li prikazana verzija ispunjava zahteve Angulara.
-        - Ukoliko nemate instaliranu verziju node.js, može se skinuti na [sajt] (https://nodejs.org/en/download) .
+        - Ukoliko nemate instaliranu verziju node.js, može se skinuti na [sajtu](https://nodejs.org/en/download) .
      - Kada ste instalirali node.js i npm, sledeći korak je instalacija Angular CLI koji pruža alate za efikasan Angular razvoj.
         - Iz terminala pokrenite sledeću komandu 'npm install -g @angular/cli'.
      - Angular je sada instaliran na vašem računara i možete koristiti bilo koji alat za pravljenje aplikacija pomoću Angular'a. Mi smo koristili Visual Studio Code pa njega i preporučujemo.
 
-2. .NET SDK 8 - potrebno je za razvoj i pokretanje bekenda. Treba otici na zvaničan .NET [sajt](https://dotnet.microsoft.com/en-us/download/dotnet/8.0), gde možemo da skinemo .NET okruženje za operativni sistem koji želimo. Nakon instalacije treba instalirati ovo okruženje po uputstvima u instalaciji.
+2. .NET SDK 8 - potrebno je za razvoj i pokretanje bekenda. Treba otici na zvaničan .NET [sajt](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) , gde možemo da skinemo .NET okruženje za operativni sistem koji želimo. Nakon instalacije treba instalirati ovo okruženje po uputstvima u instalaciji.
 3. Instalacija Visual studio code
     - Instalirati visual studio code sa zvaničnog sajta.
     - Intalirati ektenzije
@@ -34,7 +34,7 @@
     - Otvori se terminal na računaru ili u editoru (preporuka VS code)
     - Postaviti putanju na terminala na folder server
     - Pokrenuti komandu *dotnet watch run*, može da se pokrene i komanda *dotnet watch run seed* koja će uneti već neke default podatke u bazu.
-    - Nakon ovoga trebalo bi da se otvori Swagger preko kojeg možemo da komuniciramo sa bazom i on bi trebao da se nalazi na adresi http://localhost:5295
+    - Nakon ovoga trebalo bi da se otvori Swagger preko kojeg možemo da komuniciramo sa bazom i on bi trebao da se nalazi na [adresi](http://localhost:5295) .
 
 3. Pokretanje frontenda
     - Otvori se terminal na računaru ili u editoru (preporuka VS code)
